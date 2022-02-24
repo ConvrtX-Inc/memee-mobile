@@ -45,7 +45,7 @@ export default function LoginScreen({ navigation }) {
             })
         }
         else {
-
+            console.log(global.address + 'login')
             fetch(global.address + 'login', {
                 method: 'POST',
                 headers: {
