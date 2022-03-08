@@ -19,7 +19,7 @@ function SplashScreen({navigation}) {
     global.adcoinAlert = '0';
     randomNum = Math.floor(Math.random() * 5 + 1);
 
-    console.log('I am here ', randomNum);
+    /* console.log('I am here ', randomNum); */
 
     setTimeout(async () => {
       global.userName = await AsyncStorage.getItem('@userName');
@@ -315,7 +315,7 @@ function SplashScreen({navigation}) {
     })
       .then(response => response.json())
       .then(async responseJson => {
-        console.log('Login Message....');
+        /* console.log('Login Message....'); */
 
         if (responseJson.Status == 400) {
           navigation.replace('Onboarding');

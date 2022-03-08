@@ -18,11 +18,11 @@ export default function NewMessage({navigation}) {
 
   useFocusEffect(
     React.useCallback(() => {
-      console.log('Screen was focused');
+      /* console.log('Screen was focused'); */
       userListShowFN();
       // Do something when the screen is focused
       return () => {
-        console.log('Screen was unfocused');
+        /* console.log('Screen was unfocused'); */
       };
     }, []),
   );
@@ -38,7 +38,7 @@ export default function NewMessage({navigation}) {
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log('\n following called.... \n', responseJson.Requests);
+        /* console.log('\n following called.... \n', responseJson.Requests); */
         setMyuserList(responseJson.Requests);
         setFollowingList(responseJson.Requests);
       })
@@ -48,7 +48,7 @@ export default function NewMessage({navigation}) {
   }
 
   const searchUserFN = text => {
-    console.log('text', text);
+    /* console.log('text', text); */
     setSearchTxt(text);
     var seachedUser = myuserList?.filter(function search(user) {
       return (
@@ -65,12 +65,12 @@ export default function NewMessage({navigation}) {
     let users = [];
     users.push({userId: global.userData.user_id, name: global.userData.name});
     users.push({userId: user.following_id, name: user.name});
-    console.log(users);
+    /* console.log(users); */
     axios
       .post(`${global.address}createConversation`, users)
       .then(function (response) {
         // setLoader(false)
-        console.log(response.data);
+        /* console.log(response.data); */
         navigation.navigate('ChatScreen', {
           conversationId: response.data.ConversationID,
           name: user.name,

@@ -7,10 +7,10 @@ export default function DateDifference(date) {
   const diffsec = Math.ceil(diffTime / (1000 * 60));
   const diffmin = Math.ceil(diffTime / (1000 * 60 * 60));
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  console.log(diffTime + ' milliseconds');
+  /* console.log(diffTime + ' milliseconds');
   console.log(diffsec + ' sec');
   console.log(diffmin + ' min');
-  console.log(diffDays + ' days');
+  console.log(diffDays + ' days'); */
   return diffmin;
 }
 

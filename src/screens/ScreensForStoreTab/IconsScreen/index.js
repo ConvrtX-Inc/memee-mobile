@@ -39,7 +39,7 @@ export default function IconsScreen() {
   }, []);
 
   async function getIconFN() {
-    console.log('Icons Screen Running...');
+    /* console.log('Icons Screen Running...'); */
 
     await fetch(
       global.address + 'GetStoreItems/' + global.userData.user_id + '/icon',
@@ -54,8 +54,8 @@ export default function IconsScreen() {
     )
       .then(response => response.json())
       .then(async responseJson => {
-        console.log('Icons get mohsin sb....');
-        console.log(responseJson.StoreItems);
+        /* console.log('Icons get mohsin sb....');
+        console.log(responseJson.StoreItems); */
 
         responseJson.StoreItems.forEach(function (element) {
           element.img = '';
@@ -63,13 +63,13 @@ export default function IconsScreen() {
           element.loadIndicat = 0;
         });
 
-        console.log('Icons get...After...');
+        /* console.log('Icons get...After...'); */
 
         for (let i = 0; i < responseJson.StoreItems.length; i++) {
-          console.log(
+          /* console.log(
             'responseJson.StoreItems : ',
             responseJson.StoreItems[i].item_code,
-          );
+          ); */
           responseJson.StoreItems[i].img = asignImageToProductsFN(
             responseJson.StoreItems[i].item_code,
             responseJson.StoreItems[i].type,
@@ -118,8 +118,8 @@ export default function IconsScreen() {
       })
         .then(response => response.json())
         .then(async responseJson => {
-          console.log('Icons get purchase....');
-          console.log(responseJson);
+          /* console.log('Icons get purchase....');
+          console.log(responseJson); */
 
           if (responseJson.Status == '201') {
             var sms =
@@ -130,7 +130,7 @@ export default function IconsScreen() {
             iconListVar.splice(index, 1);
             setIconList([...iconListVar]);
 
-            console.log('iconList', iconList);
+            /* console.log('iconList', iconList); */
 
             setMessage(sms);
             setModalVisible(!modalVisible);
@@ -140,7 +140,7 @@ export default function IconsScreen() {
           console.error(error);
         });
     } else {
-      console.log('not enough coins');
+      /* console.log('not enough coins'); */
       var iconListVar = iconList;
       iconListVar[index].loadIndicat = 0;
 

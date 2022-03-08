@@ -91,7 +91,7 @@ export default function ExploreScreen(props) {
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log(' Searching .. ', responseJson);
+        /* console.log(' Searching .. ', responseJson); */
 
         global.responseTop = responseJson;
       })

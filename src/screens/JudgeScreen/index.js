@@ -70,7 +70,7 @@ export default function JudgeScreen(props) {
           var currentTime = date + 'T' + time;
           var resDate = responseJson.History[i].date + 'T' + time;
 
-          console.log('Current Time : ' + currentTime);
+          /* console.log('Current Time : ' + currentTime); */
           var respDate = new Date(resDate);
           var todayDate = new Date(currentTime);
 
@@ -78,11 +78,11 @@ export default function JudgeScreen(props) {
           var diffsec = Math.ceil(diffTime / 1000);
 
           var days = parseInt(diffsec) / 86400 + 1;
-          console.log('days : ', days);
+          /* console.log('days : ', days); */
           tempArr.push(days);
         }
 
-        console.log('tempArr', tempArr);
+        /* console.log('tempArr', tempArr); */
         var ind = 0;
         responseJson.History.forEach(function (element) {
           if (tempArr[ind] < 10) {

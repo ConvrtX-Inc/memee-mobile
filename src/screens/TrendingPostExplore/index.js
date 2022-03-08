@@ -35,7 +35,7 @@ export default class TrendingPostExplore extends React.Component {
   }
 
   componentDidMount() {
-    console.log('getting summoned');
+    /* console.log('getting summoned'); */
 
     this.getTrendingTagsFN();
 
@@ -71,7 +71,7 @@ export default class TrendingPostExplore extends React.Component {
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log('\n\n\n responseJson now', responseJson);
+        /*  console.log('\n\n\n responseJson now', responseJson); */
 
         responseJson.TrendingTags.forEach(function (element) {
           element.color = '#fff';
@@ -134,8 +134,8 @@ export default class TrendingPostExplore extends React.Component {
   }
 
   navigateToExpDetailFN(index) {
-    console.log(' this.state.PostData[index] : ', this.state.PostData);
-    console.log(' this.state.PostData[index] : ', index);
+    /* console.log(' this.state.PostData[index] : ', this.state.PostData);
+    console.log(' this.state.PostData[index] : ', index); */
 
     global.selectedPost = this.state.PostData[index];
     var requesrArr = this.state.PostData.slice();

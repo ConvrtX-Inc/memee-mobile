@@ -80,10 +80,10 @@ function App() {
     const subscription = AppState.addEventListener('change', nextAppState => {
       if (global.userData) {
         if (nextAppState == 'active') {
-          console.log('Online');
+          /* console.log('Online'); */
           toggleOnlineStatus('1');
         } else {
-          console.log('Offline');
+          /* console.log('Offline'); */
           toggleOnlineStatus('0');
         }
       }

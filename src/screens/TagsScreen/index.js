@@ -42,8 +42,8 @@ export default function TagScreen({navigation}) {
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log('Posts....');
-        console.log(responseJson.Posts);
+        /* console.log('Posts....');
+        console.log(responseJson.Posts); */
 
         postDataVar = responseJson.Posts;
         navigateToExpDetailFN(index);

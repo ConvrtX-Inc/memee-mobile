@@ -29,7 +29,7 @@ export default function RankingScreen(props) {
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson.Ranking.length);
+        /* console.log(responseJson.Ranking.length); */
         for (let i = 0; i < responseJson.Ranking.length; i++) {
           if (responseJson.Ranking[i].rank_name == '1th') {
             responseJson.Ranking[i].rank_name = '1st';

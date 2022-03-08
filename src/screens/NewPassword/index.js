@@ -56,7 +56,7 @@ export default function NewPassword({navigation, route}) {
               text2: 'Password reset successfully',
             });
           } else {
-            console.log(responseJson);
+            /* console.log(responseJson); */
             Toast.show({
               type: 'error',
               text1: 'Something went wrong',

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text } from 'react-native';
+import React, {useState} from 'react';
+import {View, Text} from 'react-native';
 import App from './App';
 import firebase from '@react-native-firebase/app';
 
@@ -17,49 +17,38 @@ import messaging from '@react-native-firebase/messaging';
 //   measurementId: "G-H15CTD7WSB"
 // };
 
-
 var firebaseConfig = {
-  apiKey: "AIzaSyCMsL44vvpEAO8T5Fyead6C2E48KyiOaAo",
-  authDomain: "memee-ce64c.firebaseapp.com",
-  projectId: "memee-ce64c",
+  apiKey: 'AIzaSyCMsL44vvpEAO8T5Fyead6C2E48KyiOaAo',
+  authDomain: 'memee-ce64c.firebaseapp.com',
+  projectId: 'memee-ce64c',
   databaseURL: '',
-  storageBucket: "memee-ce64c.appspot.com",
-  messagingSenderId: "665746906328",
-  appId: "1:665746906328:web:24613c004294aa787dcbad",
-  measurementId: "G-ST2GTWP2RL"
+  storageBucket: 'memee-ce64c.appspot.com',
+  messagingSenderId: '665746906328',
+  appId: '1:665746906328:web:24613c004294aa787dcbad',
+  measurementId: 'G-ST2GTWP2RL',
 };
 
-
 if (!firebase.apps.length) {
-
-  console.log("running setup....")
-  firebase.initializeApp(firebaseConfig)
+  /* console.log("running setup....") */
+  firebase.initializeApp(firebaseConfig);
 }
 
-export { firebase, messaging, }
+export {firebase, messaging};
 
 const Setup = () => {
-
   const [loading, setLoading] = useState(true);
 
   const setupCloudMessaging = async () => {
-   
-
     messaging()
-    .subscribeToTopic('notifyAll')
-    .then(() => console.log('Subscribed to topic!'));
-
-
-  
-  }
+      .subscribeToTopic('notifyAll')
+      .then(() => console.log('Subscribed to topic!'));
+  };
 
   React.useEffect(async () => {
-
-    setupCloudMessaging()
-
+    setupCloudMessaging();
   }, []);
 
-  return <App />
-}
+  return <App />;
+};
 
 export default Setup;

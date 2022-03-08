@@ -37,7 +37,7 @@ export default function ButtonsScreen() {
   }, []);
 
   async function getButtonFN() {
-    console.log('Button Screen Running...');
+    /* console.log('Button Screen Running...'); */
 
     await fetch(
       global.address + 'GetStoreItems/' + global.userData.user_id + '/button',
@@ -52,8 +52,8 @@ export default function ButtonsScreen() {
     )
       .then(response => response.json())
       .then(async responseJson => {
-        console.log('Button get....');
-        console.log(responseJson.StoreItems);
+        /* console.log('Button get....');
+        console.log(responseJson.StoreItems); */
 
         responseJson.StoreItems.forEach(function (element) {
           element.img = '';
@@ -111,8 +111,8 @@ export default function ButtonsScreen() {
       })
         .then(response => response.json())
         .then(async responseJson => {
-          console.log('Icons get purchase....');
-          console.log(responseJson);
+          /* console.log('Icons get purchase....');
+          console.log(responseJson); */
 
           if (responseJson.Status == '201') {
             var sms =
@@ -130,7 +130,7 @@ export default function ButtonsScreen() {
           console.error(error);
         });
     } else {
-      console.log('not enough coins');
+      /* console.log('not enough coins'); */
       var iconListVar = iconList;
       iconListVar[index].loadIndicat = 0;
 

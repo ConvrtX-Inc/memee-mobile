@@ -151,7 +151,7 @@ export default function Dashboard(props) {
   }
 
   function SelectedBtnFN(btnNo) {
-    console.log('Selected tab : ', btnNo);
+    /* console.log('Selected tab : ', btnNo); */
 
     global.navigateDashboard = btnNo;
 
@@ -221,7 +221,7 @@ export default function Dashboard(props) {
     if (scroll && followingPost.length < 50) return;
 
     // setLoaderIndicator(true)
-    console.log('getting posts');
+    /* console.log('getting posts'); */
 
     var postApiName = '';
     if (tabNo == 1) {
@@ -237,7 +237,7 @@ export default function Dashboard(props) {
     var limit = 50;
     offset = scroll ? offset + 50 : 0;
 
-    console.log('global.userData', global.userData);
+    /* console.log('global.userData', global.userData); */
 
     fetch(
       global.address +
@@ -261,7 +261,7 @@ export default function Dashboard(props) {
       .then(responseJson => {
         setRefreshing(false);
 
-        console.log('responseJson', responseJson);
+        /* console.log('responseJson', responseJson); */
 
         let data = [];
 
@@ -269,7 +269,7 @@ export default function Dashboard(props) {
         else if (tabNo == 2) data = responseJson.NewPosts;
         else if (tabNo == 3) data = responseJson.TrendingPosts;
 
-        console.log('response, data', responseJson, data);
+        /* console.log('response, data', responseJson, data); */
 
         if (data.length == 0) setLoaderIndicator(false);
         data.forEach(async function (element, index) {
@@ -389,7 +389,7 @@ export default function Dashboard(props) {
 
     global.sharePost = followingPost[index];
 
-    console.log('global.sharePost : ', global.sharePost);
+    /* console.log('global.sharePost : ', global.sharePost); */
     navigation.navigate('SharePost');
   }
 
@@ -424,7 +424,7 @@ export default function Dashboard(props) {
   /* global.colorPrimary */
 
   const textMaximumWidth = windowWidth * 0.75 - 20;
-  console.log('textMaximumWidth', textMaximumWidth);
+  /* console.log('textMaximumWidth', textMaximumWidth); */
   return (
     <View style={{flex: 1, backgroundColor: global.colorPrimary}}>
       <FlatList

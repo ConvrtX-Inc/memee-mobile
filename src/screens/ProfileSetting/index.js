@@ -148,7 +148,7 @@ export default function ProfileSetting(props) {
           }
 
           if (responseJson.PurchasedItems[i].type == 'font') {
-            console.log(responseJson.PurchasedItems[i]);
+            /* console.log(responseJson.PurchasedItems[i]); */
             var valueToPush = {};
             valueToPush['item_code'] = responseJson.PurchasedItems[i].item_code;
             valueToPush['datetime'] = responseJson.PurchasedItems[i].datetime;

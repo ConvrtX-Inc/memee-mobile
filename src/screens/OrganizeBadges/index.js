@@ -90,7 +90,7 @@ export default function OrganizeBadges(props) {
 
   function filterSelectFN(index) {
     setEarndeBadges(earndBadgesToStare);
-    console.log(' index Running..', index);
+    /* console.log(' index Running..', index); */
     var arrayFilter = filterArray;
     for (let i = 0; i < filterArray.length; i++) {
       if (i == index) {
@@ -119,7 +119,7 @@ export default function OrganizeBadges(props) {
   }
 
   function getEarnedBadges() {
-    console.log('Running earned badges fn');
+    /* console.log('Running earned badges fn'); */
     fetch(global.address + 'GetBadges' + '/' + global.userData.user_id, {
       method: 'get',
       headers: {
@@ -168,7 +168,7 @@ export default function OrganizeBadges(props) {
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log('\n earned Badges : \n', responseJson.BadgesProgress);
+        /* console.log('\n earned Badges : \n', responseJson.BadgesProgress); */
 
         responseJson.BadgesProgress.forEach(function (element) {
           var doneProgress = element.total_items - element.remaining_items;
@@ -185,7 +185,7 @@ export default function OrganizeBadges(props) {
 
   function selectBadgesToShow(index) {
     var status = '';
-    console.log('earndeBadges[index]', earndeBadges[index].badge_id);
+    /* console.log('earndeBadges[index]', earndeBadges[index].badge_id); */
     if (earndeBadges[index].isSelected == true) {
       earndeBadges[index].isSelected = false;
       status = 'unchecked';
@@ -212,7 +212,7 @@ export default function OrganizeBadges(props) {
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log('responseJson', responseJson);
+        /* console.log('responseJson', responseJson); */
       })
       .catch(error => {
         console.error(error);
@@ -220,7 +220,7 @@ export default function OrganizeBadges(props) {
   }
 
   function searchBadgesFN(value) {
-    console.log('\n\n ', value);
+    /* console.log('\n\n ', value); */
     setSearcTxt(value);
 
     var seachedCity = earndeBadges.filter(function search(badge) {
@@ -231,7 +231,7 @@ export default function OrganizeBadges(props) {
     } else {
       setEarndeBadges(seachedCity);
     }
-    console.log('\n seachedCity ', seachedCity);
+    /* console.log('\n seachedCity ', seachedCity); */
   }
 
   return (
