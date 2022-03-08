@@ -132,7 +132,7 @@ export default function Dashboard(props) {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          auth_token: global.token,
+          authToken: global.token,
         },
       },
     )
@@ -237,6 +237,8 @@ export default function Dashboard(props) {
     var limit = 50;
     offset = scroll ? offset + 50 : 0;
 
+    console.log('global.userData', global.userData);
+
     fetch(
       global.address +
         postApiName +
@@ -251,7 +253,7 @@ export default function Dashboard(props) {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          auth_token: global.token,
+          authToken: global.token,
         },
       },
     )
@@ -259,11 +261,15 @@ export default function Dashboard(props) {
       .then(responseJson => {
         setRefreshing(false);
 
+        console.log('responseJson', responseJson);
+
         let data = [];
 
         if (tabNo == 1) data = responseJson.FollowerPosts;
         else if (tabNo == 2) data = responseJson.NewPosts;
         else if (tabNo == 3) data = responseJson.TrendingPosts;
+
+        console.log('response, data', responseJson, data);
 
         if (data.length == 0) setLoaderIndicator(false);
         data.forEach(async function (element, index) {
@@ -312,7 +318,7 @@ export default function Dashboard(props) {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        auth_token: global.token,
+        authToken: global.token,
       },
       body: JSON.stringify({
         UserID: global.userData.user_id,
@@ -345,7 +351,7 @@ export default function Dashboard(props) {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        auth_token: global.token,
+        authToken: global.token,
       },
     })
       .then(response => response.json())

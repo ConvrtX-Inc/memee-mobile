@@ -392,3 +392,21 @@ export const checkPhoneNumber = text => {
     return false;
   }
 };
+
+// regex source https://www.section.io/engineering-education/password-strength-checker-javascript/
+/* 
+RULES:
+The password is at least 8 characters long (?=.{8,}).
+The password has at least one uppercase letter (?=.*[A-Z]).
+The password has at least one lowercase letter (?=.*[a-z]).
+The password has at least one digit (?=.*[0-9]).
+The password has at least one special character ([^A-Za-z0-9]). 
+*/
+export const isStrongPassword = txt => {
+  const r = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/;
+  if (txt.match(r)) {
+    return true;
+  } else {
+    return false;
+  }
+};

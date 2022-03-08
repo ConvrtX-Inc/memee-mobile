@@ -68,7 +68,8 @@ const Stack = createStackNavigator();
 
 global.profileBGArray = '1';
 global.bgOverlay = '1';
-global.address = 'http://memee.techticksdigital.com/Api/';
+global.address = 'https://staging-memee-services-convrtx.herokuapp.com/Api/';
+/* global.address = 'http://memee.techticksdigital.com/Api/'; */
 // global.address = "http://192.168.18.106/memee-services/Api/"
 
 Settings.initializeSDK();

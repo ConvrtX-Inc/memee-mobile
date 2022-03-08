@@ -51,10 +51,10 @@ export default function EditProfileScreen(props) {
   const [modalVisibleImgPicker, setModalVisibleImgPicker] = useState(false);
   const [filePath, setFilePath] = useState({});
   const [showPimg, setShowPimg] = useState(false);
-  const [email, setEmail] = useState(mock.userData.email);
-  const [name, setName] = useState(mock.userData.name);
-  const [phone, setPhone] = useState(mock.userData.phone);
-  const [bio, setBio] = useState(mock.userData.bio);
+  const [email, setEmail] = useState(global.userData.email);
+  const [name, setName] = useState(global.userData.name);
+  const [phone, setPhone] = useState(global.userData.phone);
+  const [bio, setBio] = useState(global.userData.bio);
   const [indicatButton, setIndicatButton] = useState(false);
 
   const errors = {
@@ -63,10 +63,10 @@ export default function EditProfileScreen(props) {
 
   const [error, setError] = useState(errors);
 
-  const [emailChanged, setEmailChanged] = useState(mock.userData.email);
-  const [nameChanged, setNameChanged] = useState(mock.userData.name);
+  const [emailChanged, setEmailChanged] = useState(global.userData.email);
+  const [nameChanged, setNameChanged] = useState(global.userData.name);
 
-  const [imgUrl, setImgUrl] = useState(mock.userData.imgurl);
+  const [imgUrl, setImgUrl] = useState(global.userData.imgurl);
 
   // Image Picker Version 3//
   const requestCameraPermission = async () => {
@@ -211,7 +211,7 @@ export default function EditProfileScreen(props) {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        auth_token: global.token,
+        authToken: global.token,
       },
       body: JSON.stringify({
         userName: name,
@@ -292,7 +292,7 @@ export default function EditProfileScreen(props) {
               <Avatar
                 rounded
                 size="xlarge"
-                source={{uri: mock.userData.imgurl}}
+                source={{uri: global.userData.imgurl}}
               />
             ) : (
               <Avatar rounded size="xlarge" source={{uri: filePath.uri}} />

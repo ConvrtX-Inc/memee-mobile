@@ -65,7 +65,7 @@ export default class TrendingPostExplore extends React.Component {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        auth_token: global.token,
+        authToken: global.token,
       },
       body: JSON.stringify({}),
     })
@@ -95,7 +95,7 @@ export default class TrendingPostExplore extends React.Component {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        auth_token: global.token,
+        authToken: global.token,
       },
     })
       .then(response => response.json())

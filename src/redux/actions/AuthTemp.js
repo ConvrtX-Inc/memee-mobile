@@ -13,7 +13,6 @@ import {
   NOTIFICATIONS,
 } from '../constants/index';
 import Toast from 'react-native-toast-message';
-import {urls} from '../../api/urls';
 
 export function registerUserFN(data, removeStates, navigate) {
   console.log('Login data..', data);
@@ -21,7 +20,7 @@ export function registerUserFN(data, removeStates, navigate) {
   return async dispatch => {
     axios({
       method: 'post',
-      url: urls.baseUrl,
+      url: `http://memeee.techticksdigital.com/Api/RegisterUser`,
       data: data,
       validateStatus: status => {
         return true;
@@ -92,8 +91,6 @@ export function readNotifications() {
 }
 
 export function toggleOnlineStatus(val) {
-  console.info('val', val);
-  console.info('uth_token: global.token,', global.token);
   fetch(
     global.address +
       'toggleOnlineStatus/' +
