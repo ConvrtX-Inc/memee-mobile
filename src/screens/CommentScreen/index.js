@@ -92,7 +92,7 @@ export default class CommentScreen extends React.Component {
 
     global.refresh = true;
     if (this.state.comment == '') {
-      console.log('comment is empty..');
+      /* console.log('comment is empty..'); */
       this.setState({
         modalVisible: true,
         message: 'Please enter some text',
@@ -125,7 +125,7 @@ export default class CommentScreen extends React.Component {
         .then(response => response.json())
         .then(responseJson => {
           if (responseJson.Status == '201') {
-            console.log(responseJson);
+            /* console.log(responseJson); */
             var comments = this.state.flatlist;
             comments.find(
               c => c.commentUID == responseJson.commentUID,
@@ -172,7 +172,7 @@ export default class CommentScreen extends React.Component {
 
     if (index == -1) index = 0;
 
-    console.log('index ', index);
+    /* console.log('index ', index); */
     this.flatListRef.scrollToOffset({offset: index * 90});
 
     Keyboard.dismiss();

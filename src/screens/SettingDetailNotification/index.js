@@ -55,7 +55,7 @@ export default function SettingDetailNotification(props) {
         )
           .then(response => response.json())
           .then(responseJson => {
-            console.log('\n\n responseJson ', responseJson);
+            /* console.log('\n\n responseJson ', responseJson); */
           })
           .catch(error => {
             console.error(error);
@@ -82,7 +82,7 @@ export default function SettingDetailNotification(props) {
       )
         .then(response => response.json())
         .then(responseJson => {
-          console.log('\n\n responseJson ', responseJson);
+          /* console.log('\n\n responseJson ', responseJson); */
         })
         .catch(error => {
           console.error(error);
@@ -106,10 +106,10 @@ export default function SettingDetailNotification(props) {
         backgroundColor: global.colorPrimary,
       }}>
       <ScrollView>
-        {console.log(
+        {/* {console.log(
           '\n\n global.userData.appNotifications',
           global.userData.appNotifications,
-        )}
+        )} */}
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image

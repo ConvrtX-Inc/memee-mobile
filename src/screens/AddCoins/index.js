@@ -89,10 +89,10 @@ export default function AddCoins(props) {
   async function getProducts() {
     await RNIap.initConnection();
     const productIds = Platform.select({
-      ios: ['com.memee.coins10000'],
+      ios: ['com.convrtx.memee.coins10000'],
       android: ['coins10000', 'coins1000'],
     });
-    console.log('PIDS: ' + productIds);
+    /* console.log('PIDS: ' + productIds); */
     try {
       var products = await RNIap.getProducts(productIds);
 
@@ -101,7 +101,8 @@ export default function AddCoins(props) {
       });
       setProducts(products);
     } catch (err) {
-      console.log(err); // standardized err.code and err.message available
+      console.log(err);
+      // standardized err.code and err.message available
     }
   }
 
@@ -131,7 +132,7 @@ export default function AddCoins(props) {
   }
 
   async function purchaseProducts(index) {
-    console.log('niggacat', productsData[index]);
+    /* console.log('niggacat', productsData[index]); */
 
     var forLoader = productsData;
     forLoader[index].loader = true;
@@ -164,7 +165,7 @@ export default function AddCoins(props) {
 
               if (receipt) {
                 currentDate = currentDateFN();
-                console.log('here1');
+                /* console.log('here1'); */
                 fetch(global.address + 'PurchaseCoins', {
                   method: 'POST',
                   headers: {
@@ -185,7 +186,7 @@ export default function AddCoins(props) {
                 })
                   .then(response => response.json())
                   .then(async responseJson => {
-                    console.log('here2');
+                    /* console.log('here2'); */
                     global.userData.coins =
                       parseInt(global.userData.coins) +
                       parseInt(currentProduct.description);
@@ -195,11 +196,11 @@ export default function AddCoins(props) {
                     var forLoader = productsData;
                     forLoader[index].loader = false;
                     setProducts([...forLoader]);
-                    console.log('here3');
+                    /* console.log('here3'); */
                     navigation.navigate('CoinsConfirmation', {
                       coins: currentProduct.description,
                     });
-                    console.log(' add Transaction... : ', responseJson);
+                    /* console.log(' add Transaction... : ', responseJson); */
                     currentProduct = null;
                   })
                   .catch(error => {

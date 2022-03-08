@@ -123,7 +123,7 @@ export default function EditProfileScreen(props) {
     let isCameraPermitted = await requestCameraPermission();
     if (isCameraPermitted && isStoragePermitted) {
       launchCamera(options, response => {
-        console.log('Response = ', response);
+        /* console.log('Response = ', response); */
 
         if (response.didCancel) {
           // alert('User cancelled camera picker');
@@ -155,7 +155,7 @@ export default function EditProfileScreen(props) {
       quality: 1,
     };
     launchImageLibrary(options, response => {
-      console.log('Response = ', response);
+      /* console.log('Response = ', response); */
 
       if (response.didCancel) {
         // alert('User cancelled camera picker');

@@ -43,7 +43,7 @@ export default class FollowRequest extends React.Component {
       followData: testFN(this.props.route.params.requests),
     });
     this._unsubscribe = this.props.navigation.addListener('focus', () => {
-      console.log('focused');
+      /* console.log('focused'); */
       this.showSuggwsionRequestFN();
     });
   }
@@ -59,8 +59,8 @@ export default class FollowRequest extends React.Component {
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log('suggesion....');
-        console.log(responseJson.Suggessions);
+        /* console.log('suggesion....'); */
+        /* console.log(responseJson.Suggessions); */
 
         this.setState({
           suggesionData: responseJson.Suggessions,

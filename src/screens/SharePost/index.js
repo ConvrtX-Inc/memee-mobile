@@ -73,7 +73,7 @@ export default function SharePost() {
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log('Amna', responseJson);
+        /* console.log('Amna', responseJson); */
         if (responseJson.Status == '200') {
           setPost('');
           setIndicatButton(false);

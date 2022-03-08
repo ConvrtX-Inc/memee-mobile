@@ -38,7 +38,7 @@ export default function ProfileBackgroundScreen() {
   }, []);
 
   async function getprofileBgFN() {
-    console.log('Button Screen Running...');
+    /* console.log('Button Screen Running...'); */
 
     await fetch(
       global.address +
@@ -56,8 +56,8 @@ export default function ProfileBackgroundScreen() {
     )
       .then(response => response.json())
       .then(async responseJson => {
-        console.log('Profile Background get....');
-        console.log(responseJson.StoreItems);
+        /* console.log('Profile Background get....');
+        console.log(responseJson.StoreItems); */
 
         responseJson.StoreItems.forEach(function (element) {
           element.img = '';
@@ -110,8 +110,8 @@ export default function ProfileBackgroundScreen() {
       })
         .then(response => response.json())
         .then(async responseJson => {
-          console.log('Icons get purchase....');
-          console.log(responseJson);
+          /* console.log('Icons get purchase....');
+          console.log(responseJson); */
 
           if (responseJson.Status == '201') {
             var iconListVar = iconList;
@@ -126,7 +126,7 @@ export default function ProfileBackgroundScreen() {
           console.error(error);
         });
     } else {
-      console.log('not enough coins');
+      /* console.log('not enough coins'); */
       var iconListVar = iconList;
       iconListVar[index].loadIndicat = 0;
 

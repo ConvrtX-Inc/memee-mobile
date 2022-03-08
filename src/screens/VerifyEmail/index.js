@@ -37,7 +37,7 @@ function VerifyEmail({navigation, route}) {
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson);
+        /* console.log(responseJson); */
         setLoader(false);
 
         if (responseJson.Status == 200) {
@@ -67,7 +67,7 @@ function VerifyEmail({navigation, route}) {
       loginType: 'Email',
     });
 
-    console.log(body);
+    /* console.log(body); */
 
     fetch(global.address + 'RegisterUser', {
       method: 'POST',
@@ -80,7 +80,7 @@ function VerifyEmail({navigation, route}) {
       .then(response => response.json())
       .then(async responseJson => {
         setLoader(false);
-        console.log(responseJson);
+        /* console.log(responseJson); */
         if (responseJson.Status == 201) {
           await AsyncStorage.setItem('@userName', global.OtpData[0].email);
           await AsyncStorage.setItem('@userPass', global.OtpData[0].password);
@@ -129,8 +129,8 @@ function VerifyEmail({navigation, route}) {
       .then(response => response.json())
       .then(responseJson => {
         global.userData = responseJson;
-        console.log('Sign Up Data...');
-        console.log(global.userData);
+        /* console.log('Sign Up Data...');
+        console.log(global.userData); */
         setLoader(false);
         navigation.replace('Dashboard');
       })

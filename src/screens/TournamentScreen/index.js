@@ -29,7 +29,7 @@ export default function TounamentScreen(props) {
   const [enterTournament, setEnterTournament] = useState('');
 
   useEffect(() => {
-    console.log(global.userData);
+    /* console.log(global.userData); */
     setEnterTournament(global.userData.participated_in_tournament);
   }, []);
 
@@ -44,7 +44,7 @@ export default function TounamentScreen(props) {
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson);
+        /* console.log(responseJson); */
         global.userData.participated_in_tournament = 1;
         setEnterTournament(1);
 

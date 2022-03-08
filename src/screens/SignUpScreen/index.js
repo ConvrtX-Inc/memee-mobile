@@ -78,7 +78,7 @@ export default function SignUpScreen({navigation}) {
         email: email.toLowerCase(),
         action: 'sign-up',
       });
-      console.log(body);
+      /* console.log(body); */
 
       fetch(global.address + 'SendOTP', {
         method: 'POST',
@@ -91,7 +91,7 @@ export default function SignUpScreen({navigation}) {
         .then(response => response.json())
         .then(responseJson => {
           setLoader(false);
-          console.log(responseJson);
+          /* console.log(responseJson); */
 
           if (responseJson.Status == 200) {
             navigation.navigate('VerifyEmail', {

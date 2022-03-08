@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "665746906328",
-    "project_id": "memee-ce64c",
-    "storage_bucket": "memee-ce64c.appspot.com"
+    "project_number": "628249846461",
+    "project_id": "memee-app-d35d3",
+    "storage_bucket": "memee-app-d35d3.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:665746906328:android:33511de4cf479ba27dcbad",
+        "mobilesdk_app_id": "1:628249846461:android:54ea0b987cde5aa6698dd4",
         "android_client_info": {
-          "package_name": "com.memee"
+          "package_name": "com.convrtx.memee"
         }
       },
       "oauth_client": [
         {
-          "client_id": "665746906328-apdgobof81ouuksedv3o0pr757er9v5u.apps.googleusercontent.com",
+          "client_id": "628249846461-u50ij37aidhtm6m5e12vab1lin15lb18.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCnAIrke72w3LcIUFni6Ph4NfpbQwdwZys"
+          "current_key": "AIzaSyAfjXyX-CXZTpLZKZiZVqSc_Rr2-wp8iN0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "665746906328-apdgobof81ouuksedv3o0pr757er9v5u.apps.googleusercontent.com",
+              "client_id": "628249846461-u50ij37aidhtm6m5e12vab1lin15lb18.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

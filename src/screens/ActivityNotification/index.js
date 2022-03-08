@@ -23,19 +23,19 @@ export default function ActivityNotification() {
 
   useFocusEffect(
     React.useCallback(() => {
-      console.log('Screen was focused');
-      console.log(followRequests);
+      /* console.log('Screen was focused'); */
+      /* console.log(followRequests); */
       showFollowRequestFN();
       dispatch(readNotifications());
       // Do something when the screen is focused
       return () => {
-        console.log('Screen was unfocused');
+        /* console.log('Screen was unfocused'); */
       };
     }, []),
   );
 
   function handleNotificationClick(data) {
-    console.log(data);
+    /* console.log(data); */
     if (data.type == 'comment') {
       global.postId = data.object_id;
       navigation.navigate('CommentScreen');

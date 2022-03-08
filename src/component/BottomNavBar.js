@@ -1,395 +1,458 @@
-import React, { useState, useEffect } from 'react';
-import { TouchableOpacity, View, Image, Text, Modal, StyleSheet, Dimensions } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
-import {PESDK, PhotoEditorModal, Configuration} from 'react-native-photoeditorsdk';
-import { requestCameraPermission, requestExternalWritePermission } from '../Utility/Utils';
+import React, {useState, useEffect} from 'react';
 import {
-    launchCamera,
-    launchImageLibrary
-} from 'react-native-image-picker';
+  TouchableOpacity,
+  View,
+  Image,
+  Text,
+  Modal,
+  StyleSheet,
+  Dimensions,
+} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import {
+  PESDK,
+  PhotoEditorModal,
+  Configuration,
+} from 'react-native-photoeditorsdk';
+import {
+  requestCameraPermission,
+  requestExternalWritePermission,
+} from '../Utility/Utils';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 var windowWidth = Dimensions.get('window').width;
 
-const BottomNavBar = ({ themeIndex, navIndex, onPress, navigation }) => {
+const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
+  const [showImagePickerDialog, setShowImagePickerDialog] = useState(false);
 
-    const [showImagePickerDialog, setShowImagePickerDialog] = useState(false);
+  let options = {
+    mediaType: 'photo',
+    maxWidth: 512,
+    maxHeight: 512,
+    quality: 1,
+  };
 
-    let options = {
-        mediaType: 'photo',
-        maxWidth: 512,
-        maxHeight: 512,
-        quality: 1,
-    };
+  let gradientColors = [];
+  let icons = [];
+  let iconsSelected = [];
+  let centerIcon = null;
+  let selectedColor = '';
+  let unselectedColor = '';
 
-    let gradientColors = []
-    let icons = []
-    let iconsSelected = []
-    let centerIcon = null
-    let selectedColor = ''
-    let unselectedColor = ''
-    
-    global.colorPrimary = '#0D0219'
-    global.colorSecondary = '#292929'
-    global.colorInput = '#292929'
-    global.colorTextPrimary = '#C1C1C1'
-    global.colorTextSecondary = '#FFFFFF'
-    global.colorTextActive = '#FFCD2F'
-    global.colorIcon = '#FFFFFF'
-    global.gradientColors = ['#292929', '#292929']
+  global.colorPrimary = '#0D0219';
+  global.colorSecondary = '#292929';
+  global.colorInput = '#292929';
+  global.colorTextPrimary = '#C1C1C1';
+  global.colorTextSecondary = '#FFFFFF';
+  global.colorTextActive = '#FFCD2F';
+  global.colorIcon = '#FFFFFF';
+  global.gradientColors = ['#292929', '#292929'];
 
-    if(themeIndex == 1){
-        gradientColors = ['#5D33AD', '#171A59']
+  if (themeIndex == 1) {
+    gradientColors = ['#5D33AD', '#171A59'];
 
-        icons.push(require("../images/earthBlue.png"))
-        icons.push(require("../images/exploreBlue.png"))
-        icons.push(require("../images/prizeBlue.png"))
-        icons.push(require("../images/profileBlue.png"))
-        
-        iconsSelected = icons
-        centerIcon = require("../images/postBlue.png")
+    icons.push(require('../images/earthBlue.png'));
+    icons.push(require('../images/exploreBlue.png'));
+    icons.push(require('../images/prizeBlue.png'));
+    icons.push(require('../images/profileBlue.png'));
 
-        selectedColor = '#BB77F0'
-        unselectedColor = '#654E77'
+    iconsSelected = icons;
+    centerIcon = require('../images/postBlue.png');
 
-        global.gradientColors = ['#5D33AD', '#171A59'] 
-    } 
-    else if (themeIndex == 2) {
-        gradientColors = ['#C83A6B', '#8D0E3A']
+    selectedColor = '#BB77F0';
+    unselectedColor = '#654E77';
 
-        icons.push(require("../images/UniconHome.png"))
-        icons.push(require("../images/uniconExplor.png"))
-        icons.push(require("../images/uniconCup.png"))
-        icons.push(require("../images/Uniconprofile.png"))
+    global.gradientColors = ['#5D33AD', '#171A59'];
+  } else if (themeIndex == 2) {
+    gradientColors = ['#C83A6B', '#8D0E3A'];
 
-        iconsSelected = icons
-        centerIcon = require("../images/uniconMain.png")
+    icons.push(require('../images/UniconHome.png'));
+    icons.push(require('../images/uniconExplor.png'));
+    icons.push(require('../images/uniconCup.png'));
+    icons.push(require('../images/Uniconprofile.png'));
 
-        selectedColor = '#FFC7DA'
-        unselectedColor = '#EE6293'
-    }
-    else if (themeIndex == 3) {
-        /* the_100_theme_icon */
-        gradientColors = ['#FFD524', '#ECB602']
+    iconsSelected = icons;
+    centerIcon = require('../images/uniconMain.png');
 
-        icons.push(require("../images/Home100.png"))
-        icons.push(require("../images/earth100.png"))
-        icons.push(require("../images/trophy100.png"))
-        icons.push(require("../images/profile1000.png"))
+    selectedColor = '#FFC7DA';
+    unselectedColor = '#EE6293';
+  } else if (themeIndex == 3) {
+    /* the_100_theme_icon */
+    gradientColors = ['#FFD524', '#ECB602'];
 
-        iconsSelected.push(require("../images/Homefilled.png"))
-        iconsSelected.push(require("../images/globeFilled.png"))
-        iconsSelected.push(require("../images/trophy100Filled.png"))
-        iconsSelected.push(require("../images/person100.png"))
+    icons.push(require('../images/Home100.png'));
+    icons.push(require('../images/earth100.png'));
+    icons.push(require('../images/trophy100.png'));
+    icons.push(require('../images/profile1000.png'));
 
-        centerIcon = require("../images/M100.png")
+    iconsSelected.push(require('../images/Homefilled.png'));
+    iconsSelected.push(require('../images/globeFilled.png'));
+    iconsSelected.push(require('../images/trophy100Filled.png'));
+    iconsSelected.push(require('../images/person100.png'));
 
-        selectedColor = '#000000'
-        unselectedColor = '#FFFFFF'
+    centerIcon = require('../images/M100.png');
 
-        global.colorPrimary = '#ECB602'
-        global.colorSecondary = '#FFDE7E'
-        global.colorInput = '#FFFFFF'
-        global.colorTextPrimary = '#292929'
-        global.colorTextSecondary = '#FFFFFF'
-        global.colorTextActive = '#FFFFFF'
-        global.colorIcon = '#292929'
-        global.gradientColors = ['#FFDE7E', '#FFDE7E']
+    selectedColor = '#000000';
+    unselectedColor = '#FFFFFF';
 
-    }
-    else if (themeIndex == 4) {
-        /* new_year_theme_icon */
-        gradientColors = ['#413781', '#413781']
+    global.colorPrimary = '#ECB602';
+    global.colorSecondary = '#FFDE7E';
+    global.colorInput = '#FFFFFF';
+    global.colorTextPrimary = '#292929';
+    global.colorTextSecondary = '#FFFFFF';
+    global.colorTextActive = '#FFFFFF';
+    global.colorIcon = '#292929';
+    global.gradientColors = ['#FFDE7E', '#FFDE7E'];
+  } else if (themeIndex == 4) {
+    /* new_year_theme_icon */
+    gradientColors = ['#413781', '#413781'];
 
-        icons.push(require("../images/NewYearHome.png"))
-        icons.push(require("../images/newYearExplore.png"))
-        icons.push(require("../images/newYearPriz.png"))
-        icons.push(require("../images/newYearPerson.png"))
-       
-        iconsSelected = icons
-        centerIcon = require("../images/newYearMain.png")
+    icons.push(require('../images/NewYearHome.png'));
+    icons.push(require('../images/newYearExplore.png'));
+    icons.push(require('../images/newYearPriz.png'));
+    icons.push(require('../images/newYearPerson.png'));
 
-        selectedColor = '#FFFFFF'
-        unselectedColor = '#B1CCAA'
-    }
-    else if (themeIndex == 5) {
-        /* save_earth_theme_icon */
-        gradientColors = ['#78AC6B', '#49843A']
+    iconsSelected = icons;
+    centerIcon = require('../images/newYearMain.png');
 
-        icons.push(require("../images/saveEarthHome.png"))
-        icons.push(require("../images/saveEarthExplore.png"))
-        icons.push(require("../images/saveEarthPrize.png"))
-        icons.push(require("../images/saveEarthPerson.png"))
+    selectedColor = '#FFFFFF';
+    unselectedColor = '#B1CCAA';
+  } else if (themeIndex == 5) {
+    /* save_earth_theme_icon */
+    gradientColors = ['#78AC6B', '#49843A'];
 
-        iconsSelected = icons
-        centerIcon = require("../images/saveEarthMain.png")
+    icons.push(require('../images/saveEarthHome.png'));
+    icons.push(require('../images/saveEarthExplore.png'));
+    icons.push(require('../images/saveEarthPrize.png'));
+    icons.push(require('../images/saveEarthPerson.png'));
 
-        selectedColor = '#FFFFFF'
-        unselectedColor = '#B1CCAA'
-    }
-    else if (themeIndex == 6) {
-        /* memee_theme_white_icon */
-        gradientColors = ['#FFFFFF', '#FFFFFF']
+    iconsSelected = icons;
+    centerIcon = require('../images/saveEarthMain.png');
 
-        icons.push(require("../images/whitehomeWhiteTheme.png"))
-        icons.push(require("../images/whiteexploreWhite.png"))
-        icons.push(require("../images/whiteTournamentWhite.png"))
-        icons.push(require("../images/whiteprofileWhite.png"))
+    selectedColor = '#FFFFFF';
+    unselectedColor = '#B1CCAA';
+  } else if (themeIndex == 6) {
+    /* memee_theme_white_icon */
+    gradientColors = ['#FFFFFF', '#FFFFFF'];
 
-        iconsSelected = icons
-        centerIcon = require("../images/whiteMainM.png")
+    icons.push(require('../images/whitehomeWhiteTheme.png'));
+    icons.push(require('../images/whiteexploreWhite.png'));
+    icons.push(require('../images/whiteTournamentWhite.png'));
+    icons.push(require('../images/whiteprofileWhite.png'));
 
-        selectedColor = '#FFD03B'
-        unselectedColor = '#000000'
-    }
-    else {
-        /* main_theme  */
-        gradientColors = ['#292929', '#292929']
+    iconsSelected = icons;
+    centerIcon = require('../images/whiteMainM.png');
 
-        icons.push(require("../images/Home.png"))
-        icons.push(require("../images/world.png"))
-        icons.push(require("../images/cup.png"))
-        icons.push(require("../images/person.png"))
+    selectedColor = '#FFD03B';
+    unselectedColor = '#000000';
+  } else {
+    /* main_theme  */
+    gradientColors = ['#292929', '#292929'];
 
-        iconsSelected.push(require("../images/mainHomFille.png"))
-        iconsSelected.push(require("../images/globeMainfilled.png"))
-        iconsSelected.push(require("../images/trophyFilledmain.png"))
-        iconsSelected.push(require("../images/personMainFilled.png"))
+    icons.push(require('../images/Home.png'));
+    icons.push(require('../images/world.png'));
+    icons.push(require('../images/cup.png'));
+    icons.push(require('../images/person.png'));
 
-        centerIcon = require("../images/mainM.png")
+    iconsSelected.push(require('../images/mainHomFille.png'));
+    iconsSelected.push(require('../images/globeMainfilled.png'));
+    iconsSelected.push(require('../images/trophyFilledmain.png'));
+    iconsSelected.push(require('../images/personMainFilled.png'));
 
-        selectedColor = '#FFCD2F'
-        unselectedColor = '#9B9B9B'        
-    }
+    centerIcon = require('../images/mainM.png');
 
-    function openGallery(){
-        setShowImagePickerDialog(false)
-        launchImageLibrary(options, (response) => {
-            console.log('Response = ', response);
+    selectedColor = '#FFCD2F';
+    unselectedColor = '#9B9B9B';
+  }
 
-            if (response.didCancel) {
-                // alert('User cancelled camera picker');
-                return;
-            } else if (response.errorCode == 'camera_unavailable') {
-                // alert('Camera not available on device');
-                return;
-            } else if (response.errorCode == 'permission') {
-                // alert('Permission not satisfied');
-                return;
-            } else if (response.errorCode == 'others') {
-                // alert(response.errorMessage);
-                return;
-            }
+  function openGallery() {
+    setShowImagePickerDialog(false);
+    launchImageLibrary(options, response => {
+      /* console.log('Response = ', response); */
 
-            let source = response.assets[0];
-            openPhotoEditor(source.uri)
-        });
-    }
+      if (response.didCancel) {
+        // alert('User cancelled camera picker');
+        return;
+      } else if (response.errorCode == 'camera_unavailable') {
+        // alert('Camera not available on device');
+        return;
+      } else if (response.errorCode == 'permission') {
+        // alert('Permission not satisfied');
+        return;
+      } else if (response.errorCode == 'others') {
+        // alert(response.errorMessage);
+        return;
+      }
 
-    const openCamera = async () => {
-        setShowImagePickerDialog(false)
-        let isStoragePermitted = await requestExternalWritePermission();
-        let isCameraPermitted = await requestCameraPermission();
-        if (isCameraPermitted && isStoragePermitted) {
-            launchCamera(options, (response) => {
-                console.log('Response = ', response);
+      let source = response.assets[0];
+      openPhotoEditor(source.uri);
+    });
+  }
 
-                if (response.didCancel) {
-                    // alert('User cancelled camera picker');
-                    return;
-                } else if (response.errorCode == 'camera_unavailable') {
-                    // alert('Camera not available on device');
-                    return;
-                } else if (response.errorCode == 'permission') {
-                    // alert('Permission not satisfied');
-                    return;
-                } else if (response.errorCode == 'others') {
-                    // alert(response.errorMessage);
-                    return;
-                }
+  const openCamera = async () => {
+    setShowImagePickerDialog(false);
+    let isStoragePermitted = await requestExternalWritePermission();
+    let isCameraPermitted = await requestCameraPermission();
+    if (isCameraPermitted && isStoragePermitted) {
+      launchCamera(options, response => {
+        /* console.log('Response = ', response); */
 
-                let source = response.assets[0];            
-                openPhotoEditor(source.uri)
-            });
+        if (response.didCancel) {
+          // alert('User cancelled camera picker');
+          return;
+        } else if (response.errorCode == 'camera_unavailable') {
+          // alert('Camera not available on device');
+          return;
+        } else if (response.errorCode == 'permission') {
+          // alert('Permission not satisfied');
+          return;
+        } else if (response.errorCode == 'others') {
+          // alert(response.errorMessage);
+          return;
         }
-    };
-    
 
-    function openPhotoEditor(uri){
-        PESDK.openEditor({ uri: uri}).then(
-            (result) => {
-              navigation.navigate("NewPost", {uri: result.image})
-            },
-            (error) => {
-              console.log(error);
-            });
+        let source = response.assets[0];
+        openPhotoEditor(source.uri);
+      });
     }
+  };
 
-    return (
-        // <View style={[styles.barStyle,{justifyContent: 'center'}]}>
-        <View style={[{justifyContent: 'center'}]}>
-            <LinearGradient
-                colors={gradientColors}
-                style={styles.bottom}
-            />
-            <View style={{flexDirection:'row', position: 'absolute',}}>
-            
-                <View style={styles.icon}>
-                    <TouchableOpacity onPress={() => onPress(1)} style={styles.touchstyle}>
-                        <Image
-                            style={styles.icon_inside}
-                            source={navIndex == 0 ? iconsSelected [0] : icons[0]}
-                        />
-                        <Text style={{ color: navIndex == 0 ? selectedColor : unselectedColor, fontSize: 11, fontFamily: global.fontSelect }}>Home</Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View style={styles.icon}>
-                    <TouchableOpacity onPress={() => onPress(2)} style={styles.touchstyle}>
-                        <Image
-                            style={styles.icon_inside}
-                            source={navIndex == 1 ? iconsSelected [1] : icons[1]}
-                        />
-                        <Text style={{ color: navIndex == 1 ? selectedColor : unselectedColor, fontSize: 11, fontFamily: global.fontSelect }}>Explore</Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View style={styles.icon}>
-                    <TouchableOpacity onPress={() => setShowImagePickerDialog(true)} style={styles.touchstyle}>
-                        <View>
-                            <Image
-                                style={styles.centerIcon}
-                                resizeMode='stretch'
-                                source={centerIcon}
-                            />
-                        </View>
-                    </TouchableOpacity>
-                </View>
-
-                <View style={styles.icon} >
-                    <TouchableOpacity onPress={() => onPress(3)} style={styles.touchstyle}>
-                        <Image
-                            style={styles.icon_inside}
-                            source={navIndex == 2 ? iconsSelected [2] : icons[2]}
-                        />
-                        <Text style={{ color: navIndex == 2 ? selectedColor : unselectedColor, fontSize: 11, fontFamily: global.fontSelect }}>Tournament</Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View style={styles.icon}>
-                    <TouchableOpacity onPress={() => onPress(4)} style={styles.touchstyle}>
-                        <Image
-                            style={styles.icon_inside}
-                            source={navIndex == 3 ? iconsSelected [3] : icons[3]}
-                        />
-                        <Text style={{ color: navIndex == 3 ? selectedColor : unselectedColor, fontSize: 11, fontFamily: global.fontSelect }}>Profile</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-            <Modal
-                animationType="fade"
-                transparent={true}
-                visible={showImagePickerDialog}
-                onRequestClose={() => {
-                    setShowImagePickerDialog(!showImagePickerDialog);
-                }}>
-                <View style={styles.centeredView}>
-                    <View style={styles.modalViewImgPicker}>
-
-                        <Text style={{ color: "#fff", fontWeight: 'bold', fontSize: 18, marginBottom: '15%', marginTop: '3%' }}>Select Image</Text>
-
-                        <TouchableOpacity style={{ marginBottom: '8%' }} onPress={() => openCamera()}>
-                            <Text style={{ color: "#fff", opacity: 0.5, fontSize: 16 }}>Take photo...</Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity style={{ marginBottom: '6%' }} onPress={() => openGallery()}>
-                            <Text style={{ color: "#fff", opacity: 0.5, fontSize: 16 }}>Choose from library...</Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity style={[styles.button, styles.buttonOpen, { marginTop: '20%' }]} onPress={() => setShowImagePickerDialog(false)} >
-                            <LinearGradient
-                                colors={[global.btnColor1, global.btnColor2]}
-                                style={{ paddingHorizontal: 27, paddingVertical: 15, justifyContent: 'center', alignSelf: 'center', borderRadius: 22, }}
-                            >
-                                <Text style={[styles.modalText, { color: global.btnTxt }]}>Close</Text>
-                            </LinearGradient>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </Modal>
-        </View>
-      
+  function openPhotoEditor(uri) {
+    PESDK.openEditor({uri: uri}).then(
+      result => {
+        navigation.navigate('NewPost', {uri: result.image});
+      },
+      error => {
+        /* console.log(error); */
+      },
     );
-}
+  }
+
+  return (
+    // <View style={[styles.barStyle,{justifyContent: 'center'}]}>
+    <View style={[{justifyContent: 'center'}]}>
+      <LinearGradient colors={gradientColors} style={styles.bottom} />
+      <View style={{flexDirection: 'row', position: 'absolute'}}>
+        <View style={styles.icon}>
+          <TouchableOpacity
+            onPress={() => onPress(1)}
+            style={styles.touchstyle}>
+            <Image
+              style={styles.icon_inside}
+              source={navIndex == 0 ? iconsSelected[0] : icons[0]}
+            />
+            <Text
+              style={{
+                color: navIndex == 0 ? selectedColor : unselectedColor,
+                fontSize: 11,
+                fontFamily: global.fontSelect,
+              }}>
+              Home
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.icon}>
+          <TouchableOpacity
+            onPress={() => onPress(2)}
+            style={styles.touchstyle}>
+            <Image
+              style={styles.icon_inside}
+              source={navIndex == 1 ? iconsSelected[1] : icons[1]}
+            />
+            <Text
+              style={{
+                color: navIndex == 1 ? selectedColor : unselectedColor,
+                fontSize: 11,
+                fontFamily: global.fontSelect,
+              }}>
+              Explore
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.icon}>
+          <TouchableOpacity
+            onPress={() => setShowImagePickerDialog(true)}
+            style={styles.touchstyle}>
+            <View>
+              <Image
+                style={styles.centerIcon}
+                resizeMode="stretch"
+                source={centerIcon}
+              />
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.icon}>
+          <TouchableOpacity
+            onPress={() => onPress(3)}
+            style={styles.touchstyle}>
+            <Image
+              style={styles.icon_inside}
+              source={navIndex == 2 ? iconsSelected[2] : icons[2]}
+            />
+            <Text
+              style={{
+                color: navIndex == 2 ? selectedColor : unselectedColor,
+                fontSize: 11,
+                fontFamily: global.fontSelect,
+              }}>
+              Tournament
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.icon}>
+          <TouchableOpacity
+            onPress={() => onPress(4)}
+            style={styles.touchstyle}>
+            <Image
+              style={styles.icon_inside}
+              source={navIndex == 3 ? iconsSelected[3] : icons[3]}
+            />
+            <Text
+              style={{
+                color: navIndex == 3 ? selectedColor : unselectedColor,
+                fontSize: 11,
+                fontFamily: global.fontSelect,
+              }}>
+              Profile
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={showImagePickerDialog}
+        onRequestClose={() => {
+          setShowImagePickerDialog(!showImagePickerDialog);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalViewImgPicker}>
+            <Text
+              style={{
+                color: '#fff',
+                fontWeight: 'bold',
+                fontSize: 18,
+                marginBottom: '15%',
+                marginTop: '3%',
+              }}>
+              Select Image
+            </Text>
+
+            <TouchableOpacity
+              style={{marginBottom: '8%'}}
+              onPress={() => openCamera()}>
+              <Text style={{color: '#fff', opacity: 0.5, fontSize: 16}}>
+                Take photo...
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={{marginBottom: '6%'}}
+              onPress={() => openGallery()}>
+              <Text style={{color: '#fff', opacity: 0.5, fontSize: 16}}>
+                Choose from library...
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.button, styles.buttonOpen, {marginTop: '20%'}]}
+              onPress={() => setShowImagePickerDialog(false)}>
+              <LinearGradient
+                colors={[global.btnColor1, global.btnColor2]}
+                style={{
+                  paddingHorizontal: 27,
+                  paddingVertical: 15,
+                  justifyContent: 'center',
+                  alignSelf: 'center',
+                  borderRadius: 22,
+                }}>
+                <Text style={[styles.modalText, {color: global.btnTxt}]}>
+                  Close
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-    bottom: {
-        flexDirection: 'row',
-        height: 80,
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30
+  bottom: {
+    flexDirection: 'row',
+    height: 80,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+  },
+  icon: {
+    width: windowWidth / 5,
+    alignSelf: 'center',
+  },
+  icon_inside: {
+    width: 30,
+    height: 30,
+    marginBottom: 5,
+    resizeMode: 'contain',
+  },
+  centerIcon: {
+    width: windowWidth / 5,
+    height: windowWidth / 5,
+    marginBottom: 30,
+  },
+  touchstyle: {
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalViewImgPicker: {
+    margin: 20,
+    height: 300,
+    width: '65%',
+    backgroundColor: '#201E23',
+    borderRadius: 15,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
     },
-    icon: {
-        width: windowWidth/5,
-        alignSelf: 'center'
-
-    },
-    icon_inside: {
-        width: 30,
-        height: 30,
-        marginBottom: 5,
-        resizeMode: 'contain'
-    },
-    centerIcon: {
-        width: windowWidth/5,
-        height: windowWidth/5,
-        marginBottom: 30
-    },
-    touchstyle: {
-        alignSelf: 'center', justifyContent: 'center', alignItems: 'center'
-    },
-    modalViewImgPicker: {
-        margin: 20,
-        height: 300,
-        width: '65%',
-        backgroundColor: "#201E23",
-        borderRadius: 15,
-        padding: 20,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5
-    },
-    centeredView: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        marginTop: '6%',
-    },
-    button: {
-        borderRadius: 25,
-        elevation: 2,
-        marginRight: '1%',
-        marginTop: '1%'
-    },
-    buttonOpen: {
-        backgroundColor: "#FBC848",
-        alignSelf: 'center'
-    },
-    modalText: {
-        marginBottom: 0,
-        marginTop: 0,
-        textAlign: "center",
-    },
-    barStyle:{
-        position: 'absolute',
-        left: 0,
-        bottom: 0,
-        right: 0,
-    }
-})
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: '6%',
+  },
+  button: {
+    borderRadius: 25,
+    elevation: 2,
+    marginRight: '1%',
+    marginTop: '1%',
+  },
+  buttonOpen: {
+    backgroundColor: '#FBC848',
+    alignSelf: 'center',
+  },
+  modalText: {
+    marginBottom: 0,
+    marginTop: 0,
+    textAlign: 'center',
+  },
+  barStyle: {
+    position: 'absolute',
+    left: 0,
+    bottom: 0,
+    right: 0,
+  },
+});
 
 export default BottomNavBar;

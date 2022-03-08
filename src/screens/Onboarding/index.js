@@ -38,16 +38,16 @@ export default function Onboarding({navigation}) {
     LoginManager.logInWithPermissions(['public_profile', 'email']).then(
       function (result) {
         if (result.isCancelled) {
-          console.log('Login cancelled');
+          /* console.log('Login cancelled'); */
         } else {
-          console.log(
+          /*  console.log(
             'Login success with permissions: ' +
               result.grantedPermissions.toString(),
-          );
+          ); */
           const currentProfile = Profile.getCurrentProfile().then(
             function (currentProfile) {
               if (currentProfile) {
-                console.log('The current logged user is: ' + currentProfile);
+                /* console.log('The current logged user is: ' + currentProfile); */
               }
             },
             AccessToken.getCurrentAccessToken().then(data => {
@@ -74,7 +74,7 @@ export default function Onboarding({navigation}) {
     )
       .then(response => response.json())
       .then(json => {
-        console.log('Logged in user data', json);
+        /* console.log('Logged in user data', json); */
         emailVar = json.email;
         nameVar = json.name;
         imageVar = json.picture.data.url;
@@ -99,7 +99,7 @@ export default function Onboarding({navigation}) {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      console.log(userInfo.user.name);
+      /* console.log(userInfo.user.name); */
       emailVar = userInfo.user.email;
       nameVar = userInfo.user.name;
       imageVar = userInfo.user.photo.replace('s96-c', 's384-c', true);

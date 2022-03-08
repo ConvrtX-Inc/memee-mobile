@@ -47,7 +47,7 @@ export default function LoginScreen({navigation}) {
         text2: 'Please enter a valid password',
       });
     } else {
-      console.log(global.address + 'login');
+      /* console.log(global.address + 'login'); */
       fetch(global.address + 'login', {
         method: 'POST',
         headers: {
@@ -75,10 +75,10 @@ export default function LoginScreen({navigation}) {
             await AsyncStorage.setItem('@userImg', '');
             await AsyncStorage.setItem('@userLoginType', 'Email');
 
-            console.log(
+            /* console.log(
               'global.token = responseJson.Token',
               responseJson.Token,
-            );
+            ); */
 
             global.token = responseJson.Token;
 

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text } from 'react-native';
+import React, {useState} from 'react';
+import {View, Text} from 'react-native';
 import App from './App';
 import firebase from '@react-native-firebase/app';
 
@@ -17,49 +17,49 @@ import messaging from '@react-native-firebase/messaging';
 //   measurementId: "G-H15CTD7WSB"
 // };
 
-
-var firebaseConfig = {
-  apiKey: "AIzaSyCMsL44vvpEAO8T5Fyead6C2E48KyiOaAo",
-  authDomain: "memee-ce64c.firebaseapp.com",
-  projectId: "memee-ce64c",
+/* var firebaseConfig = {
+  apiKey: 'AIzaSyAfjXyX-CXZTpLZKZiZVqSc_Rr2-wp8iN0',
+  authDomain: 'memee-ce64c.firebaseapp.com',
+  projectId: 'memee-app-d35d3',
   databaseURL: '',
-  storageBucket: "memee-ce64c.appspot.com",
-  messagingSenderId: "665746906328",
-  appId: "1:665746906328:web:24613c004294aa787dcbad",
-  measurementId: "G-ST2GTWP2RL"
+  storageBucket: 'memee-app-d35d3.appspot.com',
+  messagingSenderId: '665746906328',
+  appId: '1:628249846461:android:54ea0b987cde5aa6698dd4',
+  measurementId: 'G-ST2GTWP2RL',
+}; */
+
+const firebaseConfig = {
+  apiKey: 'AIzaSyD9J-gxMObldqQJGX1SKYY24A3rBmc89bk',
+  authDomain: 'memee-app-d35d3.firebaseapp.com',
+  databaseURL: 'https://memee-app-d35d3-default-rtdb.firebaseio.com',
+  projectId: 'memee-app-d35d3',
+  storageBucket: 'memee-app-d35d3.appspot.com',
+  messagingSenderId: '628249846461',
+  appId: '1:628249846461:web:0c55fc1c27ffdf52698dd4',
+  measurementId: 'G-7ZC1956Z48',
 };
 
-
 if (!firebase.apps.length) {
-
-  console.log("running setup....")
-  firebase.initializeApp(firebaseConfig)
+  /* console.log("running setup....") */
+  firebase.initializeApp(firebaseConfig);
 }
 
-export { firebase, messaging, }
+export {firebase, messaging};
 
 const Setup = () => {
-
   const [loading, setLoading] = useState(true);
 
   const setupCloudMessaging = async () => {
-   
-
     messaging()
-    .subscribeToTopic('notifyAll')
-    .then(() => console.log('Subscribed to topic!'));
-
-
-  
-  }
+      .subscribeToTopic('notifyAll')
+      .then(() => console.log('Subscribed to topic!'));
+  };
 
   React.useEffect(async () => {
-
-    setupCloudMessaging()
-
+    setupCloudMessaging();
   }, []);
 
-  return <App />
-}
+  return <App />;
+};
 
 export default Setup;

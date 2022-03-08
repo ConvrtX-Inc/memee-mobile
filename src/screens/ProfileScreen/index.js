@@ -147,8 +147,8 @@ export default function ProfileScreen(props) {
   }
 
   function profileDataFN() {
-    console.log('profile screen running ...');
-    console.log(global.profileID);
+    /* console.log('profile screen running ...');
+    console.log(global.profileID); */
     userBio = '';
     fetch(global.address + 'GetUserProfile/' + global.profileID, {
       method: 'get',
@@ -169,7 +169,7 @@ export default function ProfileScreen(props) {
         userimgUrl = responseJson.profile.imgurl;
 
         if (userBio == '') {
-          console.log('bio is empty...');
+          /* console.log('bio is empty...'); */
           userBio = '';
         }
 
@@ -236,7 +236,7 @@ export default function ProfileScreen(props) {
     let isCameraPermitted = await requestCameraPermission();
     if (isCameraPermitted && isStoragePermitted) {
       launchCamera(options, response => {
-        console.log('Response = ', response);
+        /* console.log('Response = ', response); */
 
         if (response.didCancel) {
           // alert('User cancelled camera picker');
@@ -297,7 +297,7 @@ export default function ProfileScreen(props) {
     RNS3.put(file, getBucketOptions('posts')).then(response => {
       if (response.status !== 201)
         throw new Error('Failed to upload image to S3');
-      console.log('here3');
+      /* console.log('here3'); */
 
       postUploadFN(response.body.postResponse.location);
     });
@@ -321,7 +321,7 @@ export default function ProfileScreen(props) {
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson);
+        /* console.log(responseJson); */
         if (responseJson.Status == '201') {
           global.token = responseJson.Token;
         }

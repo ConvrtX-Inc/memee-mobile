@@ -70,7 +70,7 @@ export default function JudgeMeme(props) {
           element.calHeight = height * ratio;
           element.calWidth = windowWidth;
 
-          console.log(index, element.calHeight);
+          /* console.log(index, element.calHeight); */
 
           if (index == data.length - 1) {
             setPosts(data);

@@ -34,7 +34,7 @@ export default class ProfileImageShow extends React.Component {
     });
 
   async componentDidMount() {
-    console.log(global.selectedPost.img_url);
+    /* console.log(global.selectedPost.img_url); */
     const [width, height] = await this.getImageSize(
       global.selectedPost.img_url,
     );
@@ -87,7 +87,7 @@ export default class ProfileImageShow extends React.Component {
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson);
+        /* console.log(responseJson); */
       })
       .catch(error => {
         console.error(error);
@@ -101,7 +101,7 @@ export default class ProfileImageShow extends React.Component {
   }
 
   sharePostFN() {
-    console.log(this.state.selectedPostState);
+    /* console.log(this.state.selectedPostState); */
 
     global.sharePost = this.state.selectedPostState;
     this.props.navigation.navigate('SharePost');

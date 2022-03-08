@@ -34,11 +34,11 @@ const Inbox = ({showValue}) => {
 
   useFocusEffect(
     React.useCallback(() => {
-      console.log('Screen was focused');
+      /* console.log('Screen was focused'); */
       getConversations();
       // Do something when the screen is focused
       return () => {
-        console.log('Screen was unfocused');
+        /* console.log('Screen was unfocused'); */
       };
     }, []),
   );

@@ -16,7 +16,7 @@ import Toast from 'react-native-toast-message';
 import {urls} from '../../api/urls';
 
 export function registerUserFN(data, removeStates, navigate) {
-  console.log('Login data..', data);
+  /* console.log('Login data..', data); */
 
   return async dispatch => {
     axios({
@@ -36,7 +36,7 @@ export function registerUserFN(data, removeStates, navigate) {
         });
       })
       .then(Response => {
-        console.log('products Response: WITH TOKEN', Response.data);
+        /* console.log('products Response: WITH TOKEN', Response.data); */
 
         if (Response.data.Status == 201) {
           dispatch({type: REGISTER_USER, data: Response.data});
@@ -92,8 +92,8 @@ export function readNotifications() {
 }
 
 export function toggleOnlineStatus(val) {
-  console.info('val', val);
-  console.info('uth_token: global.token,', global.token);
+  /* console.info('val', val);
+  console.info('uth_token: global.token,', global.token); */
   fetch(
     global.address +
       'toggleOnlineStatus/' +
@@ -111,7 +111,7 @@ export function toggleOnlineStatus(val) {
   )
     .then(response => response.json())
     .then(responseJson => {
-      console.log('\n Apstatus Api called.... \n', responseJson);
+      /* console.log('\n Apstatus Api called.... \n', responseJson); */
     })
     .catch(error => {
       console.error(error);
