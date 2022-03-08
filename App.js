@@ -61,6 +61,7 @@ import Congradulation from './src/screens/Congradulation';
 
 import Toast from 'react-native-toast-message';
 import {toggleOnlineStatus} from './src/redux/actions/Auth';
+import {urls} from './src/api/urls';
 
 const {store, persistor} = configureStore();
 
@@ -68,7 +69,8 @@ const Stack = createStackNavigator();
 
 global.profileBGArray = '1';
 global.bgOverlay = '1';
-global.address = 'https://staging-memee-services-convrtx.herokuapp.com/Api/';
+global.address = `${urls.baseUrl}/`;
+/* global.address = 'https://staging-memee-services-convrtx.herokuapp.com/Api/'; */
 /* global.address = 'http://memee.techticksdigital.com/Api/'; */
 // global.address = "http://192.168.18.106/memee-services/Api/"
 
