@@ -27,6 +27,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {coinsRecordFN} from '../../redux/actions/Auth';
 import Toast from 'react-native-toast-message';
 import {getBucketOptions} from '../../Utility/Utils';
+import storage from '@react-native-firebase/storage';
 
 // mock data for ui changes
 // Temporary import of colors
@@ -185,7 +186,24 @@ export default function EditProfileScreen(props) {
       name: generateUID() + '.jpg',
       type: source.type,
     };
-    RNS3.put(file, getBucketOptions('posts'))
+    let reference = storage().ref(file.name);
+    let task = reference.putFile(file.uri);
+
+    task
+      .then(response => {
+        console.log('Image uploaded to the bucket!');
+        reference.getDownloadURL().then(response => {
+          /*  console.log('Image downloaded from the bucket!', response); */
+          setImgUrl(response);
+          setIndicatButton(false);
+        });
+      })
+      .catch(e => {
+        console.log('uploading image error => ', e);
+        setIndicatButton(false);
+      });
+
+    /* RNS3.put(file, getBucketOptions('posts'))
       .then(response => {
         if (response.status !== 201)
           throw new Error('Failed to upload image to S3');
@@ -196,7 +214,7 @@ export default function EditProfileScreen(props) {
       .catch(error => {
         console.error(error);
         setIndicatButton(false);
-      });
+      }); */
   }
 
   function saveChanges() {

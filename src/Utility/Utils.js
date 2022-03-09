@@ -1,4 +1,5 @@
 import {PermissionsAndroid, Platform} from 'react-native';
+import storage from '@react-native-firebase/storage';
 
 export default function DateDifference(date) {
   const date1 = new Date('7/13/2010');
@@ -410,3 +411,25 @@ export const isStrongPassword = txt => {
     return false;
   }
 };
+
+/* export const storeImageToFirebase = async (name, path) => {
+  try {
+    let reference = storage().ref(file.name);
+    let task = await reference.putFile(file.uri);
+
+    if (task.state == 'success') {
+      let res = await reference.getDownloadURL();
+      if (res) {
+        return {success: res};
+      } else {
+        return {error: res};
+      }
+    } else {
+      return {error: task.error};
+    }
+  } catch (error) {
+    console.log('uploading image error => ', e);
+    throw new Error(error);
+  }
+};
+ */

@@ -29,6 +29,7 @@ import {generateUID} from '../../Utility/Utils';
 import {RNS3} from 'react-native-aws3';
 import {getLastSeenFormat} from '../../Utility/Utils';
 import {getBucketOptions} from '../../Utility/Utils';
+import storage from '@react-native-firebase/storage';
 
 const ChatScreen = ({route}) => {
   const navigation = useNavigation();
@@ -274,7 +275,35 @@ const ChatScreen = ({route}) => {
           name: generateUID() + '.jpg',
           type: 'image/jpeg',
         };
-        RNS3.put(file, getBucketOptions('chat')).then(response => {
+
+        let reference = storage().ref(file.name);
+        let task = reference.putFile(file.uri);
+
+        task
+          .then(response => {
+            console.log('Image uploaded to the bucket!');
+            reference.getDownloadURL().then(response => {
+              /* console.log('Image downloaded from the bucket!', response); */
+
+              var valueToPush = {};
+              valueToPush['_id'] = Math.floor(Math.random() * 100000);
+              valueToPush['text'] = '';
+              valueToPush['createdAt'] = new Date();
+              valueToPush['user'] = users.find(
+                element => element.userId == global.userData.user_id,
+              );
+              valueToPush['image'] = response;
+
+              let msg = [];
+              msg.push(valueToPush);
+              sendMessage(msg, 'image');
+            });
+          })
+          .catch(e => {
+            console.log('uploading image error => ', e);
+          });
+
+        /* RNS3.put(file, getBucketOptions('chat')).then(response => {
           if (response.status !== 201)
             throw new Error('Failed to upload image to S3');
           // setChatModal(false)
@@ -291,7 +320,7 @@ const ChatScreen = ({route}) => {
           let msg = [];
           msg.push(valueToPush);
           sendMessage(msg, 'image');
-        });
+        }); */
       }
     });
   };

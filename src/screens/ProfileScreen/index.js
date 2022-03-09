@@ -31,6 +31,7 @@ import BottomNavBar from '../../component/BottomNavBar';
 import {TextInput} from 'react-native-gesture-handler';
 import {color} from 'react-native-reanimated';
 import {getBucketOptions} from '../../Utility/Utils';
+import storage from '@react-native-firebase/storage';
 
 const axios = require('axios');
 
@@ -294,13 +295,32 @@ export default function ProfileScreen(props) {
       name: generateUID() + '.jpg',
       type: source.type,
     };
-    RNS3.put(file, getBucketOptions('posts')).then(response => {
+
+    let reference = storage().ref(file.name);
+    let task = reference.putFile(file.uri);
+
+    task
+      .then(response => {
+        console.log('Image uploaded to the bucket!');
+        reference.getDownloadURL().then(response => {
+          /*  console.log('Image downloaded from the bucket!', response); */
+          postUploadFN(response);
+        });
+      })
+      .catch(e => {
+        console.log('uploading image error => ', e);
+        Toast.show({
+          type: 'error',
+          text2: 'Unable to post. Please try again later!',
+        });
+      });
+
+    /* RNS3.put(file, getBucketOptions('posts')).then(response => {
       if (response.status !== 201)
         throw new Error('Failed to upload image to S3');
-      /* console.log('here3'); */
 
       postUploadFN(response.body.postResponse.location);
-    });
+    }); */
   }
 
   function postUploadFN(imgUrl) {
