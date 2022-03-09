@@ -26,6 +26,7 @@ import ButtonLargeIndicator from '../../component/ButtonLargeIndicator';
 import {navigateToHome} from '../../Utility/Utils';
 import Toast from 'react-native-toast-message';
 import {getBucketOptions} from '../../Utility/Utils';
+import storage from '@react-native-firebase/storage';
 
 export default function NewPost(routes) {
   const navigation = useNavigation();
@@ -61,6 +62,27 @@ export default function NewPost(routes) {
       name: generateUID() + '.jpg',
       type: 'image/jpeg',
     };
+
+    let reference = storage().ref(file.name);
+    let task = reference.putFile(file.uri);
+
+    task
+      .then(response => {
+        console.log('Image uploaded to the bucket!');
+        reference.getDownloadURL().then(response => {
+          /* console.log('Image downloaded from the bucket!', response); */
+          postUploadFN(response);
+        });
+      })
+      .catch(e => {
+        console.log('uploading image error => ', e);
+        Toast.show({
+          type: 'error',
+          text2: 'Unable to post. Please try again later!',
+        });
+      });
+
+    /* 
     RNS3.put(file, getBucketOptions('posts'))
       .then(response => {
         if (response.status !== 201)
@@ -75,7 +97,7 @@ export default function NewPost(routes) {
           type: 'error',
           text2: 'Unable to post. Please try again later!',
         });
-      });
+      }); */
   }
 
   function postUploadFN(location) {
