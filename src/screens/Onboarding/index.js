@@ -24,6 +24,8 @@ import {currentDateFN} from '../../Utility/Utils';
 import Toast from 'react-native-toast-message';
 import {toggleOnlineStatus} from '../../redux/actions/Auth';
 
+import auth from '@react-native-firebase/auth';
+
 Settings.initializeSDK();
 global.userData = [];
 var emailVar = '';
@@ -35,19 +37,18 @@ const windowWidth = Dimensions.get('window').width;
 export default function Onboarding({navigation}) {
   // Login with fb
   async function onFacebookButtonPress() {
-    LoginManager.logInWithPermissions(['public_profile', 'email']).then(
+    Toast.show({
+      type: 'error',
+      text2: 'Login with Facebook is under maintenance.',
+    });
+
+    /*  LoginManager.logInWithPermissions(['public_profile', 'email']).then(
       function (result) {
         if (result.isCancelled) {
-          /* console.log('Login cancelled'); */
         } else {
-          /*  console.log(
-            'Login success with permissions: ' +
-              result.grantedPermissions.toString(),
-          ); */
           const currentProfile = Profile.getCurrentProfile().then(
             function (currentProfile) {
               if (currentProfile) {
-                /* console.log('The current logged user is: ' + currentProfile); */
               }
             },
             AccessToken.getCurrentAccessToken().then(data => {
@@ -64,7 +65,7 @@ export default function Onboarding({navigation}) {
         });
         console.log('Login fail with error: ' + error);
       },
-    );
+    ); */
   }
 
   const initUser = token => {
@@ -90,8 +91,7 @@ export default function Onboarding({navigation}) {
 
   GoogleSignin.configure({
     webClientId:
-      '665746906328-apdgobof81ouuksedv3o0pr757er9v5u.apps.googleusercontent.com',
-    // androidClientId: '665746906328-10hlk6e5nm0gm7o0ljqb32gj78sbpmmf.apps.googleusercontent.com',
+      '628249846461-u50ij37aidhtm6m5e12vab1lin15lb18.apps.googleusercontent.com',
     offlineAccess: true,
   });
 
@@ -99,7 +99,7 @@ export default function Onboarding({navigation}) {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      /* console.log(userInfo.user.name); */
+
       emailVar = userInfo.user.email;
       nameVar = userInfo.user.name;
       imageVar = userInfo.user.photo.replace('s96-c', 's384-c', true);
@@ -122,6 +122,18 @@ export default function Onboarding({navigation}) {
       }
     }
   };
+
+  /*   const signInGmail = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const {accessToken, idToken} = await GoogleSignin.signIn();
+      setloggedIn(true);
+      const credential = auth.GoogleAuthProvider.credential(
+        idToken,
+        accessToken,
+      );
+      await auth().signInWithCredential(credential);
+    } catch (error) { console.log('error google Login', error) } */
 
   async function SignupFN() {
     var currentDate = currentDateFN();
@@ -193,15 +205,19 @@ export default function Onboarding({navigation}) {
     task: Log In Button Via Twitter is Missing
   */
   const onTwitterButtonPress = async () => {
-    try {
-      /* const res = await */
+    /* try {
+      
     } catch (error) {
       Toast.show({
         type: 'error',
         text2: 'Please check your internet connection.',
       });
       console.error('Login view Twitter error:', error);
-    }
+    } */
+    Toast.show({
+      type: 'error',
+      text2: 'Login with Twitter is under maintenance.',
+    });
   };
 
   return (
