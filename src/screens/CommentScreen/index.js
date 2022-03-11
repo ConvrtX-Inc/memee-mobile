@@ -71,7 +71,36 @@ export default class CommentScreen extends React.Component {
       .then(responseJson => {
         if (responseJson.length > 0) {
           var comments = testFN(responseJson);
-          var reversed = [].concat(comments).reverse();
+          var comment = [];
+          var replies = [];
+          var commentList = [];
+          if (comments.length > 0) {
+            for (let i = comments.length - 1; i >= 0; i--) {
+              if (comments[i].parent_id == 0) {
+                comment.push(comments[i]);
+              } else {
+                replies.push(comments[i]);
+              }
+            }
+            commentList = Array.from(comment);
+            //console.log(commentList)
+            //console.log(replies)
+            if (replies.length > 0) {
+              for (let i = 0; i < comment.length; i++) {
+                for (let j = replies.length - 1; j >= 0; j--) {
+                  if (comment[i].comment_id == replies[j].parent_id) {
+                    console.log(
+                      '\nreplies[j]\n',
+                      replies[j].parent_id,
+                      comment[i].comment_id,
+                    );
+                    commentList.splice(i, 0, replies[j]);
+                  }
+                }
+              }
+            }
+          }
+          var reversed = [].concat(commentList).reverse();
           this.setState({
             flatlist: reversed,
           });
@@ -305,6 +334,7 @@ export default class CommentScreen extends React.Component {
                             fontWeight: 'bold',
                             marginBottom: 5,
                             fontFamily: global.fontSelect,
+                            maxWidth: windowWidth * 0.7,
                           }}>
                           {item.UserName}
                         </Text>
@@ -408,6 +438,7 @@ export default class CommentScreen extends React.Component {
                           fontWeight: 'bold',
                           marginBottom: 5,
                           fontFamily: global.fontSelect,
+                          maxWidth: windowWidth * 0.637,
                         }}>
                         {item.UserName}
                       </Text>
