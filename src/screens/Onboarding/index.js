@@ -37,12 +37,12 @@ const windowWidth = Dimensions.get('window').width;
 export default function Onboarding({navigation}) {
   // Login with fb
   async function onFacebookButtonPress() {
-    Toast.show({
+    /* Toast.show({
       type: 'error',
       text2: 'Login with Facebook is under maintenance.',
-    });
+    }); */
 
-    /*  LoginManager.logInWithPermissions(['public_profile', 'email']).then(
+    LoginManager.logInWithPermissions(['public_profile', 'email']).then(
       function (result) {
         if (result.isCancelled) {
         } else {
@@ -65,7 +65,7 @@ export default function Onboarding({navigation}) {
         });
         console.log('Login fail with error: ' + error);
       },
-    ); */
+    );
   }
 
   const initUser = token => {
