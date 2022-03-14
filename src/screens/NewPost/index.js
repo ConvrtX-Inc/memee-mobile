@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 // import { useState } from 'react';
 import {
   View,
@@ -14,19 +14,23 @@ import {
   ImageBackground,
   ViewBase,
 } from 'react-native';
-import {Avatar} from 'react-native-elements';
-import {useNavigation} from '@react-navigation/native';
+import { Avatar } from 'react-native-elements';
+import { useNavigation } from '@react-navigation/native';
 import ButtonLarge from '../../component/ButtonLarge';
-import {generateUID, currentDateFN} from '../../Utility/Utils';
+import { generateUID, currentDateFN } from '../../Utility/Utils';
 import ImagePicker from 'react-native-image-picker';
 import InputMultilineBig from '../../component/InputMultiLineBig';
 import RNFetchBlob from 'rn-fetch-blob';
-import {RNS3} from 'react-native-aws3';
+import { RNS3 } from 'react-native-aws3';
 import ButtonLargeIndicator from '../../component/ButtonLargeIndicator';
-import {navigateToHome} from '../../Utility/Utils';
+import { navigateToHome } from '../../Utility/Utils';
 import Toast from 'react-native-toast-message';
-import {getBucketOptions} from '../../Utility/Utils';
+import { getBucketOptions } from '../../Utility/Utils';
 import storage from '@react-native-firebase/storage';
+
+import Video from 'react-native-video';
+
+
 
 export default function NewPost(routes) {
   const navigation = useNavigation();
@@ -34,6 +38,9 @@ export default function NewPost(routes) {
   const [post, setPost] = useState('');
   const [indicatButton, setIndicatButton] = useState(false);
   const [filePath, setFilePath] = useState('');
+  const [fileType, setFileType] = useState('');
+
+  var player = useRef();
 
   useEffect(() => {
     const backAction = () => {
@@ -50,17 +57,23 @@ export default function NewPost(routes) {
   }, []);
 
   useEffect(() => {
+    console.log("File URI", routes.route.params.uri, "File TYPE", routes.route.params.type)
     if (routes && routes.route && routes.route.params)
       setFilePath(routes.route.params.uri);
+    setFileType(routes.route.params.type)
   }, []);
 
   function uploadImageToS3() {
     setIndicatButton(true);
 
-    const file = {
+    const file = fileType == 'photo' ?  {
       uri: filePath,
       name: generateUID() + '.jpg',
       type: 'image/jpeg',
+    } : {
+      uri: filePath,
+      name: generateUID() + '.mp4',
+      type: 'video/mp4',
     };
 
     let reference = storage().ref(file.name);
@@ -101,6 +114,7 @@ export default function NewPost(routes) {
   }
 
   function postUploadFN(location) {
+    console.log("LOCATION: ",location);
     var currentDate = currentDateFN();
     fetch(global.address + 'AddPost', {
       method: 'POST',
@@ -147,30 +161,30 @@ export default function NewPost(routes) {
         backgroundColor: global.colorPrimary,
         marginBottom: -30,
       }}>
-      <ScrollView style={{padding: 10}}>
-        <View style={{flexDirection: 'row', marginTop: 10}}>
+      <ScrollView style={{ padding: 10 }}>
+        <View style={{ flexDirection: 'row', marginTop: 10 }}>
           <TouchableOpacity onPress={() => navigatFN()}>
             <Image
-              style={[styles.tinyLogo, {tintColor: global.colorIcon}]}
+              style={[styles.tinyLogo, { tintColor: global.colorIcon }]}
               source={require('../../images/back1.png')}
             />
           </TouchableOpacity>
           <Text
             style={[
               styles.title,
-              {fontFamily: global.fontSelect, color: global.colorIcon},
+              { fontFamily: global.fontSelect, color: global.colorIcon },
             ]}>
             {' '}
             New post
           </Text>
         </View>
 
-        <View style={{flexDirection: 'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           <View>
             <Avatar
               rounded
               size="medium"
-              source={{uri: global.userData.imgurl}}
+              source={{ uri: global.userData.imgurl }}
             />
           </View>
 
@@ -197,7 +211,7 @@ export default function NewPost(routes) {
           </View>
         </View>
 
-        <View style={{marginLeft: -10, marginBottom: 10}}>
+        <View style={{ marginLeft: -10, marginBottom: 10 }}>
           <InputMultilineBig
             placeholder="Type text here...."
             onChangeText={text => setPost(text)}
@@ -206,8 +220,14 @@ export default function NewPost(routes) {
             color={global.colorTextPrimary}
           />
         </View>
-
-        <Image source={{uri: filePath}} style={styles.imageStyle} />
+        {
+          fileType == 'photo' ? <Image source={{ uri: filePath }} style={styles.imageStyle} /> : 
+          <Video
+            source={{ uri: filePath }}
+            ref={player}
+            style={{ height: 300, margin: 5 }}
+          />
+        }
 
         {indicatButton == false ? (
           <ButtonLarge
@@ -228,7 +248,7 @@ export default function NewPost(routes) {
           />
         )}
 
-        <View style={{marginBottom: 70}}></View>
+        <View style={{ marginBottom: 70 }}></View>
       </ScrollView>
     </View>
   );

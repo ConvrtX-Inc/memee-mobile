@@ -7,6 +7,8 @@ import {
   Modal,
   StyleSheet,
   Dimensions,
+  Platform,
+  NativeModules,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {
@@ -21,6 +23,32 @@ import {
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 var windowWidth = Dimensions.get('window').width;
+
+//Banuba Video Editor
+const { VideoEditorModule } = NativeModules;
+
+const openEditor = (): Promise<{ videoUri: string } | null> => {
+  return VideoEditorModule.openVideoEditor();
+};
+
+export const openVideoEditor = async (): Promise<string | null> => {
+  const response = await openEditor();
+
+  console.log('response',response)
+
+  if (!response) {
+    return null;
+  }
+
+  return response?.videoUri;
+};
+
+async function getAndroidExportResult() {
+  
+  return await VideoEditorModule.openVideoEditor();
+}
+//End Video Editor
+
 
 const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
   const [showImagePickerDialog, setShowImagePickerDialog] = useState(false);
@@ -189,6 +217,8 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
     });
   }
 
+
+
   const openCamera = async () => {
     setShowImagePickerDialog(false);
     let isStoragePermitted = await requestExternalWritePermission();
@@ -220,7 +250,8 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
   function openPhotoEditor(uri) {
     PESDK.openEditor({uri: uri}).then(
       result => {
-        navigation.navigate('NewPost', {uri: result.image});
+        
+        navigation.navigate('NewPost', {uri: result.image,type:'photo'});
       },
       error => {
         /* console.log(error); */
@@ -340,7 +371,7 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
                 marginBottom: '15%',
                 marginTop: '3%',
               }}>
-              Select Image
+              Select File
             </Text>
 
             <TouchableOpacity
@@ -355,7 +386,30 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
               style={{marginBottom: '6%'}}
               onPress={() => openGallery()}>
               <Text style={{color: '#fff', opacity: 0.5, fontSize: 16}}>
-                Choose from library...
+                Choose Photo from library...
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={{marginBottom: '6%'}}
+              onPress={() => {
+                setShowImagePickerDialog(false);
+                if (Platform.OS === 'android') {
+                  getAndroidExportResult().then(videoUri => {
+                    console.log(videoUri)
+                    // alert("VIDEO URI TO BE SAVED IN DB"+videoUri)
+                    navigation.navigate('NewPost', {uri: `file://${videoUri}`,type:'video'});
+                  }).catch(e => {
+                    console.log("error",e)
+                    console.log(e)
+                  })
+                } else {
+                  const videoUri = openVideoEditor();
+                  console.log(videoUri)
+                }
+              }}>
+              <Text style={{color: '#fff', opacity: 0.5, fontSize: 16}}>
+                Select Video
               </Text>
             </TouchableOpacity>
 
