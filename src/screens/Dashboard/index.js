@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -20,17 +20,19 @@ import {
   ViewBase,
 } from 'react-native';
 import ButtonCoins from '../../component/ButtonCoins';
-import {Avatar} from 'react-native-elements';
-import {useNavigation} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
+import { Avatar } from 'react-native-elements';
+import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import TwitterTextView from 'react-native-twitter-textview';
-import {currentDateFN} from '../../Utility/Utils';
+import { currentDateFN } from '../../Utility/Utils';
 import messaging from '@react-native-firebase/messaging';
-import {firebaseConfig} from '../../redux/constants';
+import { firebaseConfig } from '../../redux/constants';
 import BottomNavBar from '../../component/BottomNavBar';
-import {getNotifications} from '../../redux/actions/Auth';
+import { getNotifications } from '../../redux/actions/Auth';
 import Toast from 'react-native-toast-message';
+import Video from 'react-native-video';
+import VideoPlayer from 'react-native-video-controls';
 
 var offset = 0;
 global.navigateDashboard = 1;
@@ -40,8 +42,8 @@ var gloIndex = '';
 
 export default function Dashboard(props) {
   const navigation = useNavigation();
-  const {coinsStored, scrollDown, ImageBottoms, notifications} = useSelector(
-    ({authRed}) => authRed,
+  const { coinsStored, scrollDown, ImageBottoms, notifications } = useSelector(
+    ({ authRed }) => authRed,
   );
 
   const [dBottomFont, setdBottomFont] = useState(global.fontSelect);
@@ -67,7 +69,7 @@ export default function Dashboard(props) {
   const [refreshing, setRefreshing] = React.useState(false);
   const [loaderIndicator, setLoaderIndicator] = useState(true);
   const flatlistRef = useRef();
-
+  const playerRef = useRef();
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     selectTab(global.navigateDashboard);
@@ -123,10 +125,10 @@ export default function Dashboard(props) {
   function saveTokenToDatabase(deviceToken) {
     fetch(
       global.address +
-        'updateDeviceToken/' +
-        global.userData.user_id +
-        '/' +
-        deviceToken,
+      'updateDeviceToken/' +
+      global.userData.user_id +
+      '/' +
+      deviceToken,
       {
         method: 'get',
         headers: {
@@ -241,13 +243,13 @@ export default function Dashboard(props) {
 
     fetch(
       global.address +
-        postApiName +
-        '/' +
-        global.userData.user_id +
-        '/' +
-        offset +
-        '/' +
-        limit,
+      postApiName +
+      '/' +
+      global.userData.user_id +
+      '/' +
+      offset +
+      '/' +
+      limit,
       {
         method: 'get',
         headers: {
@@ -261,7 +263,7 @@ export default function Dashboard(props) {
       .then(responseJson => {
         setRefreshing(false);
 
-        /* console.log('responseJson', responseJson); */
+        console.log('responseJson', responseJson);
 
         let data = [];
 
@@ -426,7 +428,7 @@ export default function Dashboard(props) {
   const textMaximumWidth = windowWidth * 0.75 - 20;
   /* console.log('textMaximumWidth', textMaximumWidth); */
   return (
-    <View style={{flex: 1, backgroundColor: global.colorPrimary}}>
+    <View style={{ flex: 1, backgroundColor: global.colorPrimary }}>
       <FlatList
         ref={flatlistRef}
         data={followingPost}
@@ -435,10 +437,10 @@ export default function Dashboard(props) {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
-        renderItem={({item, index}) => (
+        renderItem={({ item, index }) => (
           <View
-            style={{width: windowWidth, alignSelf: 'center', marginBottom: 10}}>
-            <View style={{flexDirection: 'row', marginBottom: 10}}>
+            style={{ width: windowWidth, alignSelf: 'center', marginBottom: 10 }}>
+            <View style={{ flexDirection: 'row', marginBottom: 10 }}>
               {item.ParentUserId > 0 ? (
                 <View>
                   <TouchableOpacity
@@ -459,7 +461,7 @@ export default function Dashboard(props) {
                           <Avatar
                             rounded
                             size="medium"
-                            source={{uri: item.UserImage}}
+                            source={{ uri: item.UserImage }}
                           />
                         </View>
                       </View>
@@ -479,7 +481,7 @@ export default function Dashboard(props) {
                             fontFamily: global.fontSelect,
                             width: textMaximumWidth - 100,
                           }}>
-                          <Text style={{width: 5}}>{item.UserName} </Text>
+                          <Text style={{ width: 5 }}>{item.UserName} </Text>
                         </Text>
                         <Text
                           style={{
@@ -510,12 +512,12 @@ export default function Dashboard(props) {
                           <Avatar
                             rounded
                             size="small"
-                            source={{uri: item.ParentUserImage}}
+                            source={{ uri: item.ParentUserImage }}
                           />
                         </View>
                       </View>
 
-                      <View style={{marginLeft: 10}}>
+                      <View style={{ marginLeft: 10 }}>
                         <Text
                           numberOfLines={3}
                           ellipsizeMode="tail"
@@ -553,12 +555,12 @@ export default function Dashboard(props) {
                           <Avatar
                             rounded
                             size="medium"
-                            source={{uri: item.UserImage}}
+                            source={{ uri: item.UserImage }}
                           />
                         </View>
                       </View>
 
-                      <View style={{marginLeft: 10}}>
+                      <View style={{ marginLeft: 10 }}>
                         <Text
                           numberOfLines={3}
                           ellipsizeMode="tail"
@@ -587,7 +589,7 @@ export default function Dashboard(props) {
               {global.userData.user_id == item.user_id ? (
                 <TouchableOpacity
                   onPress={() => showMenuFN(index)}
-                  style={{marginLeft: 'auto', marginTop: 27, marginRight: 10}}>
+                  style={{ marginLeft: 'auto', marginTop: 27, marginRight: 10 }}>
                   <View>
                     <Image
                       style={{
@@ -606,8 +608,8 @@ export default function Dashboard(props) {
             </View>
 
             <TwitterTextView
-              onPressHashtag={() => {}}
-              hashtagStyle={{color: global.colorTextActive}}
+              onPressHashtag={() => { }}
+              hashtagStyle={{ color: global.colorTextActive }}
               style={{
                 color: global.colorTextPrimary,
                 marginLeft: '5%',
@@ -619,20 +621,42 @@ export default function Dashboard(props) {
               {item.description}
             </TwitterTextView>
 
-            <ImageBackground
-              source={{uri: item.img_url}}
-              resizeMode="contain"
-              style={{
-                height: item.calHeight ? item.calHeight : windowWidth,
-                width: '100%',
-              }}>
-              <LinearGradient
-                colors={[global.overlay1, global.overlay3]}
-                style={{height: '100%', width: '100%'}}
-              />
-            </ImageBackground>
+            {
+              item.img_url.includes('mp4') ?
+                <View style={styles.videoContainer}>
+                
+                  <VideoPlayer
+                  key={item.post_id}
+                    source={{ uri: item.img_url }}
+                    disableFullscreen
+                    disableBack
+                    controlTimeout={2500}
+                    tapAnywhereToPause={true}
+                    showOnStart={false}
+                    videoStyle={styles.backgroundVideo}
+                    resizeMode='cover'
+                    style={{height:500}}
+                  />
 
-            <View style={{width: '100%', backgroundColor: global.colorPrimary}}>
+                </View>
+
+                : <ImageBackground
+                  source={{ uri: item.img_url }}
+                  resizeMode="contain"
+                  style={{
+                    height: item.calHeight ? item.calHeight : windowWidth,
+                    width: '100%',
+                  }}>
+                  <LinearGradient
+                    colors={[global.overlay1, global.overlay3]}
+                    style={{ height: '100%', width: '100%' }}
+                  />
+                </ImageBackground>
+
+            }
+
+
+            <View style={{ width: '100%', backgroundColor: global.colorPrimary }}>
               <ImageBackground
                 source={require('../../images/Rectangle.png')}
                 resizeMode="stretch"
@@ -689,7 +713,7 @@ export default function Dashboard(props) {
                   <Text
                     style={[
                       styles.txtReaction,
-                      {fontFamily: global.fontSelect},
+                      { fontFamily: global.fontSelect },
                     ]}>
                     {item.like_count}
                   </Text>
@@ -717,7 +741,7 @@ export default function Dashboard(props) {
                   <Text
                     style={[
                       styles.txtReaction,
-                      {fontFamily: global.fontSelect},
+                      { fontFamily: global.fontSelect },
                     ]}>
                     {item.comment_count}
                   </Text>
@@ -745,7 +769,7 @@ export default function Dashboard(props) {
                   <Text
                     style={[
                       styles.txtReaction,
-                      {fontFamily: global.fontSelect},
+                      { fontFamily: global.fontSelect },
                     ]}>
                     {item.share_count}
                   </Text>
@@ -774,7 +798,7 @@ export default function Dashboard(props) {
                 {global.userData.user_id == item.user_id ? (
                   <View>
                     <TouchableOpacity onPress={() => showMenueModalFN(index)}>
-                      <View style={{flexDirection: 'row', marginVertical: 5}}>
+                      <View style={{ flexDirection: 'row', marginVertical: 5 }}>
                         <Image
                           style={{
                             height: 22,
@@ -807,7 +831,7 @@ export default function Dashboard(props) {
               <ActivityIndicator
                 size="large"
                 color={global.colorTextActive}
-                style={{alignSelf: 'center', marginTop: '10%'}}
+                style={{ alignSelf: 'center', marginTop: '10%' }}
               />
             ) : null}
           </View>
@@ -816,12 +840,12 @@ export default function Dashboard(props) {
           <View>
             <View style={styles.topView}>
               <TouchableOpacity onPress={() => navigateToprofileFN()}>
-                <Avatar rounded size="medium" source={{uri: pimgChange}} />
+                <Avatar rounded size="medium" source={{ uri: pimgChange }} />
               </TouchableOpacity>
 
               <TouchableOpacity
                 onPress={() => navigation.navigate('NotificationScreen')}
-                style={{marginLeft: 'auto'}}>
+                style={{ marginLeft: 'auto' }}>
                 <Image
                   style={{
                     height: 50,
@@ -857,7 +881,7 @@ export default function Dashboard(props) {
               }}>
               <TouchableOpacity
                 onPress={() => selectTab(1)}
-                style={{width: '33%'}}>
+                style={{ width: '33%' }}>
                 {/* <View style={{ height: 60, borderRadius: 30, justifyContent: 'center', alignItems: 'center' }}> */}
                 <LinearGradient
                   colors={[btncolor1_1, btncolor1_2]}
@@ -870,7 +894,7 @@ export default function Dashboard(props) {
                     borderRadius: 30,
                   }}>
                   <Text
-                    style={{color: txtcolor1, fontFamily: global.fontSelect}}>
+                    style={{ color: txtcolor1, fontFamily: global.fontSelect }}>
                     Following
                   </Text>
                 </LinearGradient>
@@ -879,7 +903,7 @@ export default function Dashboard(props) {
 
               <TouchableOpacity
                 onPress={() => selectTab(2)}
-                style={{width: '34%'}}>
+                style={{ width: '34%' }}>
                 {/* <View style={{ height: 60, borderRadius: 30, justifyContent: 'center', alignItems: 'center' }}> */}
                 <LinearGradient
                   colors={[btncolor2_1, btncolor2_2]}
@@ -892,7 +916,7 @@ export default function Dashboard(props) {
                     borderRadius: 30,
                   }}>
                   <Text
-                    style={{color: txtcolor2, fontFamily: global.fontSelect}}>
+                    style={{ color: txtcolor2, fontFamily: global.fontSelect }}>
                     New Memes
                   </Text>
                 </LinearGradient>
@@ -901,7 +925,7 @@ export default function Dashboard(props) {
 
               <TouchableOpacity
                 onPress={() => selectTab(3)}
-                style={{width: '33%'}}>
+                style={{ width: '33%' }}>
                 {/* <View style={{ height: 60, borderRadius: 30, justifyContent: 'center', alignItems: 'center' }}> */}
                 <LinearGradient
                   colors={[btncolor3_1, btncolor3_2]}
@@ -914,7 +938,7 @@ export default function Dashboard(props) {
                     borderRadius: 30,
                   }}>
                   <Text
-                    style={{color: txtcolor3, fontFamily: global.fontSelect}}>
+                    style={{ color: txtcolor3, fontFamily: global.fontSelect }}>
                     Trending
                   </Text>
                 </LinearGradient>
@@ -934,11 +958,11 @@ export default function Dashboard(props) {
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={[styles.modalText, {fontFamily: global.fontSelect}]}>
+            <Text style={[styles.modalText, { fontFamily: global.fontSelect }]}>
               Are you sure you want to delete this Meme?
             </Text>
 
-            <View style={{flexDirection: 'row', marginTop: 25}}>
+            <View style={{ flexDirection: 'row', marginTop: 25 }}>
               <TouchableOpacity
                 style={[styles.button, styles.buttonOpen]}
                 onPress={() => deleteMemeeFN()}>
@@ -954,7 +978,7 @@ export default function Dashboard(props) {
                   <Text
                     style={[
                       styles.textStyle,
-                      {color: global.btnTxt, fontFamily: global.fontSelect},
+                      { color: global.btnTxt, fontFamily: global.fontSelect },
                     ]}>
                     Delete
                   </Text>
@@ -974,7 +998,7 @@ export default function Dashboard(props) {
                     borderRadius: 25,
                   }}>
                   <Text
-                    style={[styles.textStyle, {fontFamily: global.fontSelect}]}>
+                    style={[styles.textStyle, { fontFamily: global.fontSelect }]}>
                     Cancel
                   </Text>
                 </LinearGradient>
@@ -1248,5 +1272,13 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     marginTop: 0,
     textAlign: 'center',
+  },
+  videoContainer: { flex: 1, justifyContent: "center" },
+  backgroundVideo: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
   },
 });

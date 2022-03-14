@@ -11,6 +11,23 @@ import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import com.convrtx.memee.videoeditor.di.VideoEditorKoinModule;
+
+import com.banuba.sdk.arcloud.di.ArCloudKoinModule;
+import com.banuba.sdk.audiobrowser.di.AudioBrowserKoinModule;
+import com.banuba.sdk.effectplayer.adapter.BanubaEffectPlayerKoinModule;
+import com.banuba.sdk.export.di.VeExportKoinModule;
+import com.banuba.sdk.gallery.di.GalleryKoinModule;
+import com.banuba.sdk.playback.di.VePlaybackSdkKoinModule;
+import com.banuba.sdk.token.storage.di.TokenStorageKoinModule;
+import com.banuba.sdk.ve.di.VeSdkKoinModule;
+
+
+import org.koin.core.context.GlobalContext;
+
+import static org.koin.android.ext.koin.KoinExtKt.androidContext;
+import static org.koin.core.context.GlobalContextExtKt.startKoin;
+
 public class MainApplication extends androidx.multidex.MultiDexApplication implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost =
@@ -26,6 +43,10 @@ public class MainApplication extends androidx.multidex.MultiDexApplication imple
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
+
+          //Video Editor Package
+          packages.add(new VideoEditorReactPackage());
+
           return packages;
         }
 
@@ -45,6 +66,23 @@ public class MainApplication extends androidx.multidex.MultiDexApplication imple
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+
+    // Init Banuba VE SDK
+        startKoin(GlobalContext.INSTANCE, koinApplication -> {
+            androidContext(koinApplication, this);
+            koinApplication.modules(
+                    new VeSdkKoinModule().getModule(),
+                    new VeExportKoinModule().getModule(),
+                    new AudioBrowserKoinModule().getModule(), // use this module only if you bought it
+                    new ArCloudKoinModule().getModule(),
+                    new TokenStorageKoinModule().getModule(),
+                    new VePlaybackSdkKoinModule().getModule(),
+                    new VideoEditorKoinModule().getModule(),
+                    new GalleryKoinModule().getModule(),
+                    new BanubaEffectPlayerKoinModule().getModule()
+            );
+            return null;
+        });
   }
 
   /**
