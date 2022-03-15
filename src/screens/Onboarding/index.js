@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   ScrollView,
   Dimensions,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import ButtonWithImage from '../../component/ButtonWithImage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -25,6 +26,7 @@ import Toast from 'react-native-toast-message';
 import {toggleOnlineStatus} from '../../redux/actions/Auth';
 
 import auth from '@react-native-firebase/auth';
+import SplashImages from '../../component/SplashImages';
 
 Settings.initializeSDK();
 global.userData = [];
@@ -33,8 +35,11 @@ var nameVar = '';
 var loginTypeVar = '';
 var imageVar = '';
 
+const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 export default function Onboarding({navigation}) {
+  const [isLoading, setIsLoading] = useState(false);
+
   // Login with fb
   async function onFacebookButtonPress() {
     /* Toast.show({
@@ -137,6 +142,7 @@ export default function Onboarding({navigation}) {
 
   async function SignupFN() {
     var currentDate = currentDateFN();
+    setIsLoading(true);
 
     await fetch(global.address + 'RegisterUser', {
       method: 'POST',
@@ -191,6 +197,7 @@ export default function Onboarding({navigation}) {
         });
         console.error(error);
       });
+    setIsLoading(true);
   }
 
   async function logoutFromGoogle() {
@@ -220,6 +227,28 @@ export default function Onboarding({navigation}) {
     });
   };
 
+  const onLogin = async type => {
+    setIsLoading(true);
+    try {
+      if (type) {
+        if (type == 'google') {
+          await signInGmail();
+        }
+        if (type == 'facebook') {
+          await onFacebookButtonPress();
+        }
+        if (type == 'twitter') {
+          {
+            await onTwitterButtonPress();
+          }
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    setIsLoading(false);
+  };
+
   return (
     <View
       style={{
@@ -227,6 +256,7 @@ export default function Onboarding({navigation}) {
         paddingHorizontal: '5%',
         paddingTop: '5%',
         backgroundColor: '#0B0213',
+        position: 'relative',
       }}>
       <ScrollView>
         <View>
@@ -255,7 +285,7 @@ export default function Onboarding({navigation}) {
 
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => signInGmail()}
+          onPress={() => onLogin('google')}
           style={styles.buttonStyle}>
           <View style={styles.buttonContentContainer}>
             <Image
@@ -276,7 +306,7 @@ export default function Onboarding({navigation}) {
 
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => onFacebookButtonPress()}
+          onPress={() => onLogin('facebook')}
           style={styles.buttonStyle}>
           <View style={styles.buttonContentContainer}>
             <Image
@@ -297,7 +327,7 @@ export default function Onboarding({navigation}) {
 
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => onTwitterButtonPress()}
+          onPress={() => onLogin('twitter')}
           style={styles.buttonStyle}>
           <View style={styles.buttonContentContainer}>
             <Image
@@ -345,6 +375,29 @@ export default function Onboarding({navigation}) {
           By continuing you agree Memee’s Terms of Services & Privacy Policy.{' '}
         </Text>
       </ScrollView>
+      {isLoading && (
+        <View
+          style={{
+            backgroundColor: 'white',
+            position: 'absolute',
+            zIndex: 999,
+            height: windowHeight,
+            width: windowWidth,
+          }}>
+          <SplashImages />
+          <View
+            style={{
+              position: 'absolute',
+              zIndex: 999,
+              height: windowHeight,
+              width: windowWidth,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <ActivityIndicator size={100} color={'#5D33AD'} />
+          </View>
+        </View>
+      )}
     </View>
   );
 }
