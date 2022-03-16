@@ -6,7 +6,9 @@ import Video from "react-native-video";
 const StoryItem = props => {
 
     const {
-        item
+        item,
+        index,
+        setAddStoryModalVisible
     } = props;
 
     const [isPressed, setIsPressed] = useState(props?.item?.seen);
@@ -39,70 +41,85 @@ const StoryItem = props => {
     const { stories } = item;
 
     return (
-        <View>
+        <View style={{flex: 1, flexDirection: 'row'}}>
             {
-                stories[0].story_video ? (
-                    <TouchableOpacity style={{zIndex: 999}} onPress={() => _handleItemPress(item)}>
-                        <LinearGradient
-                                colors={['rgba(22, 22, 22, 0)', 'rgba(22, 22, 22, 1)']}
-                                >
-                                    <TouchableOpacity disabled>
-                                        <View style={{backgroundColor: '#201E23', marginLeft: 7,  height: 160, width: 115, borderRadius: 15 }}>
-                                        <Video
-                                            repeat
-                                            source={{ uri: item.stories.length && item.stories[0].story_image ? item.stories[0].story_image : item.stories[0].story_video }}
-                                            resizeMode="stretch"
-                                            style={{
-                                                height: '100%',
-                                                position: 'absolute',
-                                                top: 0,
-                                                left: 0,
-                                                bottom: 0,
-                                                right: 0,
-                                                borderRadius: 15
-                                            }}
-                                        />
-                                        <View style={{flex: 2.5, flexDirection: 'column'}}>
-                                            <View style={{flex: 1, justifyContent: 'center'}}>
-                                                <Text style={{color: 'white', textAlign: 'center', fontSize: 16, fontWeight: 'normal'}}></Text>       
-                                            </View>           
-                                            </View>
-                                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-                                            <Image style={{width: 35, height: 35, borderWidth: 3, borderColor: 'white', borderRadius: 50}} source={{uri: item.user_image}} />
-                                            </View>
-                                            <View style={{marginBottom: 5, marginTop: 10}}>
-                                            <Text style={{textAlign: 'center', color: 'white', fontSize: 16}}>{item.user_name}</Text>
-                                            </View>
-                                        </View>
-                                    </TouchableOpacity>
-                            </LinearGradient>
+                index === 0 && (
+                    <TouchableOpacity onPress={() => setAddStoryModalVisible(true)}>
+                        <View style={{backgroundColor: '#201E23', height: 160, width: 115, borderRadius: 15 }}>
+                            <View style={{flex: 2.5, flexDirection: 'column'}}>
+                            <View style={{flex: 1, justifyContent: 'center'}}>
+                                <Text style={{color: 'white', textAlign: 'center', fontSize: 16, fontWeight: 'normal'}}>Add story</Text>       
+                            </View>           
+                            </View>
+                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+                            {
+                                global.userData.imgurl ?
+                                <Image style={{width: 35, height: 35, borderRadius: 50, borderWidth: 3, borderColor: 'white'}} source={{uri: global.userData.imgurl}} />
+                                : <View style={{width: 35, height: 35, borderWidth: 3, borderColor: 'white', borderRadius: 50}} />
+                            }
+                            </View>
+                            <View style={{marginBottom: 5, marginTop: 10}}>
+                            <Text style={{textAlign: 'center', color: 'white', fontSize: 16}}>You</Text>
+                            </View>
+                        </View>
                     </TouchableOpacity>
-                ) : stories[0].story_image && (
-                    <TouchableOpacity onPress={() => _handleItemPress(item)}>
-                        <LinearGradient
-                                colors={['rgba(22, 22, 22, 0)', 'rgba(22, 22, 22, 1)']}
-                                >
-                                <View style={{backgroundColor: '#201E23', marginLeft: 7,  height: 160, width: 115, borderRadius: 15 }}>
-                                    <ImageBackground
-                                        source={{uri: item.stories.length && item.stories[0].story_image}}
-                                        imageStyle={{borderRadius: 10, height: 160, width: 115}}
-                                        // resizeMode="contain"
-                                        style={{flex: 1, justifyContent: 'center', height: 160, width: 115}}
-                                    >
-                                        <View style={{flex: 2.5, flexDirection: 'column'}}>
-                                        <View style={{flex: 1, justifyContent: 'center'}}>
-                                            <Text style={{color: 'white', textAlign: 'center', fontSize: 16, fontWeight: 'normal'}}></Text>       
-                                        </View>           
-                                        </View>
-                                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-                                        <Image style={{width: 35, height: 35, borderWidth: 3, borderColor: 'white', borderRadius: 50}} source={{uri: item.user_image}} />
-                                        </View>
-                                        <View style={{marginBottom: 5, marginTop: 10}}>
-                                        <Text style={{textAlign: 'center', color: 'white', fontSize: 16}}>{item.user_name}</Text>
-                                        </View>
-                                    </ImageBackground>
+                )
+            }
+            {
+                stories[stories.length - 1].story_video ? (
+                    <TouchableOpacity style={{zIndex: 999}} onPress={() => _handleItemPress(item)}>
+                        <TouchableOpacity disabled>
+                            <View style={{backgroundColor: '#201E23', marginLeft: 7,  height: 160, width: 115, borderRadius: 15 }}>
+                            <Video
+                                repeat
+                                source={{ uri: (item.stories.length && item.stories[stories.length - 1].story_video) && item.stories[stories.length - 1].story_video }}
+                                resizeMode="stretch"
+                                style={{
+                                    height: '100%',
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: 0,
+                                    bottom: 0,
+                                    right: 0,
+                                    borderRadius: 15
+                                }}
+                            />
+                            <View style={{flex: 2.5, flexDirection: 'column'}}>
+                                <View style={{flex: 1, justifyContent: 'center'}}>
+                                    <Text style={{color: 'white', textAlign: 'center', fontSize: 16, fontWeight: 'normal'}}></Text>       
+                                </View>           
                                 </View>
-                            </LinearGradient>
+                                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+                                <Image style={{width: 35, height: 35, borderWidth: 3, borderColor: 'white', borderRadius: 50}} source={{uri: item.user_image}} />
+                                </View>
+                                <View style={{marginBottom: 5, marginTop: 10}}>
+                                <Text style={{textAlign: 'center', color: 'white', fontSize: 16}}>{item.user_name}</Text>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                    </TouchableOpacity>
+                ) : stories[stories.length - 1].story_image && (
+                    <TouchableOpacity onPress={() => _handleItemPress(item)}>
+                        <View style={{backgroundColor: '#201E23', marginLeft: 7,  height: 160, width: 115, borderRadius: 15 }}>
+                            <ImageBackground
+                                source={{uri: item.stories.length && item.stories[stories.length - 1].story_image}}
+                                imageStyle={{borderRadius: 10, height: 160, width: 115}}
+                                // resizeMode="contain"
+                                style={{flex: 1, justifyContent: 'center', height: 160, width: 115}}
+                            >
+                                <View style={{flex: 2.5, flexDirection: 'column'}}>
+                                <View style={{flex: 1, justifyContent: 'center'}}>
+                                    <Text style={{color: 'white', textAlign: 'center', fontSize: 16, fontWeight: 'normal'}}></Text>       
+                                </View>           
+                                </View>
+                                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+                                <Image style={{width: 35, height: 35, borderWidth: 3, borderColor: 'white', borderRadius: 50}} source={{uri: item.user_image}} />
+                                </View>
+                                <View style={{marginBottom: 5, marginTop: 10}}>
+                                <Text style={{textAlign: 'center', color: 'white', fontSize: 16}}>{item.user_name}</Text>
+                                </View>
+                            </ImageBackground>
+                        </View>
                     </TouchableOpacity>
                 )
             }
