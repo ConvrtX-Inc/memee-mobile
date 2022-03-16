@@ -32,8 +32,8 @@ import SplashImages from '../../component/SplashImages';
 const {RNTwitterSignIn} = NativeModules;
 
 RNTwitterSignIn.init(
-  's6K0tlllk0yvnxP0ThWh8QfxN',
-  `2kmAZkplnYTiUu0QLeBI6tOJ9RNZKBGTEynvv5Yd76KwRHgKfQ`,
+  'ris7SZaa4JsF442EaN4hbFLKQ',
+  `lBh1BEZeDwHXzPJaOqRkxddrZg3ZlNdCgJhxqRoBoXYAeSPBOg`,
 ).then(() => console.log('Twitter SDK initialized'));
 
 Settings.initializeSDK();
@@ -245,7 +245,7 @@ export default function Onboarding({navigation}) {
         res.authTokenSecret,
       );
       console.log('twitterCredential', twitterCredential); */
-      const details = await fetch(
+      /* const details = await fetch(
         'https://api.twitter.com/1.1/account/verify_credentials.json',
         {
           method: 'GET',
@@ -257,7 +257,7 @@ export default function Onboarding({navigation}) {
         },
       );
 
-      console.log('details', details);
+      console.log('details', details); */
     } catch (e) {
       console.log('error twitter', e);
     }
