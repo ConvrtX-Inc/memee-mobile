@@ -237,6 +237,7 @@ export default function Dashboard(props) {
       });
       return;
     }
+    setIsOpenMedia(false);
     setAddStoryModalVisible(false);
     setFile(null);
     setLoadingAddStory(false);
@@ -295,9 +296,9 @@ export default function Dashboard(props) {
           onPress: () => console.log("Cancel Pressed"),
           style: "cancel"
         },
-        { text: "OK", onPress: () => { setFile(null); } }
+        { text: "OK", onPress: () => { setFile(null); setIsOpenMedia(false) } }
       ]
-    ) : setAddStoryModalVisible(false);
+    ) : () => { setAddStoryModalVisible(false);setIsOpenMedia(false);};
   }
 
   /* move specific item of an array to specific location(index) of an array */
@@ -685,7 +686,6 @@ export default function Dashboard(props) {
             let source = response.assets[0];
             openPhotoEditor(source.uri)
         });
-        setIsOpenMedia(false);
     }
 
     const openCamera = async () => {
@@ -714,7 +714,6 @@ export default function Dashboard(props) {
                 openPhotoEditor(source.uri)
             });
         }
-        setIsOpenMedia(false);
     };
 
 
@@ -728,10 +727,10 @@ function openPhotoEditor(uri){
         (error) => {
           console.log(error);
         });
-    setIsOpenMedia(false);
 }
 
   const textMaximumWidth = windowWidth * 0.75 - 20;
+  // console.log('FILE', file);
   /* console.log('textMaximumWidth', textMaximumWidth); */
   return (
     <View style={{ flex: 1, backgroundColor: global.colorPrimary }}>
@@ -1064,6 +1063,7 @@ function openPhotoEditor(uri){
                       { fontFamily: global.fontSelect },
                     ]}>
                     {item.comment_count}
+                  </Text>
                 </View>
 
                 <View
@@ -1278,7 +1278,26 @@ function openPhotoEditor(uri){
                     storyLimit={storyLimit}
                     setAddStoryModalVisible={setAddStoryModalVisible}
                   />
-                ) : null : <StorySkeleton />
+                ) : ( <TouchableOpacity onPress={() => setAddStoryModalVisible(true)}>
+                      <View style={{backgroundColor: '#201E23', height: 160, width: 115, borderRadius: 15 }}>
+                          <View style={{flex: 2.5, flexDirection: 'column'}}>
+                          <View style={{flex: 1, justifyContent: 'center'}}>
+                              <Text style={{color: 'white', textAlign: 'center', fontSize: 16, fontWeight: 'normal'}}>Add story</Text>       
+                          </View>           
+                          </View>
+                          <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+                          {
+                              global.userData.imgurl ?
+                              <Image style={{width: 35, height: 35, borderRadius: 50, borderWidth: 3, borderColor: 'white'}} source={{uri: global.userData.imgurl}} />
+                              : <View style={{width: 35, height: 35, borderWidth: 3, borderColor: 'white', borderRadius: 50}} />
+                          }
+                          </View>
+                          <View style={{marginBottom: 5, marginTop: 10}}>
+                          <Text style={{textAlign: 'center', color: 'white', fontSize: 16}}>You</Text>
+                          </View>
+                      </View>
+                  </TouchableOpacity>
+                ) : <StorySkeleton />
               }
             </View>
           </View>
@@ -1330,7 +1349,7 @@ function openPhotoEditor(uri){
                 </View>
               </View>
               {
-                !file && (
+                (!file && !isOpenMedia) ? (
                     <View style={styles.centeredView}>
                         <View>
                           <TouchableOpacity 
@@ -1354,6 +1373,7 @@ function openPhotoEditor(uri){
                           <TouchableOpacity
                               style={{marginBottom: '6%'}}
                               onPress={() => {
+                                setIsOpenMedia(true);
                                 if (Platform.OS === 'android') {
                                   getAndroidExportResult().then(videoUri => {
                                     setFile({type: 'video', uri: videoUri});
@@ -1384,7 +1404,17 @@ function openPhotoEditor(uri){
                           </TouchableOpacity>
                         </View>
                     </View>
-                )
+                ) : (<ActivityIndicator
+                  size="small"
+                  color={global.colorTextActive}
+                  style={{ position: 'absolute',
+                  left: 0,
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+                  alignItems: 'center',
+                  justifyContent: 'center' }}
+                />)
               }
             </View>
            )
@@ -1500,7 +1530,6 @@ function openPhotoEditor(uri){
                       repeat
                       source={{ uri: file.uri }}
                       resizeMode='cover'
-                      paused={true}
                       style={{
                         height: windowHeight,
                         position: "absolute",
