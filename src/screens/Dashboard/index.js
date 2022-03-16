@@ -70,6 +70,9 @@ export default function Dashboard(props) {
   const [loaderIndicator, setLoaderIndicator] = useState(true);
   const flatlistRef = useRef();
   const playerRef = useRef();
+
+  const [videoHeight,setVideoHeight] = useState(400);
+
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     selectTab(global.navigateDashboard);
@@ -275,16 +278,20 @@ export default function Dashboard(props) {
 
         if (data.length == 0) setLoaderIndicator(false);
         data.forEach(async function (element, index) {
-          element.showMenu = false;
-          const [width, height] = await getImageSize(element.img_url);
-          const ratio = windowWidth / width;
-          element.calHeight = height * ratio;
-          element.calWidth = windowWidth;
-          if (index == data.length - 1) {
-            setTimeout(() => {
-              scroll ? followingPost.push(data) : setFollowingPost(data);
-              setLoaderIndicator(false);
-            }, 2500);
+          if (!element.img_url.includes('mp4')) {
+            element.showMenu = false;
+            const [width, height] = await getImageSize(element.img_url);
+            const ratio = windowWidth / width;
+            element.calHeight = height * ratio;
+            element.calWidth = windowWidth;
+            if (index == data.length - 1) {
+              setTimeout(() => {
+                scroll ? followingPost.push(data) : setFollowingPost(data);
+                setLoaderIndicator(false);
+              }, 2500);
+            }
+          } else {
+            element.paused = true;
           }
         });
       })
@@ -623,21 +630,35 @@ export default function Dashboard(props) {
 
             {
               item.img_url.includes('mp4') ?
-                <View style={styles.videoContainer}>
-                
+                <View key={item.img_url}>
                   <VideoPlayer
-                  key={item.post_id}
+                    key={item.post_id}
                     source={{ uri: item.img_url }}
                     disableFullscreen
                     disableBack
                     controlTimeout={2500}
                     tapAnywhereToPause={true}
-                    showOnStart={false}
-                    videoStyle={styles.backgroundVideo}
+                    showOnStart={true}
+              
+                    style={{
+                      width: '100%',
+                      height: videoHeight
+                    }}
                     resizeMode='cover'
-                    style={{height:500}}
-                  />
+                    paused={false}
+                    onLoad={response => {
+                      const { width, height } = response.naturalSize;
+                      const heightScaled = height * (Dimensions.get("screen").width / width);
+                     
+                      if(heightScaled > 500){
+                        setVideoHeight(500)
+                      }else{
+                        setVideoHeight(heightScaled)
+                      }
+                    }}
 
+                  />
+                  
                 </View>
 
                 : <ImageBackground
@@ -1273,12 +1294,14 @@ const styles = StyleSheet.create({
     marginTop: 0,
     textAlign: 'center',
   },
-  videoContainer: { flex: 1, justifyContent: "center" },
+  videoContainer: { flex: 1, justifyContent: "center"  },
   backgroundVideo: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
+    // position: 'absolute',
+    // top: 0,
+    // left: 0,
+    // bottom: 0,
+    // right: 0,
+    width: '100%',
+    height:500
   },
 });

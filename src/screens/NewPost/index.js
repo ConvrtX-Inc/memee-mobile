@@ -13,6 +13,7 @@ import {
   FlatList,
   ImageBackground,
   ViewBase,
+  Dimensions,
 } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
@@ -29,6 +30,7 @@ import { getBucketOptions } from '../../Utility/Utils';
 import storage from '@react-native-firebase/storage';
 
 import Video from 'react-native-video';
+import VideoPlayer from 'react-native-video-controls';
 
 
 
@@ -39,6 +41,7 @@ export default function NewPost(routes) {
   const [indicatButton, setIndicatButton] = useState(false);
   const [filePath, setFilePath] = useState('');
   const [fileType, setFileType] = useState('');
+  const [videoHeight,setVideoHeight] = useState(300);
 
   var player = useRef();
 
@@ -66,7 +69,7 @@ export default function NewPost(routes) {
   function uploadImageToS3() {
     setIndicatButton(true);
 
-    const file = fileType == 'photo' ?  {
+    const file = fileType == 'photo' ? {
       uri: filePath,
       name: generateUID() + '.jpg',
       type: 'image/jpeg',
@@ -114,7 +117,7 @@ export default function NewPost(routes) {
   }
 
   function postUploadFN(location) {
-    console.log("LOCATION: ",location);
+    console.log("LOCATION: ", location);
     var currentDate = currentDateFN();
     fetch(global.address + 'AddPost', {
       method: 'POST',
@@ -221,12 +224,37 @@ export default function NewPost(routes) {
           />
         </View>
         {
-          fileType == 'photo' ? <Image source={{ uri: filePath }} style={styles.imageStyle} /> : 
-          <Video
-            source={{ uri: filePath }}
-            ref={player}
-            style={{ height: 300, margin: 5 }}
-          />
+          fileType == 'photo' ? <Image source={{ uri: filePath }} style={styles.imageStyle} /> :
+            // <Video
+            //   source={{ uri: filePath }}
+            //   ref={player}
+            //   resizeMode='contain'
+            //   style={{ height: 300, margin: 5 }}
+            // />
+            <VideoPlayer
+             
+              source={{ uri: filePath }}
+              disableFullscreen
+              disableBack
+              controlTimeout={2500}
+              tapAnywhereToPause={true}
+              showOnStart={true}
+
+              style={{
+                width: '100%',
+                height: videoHeight
+              }}
+              resizeMode='contain'
+              paused={false}
+              onLoad={response => {
+                const { width, height } = response.naturalSize;
+                const heightScaled = height * (Dimensions.get("screen").width / width);
+                if (heightScaled < 300) {
+                  setVideoHeight(heightScaled)
+                } 
+              }}
+
+            />
         }
 
         {indicatButton == false ? (

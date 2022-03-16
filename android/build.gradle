@@ -9,7 +9,6 @@ buildscript {
         maven { url "https://artifactory.img.ly/artifactory/imgly" }
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10"
         classpath 'ly.img.android.sdk:plugin:9.2.0'
          classpath 'com.google.gms:google-services:4.3.10'
       
@@ -35,6 +34,8 @@ buildscript {
     dependencies {
         classpath("com.android.tools.build:gradle:4.2.2")
         classpath 'com.google.gms:google-services:4.1.0' // <--- use this version or newer
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
