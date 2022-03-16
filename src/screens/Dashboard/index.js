@@ -907,6 +907,7 @@ function openPhotoEditor(uri){
                     source={{ uri: item.img_url }}
                     disableFullscreen
                     disableBack
+                    paused={true}
                     controlTimeout={2500}
                     tapAnywhereToPause={true}
                     showOnStart={true}
