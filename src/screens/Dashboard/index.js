@@ -55,6 +55,8 @@ global.navigateDashboard = 1;
 var windowWidth = Dimensions.get('window').width;
 var windowHeight = Dimensions.get('window').height;
 var gloIndex = '';
+var story_offset = 0;
+var story_limit = 10;
 
 //Banuba Video Editor
 const { VideoEditorModule } = NativeModules;
@@ -176,10 +178,11 @@ export default function Dashboard(props) {
   // fetch stories = query /user_id=xxxx&limit=xx
   const fetchStories = async () => {
     setLoadingStoriesItems(true);
-    const response = await API.GetDayStories({ user_id: global.userData.user_id, limit: 10 });
+    const response = await API.GetDayStories({ user_id: global.userData.user_id, limit: story_limit, offset: story_offset });
     const { DayStories, Status } = response;
     const filterStories = DayStories.filter(story => story.stories.length > 0);
-;    if (Status !== 200) {
+
+    if (Status !== 200) {
       Toast.show({
         type: 'error',
         text2: 'Unable to retrieve stories, please try again later.',
@@ -244,6 +247,10 @@ export default function Dashboard(props) {
       return false;
     }
     return true;
+  }
+
+  function updateStoryOffset() {
+    story_offset = story_limit - 1;
   }
 
   function cancelStoryModal() {
@@ -689,6 +696,7 @@ function openPhotoEditor(uri){
 }
 
   const textMaximumWidth = windowWidth * 0.75 - 20;
+  // console.log('OFFSET', story_offset);
   /* console.log('textMaximumWidth', textMaximumWidth); */
   return (
     <View style={{ flex: 1, backgroundColor: global.colorPrimary }}>
@@ -1236,6 +1244,7 @@ function openPhotoEditor(uri){
                       duration={5}
                       deleteStory={(story_id) => deleteStory(story_id)}
                       reloadStory={fetchStories}
+                      // updateOffset={updateStoryOffset}
                     />
                   ) : null : <StorySkeleton />
                 }

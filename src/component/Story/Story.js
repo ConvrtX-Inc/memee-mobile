@@ -15,7 +15,8 @@ export const Story = props => {
         customCloseComponent,
         stories,
         deleteStory,
-        reloadStory
+        reloadStory,
+        // updateOffset
     } = props;
 
     const [dataState, setDataState] = useState([]);
@@ -85,7 +86,7 @@ export const Story = props => {
                             key={i}
                             profileName={x.user_name}
                             profileImage={x.user_image}
-                            stories={[].concat(x.stories).reverse()} // will change
+                            stories={x.stories}
                             user_id={x.user_id}
                             deleteStory={deleteStory}
                             reloadStory={reloadStory}
@@ -143,6 +144,7 @@ export const Story = props => {
                     <StoryList
                         handleStoryItemPress={_handleStoryItemPress}
                         data={selectedData}
+                        // updateOffset={updateOffset}
                     />
                 )
             }
