@@ -945,7 +945,6 @@ function openPhotoEditor(uri){
                       height: videoHeight
                     }}
                     resizeMode='cover'
-                    paused={false}
                     onLoad={response => {
                       const { width, height } = response.naturalSize;
                       const heightScaled = height * (Dimensions.get("screen").width / width);
@@ -1065,7 +1064,6 @@ function openPhotoEditor(uri){
                       { fontFamily: global.fontSelect },
                     ]}>
                     {item.comment_count}
-                  </Text>
                 </View>
 
                 <View
@@ -1502,6 +1500,7 @@ function openPhotoEditor(uri){
                       repeat
                       source={{ uri: file.uri }}
                       resizeMode='cover'
+                      paused={true}
                       style={{
                         height: windowHeight,
                         position: "absolute",
