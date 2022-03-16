@@ -5,11 +5,9 @@ import {asignImageToProductsFN} from '../../Utility/Utils';
 import {useDispatch} from 'react-redux';
 import {coinsRecordFN, storeIconsBottomTabFN} from '../../redux/actions/Auth';
 import {currentDateFN} from '../../Utility/Utils';
+import SplashImages from '../../component/SplashImages';
 
 console.disableYellowBox = true;
-
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
 
 var randomNum = '';
 function SplashScreen({navigation}) {
@@ -354,25 +352,7 @@ function SplashScreen({navigation}) {
       });
   }
 
-  return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Image
-        source={
-          randomNum == 1
-            ? require('../../images/Splash1.png')
-            : randomNum == 2
-            ? require('../../images/Splash2.png')
-            : randomNum == 3
-            ? require('../../images/Splash3.png')
-            : randomNum == 4
-            ? require('../../images/Splash4.png')
-            : require('../../images/Splash5.png')
-        }
-        resizeMode="cover"
-        style={{height: windowHeight, width: windowWidth, alignSelf: 'center'}}
-      />
-    </View>
-  );
+  return <SplashImages />;
 }
 
 export default SplashScreen;
