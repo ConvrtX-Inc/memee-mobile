@@ -57,6 +57,7 @@
     "react-native-tab-view": "2.16.0",
     "react-native-text-gradient": "^0.1.7",
     "react-native-toast-message": "^1.6.0",
+    "react-native-twitter-signin": "^1.1.1",
     "react-native-twitter-textview": "^1.0.7",
     "react-native-vector-icons": "^8.1.0",
     "react-native-video": "^5.2.0",

@@ -8,6 +8,7 @@ import {
   Dimensions,
   Image,
   ActivityIndicator,
+  NativeModules,
 } from 'react-native';
 import ButtonWithImage from '../../component/ButtonWithImage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -27,6 +28,13 @@ import {toggleOnlineStatus} from '../../redux/actions/Auth';
 
 import auth from '@react-native-firebase/auth';
 import SplashImages from '../../component/SplashImages';
+
+const {RNTwitterSignIn} = NativeModules;
+
+RNTwitterSignIn.init(
+  's6K0tlllk0yvnxP0ThWh8QfxN',
+  `2kmAZkplnYTiUu0QLeBI6tOJ9RNZKBGTEynvv5Yd76KwRHgKfQ`,
+).then(() => console.log('Twitter SDK initialized'));
 
 Settings.initializeSDK();
 global.userData = [];
@@ -211,7 +219,7 @@ export default function Onboarding({navigation}) {
     added for twitter login function date: 2/24/2022
     task: Log In Button Via Twitter is Missing
   */
-  const onTwitterButtonPress = async () => {
+  const onTwitterButtonPress2 = async () => {
     /* try {
       
     } catch (error) {
@@ -227,6 +235,39 @@ export default function Onboarding({navigation}) {
     });
   };
 
+  async function onTwitterButtonPress() {
+    // Perform the login request
+    try {
+      const res = await RNTwitterSignIn.logIn();
+      console.log('res', res);
+      /* const twitterCredential = auth.TwitterAuthProvider.credential(
+        res.authToken,
+        res.authTokenSecret,
+      );
+      console.log('twitterCredential', twitterCredential); */
+      const details = await fetch(
+        'https://api.twitter.com/1.1/account/verify_credentials.json',
+        {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${res.authToken}`,
+          },
+        },
+      );
+
+      console.log('details', details);
+    } catch (e) {
+      console.log('error twitter', e);
+    }
+
+    // Create a Twitter credential with the tokens
+
+    // Sign-in the user with the credential
+    /* return auth().signInWithCredential(twitterCredential); */
+  }
+
   const onLogin = async type => {
     setIsLoading(true);
     try {
@@ -238,9 +279,7 @@ export default function Onboarding({navigation}) {
           await onFacebookButtonPress();
         }
         if (type == 'twitter') {
-          {
-            await onTwitterButtonPress();
-          }
+          await onTwitterButtonPress();
         }
       }
     } catch (e) {
