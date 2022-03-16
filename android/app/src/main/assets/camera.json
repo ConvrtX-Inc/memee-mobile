@@ -11,7 +11,7 @@
   "banubaColorEffectsAssetsPath": "luts",
   "banubaMasksAssetsPath": "effects",
   "banubaMaskBeauty": "Beauty",
-  "showDebugViews": true,
+  "showDebugViews": false,
   "supportsMuteMic": true,
   "switchFacingOnDoubleTap": true,
   "startFrontFacingFirst": true,

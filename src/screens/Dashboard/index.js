@@ -945,7 +945,7 @@ function openPhotoEditor(uri){
                       height: videoHeight
                     }}
                     resizeMode='cover'
-                    paused={false}
+                   
                     onLoad={response => {
                       const { width, height } = response.naturalSize;
                       const heightScaled = height * (Dimensions.get("screen").width / width);
