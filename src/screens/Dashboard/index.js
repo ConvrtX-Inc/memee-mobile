@@ -55,8 +55,6 @@ global.navigateDashboard = 1;
 var windowWidth = Dimensions.get('window').width;
 var windowHeight = Dimensions.get('window').height;
 var gloIndex = '';
-var story_offset = 0;
-var story_limit = 10;
 
 //Banuba Video Editor
 const { VideoEditorModule } = NativeModules;
@@ -98,6 +96,10 @@ export default function Dashboard(props) {
   const [followingPost, setFollowingPost] = useState([]);
   const [modalVisible, setModalVisible] = useState('');
 
+  const [storyPage, setStoryPage] = useState(1);
+  const [storyOffset, setStoryOffset] = useState(0);
+  const [storyLimit, setStoryLimit] = useState(10);
+
   const [addStoryModalVisible, setAddStoryModalVisible] = useState(false);
   const [file, setFile] = useState(null);
   const [isOpenMedia, setIsOpenMedia] = useState(false);
@@ -107,6 +109,8 @@ export default function Dashboard(props) {
 
   const [loadingAddStory, setLoadingAddStory] = useState(false);
   const [updatedStories, setUpdatedStories] = useState(0);
+  
+  const [loadingNewStory, setLoadingNewStory] = useState(false);
 
   const [postIdToDelete, setPostIdToDelete] = useState('');
   const [defaultHeartColor, setDefaultHeartColor] = useState('#89789A');
@@ -181,7 +185,8 @@ export default function Dashboard(props) {
   // fetch stories = query /user_id=xxxx&limit=xx
   const fetchStories = async () => {
     setLoadingStoriesItems(true);
-    const response = await API.GetDayStories({ user_id: global.userData.user_id, limit: story_limit, offset: story_offset });
+    setStoryOffset(0);
+    const response = await API.GetDayStories({ user_id: global.userData.user_id, limit: storyLimit, offset: 0 });
     const { DayStories, Status } = response;
     const filterStories = DayStories.filter(story => story.stories.length > 0);
 
@@ -252,8 +257,32 @@ export default function Dashboard(props) {
     return true;
   }
 
-  function updateStoryOffset() {
-    story_offset = story_limit - 1;
+  async function updateStoryOffset(offset, page, limit) {
+    setLoadingNewStory(true);
+    console.log('New story request page:', {offset, page, limit})
+    const response = await API.GetDayStories({ user_id: global.userData.user_id, limit: storyLimit, offset });
+    const { DayStories, Status } = response;
+    const filterStories = DayStories.filter(story => story.stories.length > 0);
+
+    if (Status !== 200) {
+      Toast.show({
+        type: 'error',
+        text2: 'Unable to retrieve stories, please try again later.',
+      });
+      return;
+    }
+
+    if (filterStories.length > 0) {
+      const cloneStories = stories;
+      const mergeStories = cloneStories.concat(filterStories);
+
+      setStories(mergeStories);
+      const newOffset = limit - page;
+      const newPage = page + 1;
+      setStoryOffset(newOffset);
+      setStoryPage(newPage);
+    }
+    setLoadingNewStory(false);
   }
 
   function cancelStoryModal() {
@@ -703,7 +732,6 @@ function openPhotoEditor(uri){
 }
 
   const textMaximumWidth = windowWidth * 0.75 - 20;
-  // console.log('OFFSET', story_offset);
   /* console.log('textMaximumWidth', textMaximumWidth); */
   return (
     <View style={{ flex: 1, backgroundColor: global.colorPrimary }}>
@@ -1239,42 +1267,39 @@ function openPhotoEditor(uri){
               </TouchableOpacity>
             </View> 
             <View style={{flexDirection: 'row', marginLeft: 10, marginBottom: 25}}>
-              <ScrollView horizontal={true}>
-                <TouchableOpacity onPress={() => setAddStoryModalVisible(true)}>
-                  <View style={{backgroundColor: '#201E23', height: 160, width: 115, borderRadius: 15 }}>
-                    <View style={{flex: 2.5, flexDirection: 'column'}}>
-                      <View style={{flex: 1, justifyContent: 'center'}}>
-                        <Text style={{color: 'white', textAlign: 'center', fontSize: 16, fontWeight: 'normal'}}>Add story</Text>       
-                      </View>           
-                    </View>
-                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-                      {
-                        global.userData.imgurl ?
-                          <Image style={{width: 35, height: 35, borderRadius: 50, borderWidth: 3, borderColor: 'white'}} source={{uri: global.userData.imgurl}} />
-                        : <View style={{width: 35, height: 35, borderWidth: 3, borderColor: 'white', borderRadius: 50}} />
-                      }
-                    </View>
-                    <View style={{marginBottom: 5, marginTop: 10}}>
-                      <Text style={{textAlign: 'center', color: 'white', fontSize: 16}}>You</Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-                {
-                  !loadingStoriesItems ? stories.length > 0 ? (
-                    <Story 
-                      stories={stories}
-                      duration={5}
-                      deleteStory={(story_id) => deleteStory(story_id)}
-                      reloadStory={fetchStories}
-                      // updateOffset={updateStoryOffset}
-                    />
-                  ) : null : <StorySkeleton />
-                }
-              </ScrollView>
+              {
+                !loadingStoriesItems ? stories.length > 0 ? (
+                  <Story 
+                    stories={stories}
+                    duration={5}
+                    deleteStory={(story_id) => deleteStory(story_id)}
+                    reloadStory={fetchStories}
+                    updateOffset={(offset, page, limit) => updateStoryOffset(offset, page, limit)}
+                    storyOffset={storyOffset}
+                    storyPage={storyPage}
+                    storyLimit={storyLimit}
+                    setAddStoryModalVisible={setAddStoryModalVisible}
+                  />
+                ) : null : <StorySkeleton />
+              }
             </View>
           </View>
         )}
       />
+      
+      {
+        loadingNewStory && (<ActivityIndicator
+          size="large"
+          color={global.colorTextActive}
+          style={{ position: 'absolute',
+          left: 0,
+          right: 0,
+          top: 0,
+          bottom: 0,
+          alignItems: 'center',
+          justifyContent: 'center' }}
+        />)
+      }
 
       {/* Modal for add story */}
 
@@ -1282,9 +1307,7 @@ function openPhotoEditor(uri){
         animationType='slide'
         transparent={true}
         visible={addStoryModalVisible}
-        onRequestClose={() => setAddStoryModalVisible(true)}
-        // presentationStyle="pageSheet"
-        // statusBarTranslucent={true}
+        onRequestClose={() => setAddStoryModalVisible(false)}
       >
         <View style={{
           backgroundColor: '#201E23', 
@@ -1478,7 +1501,7 @@ function openPhotoEditor(uri){
                   <Video
                       repeat
                       source={{ uri: file.uri }}
-                      resizeMode='stretch'
+                      resizeMode='cover'
                       style={{
                         height: windowHeight,
                         position: "absolute",

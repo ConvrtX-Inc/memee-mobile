@@ -254,7 +254,7 @@ export const StoryListItem = props => {
                                 <Video
                                     onLoad={(data) => start(data.duration * 1000)}
                                     source={{ uri: content[current].story_content }}
-                                    resizeMode="contain"
+                                    resizeMode="cover"
                                     style={{
                                         height: height,
                                         position: 'absolute',

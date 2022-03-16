@@ -16,7 +16,11 @@ export const Story = props => {
         stories,
         deleteStory,
         reloadStory,
-        // updateOffset
+        updateOffset,
+        storyOffset,
+        storyPage,
+        storyLimit,
+        setAddStoryModalVisible
     } = props;
 
     const [dataState, setDataState] = useState([]);
@@ -140,13 +144,15 @@ export const Story = props => {
     return (
         <Fragment>
             {
-                stories.length > 0 && (
-                    <StoryList
-                        handleStoryItemPress={_handleStoryItemPress}
-                        data={selectedData}
-                        // updateOffset={updateOffset}
-                    />
-                )
+                <StoryList
+                    handleStoryItemPress={_handleStoryItemPress}
+                    data={selectedData}
+                    updateOffset={updateOffset}
+                    storyOffset={storyOffset}
+                    storyPage={storyPage}
+                    storyLimit={storyLimit}
+                    setAddStoryModalVisible={setAddStoryModalVisible}
+                />
             }
             <Modal
                 style={{
