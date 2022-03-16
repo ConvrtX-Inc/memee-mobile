@@ -630,6 +630,7 @@ export default function Dashboard(props) {
                     source={{ uri: item.img_url }}
                     disableFullscreen
                     disableBack
+                    paused={true}
                     controlTimeout={2500}
                     tapAnywhereToPause={true}
                     showOnStart={false}
