@@ -12,6 +12,8 @@ target 'memee' do
     :hermes_enabled => false
   )
 
+  pod 'react-native-twitter-signin', :path => '../node_modules/react-native-twitter-signin'
+
   target 'memeeTests' do
     inherit! :complete
     # Pods for testing

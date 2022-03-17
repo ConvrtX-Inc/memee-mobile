@@ -8,6 +8,7 @@ import {
   Dimensions,
   Image,
   ActivityIndicator,
+  NativeModules,
 } from 'react-native';
 import ButtonWithImage from '../../component/ButtonWithImage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -27,6 +28,14 @@ import {toggleOnlineStatus} from '../../redux/actions/Auth';
 
 import auth from '@react-native-firebase/auth';
 import SplashImages from '../../component/SplashImages';
+
+const {RNTwitterSignIn} = NativeModules;
+import {decode as atob, encode as btoa} from 'base-64';
+
+RNTwitterSignIn.init(
+  '7Yg35MGJX38own2WE9lxp3I05',
+  `27L8uE0Vyafin9kKceG0fWFbNiNVDggrKAFDxOFBhrUW7aQoM0`,
+).then(() => console.log('Twitter SDK initialized'));
 
 Settings.initializeSDK();
 global.userData = [];
@@ -197,7 +206,7 @@ export default function Onboarding({navigation}) {
         });
         console.error(error);
       });
-    setIsLoading(true);
+    setIsLoading(false);
   }
 
   async function logoutFromGoogle() {
@@ -207,46 +216,46 @@ export default function Onboarding({navigation}) {
     } catch (e) {}
   }
 
-  /*
-    added for twitter login function date: 2/24/2022
-    task: Log In Button Via Twitter is Missing
-  */
-  const onTwitterButtonPress = async () => {
-    /* try {
-      
-    } catch (error) {
+  async function onTwitterButtonPress() {
+    // Perform the login request
+    try {
+      const res = await RNTwitterSignIn.logIn();
+      console.log('res', res.email, res.name);
+
+      emailVar = res?.email || '';
+      nameVar = res.name;
+      imageVar = null;
+      loginTypeVar = 'Twitter';
+
+      await SignupFN();
+    } catch (e) {
+      console.log('error twitter', e);
       Toast.show({
         type: 'error',
-        text2: 'Please check your internet connection.',
+        text2: 'Twitter Login Error',
       });
-      console.error('Login view Twitter error:', error);
-    } */
-    Toast.show({
-      type: 'error',
-      text2: 'Login with Twitter is under maintenance.',
-    });
-  };
+    }
+
+    setIsLoading(false);
+  }
 
   const onLogin = async type => {
     setIsLoading(true);
     try {
       if (type) {
         if (type == 'google') {
-          await signInGmail();
+          signInGmail();
         }
         if (type == 'facebook') {
-          await onFacebookButtonPress();
+          onFacebookButtonPress();
         }
         if (type == 'twitter') {
-          {
-            await onTwitterButtonPress();
-          }
+          onTwitterButtonPress();
         }
       }
     } catch (e) {
       console.log(e);
     }
-    setIsLoading(false);
   };
 
   return (
