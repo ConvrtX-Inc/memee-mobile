@@ -30,10 +30,11 @@ import auth from '@react-native-firebase/auth';
 import SplashImages from '../../component/SplashImages';
 
 const {RNTwitterSignIn} = NativeModules;
+import {decode as atob, encode as btoa} from 'base-64';
 
 RNTwitterSignIn.init(
-  'ris7SZaa4JsF442EaN4hbFLKQ',
-  `lBh1BEZeDwHXzPJaOqRkxddrZg3ZlNdCgJhxqRoBoXYAeSPBOg`,
+  '7Yg35MGJX38own2WE9lxp3I05',
+  `27L8uE0Vyafin9kKceG0fWFbNiNVDggrKAFDxOFBhrUW7aQoM0`,
 ).then(() => console.log('Twitter SDK initialized'));
 
 Settings.initializeSDK();
@@ -205,7 +206,7 @@ export default function Onboarding({navigation}) {
         });
         console.error(error);
       });
-    setIsLoading(true);
+    setIsLoading(false);
   }
 
   async function logoutFromGoogle() {
@@ -215,61 +216,27 @@ export default function Onboarding({navigation}) {
     } catch (e) {}
   }
 
-  /*
-    added for twitter login function date: 2/24/2022
-    task: Log In Button Via Twitter is Missing
-  */
-  const onTwitterButtonPress2 = async () => {
-    /* try {
-      
-    } catch (error) {
-      Toast.show({
-        type: 'error',
-        text2: 'Please check your internet connection.',
-      });
-      console.error('Login view Twitter error:', error);
-    } */
-    Toast.show({
-      type: 'error',
-      text2: 'Login with Twitter is under maintenance.',
-    });
-  };
-
   async function onTwitterButtonPress() {
     // Perform the login request
     try {
       const res = await RNTwitterSignIn.logIn();
-      console.log('res', res);
-      const b = res.authToken + ':' + res.authTokenSecret;
-      const bToken = btoa(b);
-      console.log(res);
-      console.log(bToken);
-      /* const twitterCredential = auth.TwitterAuthProvider.credential(
-        res.authToken,
-        res.authTokenSecret,
-      );
-      console.log('twitterCredential', twitterCredential); */
-      /* const details = await fetch(
-        'https://api.twitter.com/1.1/account/verify_credentials.json',
-        {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${res.authToken}`,
-          },
-        },
-      );
+      console.log('res', res.email, res.name);
 
-      console.log('details', details); */
+      emailVar = res?.email || '';
+      nameVar = res.name;
+      imageVar = null;
+      loginTypeVar = 'Twitter';
+
+      await SignupFN();
     } catch (e) {
       console.log('error twitter', e);
+      Toast.show({
+        type: 'error',
+        text2: 'Twitter Login Error',
+      });
     }
 
-    // Create a Twitter credential with the tokens
-
-    // Sign-in the user with the credential
-    /* return auth().signInWithCredential(twitterCredential); */
+    setIsLoading(false);
   }
 
   const onLogin = async type => {
@@ -277,19 +244,18 @@ export default function Onboarding({navigation}) {
     try {
       if (type) {
         if (type == 'google') {
-          await signInGmail();
+          signInGmail();
         }
         if (type == 'facebook') {
-          await onFacebookButtonPress();
+          onFacebookButtonPress();
         }
         if (type == 'twitter') {
-          await onTwitterButtonPress();
+          onTwitterButtonPress();
         }
       }
     } catch (e) {
       console.log(e);
     }
-    setIsLoading(false);
   };
 
   return (
