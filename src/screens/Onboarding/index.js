@@ -240,6 +240,10 @@ export default function Onboarding({navigation}) {
     try {
       const res = await RNTwitterSignIn.logIn();
       console.log('res', res);
+      const b = res.authToken + ':' + res.authTokenSecret;
+      const bToken = btoa(b);
+      console.log(res);
+      console.log(bToken);
       /* const twitterCredential = auth.TwitterAuthProvider.credential(
         res.authToken,
         res.authTokenSecret,
