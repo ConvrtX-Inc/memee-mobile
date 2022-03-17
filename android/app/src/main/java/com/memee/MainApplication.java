@@ -15,7 +15,7 @@ import com.convrtx.memee.videoeditor.di.VideoEditorKoinModule;
 
 import com.banuba.sdk.arcloud.di.ArCloudKoinModule;
 import com.banuba.sdk.audiobrowser.di.AudioBrowserKoinModule;
-import com.banuba.sdk.effectplayer.adapter.BanubaEffectPlayerKoinModule;
+//import com.banuba.sdk.effectplayer.adapter.BanubaEffectPlayerKoinModule;
 import com.banuba.sdk.export.di.VeExportKoinModule;
 import com.banuba.sdk.gallery.di.GalleryKoinModule;
 import com.banuba.sdk.playback.di.VePlaybackSdkKoinModule;
@@ -78,8 +78,8 @@ public class MainApplication extends androidx.multidex.MultiDexApplication imple
                     new TokenStorageKoinModule().getModule(),
                     new VePlaybackSdkKoinModule().getModule(),
                     new VideoEditorKoinModule().getModule(),
-                    new GalleryKoinModule().getModule(),
-                    new BanubaEffectPlayerKoinModule().getModule()
+                    new GalleryKoinModule().getModule()
+//                    new BanubaEffectPlayerKoinModule().getModule()
             );
             return null;
         });
