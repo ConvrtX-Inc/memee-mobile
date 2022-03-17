@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
+import _ from 'lodash';
 import {
   View,
   Text,
@@ -18,6 +19,7 @@ import {
   FlatList,
   ImageBackground,
   ViewBase,
+  NativeModules,
 } from 'react-native';
 import ButtonCoins from '../../component/ButtonCoins';
 import { Avatar } from 'react-native-elements';
@@ -33,12 +35,50 @@ import { getNotifications } from '../../redux/actions/Auth';
 import Toast from 'react-native-toast-message';
 import Video from 'react-native-video';
 import VideoPlayer from 'react-native-video-controls';
+import Icon from 'react-native-vector-icons/AntDesign'
+import {
+  launchCamera,
+  launchImageLibrary
+} from 'react-native-image-picker';
+import {PESDK, PhotoEditorModal, Configuration} from 'react-native-photoeditorsdk';
+import { requestCameraPermission, requestExternalWritePermission } from '../../Utility/Utils';
+import Story from '../../component/Story/Story';
+import StorySkeleton from '../../component/Story/StorySkeleton';
+import API from '../../api/StoryApi';
+import {RNS3} from 'react-native-aws3';
+import {getBucketOptions, generateUID} from '../../Utility/Utils';
+import storage from '@react-native-firebase/storage';
+import moment from 'moment';
 
 var offset = 0;
 global.navigateDashboard = 1;
 var windowWidth = Dimensions.get('window').width;
 var windowHeight = Dimensions.get('window').height;
 var gloIndex = '';
+var story_offset = 0;
+var story_limit = 10;
+
+//Banuba Video Editor
+const { VideoEditorModule } = NativeModules;
+
+const openEditor = async ()=> {
+  return await VideoEditorModule.openVideoEditor();
+};
+
+export const openVideoEditor = async () => {
+  const response = await openEditor();
+
+  if (!response) {
+    return null;
+  }
+
+  return response?.videoUri;
+};
+
+async function getAndroidExportResult() {
+  return await VideoEditorModule.openVideoEditor();
+}
+//End Video Editor
 
 export default function Dashboard(props) {
   const navigation = useNavigation();
@@ -46,10 +86,28 @@ export default function Dashboard(props) {
     ({ authRed }) => authRed,
   );
 
+  let options = {
+    mediaType: 'photo',
+    maxWidth: 512,
+    maxHeight: 512,
+    quality: 1,
+};
+
   const [dBottomFont, setdBottomFont] = useState(global.fontSelect);
   const dispatch = useDispatch();
   const [followingPost, setFollowingPost] = useState([]);
   const [modalVisible, setModalVisible] = useState('');
+
+  const [addStoryModalVisible, setAddStoryModalVisible] = useState(false);
+  const [file, setFile] = useState(null);
+  const [isOpenMedia, setIsOpenMedia] = useState(false);
+
+  const [stories, setStories] = useState([]);
+  const [loadingStoriesItems, setLoadingStoriesItems] = useState(false);
+
+  const [loadingAddStory, setLoadingAddStory] = useState(false);
+  const [updatedStories, setUpdatedStories] = useState(0);
+
   const [postIdToDelete, setPostIdToDelete] = useState('');
   const [defaultHeartColor, setDefaultHeartColor] = useState('#89789A');
   const [heartColor, setHeartColor] = useState('#EC1C1C');
@@ -72,8 +130,151 @@ export default function Dashboard(props) {
   const playerRef = useRef();
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
+    fetchStories();
     selectTab(global.navigateDashboard);
   }, []);
+
+
+  // fetching of Stories
+  useEffect(() => {
+    fetchStories();
+  },[updatedStories]);
+
+  // upload image/video
+  function uploadImageToS3() {
+    setLoadingAddStory(true);
+
+    const data = file.type == 'photo' ?  {
+      uri: file.uri,
+      name: generateUID() + '.jpg',
+      type: 'image/jpeg',
+    } : {
+      uri: file.uri,
+      name: generateUID() + '.mp4',
+      type: 'video/mp4',
+    };
+
+    let reference = storage().ref(data.name);
+    let task = reference.putFile(data.uri);
+
+    task
+      .then(res => {
+        console.log('Image uploaded to the bucket!');
+        reference.getDownloadURL().then(response => {
+          console.log('Image downloaded from the bucket!', response);
+          addStory(response);
+        });
+      })
+      .catch(e => {
+        console.log('uploading image error => ', e);
+        Toast.show({
+          type: 'error',
+          text2: 'Unable to add story. Please try again later!',
+        });
+        setLoadingAddStory(false);
+      });
+  }
+
+  // fetch stories = query /user_id=xxxx&limit=xx
+  const fetchStories = async () => {
+    setLoadingStoriesItems(true);
+    const response = await API.GetDayStories({ user_id: global.userData.user_id, limit: story_limit, offset: story_offset });
+    const { DayStories, Status } = response;
+    const filterStories = DayStories.filter(story => story.stories.length > 0);
+
+    if (Status !== 200) {
+      Toast.show({
+        type: 'error',
+        text2: 'Unable to retrieve stories, please try again later.',
+      });
+      setLoadingStoriesItems(false);
+      setRefreshing(false);
+      return;
+    }
+
+    if (filterStories.length > 0) {
+      let storyIndexOfLoggedInUser = 0;
+
+      for (let index = 0; index < filterStories.length; index++) {
+        if (global.userData.user_id === filterStories[index].user_id) {
+          storyIndexOfLoggedInUser = index;
+          break;
+        }
+      }
+
+      // move(): put the story of the logged in user in the first of story lists
+      setStories(move(storyIndexOfLoggedInUser, 0, filterStories));
+      setLoadingStoriesItems(false);
+      setRefreshing(false);
+      return;
+    }
+    setStories([]);
+    setLoadingStoriesItems(false);
+    setRefreshing(false);
+  }
+
+  // Add story body: {userId: XXXX, ImgUrl: XXXX, VideoUrl: XXXX, dateTime: xxxx}
+  async function addStory(location) {
+    const response = await API.AddStory({
+      userID: global.userData.user_id,
+      ImgUrl: file.type === 'photo' ? location : '',
+      VideoUrl: file.type === 'video' ? location : '',
+      dateTime: moment().format('YYYY-MM-DD HH:mm:ss')
+    });
+
+    if (response.Status !== 201) {
+      Toast.show({
+        type: 'error',
+        text2: 'Something went wrong. Please try again later!',
+      });
+      return;
+    }
+    setAddStoryModalVisible(false);
+    setFile(null);
+    setLoadingAddStory(false);
+    setUpdatedStories(updatedStories + 1);
+  }
+
+  // delete story body: {story_id: xxxx}
+  async function deleteStory(story_id) {
+    const response = await API.DeleteStory({story_id});
+
+    if (response.Status !== 200) {
+      Toast.show({
+        type: 'error',
+        text2: 'Something went wrong. Please try again later!',
+      });
+      return false;
+    }
+    return true;
+  }
+
+  function updateStoryOffset() {
+    story_offset = story_limit - 1;
+  }
+
+  function cancelStoryModal() {
+    file ? Alert.alert(
+      "Discard story",
+      "Are you sure you want to exit?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "OK", onPress: () => { setFile(null); } }
+      ]
+    ) : setAddStoryModalVisible(false);
+  }
+
+  /* move specific item of an array to specific location(index) of an array */
+  function move(from, to, arr) {
+    const newArr = [...arr];
+    const item = newArr.splice(from, 1)[0];
+    newArr.splice(to, 0, item);
+    return newArr;
+  }
 
   useEffect(() => {
     selectTab(global.navigateDashboard);
@@ -121,6 +322,7 @@ export default function Dashboard(props) {
 
     return () => backHandler.remove();
   }, []);
+
 
   function saveTokenToDatabase(deviceToken) {
     fetch(
@@ -409,7 +611,7 @@ export default function Dashboard(props) {
       navigation.navigate('ProfileScreen');
     }
   }
-
+  
   const mock = [
     {
       ParentUserId: 0,
@@ -425,7 +627,76 @@ export default function Dashboard(props) {
   ];
   /* global.colorPrimary */
 
+  function openGallery(){
+        setIsOpenMedia(true);
+        launchImageLibrary(options, (response) => {
+            console.log('Response = ', response);
+
+            if (response.didCancel) {
+                // alert('User cancelled camera picker');
+                return;
+            } else if (response.errorCode == 'camera_unavailable') {
+                // alert('Camera not available on device');
+                return;
+            } else if (response.errorCode == 'permission') {
+                // alert('Permission not satisfied');
+                return;
+            } else if (response.errorCode == 'others') {
+                // alert(response.errorMessage);
+                return;
+            }
+
+            let source = response.assets[0];
+            openPhotoEditor(source.uri)
+        });
+        setIsOpenMedia(false);
+    }
+
+    const openCamera = async () => {
+        setIsOpenMedia(true);
+        let isStoragePermitted = await requestExternalWritePermission();
+        let isCameraPermitted = await requestCameraPermission();
+        if (isCameraPermitted && isStoragePermitted) {
+            launchCamera(options, (response) => {
+                console.log('Response = ', response);
+
+                if (response.didCancel) {
+                    // alert('User cancelled camera picker');
+                    return;
+                } else if (response.errorCode == 'camera_unavailable') {
+                    // alert('Camera not available on device');
+                    return;
+                } else if (response.errorCode == 'permission') {
+                    // alert('Permission not satisfied');
+                    return;
+                } else if (response.errorCode == 'others') {
+                    // alert(response.errorMessage);
+                    return;
+                }
+
+                let source = response.assets[0];            
+                openPhotoEditor(source.uri)
+            });
+        }
+        setIsOpenMedia(false);
+    };
+
+
+function openPhotoEditor(uri){
+    setIsOpenMedia(true);
+    PESDK.openEditor({ uri: uri}).then(
+        (result) => {
+          // navigation.navigate("NewPost", {uri: result.image})
+          setFile({type: 'photo', uri: result.image});
+        },
+        (error) => {
+          console.log(error);
+        });
+    setIsOpenMedia(false);
+}
+
   const textMaximumWidth = windowWidth * 0.75 - 20;
+  // console.log('OFFSET', story_offset);
   /* console.log('textMaximumWidth', textMaximumWidth); */
   return (
     <View style={{ flex: 1, backgroundColor: global.colorPrimary }}>
@@ -945,10 +1216,305 @@ export default function Dashboard(props) {
                 </LinearGradient>
                 {/* </View> */}
               </TouchableOpacity>
+            </View> 
+            <View style={{flexDirection: 'row', marginLeft: 10, marginBottom: 25}}>
+              <ScrollView horizontal={true}>
+                <TouchableOpacity onPress={() => setAddStoryModalVisible(true)}>
+                  <View style={{backgroundColor: '#201E23', height: 160, width: 115, borderRadius: 15 }}>
+                    <View style={{flex: 2.5, flexDirection: 'column'}}>
+                      <View style={{flex: 1, justifyContent: 'center'}}>
+                        <Text style={{color: 'white', textAlign: 'center', fontSize: 16, fontWeight: 'normal'}}>Add story</Text>       
+                      </View>           
+                    </View>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+                      {
+                        global.userData.imgurl ?
+                          <Image style={{width: 35, height: 35, borderRadius: 50, borderWidth: 3, borderColor: 'white'}} source={{uri: global.userData.imgurl}} />
+                        : <View style={{width: 35, height: 35, borderWidth: 3, borderColor: 'white', borderRadius: 50}} />
+                      }
+                    </View>
+                    <View style={{marginBottom: 5, marginTop: 10}}>
+                      <Text style={{textAlign: 'center', color: 'white', fontSize: 16}}>You</Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+                {
+                  !loadingStoriesItems ? stories.length > 0 ? (
+                    <Story 
+                      stories={stories}
+                      duration={5}
+                      deleteStory={(story_id) => deleteStory(story_id)}
+                      reloadStory={fetchStories}
+                      // updateOffset={updateStoryOffset}
+                    />
+                  ) : null : <StorySkeleton />
+                }
+              </ScrollView>
             </View>
           </View>
         )}
       />
+
+      {/* Modal for add story */}
+
+      <Modal
+        animationType='slide'
+        transparent={true}
+        visible={addStoryModalVisible}
+        onRequestClose={() => setAddStoryModalVisible(true)}
+        // presentationStyle="pageSheet"
+        // statusBarTranslucent={true}
+      >
+        <View style={{
+          backgroundColor: '#201E23', 
+          flex: 1
+        }}>
+         {
+           !file && (
+            <View
+                style={{
+                  flex: 1, 
+                  height: '100%', 
+                  width: '100%'
+                }}
+            >
+              <View style={{flexDirection: 'row-reverse'}}>
+                <View>
+                  <TouchableOpacity onPress={() => cancelStoryModal()}>
+                    {
+                      loadingAddStory ? <ActivityIndicator size="small" color="white" style={{paddingRight: 15, paddingTop: 15}} /> : <Text style={{paddingRight: 15, paddingTop: 15, color: 'white', fontSize: 16}}>Cancel</Text>
+                    }
+                  </TouchableOpacity>
+                </View>
+              </View>
+              {
+                !file && (
+                    <View style={styles.centeredView}>
+                        <View>
+                          <TouchableOpacity 
+                            disabled={isOpenMedia} 
+                            style={{ marginBottom: '8%' }} 
+                            onPress={() => openCamera()}
+                          >
+                              <Text style={{ 
+                                color: "#fff", 
+                                opacity: 0.5, 
+                                fontSize: 16 }}
+                              >Take photo...</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity 
+                            disabled={isOpenMedia} 
+                            style={{ marginBottom: '6%' }} 
+                            onPress={() => openGallery()}
+                          >
+                              <Text style={{ color: "#fff", opacity: 0.5, fontSize: 16 }}>Choose photo from library...</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                              style={{marginBottom: '6%'}}
+                              onPress={() => {
+                                if (Platform.OS === 'android') {
+                                  getAndroidExportResult().then(videoUri => {
+                                    setFile({type: 'video', uri: videoUri});
+                                  }).catch(e => {
+                                    console.log("error",e)
+                                    console.log(e)
+                                  })
+                                } else {
+                                  const videoUri = openVideoEditor();
+                                  console.log(videoUri)
+                                }
+                              }}>
+                              <Text style={{color: '#fff', opacity: 0.5, fontSize: 16}}>
+                                Select Video
+                              </Text>
+                            </TouchableOpacity>
+                          <TouchableOpacity 
+                            disabled={isOpenMedia} 
+                            style={[{ marginTop: '20%' }]} 
+                            onPress={() => setAddStoryModalVisible(false)}
+                          >
+                              <LinearGradient
+                                  colors={[global.btnColor1, global.btnColor2]}
+                                  style={{ paddingHorizontal: 27, paddingVertical: 15, justifyContent: 'center', alignSelf: 'center', borderRadius: 22, }}
+                              >
+                                  <Text style={[styles.modalText, { color: global.btnTxt }]}>Cancel</Text>
+                              </LinearGradient>
+                          </TouchableOpacity>
+                        </View>
+                    </View>
+                )
+              }
+            </View>
+           )
+         }
+         {
+           (file && file.type === 'photo') && (
+            <ImageBackground
+              source={{uri: file && file.uri}}
+              // resizeMode="contain"
+              imageStyle={{
+                flex: 1,
+                height: '100%',
+                width: '100%'
+              }}
+              style={{
+                flex: 1, 
+                height: '100%', 
+                width: '100%'
+              }}
+          >
+            <View style={{flexDirection: 'row-reverse'}}>
+              <View>
+                <TouchableOpacity onPress={() => cancelStoryModal()}>
+                  {
+                    loadingAddStory ? <ActivityIndicator size="small" color="white" style={{paddingRight: 15, paddingTop: 15}} /> : <Text style={{paddingRight: 15, paddingTop: 15, color: 'white', fontSize: 16}}>Cancel</Text>
+                  }
+                </TouchableOpacity>
+              </View>
+            </View>
+            {
+              !file && (
+                  <View style={styles.centeredView}>
+                      <View>
+                        <TouchableOpacity 
+                          disabled={isOpenMedia} 
+                          style={{ marginBottom: '8%' }} 
+                          onPress={() => openCamera()}
+                        >
+                            <Text style={{ 
+                              color: "#fff", 
+                              opacity: 0.5, 
+                              fontSize: 16 }}
+                            >Take photo...</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity 
+                          disabled={isOpenMedia} 
+                          style={{ marginBottom: '6%' }} 
+                          onPress={() => openGallery()}
+                        >
+                            <Text style={{ color: "#fff", opacity: 0.5, fontSize: 16 }}>Choose from library...</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity 
+                          disabled={isOpenMedia} 
+                          style={[{ marginTop: '20%' }]} 
+                          onPress={() => setAddStoryModalVisible(false)}
+                        >
+                            <LinearGradient
+                                colors={[global.btnColor1, global.btnColor2]}
+                                style={{ paddingHorizontal: 27, paddingVertical: 15, justifyContent: 'center', alignSelf: 'center', borderRadius: 22, }}
+                            >
+                                <Text style={[styles.modalText, { color: global.btnTxt }]}>Cancel</Text>
+                            </LinearGradient>
+                        </TouchableOpacity>
+                      </View>
+                  </View>
+              )
+            }
+            {
+              (file && file.type === 'photo') && (
+                <View style={{flex: 1}}>
+                    <View style={{
+                      flex: 1, 
+                      flexDirection: 'column', 
+                      justifyContent: 'flex-end'
+                    }}>
+                    <View style={{
+                      justifyContent: 'flex-end', 
+                      flexDirection: 'row', 
+                      marginBottom: 35, 
+                      marginRight: 25
+                      }}>
+                      {
+                        !loadingAddStory && (
+                            <TouchableOpacity style={[{ marginTop: '20%' }]} onPress={() => uploadImageToS3()} >
+                                <LinearGradient
+                                    colors={[global.btnColor1, global.btnColor2]}
+                                    style={{ 
+                                      paddingHorizontal: 27, 
+                                      paddingVertical: 15, 
+                                      justifyContent: 'center', 
+                                      alignSelf: 'center',
+                                      borderRadius: 22
+                                    }}
+                                >
+                                    <Text style={[styles.modalText, { color: global.btnTxt }]}><Icon name="plus" color='black' /> Add story</Text>
+                                </LinearGradient>
+                            </TouchableOpacity>
+                        )
+                      }
+                    </View>
+                    </View>
+                </View>
+              )
+            }
+          </ImageBackground>
+           )
+         }
+         {
+           (file && file.type === 'video') && (
+              <View style={{flex: 1}}>
+                <View>
+                  <Video
+                      repeat
+                      source={{ uri: file.uri }}
+                      resizeMode='stretch'
+                      style={{
+                        height: windowHeight,
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        bottom: 0,
+                        right: 0
+                      }}
+                  />
+                </View>
+                <View style={{flexDirection: 'row-reverse'}}>
+                  <TouchableOpacity onPress={() => cancelStoryModal()}>
+                    {
+                      loadingAddStory ? <ActivityIndicator size="small" color="white" style={{paddingRight: 15, paddingTop: 15}} /> : <Text style={{paddingRight: 15, paddingTop: 15, color: 'white', fontSize: 16}}>Cancel</Text>
+                    }
+                  </TouchableOpacity>
+                </View>
+                <View style={{flex: 1}}>
+                      <View style={{
+                        flex: 1, 
+                        flexDirection: 'column', 
+                        justifyContent: 'flex-end'
+                      }}>
+                      <View style={{
+                        justifyContent: 'flex-end', 
+                        flexDirection: 'row', 
+                        marginBottom: 35, 
+                        marginRight: 25
+                        }}>
+                        {
+                          !loadingAddStory && (
+                              <TouchableOpacity style={[{ marginTop: '20%' }]} onPress={() => uploadImageToS3()} >
+                                  <LinearGradient
+                                      colors={[global.btnColor1, global.btnColor2]}
+                                      style={{ 
+                                        paddingHorizontal: 27, 
+                                        paddingVertical: 15, 
+                                        justifyContent: 'center', 
+                                        alignSelf: 'center',
+                                        borderRadius: 22
+                                      }}
+                                  >
+                                      <Text style={[styles.modalText, { color: global.btnTxt }]}><Icon name="plus" color='black' /> Add story</Text>
+                                  </LinearGradient>
+                              </TouchableOpacity>
+                          )
+                        }
+                      </View>
+                      </View>
+                  </View>
+                </View>
+           )
+         }
+        </View>
+      </Modal>
+
+      {/* End of Modal add story */}
 
       <Modal
         animationType="slide"
@@ -1282,4 +1848,29 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
   },
+  bottom: {
+    flexDirection: 'row',
+    height: 80,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30
+  },
+  icon: {
+      width: windowWidth/5,
+      alignSelf: 'center'
+
+  },
+  icon_inside: {
+      width: 30,
+      height: 30,
+      marginBottom: 5,
+      resizeMode: 'contain'
+  },
+  centerIcon: {
+      width: windowWidth/5,
+      height: windowWidth/5,
+      marginBottom: 30
+  },
+  touchstyle: {
+      alignSelf: 'center', justifyContent: 'center', alignItems: 'center'
+  }
 });
