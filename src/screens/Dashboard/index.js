@@ -293,12 +293,12 @@ export default function Dashboard(props) {
       [
         {
           text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
+          onPress: () => { setAddStoryModalVisible(false);setIsOpenMedia(false);},
           style: "cancel"
         },
         { text: "OK", onPress: () => { setFile(null); setIsOpenMedia(false) } }
       ]
-    ) : () => { setAddStoryModalVisible(false);setIsOpenMedia(false);};
+    ) : setAddStoryModalVisible(false)
   }
 
   /* move specific item of an array to specific location(index) of an array */
@@ -671,14 +671,18 @@ export default function Dashboard(props) {
 
             if (response.didCancel) {
                 // alert('User cancelled camera picker');
+                setIsOpenMedia(false);
                 return;
             } else if (response.errorCode == 'camera_unavailable') {
+                setIsOpenMedia(false);
                 // alert('Camera not available on device');
                 return;
             } else if (response.errorCode == 'permission') {
+                setIsOpenMedia(false);
                 // alert('Permission not satisfied');
                 return;
             } else if (response.errorCode == 'others') {
+                setIsOpenMedia(false);
                 // alert(response.errorMessage);
                 return;
             }
@@ -698,15 +702,19 @@ export default function Dashboard(props) {
 
                 if (response.didCancel) {
                     // alert('User cancelled camera picker');
+                    setIsOpenMedia(false);
                     return;
                 } else if (response.errorCode == 'camera_unavailable') {
                     // alert('Camera not available on device');
+                    setIsOpenMedia(false);
                     return;
                 } else if (response.errorCode == 'permission') {
                     // alert('Permission not satisfied');
+                    setIsOpenMedia(false);
                     return;
                 } else if (response.errorCode == 'others') {
                     // alert(response.errorMessage);
+                    setIsOpenMedia(false);
                     return;
                 }
 
@@ -721,6 +729,9 @@ function openPhotoEditor(uri){
     setIsOpenMedia(true);
     PESDK.openEditor({ uri: uri}).then(
         (result) => {
+          if (!result || !result.image) {
+            setIsOpenMedia(false);
+          }
           // navigation.navigate("NewPost", {uri: result.image})
           setFile({type: 'photo', uri: result.image});
         },
@@ -1385,6 +1396,7 @@ function openPhotoEditor(uri){
                                   const videoUri = openVideoEditor();
                                   console.log(videoUri)
                                 }
+                                setIsOpenMedia(false);
                               }}>
                               <Text style={{color: '#fff', opacity: 0.5, fontSize: 16}}>
                                 Select Video
@@ -1423,7 +1435,7 @@ function openPhotoEditor(uri){
            (file && file.type === 'photo') && (
             <ImageBackground
               source={{uri: file && file.uri}}
-              // resizeMode="contain"
+              resizeMode="contain"
               imageStyle={{
                 flex: 1,
                 height: '100%',
@@ -1529,7 +1541,7 @@ function openPhotoEditor(uri){
                   <Video
                       repeat
                       source={{ uri: file.uri }}
-                      resizeMode='cover'
+                      resizeMode='contain'
                       style={{
                         height: windowHeight,
                         position: "absolute",
