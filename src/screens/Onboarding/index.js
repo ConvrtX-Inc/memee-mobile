@@ -9,6 +9,7 @@ import {
   Image,
   ActivityIndicator,
   NativeModules,
+  Platform,
 } from 'react-native';
 import ButtonWithImage from '../../component/ButtonWithImage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -55,6 +56,9 @@ export default function Onboarding({navigation}) {
       type: 'error',
       text2: 'Login with Facebook is under maintenance.',
     }); */
+    if (Platform.OS === 'android') {
+      LoginManager.setLoginBehavior('web_only');
+    }
 
     LoginManager.logInWithPermissions(['public_profile', 'email']).then(
       function (result) {
