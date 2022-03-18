@@ -71,7 +71,8 @@ const StoryItem = props => {
                         <TouchableOpacity disabled>
                             <View style={{backgroundColor: '#201E23', marginLeft: 7,  height: 160, width: 115, borderRadius: 15 }}>
                             <Video
-                                repeat
+                                // repeat
+                                muted
                                 source={{ uri: (item.stories.length && item.stories[stories.length - 1].story_video) && item.stories[stories.length - 1].story_video }}
                                 resizeMode="stretch"
                                 style={{

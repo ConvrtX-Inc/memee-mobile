@@ -14,7 +14,8 @@ import {
     SafeAreaView,
     Alert
 } from "react-native";
-import Icon from 'react-native-vector-icons/AntDesign'
+import Icon from 'react-native-vector-icons/AntDesign';
+import Octicons from 'react-native-vector-icons/Octicons';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import {useNavigation} from '@react-navigation/native';
 import VideoPlayer from 'react-native-video-controls';
@@ -29,6 +30,7 @@ export const StoryListItem = props => {
     const [load, setLoad] = useState(true);
     const [pressed, setPressed] = useState(false);
     const [deleteUpdate, setDeleteUpdate] = useState(0);
+    const [muted, setMuted] = useState(true);
     const [content, setContent] = useState(
         stories.map((x) => {
             return {
@@ -244,25 +246,32 @@ export const StoryListItem = props => {
             <SafeAreaView>
                 <View style={styles.backgroundContainer}>
                     {
-                        content[current].file_type === 'photo' ? (
-                            <Image onLoadEnd={() => start(props.duration)}
-                                source={{uri: content[current].story_content}}
-                                style={styles.image}
-                            />
-                        ) : (
-                            <View>
+                        content[current].file_type === 'photo' && (
+                        <Image onLoadEnd={() => start(props.duration)}
+                            source={{uri: content[current].story_content}}
+                            resizeMode="contain"
+                            style={styles.image}
+                        />)
+                    }
+                    {
+                        content[current].file_type === 'video' && (
+                            <View style={{backgroundColor: '#201E23'}}>
                                 <Video
+                                    muted={muted}
+                                    // onReadyForDisplay={(data) => start(5000)}
                                     onLoad={(data) => start(data.duration * 1000)}
                                     source={{ uri: content[current].story_content }}
-                                    resizeMode="cover"
+                                    resizeMode="contain"
+                                    controls
                                     style={{
                                         height: height,
-                                        position: 'absolute',
-                                        top: 0,
-                                        left: 0,
-                                        bottom: 0,
-                                        right: 0,
+                                        // position: 'absolute',
+                                        // top: 0,
+                                        // left: 0,
+                                        // bottom: 0,
+                                        // right: 0,
                                     }}
+                                    playInBackground={false}
                                 />
                             </View>
                         )
@@ -307,6 +316,14 @@ export const StoryListItem = props => {
                             )
                         }
                     </View>
+                    {
+
+                        content[current].file_type === 'video' && (<TouchableOpacity onPress={() => setMuted(!muted)}>
+                        <View style={styles.closeIconContainer}>
+                            <Octicons name={muted ? 'mute' : 'unmute'} size={22} color="white" />
+                        </View>
+                    </TouchableOpacity>)
+                    }
                     <TouchableOpacity onPress={() => {
                         if (props.onClosePress) {
                             props.onClosePress();
@@ -339,22 +356,24 @@ export const StoryListItem = props => {
                     >
                         <View style={{flex: 1}}/>
                     </TouchableWithoutFeedback>
-                    <TouchableWithoutFeedback onPressIn={() => progress.stopAnimation()}
-                                              onLongPress={() => setPressed(true)}
-                                              onPressOut={() => {
-                                                  setPressed(false);
-                                                  startAnimation(props.duration);
-                                              }}
-                                              onPress={() => {
-                                                  if (!pressed && !load) {
-                                                      next()
-                                                  }
-                                              }}>
+                    <TouchableWithoutFeedback
+                        onPressIn={() => progress.stopAnimation()}
+                        onLongPress={() => setPressed(true)}
+                        onPressOut={() => {
+                            setPressed(false);
+                            startAnimation(props.duration);
+                        }}
+                        onPress={() => {
+                            if (!pressed && !load) {
+                                next()
+                            }
+                        }}
+                    >
                         <View style={{flex: 1}}/>
                     </TouchableWithoutFeedback>
                 </View>
             </View>
-            {content[current].onPress &&
+            {/* {content[current].onPress &&
                 <TouchableOpacity activeOpacity={1}
                                   onPress={onSwipeUp}
                                   style={styles.swipeUpBtn}>
@@ -365,7 +384,7 @@ export const StoryListItem = props => {
                             <Text style={{color: 'white', marginTop: 5}}>{swipeText}</Text>
                         </>
                     }
-                </TouchableOpacity>}
+                </TouchableOpacity>} */}
         </GestureRecognizer>
     )
 }
@@ -383,9 +402,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#000',
     },
     image: {
-        width: width,
-        height: height,
-        resizeMode: 'cover'
+        // width: width,
+        height: height
     },
     backgroundContainer: {
         position: 'absolute',
