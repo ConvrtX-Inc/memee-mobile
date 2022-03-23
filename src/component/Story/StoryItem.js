@@ -2,6 +2,7 @@ import React, {useState, useEffect, useRef} from "react";
 import {View, Image, TouchableOpacity, Text, StyleSheet, Platform, ImageBackground} from "react-native";
 import LinearGradient from 'react-native-linear-gradient';
 import Video from "react-native-video";
+import Icon from 'react-native-vector-icons/AntDesign'
 
 const StoryItem = props => {
 
@@ -43,7 +44,7 @@ const StoryItem = props => {
     return (
         <View style={{flex: 1, flexDirection: 'row'}}>
             {
-                index === 0 && (
+                (index === 0 && global.userData.user_id !== item.user_id) && (
                     <TouchableOpacity onPress={() => setAddStoryModalVisible(true)}>
                         <View style={{backgroundColor: '#201E23', height: 160, width: 115, borderRadius: 15 }}>
                             <View style={{flex: 2.5, flexDirection: 'column'}}>
@@ -51,12 +52,11 @@ const StoryItem = props => {
                                 <Text style={{color: 'white', textAlign: 'center', fontSize: 16, fontWeight: 'normal'}}>Add story</Text>       
                             </View>           
                             </View>
-                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-                            {
-                                global.userData.imgurl ?
-                                <Image style={{width: 35, height: 35, borderRadius: 50, borderWidth: 3, borderColor: 'white'}} source={{uri: global.userData.imgurl}} />
-                                : <View style={{width: 35, height: 35, borderWidth: 3, borderColor: 'white', borderRadius: 50}} />
-                            }
+                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                                <TouchableOpacity onPress={() => setAddStoryModalVisible(true)}>
+                                    <Image style={{width: 35, height: 35, borderRadius: 50}} source={{uri: global.userData.imgurl}} />
+                                    <Icon name='pluscircle' size={20} color="#4267B2" style={{position: 'absolute', right: -2, bottom: -2, backgroundColor: 'white', fontWeight: 'bold', borderRadius: 100}} />
+                                </TouchableOpacity>
                             </View>
                             <View style={{marginBottom: 5, marginTop: 10}}>
                             <Text style={{textAlign: 'center', color: 'white', fontSize: 16}}>You</Text>
@@ -90,9 +90,20 @@ const StoryItem = props => {
                                     <Text style={{color: 'white', textAlign: 'center', fontSize: 16, fontWeight: 'normal'}}></Text>       
                                 </View>           
                                 </View>
-                                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-                                <Image style={{width: 35, height: 35, borderWidth: 3, borderColor: 'white', borderRadius: 50}} source={{uri: item.user_image}} />
-                                </View>
+                                {
+                                    global.userData.user_id === item.user_id ? (
+                                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                                            <TouchableOpacity onPress={() => setAddStoryModalVisible(true)}>
+                                                <Image style={{width: 35, height: 35, borderRadius: 50, borderWidth: 3, borderColor: 'white'}} source={{uri: global.userData.imgurl}} />
+                                                <Icon name='pluscircle' size={20} color="#4267B2" style={{position: 'absolute', right: -2, bottom: -2, backgroundColor: 'white', fontWeight: 'bold', borderRadius: 100}} />
+                                            </TouchableOpacity>
+                                        </View>
+                                    ) : (
+                                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+                                            <Image style={{width: 35, height: 35, borderWidth: 3, borderColor: 'white', borderRadius: 50}} source={{uri: item.user_image}} />
+                                        </View>
+                                    )
+                                }
                                 <View style={{marginBottom: 5, marginTop: 10}}>
                                 <Text style={{textAlign: 'center', color: 'white', fontSize: 16}}>{item.user_name}</Text>
                                 </View>
@@ -113,9 +124,20 @@ const StoryItem = props => {
                                     <Text style={{color: 'white', textAlign: 'center', fontSize: 16, fontWeight: 'normal'}}></Text>       
                                 </View>           
                                 </View>
-                                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-                                <Image style={{width: 35, height: 35, borderWidth: 3, borderColor: 'white', borderRadius: 50}} source={{uri: item.user_image}} />
-                                </View>
+                                {
+                                    global.userData.user_id === item.user_id ? (
+                                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                                            <TouchableOpacity onPress={() => setAddStoryModalVisible(true)}>
+                                                <Image style={{width: 35, height: 35, borderRadius: 50, borderWidth: 3, borderColor: 'white'}} source={{uri: global.userData.imgurl}} />
+                                                <Icon name='pluscircle' size={20} color="#4267B2" style={{position: 'absolute', right: -2, bottom: -2, backgroundColor: 'white', fontWeight: 'bold', borderRadius: 100}} />
+                                            </TouchableOpacity>
+                                        </View>
+                                    ) : (
+                                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+                                            <Image style={{width: 35, height: 35, borderWidth: 3, borderColor: 'white', borderRadius: 50}} source={{uri: item.user_image}} />
+                                        </View>
+                                    )
+                                }
                                 <View style={{marginBottom: 5, marginTop: 10}}>
                                 <Text style={{textAlign: 'center', color: 'white', fontSize: 16}}>{item.user_name}</Text>
                                 </View>
