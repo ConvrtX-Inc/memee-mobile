@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import _ from 'lodash';
+import _, { filter } from 'lodash';
 import {
   View,
   Text,
@@ -21,6 +21,7 @@ import {
   ViewBase,
   NativeModules,
 } from 'react-native';
+import Modal2 from "react-native-modalbox";
 import ButtonCoins from '../../component/ButtonCoins';
 import { Avatar } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
@@ -190,6 +191,10 @@ export default function Dashboard(props) {
     const { DayStories, Status } = response;
     const filterStories = DayStories.filter(story => story.stories.length > 0);
 
+    // for (let j = 0; j < 7; j++) {
+    //   filterStories.push(filterStories[0]);
+    // }
+
     if (Status !== 200) {
       Toast.show({
         type: 'error',
@@ -221,7 +226,7 @@ export default function Dashboard(props) {
     setRefreshing(false);
   }
 
-  // Add story body: {userId: XXXX, ImgUrl: XXXX, VideoUrl: XXXX, dateTime: xxxx}
+  // Add story body: {userId: XXXX, ImgUrl: XXXX, VideoUrl: XXXX, dateTime: YYYY-MM-DD HH:mm:ss}
   async function addStory(location) {
     const response = await API.AddStory({
       userID: global.userData.user_id,
@@ -741,6 +746,7 @@ function openPhotoEditor(uri){
 }
 
   const textMaximumWidth = windowWidth * 0.75 - 20;
+
   // console.log('FILE', file);
   /* console.log('textMaximumWidth', textMaximumWidth); */
   return (
@@ -1275,7 +1281,7 @@ function openPhotoEditor(uri){
                 {/* </View> */}
               </TouchableOpacity>
             </View> 
-            <View style={{flexDirection: 'row', marginLeft: 10, marginBottom: 25}}>
+            <View style={{flexDirection: 'row', marginBottom: 25}}>
               {
                 !loadingStoriesItems ? stories.length > 0 ? (
                   <Story 
@@ -1297,11 +1303,10 @@ function openPhotoEditor(uri){
                           </View>           
                           </View>
                           <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-                          {
-                              global.userData.imgurl ?
-                              <Image style={{width: 35, height: 35, borderRadius: 50, borderWidth: 3, borderColor: 'white'}} source={{uri: global.userData.imgurl}} />
-                              : <View style={{width: 35, height: 35, borderWidth: 3, borderColor: 'white', borderRadius: 50}} />
-                          }
+                          <TouchableOpacity onPress={() => setAddStoryModalVisible(true)}>
+                            <Image style={{width: 35, height: 35, borderRadius: 50}} source={{uri: global.userData.imgurl}} />
+                            <Icon name='pluscircle' size={20} color="#4267B2" style={{position: 'absolute', right: -2, bottom: -2, backgroundColor: 'white', fontWeight: 'bold', borderRadius: 100}} />
+                          </TouchableOpacity>
                           </View>
                           <View style={{marginBottom: 5, marginTop: 10}}>
                           <Text style={{textAlign: 'center', color: 'white', fontSize: 16}}>You</Text>
@@ -1331,11 +1336,20 @@ function openPhotoEditor(uri){
 
       {/* Modal for add story */}
 
-      <Modal
-        animationType='slide'
+      <Modal2
+        // animationType='slide'
+        // transparent={true}
+        // visible={addStoryModalVisible}
+        style={{
+            flex: 1,
+            height: Dimensions.get("window").height,
+            width: Dimensions.get("window").width
+        }}
+        isOpen={addStoryModalVisible}
+        onClosed={() => setAddStoryModalVisible(false)}
+        position="center"
+        coverScreen={true}
         transparent={true}
-        visible={addStoryModalVisible}
-        onRequestClose={() => setAddStoryModalVisible(false)}
       >
         <View style={{
           backgroundColor: '#201E23', 
@@ -1596,7 +1610,7 @@ function openPhotoEditor(uri){
            )
          }
         </View>
-      </Modal>
+      </Modal2>
 
       {/* End of Modal add story */}
 
