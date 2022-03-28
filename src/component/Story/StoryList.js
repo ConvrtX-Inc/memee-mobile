@@ -79,7 +79,8 @@ const StoryList = (props) => {
             horizontal
             onEndReachedThreshold={0.1}
             onEndReached={() => {
-                if (data.length >= 10) {
+                const mod = data.length % 10;
+                if (mod === 0) {
                     updateOffset(storyOffset, storyPage, storyLimit)
                 }
             }}

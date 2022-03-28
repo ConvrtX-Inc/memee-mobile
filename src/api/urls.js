@@ -1,5 +1,5 @@
 export const urls = {
-  baseUrl: 'https://staging-memee-services-convrtx.herokuapp.com/Api',
+  baseUrl: 'https://memee-api-dev.herokuapp.com/Api',
   register: '/RegisterUser',
   getNotifications: '/GetNotifications',
   readNotifications: '/ReadNotifications',
