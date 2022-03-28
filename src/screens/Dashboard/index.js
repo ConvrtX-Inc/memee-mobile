@@ -187,7 +187,7 @@ export default function Dashboard(props) {
   const fetchStories = async () => {
     setLoadingStoriesItems(true);
     setStoryOffset(0);
-    const response = await API.GetDayStories({ user_id: global.userData.user_id, limit: storyLimit, offset: 0 });
+    const response = await API.GetDayStories({ user_id: global.userData.user_id, limit: storyLimit, offset: storyOffset });
     const { DayStories, Status } = response;
     const filterStories = DayStories.filter(story => story.stories.length > 0);
 

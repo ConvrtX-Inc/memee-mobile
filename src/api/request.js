@@ -1,11 +1,12 @@
 import _ from 'lodash';
 import superagent from 'superagent';
+import {urls} from './urls';
 
 export default {
 	get(url, query = {}) {
 		return new Promise(function (resolve, reject) {
 			superagent
-				.get(`${global.address}${url}`)
+				.get(`${urls.baseUrl}/${url}`)
 				.set('Accept', 'application/json')
 				.set('Content-Type', 'application/json')
 				.set('authToken', global.token)
@@ -29,7 +30,7 @@ export default {
 	post(url, body = {}) {
 		return new Promise(function (resolve, reject) {
 			superagent
-				.post(`${global.address}${url}`)
+				.post(`${urls.baseUrl}/${url}`)
 				.set('Accept', 'application/json')
 				.set('Content-Type', 'application/json')
 				.set('authToken', global.token)
@@ -53,7 +54,7 @@ export default {
 	patch(url, body = {}) {
 		return new Promise(function (resolve, reject) {
 			superagent
-				.patch(`${global.address}${url}`)
+				.patch(`${urls.baseUrl}/${url}`)
 				.set('Accept', 'application/json')
 				.set('Content-Type', 'application/json')
 				.set('authToken', global.token)
@@ -77,7 +78,7 @@ export default {
 	delete(url, body = {}) {
 		return new Promise(function (resolve, reject) {
 			superagent
-				.del(`${global.address}${url}`)
+				.del(`${urls.baseUrl}/${url}`)
 				.set('Accept', 'application/json')
 				.set('Content-Type', 'application/json')
 				.set('authToken', global.token)
