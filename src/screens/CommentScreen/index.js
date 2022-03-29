@@ -71,7 +71,7 @@ export default class CommentScreen extends React.Component {
       .then(responseJson => {
         if (responseJson.length > 0) {
           var comments = testFN(responseJson);
-          var comment = [];
+          /* var comment = [];
           var replies = [];
           var commentList = [];
           if (comments.length > 0) {
@@ -99,10 +99,40 @@ export default class CommentScreen extends React.Component {
                 }
               }
             }
+          } */
+
+          /* var reversed = [].concat(commentList).reverse(); */
+
+          var comment = [];
+          var replies = [];
+          var commentList = [];
+          if (comments.length > 0) {
+            for (let i = comments.length - 1; i >= 0; i--) {
+              if (comments[i].parent_id == 0) {
+                comment.push(comments[i]);
+              } else {
+                replies.push(comments[i]);
+              }
+            }
+            commentList = Array.from(comment);
+            console.log(commentList[0]);
+            if (replies.length > 0) {
+              for (let i = 0; i < comment.length; i++) {
+                for (let j = replies.length - 1; j >= 0; j--) {
+                  if (comment[i].comment_id == replies[j].parent_id) {
+                    console.log(
+                      '\nreplies[j]\n',
+                      replies[j].parent_id,
+                      comment[i].comment_id,
+                    );
+                    commentList.splice(i + 1, 0, replies[j]);
+                  }
+                }
+              }
+            }
           }
-          var reversed = [].concat(commentList).reverse();
           this.setState({
-            flatlist: reversed,
+            flatlist: commentList,
           });
         }
       })
@@ -188,7 +218,8 @@ export default class CommentScreen extends React.Component {
       temparr['commentUID'] = commentUID;
 
       index = tempCommentList.findIndex(c => c.comment_id == parentID) + 1;
-      tempCommentList.splice(index, 0, temparr);
+      if (parentID != 0) tempCommentList.splice(index, 0, temparr);
+      else tempCommentList.push(temparr);
 
       this.setState({
         placeholderStat: 'Write a comment',
