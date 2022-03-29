@@ -25,16 +25,16 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 var windowWidth = Dimensions.get('window').width;
 
 //Banuba Video Editor
-const { VideoEditorModule } = NativeModules;
+const {VideoEditorModule} = NativeModules;
 
-const openEditor = (): Promise<{ videoUri: string } | null> => {
+const openEditor = (): Promise<{videoUri: string} | null> => {
   return VideoEditorModule.openVideoEditor();
 };
 
 export const openVideoEditor = async (): Promise<string | null> => {
   const response = await openEditor();
 
-  console.log('response',response)
+  console.log('response', response);
 
   if (!response) {
     return null;
@@ -44,11 +44,9 @@ export const openVideoEditor = async (): Promise<string | null> => {
 };
 
 async function getAndroidExportResult() {
-  
   return await VideoEditorModule.openVideoEditor();
 }
 //End Video Editor
-
 
 const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
   const [showImagePickerDialog, setShowImagePickerDialog] = useState(false);
@@ -217,8 +215,6 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
     });
   }
 
-
-
   const openCamera = async () => {
     setShowImagePickerDialog(false);
     let isStoragePermitted = await requestExternalWritePermission();
@@ -250,8 +246,7 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
   function openPhotoEditor(uri) {
     PESDK.openEditor({uri: uri}).then(
       result => {
-        
-        navigation.navigate('NewPost', {uri: result.image,type:'photo'});
+        navigation.navigate('NewPost', {uri: result.image, type: 'photo'});
       },
       error => {
         /* console.log(error); */
@@ -261,7 +256,12 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
 
   return (
     // <View style={[styles.barStyle,{justifyContent: 'center'}]}>
-    <View style={[{justifyContent: 'center'}]}>
+    //<View style={[{justifyContent: 'center'}]}>
+    <View
+      style={{
+        justifyContent: 'center',
+        marginTop: -31,
+      }}>
       <LinearGradient colors={gradientColors} style={styles.bottom} />
       <View style={{flexDirection: 'row', position: 'absolute'}}>
         <View style={styles.icon}>
@@ -395,17 +395,22 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
               onPress={() => {
                 setShowImagePickerDialog(false);
                 if (Platform.OS === 'android') {
-                  getAndroidExportResult().then(videoUri => {
-                    console.log(videoUri)
-                    // alert("VIDEO URI TO BE SAVED IN DB"+videoUri)
-                    navigation.navigate('NewPost', {uri: `file://${videoUri}`,type:'video'});
-                  }).catch(e => {
-                    console.log("error",e)
-                    console.log(e)
-                  })
+                  getAndroidExportResult()
+                    .then(videoUri => {
+                      console.log(videoUri);
+                      // alert("VIDEO URI TO BE SAVED IN DB"+videoUri)
+                      navigation.navigate('NewPost', {
+                        uri: `file://${videoUri}`,
+                        type: 'video',
+                      });
+                    })
+                    .catch(e => {
+                      console.log('error', e);
+                      console.log(e);
+                    });
                 } else {
                   const videoUri = openVideoEditor();
-                  console.log(videoUri)
+                  console.log(videoUri);
                 }
               }}>
               <Text style={{color: '#fff', opacity: 0.5, fontSize: 16}}>
