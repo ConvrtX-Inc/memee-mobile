@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import _, { filter } from 'lodash';
+import _, {filter} from 'lodash';
 import {
   View,
   Text,
@@ -22,28 +22,32 @@ import {
   NativeModules,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Modal2 from "react-native-modalbox";
+import Modal2 from 'react-native-modalbox';
 import ButtonCoins from '../../component/ButtonCoins';
-import { Avatar } from 'react-native-elements';
-import { useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
+import {Avatar} from 'react-native-elements';
+import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import TwitterTextView from 'react-native-twitter-textview';
-import { currentDateFN } from '../../Utility/Utils';
+import {currentDateFN} from '../../Utility/Utils';
 import messaging from '@react-native-firebase/messaging';
-import { firebaseConfig } from '../../redux/constants';
+import {firebaseConfig} from '../../redux/constants';
 import BottomNavBar from '../../component/BottomNavBar';
-import { getNotifications } from '../../redux/actions/Auth';
+import {getNotifications} from '../../redux/actions/Auth';
 import Toast from 'react-native-toast-message';
 import Video from 'react-native-video';
 import VideoPlayer from 'react-native-video-controls';
-import Icon from 'react-native-vector-icons/AntDesign'
+import Icon from 'react-native-vector-icons/AntDesign';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {
-  launchCamera,
-  launchImageLibrary
-} from 'react-native-image-picker';
-import {PESDK, PhotoEditorModal, Configuration} from 'react-native-photoeditorsdk';
-import { requestCameraPermission, requestExternalWritePermission } from '../../Utility/Utils';
+  PESDK,
+  PhotoEditorModal,
+  Configuration,
+} from 'react-native-photoeditorsdk';
+import {
+  requestCameraPermission,
+  requestExternalWritePermission,
+} from '../../Utility/Utils';
 import Story from '../../component/Story/Story';
 import StorySkeleton from '../../component/Story/StorySkeleton';
 import API from '../../api/StoryApi';
@@ -59,9 +63,9 @@ var windowHeight = Dimensions.get('window').height;
 var gloIndex = '';
 
 //Banuba Video Editor
-const { VideoEditorModule } = NativeModules;
+const {VideoEditorModule} = NativeModules;
 
-const openEditor = async ()=> {
+const openEditor = async () => {
   return await VideoEditorModule.openVideoEditor();
 };
 
@@ -82,8 +86,8 @@ async function getAndroidExportResult() {
 
 export default function Dashboard(props) {
   const navigation = useNavigation();
-  const { coinsStored, scrollDown, ImageBottoms, notifications } = useSelector(
-    ({ authRed }) => authRed,
+  const {coinsStored, scrollDown, ImageBottoms, notifications} = useSelector(
+    ({authRed}) => authRed,
   );
 
   let options = {
@@ -91,7 +95,7 @@ export default function Dashboard(props) {
     maxWidth: 512,
     maxHeight: 512,
     quality: 1,
-};
+  };
 
   const [dBottomFont, setdBottomFont] = useState(global.fontSelect);
   const dispatch = useDispatch();
@@ -111,7 +115,7 @@ export default function Dashboard(props) {
 
   const [loadingAddStory, setLoadingAddStory] = useState(false);
   const [updatedStories, setUpdatedStories] = useState(0);
-  
+
   const [loadingNewStory, setLoadingNewStory] = useState(false);
 
   const [postIdToDelete, setPostIdToDelete] = useState('');
@@ -136,7 +140,7 @@ export default function Dashboard(props) {
   const flatlistRef = useRef();
   const playerRef = useRef();
 
-  const [videoHeight,setVideoHeight] = useState(400);
+  const [videoHeight, setVideoHeight] = useState(400);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -144,25 +148,27 @@ export default function Dashboard(props) {
     selectTab(global.navigateDashboard);
   }, []);
 
-
   // fetching of Stories
   useEffect(() => {
     fetchStories();
-  },[updatedStories]);
+  }, [updatedStories]);
 
   // upload image/video
   function uploadImageToS3() {
     setLoadingAddStory(true);
 
-    const data = file.type == 'photo' ?  {
-      uri: file.uri,
-      name: generateUID() + '.jpg',
-      type: 'image/jpeg',
-    } : {
-      uri: file.uri,
-      name: generateUID() + '.mp4',
-      type: 'video/mp4',
-    };
+    const data =
+      file.type == 'photo'
+        ? {
+            uri: file.uri,
+            name: generateUID() + '.jpg',
+            type: 'image/jpeg',
+          }
+        : {
+            uri: file.uri,
+            name: generateUID() + '.mp4',
+            type: 'video/mp4',
+          };
 
     let reference = storage().ref(data.name);
     let task = reference.putFile(data.uri);
@@ -189,8 +195,12 @@ export default function Dashboard(props) {
   const fetchStories = async () => {
     setLoadingStoriesItems(true);
     setStoryOffset(0);
-    const response = await API.GetDayStories({ user_id: global.userData.user_id, limit: storyLimit, offset: storyOffset });
-    const { DayStories, Status } = response;
+    const response = await API.GetDayStories({
+      user_id: global.userData.user_id,
+      limit: storyLimit,
+      offset: storyOffset,
+    });
+    const {DayStories, Status} = response;
     const filterStories = DayStories.filter(story => story.stories.length > 0);
 
     // for (let j = 0; j < 7; j++) {
@@ -226,7 +236,7 @@ export default function Dashboard(props) {
     setStories([]);
     setLoadingStoriesItems(false);
     setRefreshing(false);
-  }
+  };
 
   // Add story body: {userId: XXXX, ImgUrl: XXXX, VideoUrl: XXXX, dateTime: YYYY-MM-DD HH:mm:ss}
   async function addStory(location) {
@@ -234,7 +244,7 @@ export default function Dashboard(props) {
       userID: global.userData.user_id,
       ImgUrl: file.type === 'photo' ? location : '',
       VideoUrl: file.type === 'video' ? location : '',
-      dateTime: moment().format('YYYY-MM-DD HH:mm:ss')
+      dateTime: moment().format('YYYY-MM-DD HH:mm:ss'),
     });
 
     if (response.Status !== 201) {
@@ -267,9 +277,13 @@ export default function Dashboard(props) {
 
   async function updateStoryOffset(offset, page, limit) {
     setLoadingNewStory(true);
-    console.log('New story request page:', {offset, page, limit})
-    const response = await API.GetDayStories({ user_id: global.userData.user_id, limit: storyLimit, offset });
-    const { DayStories, Status } = response;
+    console.log('New story request page:', {offset, page, limit});
+    const response = await API.GetDayStories({
+      user_id: global.userData.user_id,
+      limit: storyLimit,
+      offset,
+    });
+    const {DayStories, Status} = response;
     const filterStories = DayStories.filter(story => story.stories.length > 0);
 
     if (Status !== 200) {
@@ -294,18 +308,25 @@ export default function Dashboard(props) {
   }
 
   function cancelStoryModal() {
-    file ? Alert.alert(
-      "Discard story",
-      "Are you sure you want to exit?",
-      [
-        {
-          text: "Cancel",
-          onPress: () => { setAddStoryModalVisible(false);setIsOpenMedia(false);},
-          style: "cancel"
-        },
-        { text: "OK", onPress: () => { setFile(null); setIsOpenMedia(false) } }
-      ]
-    ) : setAddStoryModalVisible(false)
+    file
+      ? Alert.alert('Discard story', 'Are you sure you want to exit?', [
+          {
+            text: 'Cancel',
+            onPress: () => {
+              setAddStoryModalVisible(false);
+              setIsOpenMedia(false);
+            },
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: () => {
+              setFile(null);
+              setIsOpenMedia(false);
+            },
+          },
+        ])
+      : setAddStoryModalVisible(false);
   }
 
   /* move specific item of an array to specific location(index) of an array */
@@ -363,14 +384,13 @@ export default function Dashboard(props) {
     return () => backHandler.remove();
   }, []);
 
-
   function saveTokenToDatabase(deviceToken) {
     fetch(
       global.address +
-      'updateDeviceToken/' +
-      global.userData.user_id +
-      '/' +
-      deviceToken,
+        'updateDeviceToken/' +
+        global.userData.user_id +
+        '/' +
+        deviceToken,
       {
         method: 'get',
         headers: {
@@ -485,13 +505,13 @@ export default function Dashboard(props) {
 
     fetch(
       global.address +
-      postApiName +
-      '/' +
-      global.userData.user_id +
-      '/' +
-      offset +
-      '/' +
-      limit,
+        postApiName +
+        '/' +
+        global.userData.user_id +
+        '/' +
+        offset +
+        '/' +
+        limit,
       {
         method: 'get',
         headers: {
@@ -655,7 +675,7 @@ export default function Dashboard(props) {
       navigation.navigate('ProfileScreen');
     }
   }
-  
+
   const mock = [
     {
       ParentUserId: 0,
@@ -671,88 +691,88 @@ export default function Dashboard(props) {
   ];
   /* global.colorPrimary */
 
-  function openGallery(){
-        setIsOpenMedia(true);
-        launchImageLibrary(options, (response) => {
-            console.log('Response = ', response);
-
-            if (response.didCancel) {
-                // alert('User cancelled camera picker');
-                setIsOpenMedia(false);
-                return;
-            } else if (response.errorCode == 'camera_unavailable') {
-                setIsOpenMedia(false);
-                // alert('Camera not available on device');
-                return;
-            } else if (response.errorCode == 'permission') {
-                setIsOpenMedia(false);
-                // alert('Permission not satisfied');
-                return;
-            } else if (response.errorCode == 'others') {
-                setIsOpenMedia(false);
-                // alert(response.errorMessage);
-                return;
-            }
-
-            let source = response.assets[0];
-            openPhotoEditor(source.uri)
-        });
-    }
-
-    const openCamera = async () => {
-        setIsOpenMedia(true);
-        let isStoragePermitted = await requestExternalWritePermission();
-        let isCameraPermitted = await requestCameraPermission();
-        if (isCameraPermitted && isStoragePermitted) {
-            launchCamera(options, (response) => {
-                console.log('Response = ', response);
-
-                if (response.didCancel) {
-                    // alert('User cancelled camera picker');
-                    setIsOpenMedia(false);
-                    return;
-                } else if (response.errorCode == 'camera_unavailable') {
-                    // alert('Camera not available on device');
-                    setIsOpenMedia(false);
-                    return;
-                } else if (response.errorCode == 'permission') {
-                    // alert('Permission not satisfied');
-                    setIsOpenMedia(false);
-                    return;
-                } else if (response.errorCode == 'others') {
-                    // alert(response.errorMessage);
-                    setIsOpenMedia(false);
-                    return;
-                }
-
-                let source = response.assets[0];            
-                openPhotoEditor(source.uri)
-            });
-        }
-    };
-
-
-function openPhotoEditor(uri){
+  function openGallery() {
     setIsOpenMedia(true);
-    PESDK.openEditor({ uri: uri}).then(
-        (result) => {
-          if (!result || !result.image) {
-            setIsOpenMedia(false);
-          }
-          // navigation.navigate("NewPost", {uri: result.image})
-          setFile({type: 'photo', uri: result.image});
-        },
-        (error) => {
-          console.log(error);
-        });
-}
+    launchImageLibrary(options, response => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        // alert('User cancelled camera picker');
+        setIsOpenMedia(false);
+        return;
+      } else if (response.errorCode == 'camera_unavailable') {
+        setIsOpenMedia(false);
+        // alert('Camera not available on device');
+        return;
+      } else if (response.errorCode == 'permission') {
+        setIsOpenMedia(false);
+        // alert('Permission not satisfied');
+        return;
+      } else if (response.errorCode == 'others') {
+        setIsOpenMedia(false);
+        // alert(response.errorMessage);
+        return;
+      }
+
+      let source = response.assets[0];
+      openPhotoEditor(source.uri);
+    });
+  }
+
+  const openCamera = async () => {
+    setIsOpenMedia(true);
+    let isStoragePermitted = await requestExternalWritePermission();
+    let isCameraPermitted = await requestCameraPermission();
+    if (isCameraPermitted && isStoragePermitted) {
+      launchCamera(options, response => {
+        console.log('Response = ', response);
+
+        if (response.didCancel) {
+          // alert('User cancelled camera picker');
+          setIsOpenMedia(false);
+          return;
+        } else if (response.errorCode == 'camera_unavailable') {
+          // alert('Camera not available on device');
+          setIsOpenMedia(false);
+          return;
+        } else if (response.errorCode == 'permission') {
+          // alert('Permission not satisfied');
+          setIsOpenMedia(false);
+          return;
+        } else if (response.errorCode == 'others') {
+          // alert(response.errorMessage);
+          setIsOpenMedia(false);
+          return;
+        }
+
+        let source = response.assets[0];
+        openPhotoEditor(source.uri);
+      });
+    }
+  };
+
+  function openPhotoEditor(uri) {
+    setIsOpenMedia(true);
+    PESDK.openEditor({uri: uri}).then(
+      result => {
+        if (!result || !result.image) {
+          setIsOpenMedia(false);
+        }
+        // navigation.navigate("NewPost", {uri: result.image})
+        setFile({type: 'photo', uri: result.image});
+      },
+      error => {
+        console.log(error);
+      },
+    );
+  }
 
   const textMaximumWidth = windowWidth * 0.75 - 20;
 
   // console.log('FILE', file);
   /* console.log('textMaximumWidth', textMaximumWidth); */
   return (
-    <View style={{ flex: 1, backgroundColor: global.colorPrimary }}>
+    <View style={{flex: 1, backgroundColor: global.colorPrimary}}>
       <FlatList
         ref={flatlistRef}
         data={followingPost}
@@ -761,10 +781,10 @@ function openPhotoEditor(uri){
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
-        renderItem={({ item, index }) => (
+        renderItem={({item, index}) => (
           <View
-            style={{ width: windowWidth, alignSelf: 'center', marginBottom: 10 }}>
-            <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+            style={{width: windowWidth, alignSelf: 'center', marginBottom: 10}}>
+            <View style={{flexDirection: 'row', marginBottom: 10}}>
               {item.ParentUserId > 0 ? (
                 <View>
                   <TouchableOpacity
@@ -785,7 +805,7 @@ function openPhotoEditor(uri){
                           <Avatar
                             rounded
                             size="medium"
-                            source={{ uri: item.UserImage }}
+                            source={{uri: item.UserImage}}
                           />
                         </View>
                       </View>
@@ -805,7 +825,7 @@ function openPhotoEditor(uri){
                             fontFamily: global.fontSelect,
                             width: textMaximumWidth - 100,
                           }}>
-                          <Text style={{ width: 5 }}>{item.UserName} </Text>
+                          <Text style={{width: 5}}>{item.UserName} </Text>
                         </Text>
                         <Text
                           style={{
@@ -836,12 +856,12 @@ function openPhotoEditor(uri){
                           <Avatar
                             rounded
                             size="small"
-                            source={{ uri: item.ParentUserImage }}
+                            source={{uri: item.ParentUserImage}}
                           />
                         </View>
                       </View>
 
-                      <View style={{ marginLeft: 10 }}>
+                      <View style={{marginLeft: 10}}>
                         <Text
                           numberOfLines={3}
                           ellipsizeMode="tail"
@@ -879,12 +899,12 @@ function openPhotoEditor(uri){
                           <Avatar
                             rounded
                             size="medium"
-                            source={{ uri: item.UserImage }}
+                            source={{uri: item.UserImage}}
                           />
                         </View>
                       </View>
 
-                      <View style={{ marginLeft: 10 }}>
+                      <View style={{marginLeft: 10}}>
                         <Text
                           numberOfLines={3}
                           ellipsizeMode="tail"
@@ -913,7 +933,7 @@ function openPhotoEditor(uri){
               {global.userData.user_id == item.user_id ? (
                 <TouchableOpacity
                   onPress={() => showMenuFN(index)}
-                  style={{ marginLeft: 'auto', marginTop: 27, marginRight: 10 }}>
+                  style={{marginLeft: 'auto', marginTop: 27, marginRight: 10}}>
                   <View>
                     <Image
                       style={{
@@ -932,8 +952,8 @@ function openPhotoEditor(uri){
             </View>
 
             <TwitterTextView
-              onPressHashtag={() => { }}
-              hashtagStyle={{ color: global.colorTextActive }}
+              onPressHashtag={() => {}}
+              hashtagStyle={{color: global.colorTextActive}}
               style={{
                 color: global.colorTextPrimary,
                 marginLeft: '5%',
@@ -945,56 +965,51 @@ function openPhotoEditor(uri){
               {item.description}
             </TwitterTextView>
 
-            {
-              item.img_url.includes('mp4') ?
-                <View key={item.img_url}>
-                  <VideoPlayer
-                    key={item.post_id}
-                    source={{ uri: item.img_url }}
-                    disableFullscreen
-                    disableBack
-                    paused={true}
-                    controlTimeout={2500}
-                    tapAnywhereToPause={true}
-                    showOnStart={true}
-              
-                    style={{
-                      width: '100%',
-                      height: videoHeight
-                    }}
-                    resizeMode='cover'
-                    onLoad={response => {
-                      const { width, height } = response.naturalSize;
-                      const heightScaled = height * (Dimensions.get("screen").width / width);
-                     
-                      if(heightScaled > 500){
-                        setVideoHeight(500)
-                      }else{
-                        setVideoHeight(heightScaled)
-                      }
-                    }}
-
-                  />
-                  
-                </View>
-
-                : <ImageBackground
-                  source={{ uri: item.img_url }}
-                  resizeMode="contain"
+            {item.img_url.includes('mp4') ? (
+              <View key={item.img_url}>
+                <VideoPlayer
+                  key={item.post_id}
+                  source={{uri: item.img_url}}
+                  disableFullscreen
+                  disableBack
+                  paused={true}
+                  controlTimeout={2500}
+                  tapAnywhereToPause={true}
+                  showOnStart={true}
                   style={{
-                    height: item.calHeight ? item.calHeight : windowWidth,
                     width: '100%',
-                  }}>
-                  <LinearGradient
-                    colors={[global.overlay1, global.overlay3]}
-                    style={{ height: '100%', width: '100%' }}
-                  />
-                </ImageBackground>
+                    height: videoHeight,
+                  }}
+                  resizeMode="cover"
+                  onLoad={response => {
+                    const {width, height} = response.naturalSize;
+                    const heightScaled =
+                      height * (Dimensions.get('screen').width / width);
 
-            }
+                    if (heightScaled > 500) {
+                      setVideoHeight(500);
+                    } else {
+                      setVideoHeight(heightScaled);
+                    }
+                  }}
+                />
+              </View>
+            ) : (
+              <ImageBackground
+                source={{uri: item.img_url}}
+                resizeMode="contain"
+                style={{
+                  height: item.calHeight ? item.calHeight : windowWidth,
+                  width: '100%',
+                }}>
+                <LinearGradient
+                  colors={[global.overlay1, global.overlay3]}
+                  style={{height: '100%', width: '100%'}}
+                />
+              </ImageBackground>
+            )}
 
-
-            <View style={{ width: '100%', backgroundColor: global.colorPrimary }}>
+            <View style={{width: '100%', backgroundColor: global.colorPrimary}}>
               <ImageBackground
                 source={global.postInteractionsBG}
                 resizeMode="stretch"
@@ -1051,7 +1066,10 @@ function openPhotoEditor(uri){
                   <Text
                     style={[
                       styles.txtReaction,
-                      { fontFamily: global.fontSelect, color: global.postInteractionsTextColor },
+                      {
+                        fontFamily: global.fontSelect,
+                        color: global.postInteractionsTextColor,
+                      },
                     ]}>
                     {item.like_count}
                   </Text>
@@ -1071,7 +1089,7 @@ function openPhotoEditor(uri){
                         width: 28,
                         marginLeft: 10,
                         marginRight: 2,
-                        tintColor: global.postInteractionsTextColor
+                        tintColor: global.postInteractionsTextColor,
                       }}
                       resizeMode="stretch"
                       source={require('../../images/sms.png')}
@@ -1080,7 +1098,10 @@ function openPhotoEditor(uri){
                   <Text
                     style={[
                       styles.txtReaction,
-                      { fontFamily: global.fontSelect, color: global.postInteractionsTextColor },
+                      {
+                        fontFamily: global.fontSelect,
+                        color: global.postInteractionsTextColor,
+                      },
                     ]}>
                     {item.comment_count}
                   </Text>
@@ -1091,7 +1112,7 @@ function openPhotoEditor(uri){
                     width: '32%',
                     flexDirection: 'row',
                     justifyContent: 'center',
-                    alignItems: 'center'
+                    alignItems: 'center',
                   }}>
                   <TouchableOpacity onPress={() => sharePostFN(index)}>
                     <Image
@@ -1100,7 +1121,7 @@ function openPhotoEditor(uri){
                         width: 28,
                         marginLeft: 10,
                         marginRight: 2,
-                        tintColor: global.postInteractionsTextColor
+                        tintColor: global.postInteractionsTextColor,
                       }}
                       resizeMode="stretch"
                       source={require('../../images/share.png')}
@@ -1109,7 +1130,10 @@ function openPhotoEditor(uri){
                   <Text
                     style={[
                       styles.txtReaction,
-                      { fontFamily: global.fontSelect, color: global.postInteractionsTextColor },
+                      {
+                        fontFamily: global.fontSelect,
+                        color: global.postInteractionsTextColor,
+                      },
                     ]}>
                     {item.share_count}
                   </Text>
@@ -1138,7 +1162,7 @@ function openPhotoEditor(uri){
                 {global.userData.user_id == item.user_id ? (
                   <View>
                     <TouchableOpacity onPress={() => showMenueModalFN(index)}>
-                      <View style={{ flexDirection: 'row', marginVertical: 5 }}>
+                      <View style={{flexDirection: 'row', marginVertical: 5}}>
                         <Image
                           style={{
                             height: 22,
@@ -1171,7 +1195,7 @@ function openPhotoEditor(uri){
               <ActivityIndicator
                 size="large"
                 color={global.colorTextActive}
-                style={{ alignSelf: 'center', marginTop: '10%' }}
+                style={{alignSelf: 'center', marginTop: '10%'}}
               />
             ) : null}
           </View>
@@ -1180,12 +1204,12 @@ function openPhotoEditor(uri){
           <View>
             <View style={styles.topView}>
               <TouchableOpacity onPress={() => navigateToprofileFN()}>
-                <Avatar rounded size="medium" source={{ uri: pimgChange }} />
+                <Avatar rounded size="medium" source={{uri: pimgChange}} />
               </TouchableOpacity>
 
               <TouchableOpacity
                 onPress={() => navigation.navigate('NotificationScreen')}
-                style={{ marginLeft: 'auto' }}>
+                style={{marginLeft: 'auto'}}>
                 <Image
                   style={{
                     height: 50,
@@ -1221,7 +1245,7 @@ function openPhotoEditor(uri){
               }}>
               <TouchableOpacity
                 onPress={() => selectTab(1)}
-                style={{ width: '33%' }}>
+                style={{width: '33%'}}>
                 {/* <View style={{ height: 60, borderRadius: 30, justifyContent: 'center', alignItems: 'center' }}> */}
                 <LinearGradient
                   colors={[btncolor1_1, btncolor1_2]}
@@ -1234,7 +1258,7 @@ function openPhotoEditor(uri){
                     borderRadius: 30,
                   }}>
                   <Text
-                    style={{ color: txtcolor1, fontFamily: global.fontSelect }}>
+                    style={{color: txtcolor1, fontFamily: global.fontSelect}}>
                     Following
                   </Text>
                 </LinearGradient>
@@ -1243,7 +1267,7 @@ function openPhotoEditor(uri){
 
               <TouchableOpacity
                 onPress={() => selectTab(2)}
-                style={{ width: '34%' }}>
+                style={{width: '34%'}}>
                 {/* <View style={{ height: 60, borderRadius: 30, justifyContent: 'center', alignItems: 'center' }}> */}
                 <LinearGradient
                   colors={[btncolor2_1, btncolor2_2]}
@@ -1256,7 +1280,7 @@ function openPhotoEditor(uri){
                     borderRadius: 30,
                   }}>
                   <Text
-                    style={{ color: txtcolor2, fontFamily: global.fontSelect }}>
+                    style={{color: txtcolor2, fontFamily: global.fontSelect}}>
                     New Memes
                   </Text>
                 </LinearGradient>
@@ -1265,7 +1289,7 @@ function openPhotoEditor(uri){
 
               <TouchableOpacity
                 onPress={() => selectTab(3)}
-                style={{ width: '33%' }}>
+                style={{width: '33%'}}>
                 {/* <View style={{ height: 60, borderRadius: 30, justifyContent: 'center', alignItems: 'center' }}> */}
                 <LinearGradient
                   colors={[btncolor3_1, btncolor3_2]}
@@ -1278,65 +1302,116 @@ function openPhotoEditor(uri){
                     borderRadius: 30,
                   }}>
                   <Text
-                    style={{ color: txtcolor3, fontFamily: global.fontSelect }}>
+                    style={{color: txtcolor3, fontFamily: global.fontSelect}}>
                     Trending
                   </Text>
                 </LinearGradient>
                 {/* </View> */}
               </TouchableOpacity>
-            </View> 
+            </View>
             <View style={{flexDirection: 'row', marginBottom: 25}}>
-              {
-                !loadingStoriesItems ? stories.length > 0 ? (
-                  <Story 
+              {!loadingStoriesItems ? (
+                stories.length > 0 ? (
+                  <Story
                     stories={stories}
                     duration={5}
-                    deleteStory={(story_id) => deleteStory(story_id)}
+                    deleteStory={story_id => deleteStory(story_id)}
                     reloadStory={fetchStories}
-                    updateOffset={(offset, page, limit) => updateStoryOffset(offset, page, limit)}
+                    updateOffset={(offset, page, limit) =>
+                      updateStoryOffset(offset, page, limit)
+                    }
                     storyOffset={storyOffset}
                     storyPage={storyPage}
                     storyLimit={storyLimit}
                     setAddStoryModalVisible={setAddStoryModalVisible}
                   />
-                ) : ( <TouchableOpacity onPress={() => setAddStoryModalVisible(true)}>
-                      <View style={{backgroundColor: global.colorSecondary, height: 160, width: 115, borderRadius: 15, marginLeft: 5 }}>
-                          <View style={{flex: 2.5, flexDirection: 'column'}}>
-                          <View style={{flex: 1, justifyContent: 'center'}}>
-                              <Text style={{color: 'white', textAlign: 'center', fontSize: 16, fontWeight: 'normal'}}>Add story</Text>       
-                          </View>           
-                          </View>
-                          <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-                          <TouchableOpacity onPress={() => setAddStoryModalVisible(true)}>
-                            <Image style={{width: 35, height: 35, borderRadius: 50}} source={{uri: global.userData.imgurl}} />
-                            <Icon name='pluscircle' size={20} color="#4267B2" style={{position: 'absolute', right: -2, bottom: -2, backgroundColor: 'white', fontWeight: 'bold', borderRadius: 100}} />
-                          </TouchableOpacity>
-                          </View>
-                          <View style={{marginBottom: 5, marginTop: 10}}>
-                          <Text style={{textAlign: 'center', color: 'white', fontSize: 16}}>You</Text>
-                          </View>
+                ) : (
+                  <TouchableOpacity
+                    onPress={() => setAddStoryModalVisible(true)}>
+                    <View
+                      style={{
+                        backgroundColor: global.colorSecondary,
+                        height: 160,
+                        width: 115,
+                        borderRadius: 15,
+                        marginLeft: 5,
+                      }}>
+                      <View style={{flex: 2.5, flexDirection: 'column'}}>
+                        <View style={{flex: 1, justifyContent: 'center'}}>
+                          <Text
+                            style={{
+                              color: 'white',
+                              textAlign: 'center',
+                              fontSize: 16,
+                              fontWeight: 'normal',
+                            }}>
+                            Add story
+                          </Text>
+                        </View>
                       </View>
+                      <View
+                        style={{
+                          flex: 1,
+                          flexDirection: 'row',
+                          justifyContent: 'center',
+                        }}>
+                        <TouchableOpacity
+                          onPress={() => setAddStoryModalVisible(true)}>
+                          <Image
+                            style={{width: 35, height: 35, borderRadius: 50}}
+                            source={{uri: global.userData.imgurl}}
+                          />
+                          <Icon
+                            name="pluscircle"
+                            size={20}
+                            color="#4267B2"
+                            style={{
+                              position: 'absolute',
+                              right: -2,
+                              bottom: -2,
+                              backgroundColor: 'white',
+                              fontWeight: 'bold',
+                              borderRadius: 100,
+                            }}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                      <View style={{marginBottom: 5, marginTop: 10}}>
+                        <Text
+                          style={{
+                            textAlign: 'center',
+                            color: 'white',
+                            fontSize: 16,
+                          }}>
+                          You
+                        </Text>
+                      </View>
+                    </View>
                   </TouchableOpacity>
-                ) : <StorySkeleton />
-              }
+                )
+              ) : (
+                <StorySkeleton />
+              )}
             </View>
           </View>
         )}
       />
-      
-      {
-        loadingNewStory && (<ActivityIndicator
+
+      {loadingNewStory && (
+        <ActivityIndicator
           size="large"
           color={global.colorTextActive}
-          style={{ position: 'absolute',
-          left: 0,
-          right: 0,
-          top: 0,
-          bottom: 0,
-          alignItems: 'center',
-          justifyContent: 'center' }}
-        />)
-      }
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        />
+      )}
 
       {/* Modal for add story */}
 
@@ -1345,274 +1420,339 @@ function openPhotoEditor(uri){
         // transparent={true}
         // visible={addStoryModalVisible}
         style={{
-            flex: 1,
-            height: Dimensions.get("window").height,
-            width: Dimensions.get("window").width
+          flex: 1,
+          height: Dimensions.get('window').height,
+          width: Dimensions.get('window').width,
         }}
         isOpen={addStoryModalVisible}
         onClosed={() => setAddStoryModalVisible(false)}
         position="center"
         coverScreen={true}
-        transparent={true}
-      >
-        <View style={{
-          backgroundColor: '#201E23', 
-          flex: 1
-        }}>
-         {
-           !file && (
+        transparent={true}>
+        <View
+          style={{
+            backgroundColor: '#201E23',
+            flex: 1,
+          }}>
+          {!file && (
             <View
-                style={{
-                  flex: 1, 
-                  height: '100%', 
-                  width: '100%'
-                }}
-            >
+              style={{
+                flex: 1,
+                height: '100%',
+                width: '100%',
+              }}>
               <View style={{flexDirection: 'row-reverse'}}>
                 <View>
                   <TouchableOpacity onPress={() => cancelStoryModal()}>
-                    {
-                      loadingAddStory ? <ActivityIndicator size="small" color="white" style={{paddingRight: 15, paddingTop: 15}} /> : <Text style={{paddingRight: 15, paddingTop: 15, color: 'white', fontSize: 16}}>Cancel</Text>
-                    }
+                    {loadingAddStory ? (
+                      <ActivityIndicator
+                        size="small"
+                        color="white"
+                        style={{paddingRight: 15, paddingTop: 15}}
+                      />
+                    ) : (
+                      <Text
+                        style={{
+                          paddingRight: 15,
+                          paddingTop: 15,
+                          color: 'white',
+                          fontSize: 16,
+                        }}>
+                        Cancel
+                      </Text>
+                    )}
                   </TouchableOpacity>
                 </View>
               </View>
-              {
-                (!file && !isOpenMedia) ? (
-                    <View style={styles.centeredView}>
-                        <View>
-                          <TouchableOpacity 
-                            disabled={isOpenMedia} 
-                            style={{ marginBottom: '8%' }} 
-                            onPress={() => openCamera()}
-                          >
-                              <Text style={{ 
-                                color: "#fff", 
-                                opacity: 0.5, 
-                                fontSize: 16 }}
-                              >Take photo...</Text>
-                          </TouchableOpacity>
-                          <TouchableOpacity 
-                            disabled={isOpenMedia} 
-                            style={{ marginBottom: '6%' }} 
-                            onPress={() => openGallery()}
-                          >
-                              <Text style={{ color: "#fff", opacity: 0.5, fontSize: 16 }}>Choose photo from library...</Text>
-                          </TouchableOpacity>
-                          <TouchableOpacity
-                              style={{marginBottom: '6%'}}
-                              onPress={() => {
-                                setIsOpenMedia(true);
-                                if (Platform.OS === 'android') {
-                                  getAndroidExportResult().then(videoUri => {
-                                    setFile({type: 'video', uri: videoUri});
-                                  }).catch(e => {
-                                    console.log("error",e)
-                                    console.log(e)
-                                  })
-                                } else {
-                                  const videoUri = openVideoEditor();
-                                  console.log(videoUri)
-                                }
-                                setIsOpenMedia(false);
-                              }}>
-                              <Text style={{color: '#fff', opacity: 0.5, fontSize: 16}}>
-                                Select Video
-                              </Text>
-                            </TouchableOpacity>
-                          <TouchableOpacity 
-                            disabled={isOpenMedia} 
-                            style={[{ marginTop: '20%' }]} 
-                            onPress={() => setAddStoryModalVisible(false)}
-                          >
-                              <LinearGradient
-                                  colors={[global.btnColor1, global.btnColor2]}
-                                  style={{ paddingHorizontal: 27, paddingVertical: 15, justifyContent: 'center', alignSelf: 'center', borderRadius: 22, }}
-                              >
-                                  <Text style={[styles.modalText, { color: global.btnTxt }]}>Cancel</Text>
-                              </LinearGradient>
-                          </TouchableOpacity>
-                        </View>
-                    </View>
-                ) : (<ActivityIndicator
+              {!file && !isOpenMedia ? (
+                <View style={styles.centeredView}>
+                  <View>
+                    <TouchableOpacity
+                      disabled={isOpenMedia}
+                      style={{marginBottom: '8%'}}
+                      onPress={() => openCamera()}>
+                      <Text
+                        style={{
+                          color: '#fff',
+                          opacity: 0.5,
+                          fontSize: 16,
+                        }}>
+                        Take photo...
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      disabled={isOpenMedia}
+                      style={{marginBottom: '6%'}}
+                      onPress={() => openGallery()}>
+                      <Text style={{color: '#fff', opacity: 0.5, fontSize: 16}}>
+                        Choose photo from library...
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={{marginBottom: '6%'}}
+                      onPress={() => {
+                        setIsOpenMedia(true);
+                        if (Platform.OS === 'android') {
+                          getAndroidExportResult()
+                            .then(videoUri => {
+                              setFile({type: 'video', uri: videoUri});
+                            })
+                            .catch(e => {
+                              console.log('error', e);
+                              console.log(e);
+                            });
+                        } else {
+                          const videoUri = openVideoEditor();
+                          console.log(videoUri);
+                        }
+                        setIsOpenMedia(false);
+                      }}>
+                      <Text style={{color: '#fff', opacity: 0.5, fontSize: 16}}>
+                        Select Video
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      disabled={isOpenMedia}
+                      style={[{marginTop: '20%'}]}
+                      onPress={() => setAddStoryModalVisible(false)}>
+                      <LinearGradient
+                        colors={[global.btnColor1, global.btnColor2]}
+                        style={{
+                          paddingHorizontal: 27,
+                          paddingVertical: 15,
+                          justifyContent: 'center',
+                          alignSelf: 'center',
+                          borderRadius: 22,
+                        }}>
+                        <Text
+                          style={[styles.modalText, {color: global.btnTxt}]}>
+                          Cancel
+                        </Text>
+                      </LinearGradient>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              ) : (
+                <ActivityIndicator
                   size="small"
                   color={global.colorTextActive}
-                  style={{ position: 'absolute',
-                  left: 0,
-                  right: 0,
-                  top: 0,
-                  bottom: 0,
-                  alignItems: 'center',
-                  justifyContent: 'center' }}
-                />)
-              }
+                  style={{
+                    position: 'absolute',
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                />
+              )}
             </View>
-           )
-         }
-         {
-           (file && file.type === 'photo') && (
+          )}
+          {file && file.type === 'photo' && (
             <ImageBackground
               source={{uri: file && file.uri}}
               resizeMode="contain"
               imageStyle={{
                 flex: 1,
                 height: '100%',
-                width: '100%'
+                width: '100%',
               }}
               style={{
-                flex: 1, 
-                height: '100%', 
-                width: '100%'
-              }}
-          >
-            <View style={{flexDirection: 'row-reverse'}}>
-              <View>
-                <TouchableOpacity onPress={() => cancelStoryModal()}>
-                  {
-                    loadingAddStory ? <ActivityIndicator size="small" color="white" style={{paddingRight: 15, paddingTop: 15}} /> : <Text style={{paddingRight: 15, paddingTop: 15, color: 'white', fontSize: 16}}>Cancel</Text>
-                  }
-                </TouchableOpacity>
-              </View>
-            </View>
-            {
-              !file && (
-                  <View style={styles.centeredView}>
-                      <View>
-                        <TouchableOpacity 
-                          disabled={isOpenMedia} 
-                          style={{ marginBottom: '8%' }} 
-                          onPress={() => openCamera()}
-                        >
-                            <Text style={{ 
-                              color: "#fff", 
-                              opacity: 0.5, 
-                              fontSize: 16 }}
-                            >Take photo...</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity 
-                          disabled={isOpenMedia} 
-                          style={{ marginBottom: '6%' }} 
-                          onPress={() => openGallery()}
-                        >
-                            <Text style={{ color: "#fff", opacity: 0.5, fontSize: 16 }}>Choose from library...</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity 
-                          disabled={isOpenMedia} 
-                          style={[{ marginTop: '20%' }]} 
-                          onPress={() => setAddStoryModalVisible(false)}
-                        >
-                            <LinearGradient
-                                colors={[global.btnColor1, global.btnColor2]}
-                                style={{ paddingHorizontal: 27, paddingVertical: 15, justifyContent: 'center', alignSelf: 'center', borderRadius: 22, }}
-                            >
-                                <Text style={[styles.modalText, { color: global.btnTxt }]}>Cancel</Text>
-                            </LinearGradient>
-                        </TouchableOpacity>
-                      </View>
-                  </View>
-              )
-            }
-            {
-              (file && file.type === 'photo') && (
-                <View style={{flex: 1}}>
-                    <View style={{
-                      flex: 1, 
-                      flexDirection: 'column', 
-                      justifyContent: 'flex-end'
-                    }}>
-                    <View style={{
-                      justifyContent: 'flex-end', 
-                      flexDirection: 'row', 
-                      marginBottom: 35, 
-                      marginRight: 25
-                      }}>
-                      {
-                        !loadingAddStory && (
-                            <TouchableOpacity style={[{ marginTop: '20%' }]} onPress={() => uploadImageToS3()} >
-                                <LinearGradient
-                                    colors={[global.btnColor1, global.btnColor2]}
-                                    style={{ 
-                                      paddingHorizontal: 27, 
-                                      paddingVertical: 15, 
-                                      justifyContent: 'center', 
-                                      alignSelf: 'center',
-                                      borderRadius: 22
-                                    }}
-                                >
-                                    <Text style={[styles.modalText, { color: global.btnTxt }]}><Icon name="plus" color='black' /> Add story</Text>
-                                </LinearGradient>
-                            </TouchableOpacity>
-                        )
-                      }
-                    </View>
-                    </View>
-                </View>
-              )
-            }
-          </ImageBackground>
-           )
-         }
-         {
-           (file && file.type === 'video') && (
-              <View style={{flex: 1}}>
+                flex: 1,
+                height: '100%',
+                width: '100%',
+              }}>
+              <View style={{flexDirection: 'row-reverse'}}>
                 <View>
-                  <Video
-                      repeat
-                      source={{ uri: file.uri }}
-                      resizeMode='contain'
-                      style={{
-                        height: windowHeight,
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        bottom: 0,
-                        right: 0
-                      }}
-                  />
-                </View>
-                <View style={{flexDirection: 'row-reverse'}}>
                   <TouchableOpacity onPress={() => cancelStoryModal()}>
-                    {
-                      loadingAddStory ? <ActivityIndicator size="small" color="white" style={{paddingRight: 15, paddingTop: 15}} /> : <Text style={{paddingRight: 15, paddingTop: 15, color: 'white', fontSize: 16}}>Cancel</Text>
-                    }
+                    {loadingAddStory ? (
+                      <ActivityIndicator
+                        size="small"
+                        color="white"
+                        style={{paddingRight: 15, paddingTop: 15}}
+                      />
+                    ) : (
+                      <Text
+                        style={{
+                          paddingRight: 15,
+                          paddingTop: 15,
+                          color: 'white',
+                          fontSize: 16,
+                        }}>
+                        Cancel
+                      </Text>
+                    )}
                   </TouchableOpacity>
                 </View>
-                <View style={{flex: 1}}>
-                      <View style={{
-                        flex: 1, 
-                        flexDirection: 'column', 
-                        justifyContent: 'flex-end'
-                      }}>
-                      <View style={{
-                        justifyContent: 'flex-end', 
-                        flexDirection: 'row', 
-                        marginBottom: 35, 
-                        marginRight: 25
+              </View>
+              {!file && (
+                <View style={styles.centeredView}>
+                  <View>
+                    <TouchableOpacity
+                      disabled={isOpenMedia}
+                      style={{marginBottom: '8%'}}
+                      onPress={() => openCamera()}>
+                      <Text
+                        style={{
+                          color: '#fff',
+                          opacity: 0.5,
+                          fontSize: 16,
                         }}>
-                        {
-                          !loadingAddStory && (
-                              <TouchableOpacity style={[{ marginTop: '20%' }]} onPress={() => uploadImageToS3()} >
-                                  <LinearGradient
-                                      colors={[global.btnColor1, global.btnColor2]}
-                                      style={{ 
-                                        paddingHorizontal: 27, 
-                                        paddingVertical: 15, 
-                                        justifyContent: 'center', 
-                                        alignSelf: 'center',
-                                        borderRadius: 22
-                                      }}
-                                  >
-                                      <Text style={[styles.modalText, { color: global.btnTxt }]}><Icon name="plus" color='black' /> Add story</Text>
-                                  </LinearGradient>
-                              </TouchableOpacity>
-                          )
-                        }
-                      </View>
-                      </View>
+                        Take photo...
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      disabled={isOpenMedia}
+                      style={{marginBottom: '6%'}}
+                      onPress={() => openGallery()}>
+                      <Text style={{color: '#fff', opacity: 0.5, fontSize: 16}}>
+                        Choose from library...
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      disabled={isOpenMedia}
+                      style={[{marginTop: '20%'}]}
+                      onPress={() => setAddStoryModalVisible(false)}>
+                      <LinearGradient
+                        colors={[global.btnColor1, global.btnColor2]}
+                        style={{
+                          paddingHorizontal: 27,
+                          paddingVertical: 15,
+                          justifyContent: 'center',
+                          alignSelf: 'center',
+                          borderRadius: 22,
+                        }}>
+                        <Text
+                          style={[styles.modalText, {color: global.btnTxt}]}>
+                          Cancel
+                        </Text>
+                      </LinearGradient>
+                    </TouchableOpacity>
                   </View>
                 </View>
-           )
-         }
+              )}
+              {file && file.type === 'photo' && (
+                <View style={{flex: 1}}>
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: 'column',
+                      justifyContent: 'flex-end',
+                    }}>
+                    <View
+                      style={{
+                        justifyContent: 'flex-end',
+                        flexDirection: 'row',
+                        marginBottom: 35,
+                        marginRight: 25,
+                      }}>
+                      {!loadingAddStory && (
+                        <TouchableOpacity
+                          style={[{marginTop: '20%'}]}
+                          onPress={() => uploadImageToS3()}>
+                          <LinearGradient
+                            colors={[global.btnColor1, global.btnColor2]}
+                            style={{
+                              paddingHorizontal: 27,
+                              paddingVertical: 15,
+                              justifyContent: 'center',
+                              alignSelf: 'center',
+                              borderRadius: 22,
+                            }}>
+                            <Text
+                              style={[
+                                styles.modalText,
+                                {color: global.btnTxt},
+                              ]}>
+                              <Icon name="plus" color="black" /> Add story
+                            </Text>
+                          </LinearGradient>
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                  </View>
+                </View>
+              )}
+            </ImageBackground>
+          )}
+          {file && file.type === 'video' && (
+            <View style={{flex: 1}}>
+              <View>
+                <Video
+                  repeat
+                  source={{uri: file.uri}}
+                  resizeMode="contain"
+                  style={{
+                    height: windowHeight,
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                    right: 0,
+                  }}
+                />
+              </View>
+              <View style={{flexDirection: 'row-reverse'}}>
+                <TouchableOpacity onPress={() => cancelStoryModal()}>
+                  {loadingAddStory ? (
+                    <ActivityIndicator
+                      size="small"
+                      color="white"
+                      style={{paddingRight: 15, paddingTop: 15}}
+                    />
+                  ) : (
+                    <Text
+                      style={{
+                        paddingRight: 15,
+                        paddingTop: 15,
+                        color: 'white',
+                        fontSize: 16,
+                      }}>
+                      Cancel
+                    </Text>
+                  )}
+                </TouchableOpacity>
+              </View>
+              <View style={{flex: 1}}>
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'column',
+                    justifyContent: 'flex-end',
+                  }}>
+                  <View
+                    style={{
+                      justifyContent: 'flex-end',
+                      flexDirection: 'row',
+                      marginBottom: 35,
+                      marginRight: 25,
+                    }}>
+                    {!loadingAddStory && (
+                      <TouchableOpacity
+                        style={[{marginTop: '20%'}]}
+                        onPress={() => uploadImageToS3()}>
+                        <LinearGradient
+                          colors={[global.btnColor1, global.btnColor2]}
+                          style={{
+                            paddingHorizontal: 27,
+                            paddingVertical: 15,
+                            justifyContent: 'center',
+                            alignSelf: 'center',
+                            borderRadius: 22,
+                          }}>
+                          <Text
+                            style={[styles.modalText, {color: global.btnTxt}]}>
+                            <Icon name="plus" color="black" /> Add story
+                          </Text>
+                        </LinearGradient>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                </View>
+              </View>
+            </View>
+          )}
         </View>
       </Modal2>
 
@@ -1627,11 +1767,11 @@ function openPhotoEditor(uri){
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={[styles.modalText, { fontFamily: global.fontSelect }]}>
+            <Text style={[styles.modalText, {fontFamily: global.fontSelect}]}>
               Are you sure you want to delete this Meme?
             </Text>
 
-            <View style={{ flexDirection: 'row', marginTop: 25 }}>
+            <View style={{flexDirection: 'row', marginTop: 25}}>
               <TouchableOpacity
                 style={[styles.button, styles.buttonOpen]}
                 onPress={() => deleteMemeeFN()}>
@@ -1647,7 +1787,7 @@ function openPhotoEditor(uri){
                   <Text
                     style={[
                       styles.textStyle,
-                      { color: global.btnTxt, fontFamily: global.fontSelect },
+                      {color: global.btnTxt, fontFamily: global.fontSelect},
                     ]}>
                     Delete
                   </Text>
@@ -1667,7 +1807,7 @@ function openPhotoEditor(uri){
                     borderRadius: 25,
                   }}>
                   <Text
-                    style={[styles.textStyle, { fontFamily: global.fontSelect }]}>
+                    style={[styles.textStyle, {fontFamily: global.fontSelect}]}>
                     Cancel
                   </Text>
                 </LinearGradient>
@@ -1942,7 +2082,7 @@ const styles = StyleSheet.create({
     marginTop: 0,
     textAlign: 'center',
   },
-  videoContainer: { flex: 1, justifyContent: "center"  },
+  videoContainer: {flex: 1, justifyContent: 'center'},
   backgroundVideo: {
     // position: 'absolute',
     // top: 0,
@@ -1950,31 +2090,32 @@ const styles = StyleSheet.create({
     // bottom: 0,
     // right: 0,
     width: '100%',
-    height:500
+    height: 500,
   },
   bottom: {
     flexDirection: 'row',
     height: 80,
     borderTopLeftRadius: 30,
-    borderTopRightRadius: 30
+    borderTopRightRadius: 30,
   },
   icon: {
-      width: windowWidth/5,
-      alignSelf: 'center'
-
+    width: windowWidth / 5,
+    alignSelf: 'center',
   },
   icon_inside: {
-      width: 30,
-      height: 30,
-      marginBottom: 5,
-      resizeMode: 'contain'
+    width: 30,
+    height: 30,
+    marginBottom: 5,
+    resizeMode: 'contain',
   },
   centerIcon: {
-      width: windowWidth/5,
-      height: windowWidth/5,
-      marginBottom: 30
+    width: windowWidth / 5,
+    height: windowWidth / 5,
+    marginBottom: 30,
   },
   touchstyle: {
-      alignSelf: 'center', justifyContent: 'center', alignItems: 'center'
-  }
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
