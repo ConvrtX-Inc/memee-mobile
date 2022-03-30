@@ -272,16 +272,16 @@ export default class FollowRequest extends React.Component {
                     {item.is_follow_request_approved == 0 ? (
                       <ButtonShort
                         title="Confirm"
-                        bgClrFirst={global.btnColor1}
-                        bgClrSecond={global.btnColor2}
-                        btnTxtClr={global.btnTxt}
+                        bgClrFirst={global.confirmBtnBG1}
+                        bgClrSecond={global.confirmBtnBG2}
+                        btnTxtClr={global.confirmBtnTextColor}
                         font={global.fontSelect}
                         onPress={() => this.confirmReques(index)}
                       />
                     ) : (
                       <ButtonShort
-                        bgClrFirst={global.btnColor1}
-                        bgClrSecond={global.btnColor2}
+                        bgClrFirst={global.confirmBtnBG1}
+                        bgClrSecond={global.confirmBtnBG2}
                         font={global.fontSelect}
                         title="Confirmed"
                       />
@@ -290,8 +290,8 @@ export default class FollowRequest extends React.Component {
                       title="Decline"
                       onPress={() => this.rejectRequest(index)}
                       font={global.fontSelect}
-                      color={global.colorSecondary}
-                      textColor={global.colorIcon}
+                      color={global.declineButtonBG}
+                      textColor={global.declineButtonTextColor}
                     />
                   </View>
                 </View>
@@ -388,9 +388,9 @@ export default class FollowRequest extends React.Component {
                       <ButtonExtraSmall
                         title="Follow"
                         onPress={() => this.sendFollowRequest(item)}
-                        bgClrFirst={global.btnColor1}
-                        bgClrSecond={global.btnColor2}
-                        btnTxtClr={global.btnTxt}
+                        bgClrFirst={global.followBtnBG1}
+                        bgClrSecond={global.followBtnBG2}
+                        btnTxtClr={global.followBtnTextColor}
                         font={global.fontSelect}
                       />
                     </View>

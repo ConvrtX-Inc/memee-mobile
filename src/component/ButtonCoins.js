@@ -11,7 +11,7 @@ const ButtonCoins = ({ title, onPress, showAdd, font }) => {
             style={styles.buttonStyle}>
 
             <LinearGradient
-                colors={['#73FF66', '#19850F']}
+                colors={[global.addCoinsBtnColor1, global.addCoinsBtnColor2]}
                 style={{ height: 50, minWidth: 120, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', alignSelf: 'center', borderRadius: 22, }}
             >
                 {showAdd == '1' ?

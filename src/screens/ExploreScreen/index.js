@@ -166,13 +166,13 @@ export default function ExploreScreen(props) {
             flexDirection: 'row',
             height: 55,
             width: '92%',
-            backgroundColor: '#201E23',
+            backgroundColor: global.searchInputColor,
             alignSelf: 'center',
             borderRadius: 32,
           }}>
           <TouchableOpacity>
             <Image
-              style={{height: 25, width: 25, marginTop: 15, marginLeft: 15}}
+              style={{height: 25, width: 25, marginTop: 15, marginLeft: 15, color: 'black'}}
               resizeMode="stretch"
               source={require('../../images/search.png')}
             />
@@ -180,12 +180,12 @@ export default function ExploreScreen(props) {
           <TextInput
             style={{
               marginLeft: 5,
-              color: '#fff',
+              color: global.searchInputTextColor,
               width: '78%',
               fontFamily: global.fontSelect,
             }}
             placeholder="Search hashtags, users"
-            placeholderTextColor="#707070"
+            placeholderTextColor={global.searchInputPlaceholderTextColor}
             value={searcTxt}
             onChangeText={text => checkSearchTxtFN(text)}
             secureTextEntry={false}

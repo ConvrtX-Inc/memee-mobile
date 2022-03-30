@@ -518,7 +518,7 @@ export default class CommentScreen extends React.Component {
             style={{
               alignItems: 'center',
               flexDirection: 'row',
-              backgroundColor: '#201E23',
+              backgroundColor: global.commentInputColor,
               width: (windowWidth * 76) / 100,
               marginLeft: 10,
               borderRadius: 30,
@@ -532,7 +532,7 @@ export default class CommentScreen extends React.Component {
                 },
               ]}
               placeholder={this.state.placeholderStat}
-              placeholderTextColor="#707070"
+              placeholderTextColor={global.commentInputPlaceholderTextColor}
               value={this.state.comment}
               multiline={true}
               onChangeText={text => this.setState({comment: text})}
@@ -542,7 +542,7 @@ export default class CommentScreen extends React.Component {
             <TouchableOpacity onPress={() => this.commentPlacedFN()}>
               <Text
                 style={{
-                  color: global.colorTextActive,
+                  color: global.postTextComment,
                   fontFamily: global.fontSelect,
                 }}>
                 Post

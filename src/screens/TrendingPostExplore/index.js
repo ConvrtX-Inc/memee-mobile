@@ -117,13 +117,13 @@ export default class TrendingPostExplore extends React.Component {
     var tagArray = this.state.hashTags;
     for (let i = 0; i < this.state.hashTags.length; i++) {
       if (i == index) {
-        tagArray[i].color = global.btnColor1;
-        tagArray[i].color1 = global.btnColor2;
-        tagArray[i].txtClr = global.btnTxt;
+        tagArray[i].color = global.selectedTagsColor1;
+        tagArray[i].color1 = global.selectedTagsColor2;
+        tagArray[i].txtClr = global.selectedTagText;
       } else {
-        tagArray[i].color = '#0D0219';
-        tagArray[i].color1 = '#0D0219';
-        tagArray[i].txtClr = '#fff';
+        tagArray[i].color = global.notSelectedTagsColor1;
+        tagArray[i].color1 = global.notSelectedTagsColor2;
+        tagArray[i].txtClr = global.notSelectedTagText;
       }
     }
     this.setState({
@@ -181,7 +181,7 @@ export default class TrendingPostExplore extends React.Component {
                   style={{
                     paddingHorizontal: 16,
                     borderWidth: 1,
-                    borderColor: '#676767',
+                    borderColor: global.tagsBorderColor,
                     borderRadius: 22,
                     paddingVertical: 10,
                   }}>

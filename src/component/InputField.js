@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { TextInput, StyleSheet } from 'react-native';
 
-const Input = ({ placeholder, value, onChangeText, secureTextEntry, Editable, color}) => {
+const Input = ({ screen, placeholder, value, onChangeText, secureTextEntry, Editable, color}) => {
     return (
-        <TextInput style={[styles.input, {color: Editable == false ? "#707070" : (color==undefined ? '#fff' : color)}]}
+        <TextInput style={[styles.input, {color: Editable == false ? "#707070" : (color==undefined ? '#fff' : color), borderBottomColor: screen === 'editprofile' ? global.editProfileInputBorderBottom : '#454545'}]}
             placeholder={placeholder}
             placeholderTextColor = {"#707070"}
             value={value}
@@ -19,7 +19,6 @@ const styles = StyleSheet.create({
     input: {
         height: 40,
         width: '90%',
-        borderBottomColor: '#454545',
         borderBottomWidth: 1,
         alignSelf: 'center',
         marginTop: 10,

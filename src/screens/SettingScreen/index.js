@@ -64,6 +64,7 @@ export default function SettingScreen(props) {
     global.btnColor1 = '#FFE299';
     global.btnColor2 = '#F6B202';
     global.WhichTab = '0';
+    global.btnTxt = '#000000';
     global.iconBottomSelected = require('../../images/Tabbar.png');
     global.profileBGgl = require('../../images/profileBG.png');
 

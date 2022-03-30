@@ -89,41 +89,54 @@ export default function Tournament(props) {
       setBtncolor1_1(global.btnColor1);
       setBtncolor1_2(global.btnColor2);
 
-      setBtncolor2_1('#201E23');
-      setBtncolor2_2('#201E23');
+      setBtncolor2_1(global.tabNotSelectedColor);
+      setBtncolor2_2(global.tabNotSelectedColor);
 
-      setBtncolor3_1('#201E23');
-      setBtncolor3_2('#201E23');
+      setBtncolor3_1(global.tabNotSelectedColor);
+      setBtncolor3_2(global.tabNotSelectedColor);
 
       setTxtcolor1(global.btnTxt);
-      setTxtcolor2('#ABABAD');
-      setTxtcolor3('#ABABAD');
+      setTxtcolor2(global.tabNotSelectedTextColor);
+      setTxtcolor3(global.tabNotSelectedTextColor);
     } else if (btnNo == 2) {
-      setBtncolor1_1('#201E23');
-      setBtncolor1_2('#201E23');
+      setBtncolor1_1(global.tabNotSelectedColor);
+      setBtncolor1_2(global.tabNotSelectedColor);
 
       setBtncolor2_1(global.btnColor1);
       setBtncolor2_2(global.btnColor2);
 
-      setBtncolor3_1('#201E23');
-      setBtncolor3_2('#201E23');
+      setBtncolor3_1(global.tabNotSelectedColor);
+      setBtncolor3_2(global.tabNotSelectedColor);
 
-      setTxtcolor1('#ABABAD');
+      setTxtcolor1(global.tabNotSelectedTextColor);
       setTxtcolor2(global.btnTxt);
-      setTxtcolor3('#ABABAD');
-    } else {
-      setBtncolor1_1('#201E23');
-      setBtncolor1_2('#201E23');
+      setTxtcolor3(global.tabNotSelectedTextColor);
+    } else if (btnNo == 3) {
+      setBtncolor1_1(global.tabNotSelectedColor);
+      setBtncolor1_2(global.tabNotSelectedColor);
 
-      setBtncolor2_1('#201E23');
-      setBtncolor2_2('#201E23');
+      setBtncolor2_1(global.tabNotSelectedColor);
+      setBtncolor2_2(global.tabNotSelectedColor);
 
       setBtncolor3_1(global.btnColor1);
       setBtncolor3_2(global.btnColor2);
 
-      setTxtcolor1('#ABABAD');
-      setTxtcolor2('#ABABAD');
+      setTxtcolor1(global.tabNotSelectedTextColor);
+      setTxtcolor2(global.tabNotSelectedTextColor);
       setTxtcolor3(global.btnTxt);
+    } else {
+      setBtncolor1_1(global.btnColor1);
+      setBtncolor1_2(global.btnColor2);
+
+      setBtncolor2_1(global.tabNotSelectedColor);
+      setBtncolor2_2(global.tabNotSelectedColor);
+
+      setBtncolor3_1(global.tabNotSelectedColor);
+      setBtncolor3_2(global.tabNotSelectedColor);
+
+      setTxtcolor1(global.btnTxt);
+      setTxtcolor2(global.tabNotSelectedTextColor);
+      setTxtcolor3(global.tabNotSelectedTextColor);
     }
   }
 
@@ -202,7 +215,7 @@ export default function Tournament(props) {
         <View
           style={{
             flexDirection: 'row',
-            backgroundColor: '#201E23',
+            backgroundColor: global.tabColor,
             width: '93%',
             height: 60,
             alignSelf: 'center',

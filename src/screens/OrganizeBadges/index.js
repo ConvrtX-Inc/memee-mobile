@@ -265,7 +265,7 @@ export default function OrganizeBadges(props) {
               flexDirection: 'row',
               height: 55,
               width: '75%',
-              backgroundColor: '#201E23',
+              backgroundColor: global.searchInputColor,
               alignSelf: 'flex-start',
               borderRadius: 32,
             }}>
@@ -279,12 +279,12 @@ export default function OrganizeBadges(props) {
             <TextInput
               style={{
                 marginLeft: 5,
-                color: '#fff',
+                color: global.searchInputTextColor,
                 width: '78%',
                 fontFamily: global.fontSelect,
               }}
               placeholder="Search badges, rarity"
-              placeholderTextColor="#707070"
+              placeholderTextColor={global.searchInputPlaceholderTextColor}
               value={searcTxt}
               onChangeText={text => searchBadgesFN(text)}
               secureTextEntry={false}
@@ -297,7 +297,7 @@ export default function OrganizeBadges(props) {
                 style={{
                   justifyContent: 'center',
                   alignItems: 'center',
-                  backgroundColor: '#201E23',
+                  backgroundColor: global.filterBtnColor,
                   height: 55,
                   width: 55,
                   borderRadius: 30,
@@ -316,7 +316,7 @@ export default function OrganizeBadges(props) {
                 style={{
                   justifyContent: 'center',
                   alignItems: 'center',
-                  backgroundColor: '#201E23',
+                  backgroundColor: global.filterBtnColor,
                   height: 55,
                   width: 55,
                   borderRadius: 30,
@@ -427,7 +427,7 @@ export default function OrganizeBadges(props) {
 
         {earnBadgeCollaps == true ? (
           <LinearGradient
-            colors={global.gradientColors}
+            colors={global.earnedBadgesGradientColors}
             style={{
               alignItems: 'center',
               marginTop: (windowWidth * 5) / 100,
@@ -544,7 +544,7 @@ export default function OrganizeBadges(props) {
                 style={{
                   padding: (windowWidth * 3.5) / 100,
                   borderRadius: (windowWidth * 5) / 100,
-                  backgroundColor: '#292929',
+                  backgroundColor: (index <= 1 && global.cust_item_code === 'roygbiv-pink') ? global.lockedBadgesBG : global.lockedBadgesAboveTop2,
                   width: (windowWidth * 40) / 100,
                   marginHorizontal: (windowWidth * 1.5) / 100,
                   marginTop: (windowWidth * 4) / 100,
@@ -588,7 +588,7 @@ export default function OrganizeBadges(props) {
 
                 <Text
                   style={{
-                    color: '#fff',
+                    color: global.lockedBadgesTitleColor,
                     fontSize: 13,
                     marginTop: (windowWidth * 0.8) / 100,
                   }}>
@@ -596,7 +596,7 @@ export default function OrganizeBadges(props) {
                 </Text>
                 <Text
                   style={{
-                    color: '#8E8DAF',
+                    color:  index > 1 ? '#FFF62A' : global.lockedBadgesSubTitleColor,
                     fontSize: 10,
                     marginTop: (windowWidth * 0.8) / 100,
                   }}>
@@ -604,7 +604,7 @@ export default function OrganizeBadges(props) {
                 </Text>
                 <Text
                   style={{
-                    color: '#8E8DAF',
+                    color: global.lockedBadgesRarityColor,
                     fontSize: 10,
                     marginTop: (windowWidth * 1.4) / 100,
                   }}>
@@ -612,7 +612,7 @@ export default function OrganizeBadges(props) {
                 </Text>
                 <Text
                   style={{
-                    color: '#8E8DAF',
+                    color: global.lockedBadgesPointsColor,
                     fontSize: 10,
                     marginTop: (windowWidth * 4.5) / 100,
                     marginBottom: (windowWidth * 1.5) / 100,
@@ -623,7 +623,7 @@ export default function OrganizeBadges(props) {
                 <ProgressBar
                   style={{marginBottom: 10}}
                   progress={item.percentProgress}
-                  color={'#FFCD2F'}
+                  color={index === 1 ? '#FFFFFF' : '#FFCD2F'}
                 />
               </View>
             )}
