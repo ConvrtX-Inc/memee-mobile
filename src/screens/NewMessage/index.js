@@ -60,6 +60,7 @@ export default function NewMessage({navigation}) {
   };
 
   function openChat(user) {
+    console.log('hello')
     // setLoader(true)
 
     let users = [];
@@ -67,7 +68,7 @@ export default function NewMessage({navigation}) {
     users.push({userId: user.following_id, name: user.name});
     /* console.log(users); */
     axios
-      .post(`${global.address}createConversation`, users)
+      .post(`${global.address}/createConversation`, users)
       .then(function (response) {
         // setLoader(false)
         /* console.log(response.data); */
@@ -116,7 +117,7 @@ export default function NewMessage({navigation}) {
       <View
         style={{
           flexDirection: 'row',
-          backgroundColor: '#201E23',
+          backgroundColor: global.searchInputColor,
           width: '96%',
           height: 60,
           alignSelf: 'center',
@@ -127,6 +128,7 @@ export default function NewMessage({navigation}) {
         <Text style={{color: '#fff', marginLeft: '7%'}}>To: </Text>
         <View style={{width: '75%', marginTop: -8}}>
           <SimpleInput
+            color={global.searchInputTextColor}
             placeholder=""
             onChangeText={text => searchUserFN(text)}
             value={searchTxt}

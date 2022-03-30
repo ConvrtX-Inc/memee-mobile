@@ -164,6 +164,40 @@ export default function ProfileSetting(props) {
           }
         }
 
+        const freeThemes = [
+            {
+                datetime: undefined,
+                img: require('../../images/roygbivTabBar.png'),
+                item_code: 'free_icon_roygbiv_pink_1',
+                item_id: 'free-icon-roygbivpink-1',
+                purchase_id: undefined,
+                type: 'icon'
+            }
+        ]
+
+        const freeButtons = [
+          {
+            item_code: 'free_button_roygbiv_pink_1',
+            datetime: undefined,
+            item_id: 'free-button-roygbivpink-1',
+            purchase_id: undefined,
+            type: 'button',
+            img: require('../../images/genericButton.png')
+          }
+        ]
+
+        for (let index = 0; index < freeThemes.length; index++) {
+          const freeTheme = freeThemes[index];
+          iconsVar.push(freeTheme);
+        }
+
+        for (let j = 0; j < freeButtons.length; j++) {
+          const freeButton = freeButtons[j];
+          buttonsVar.push(freeButton);
+        }
+
+        console.log('buttonsVar var', buttonsVar);
+
         setFontPurchased(fontVar);
         setButtonPurchased(buttonsVar);
         setBottomTabicon(iconsVar);
@@ -179,18 +213,18 @@ export default function ProfileSetting(props) {
     setModalVisible(false);
 
     if (buttonPurchased[btnNo].item_code == 'the_100_theme_button') {
-      await AsyncStorage.setItem('@btnclr1', '#000000');
-      await AsyncStorage.setItem('@btnclr2', '#000000');
-      await AsyncStorage.setItem('@btntxtclr', '#ffffff');
+      await AsyncStorage.setItem('@btnclr1', '#FFFFFF');
+      await AsyncStorage.setItem('@btnclr2', '#FFFFFF');
+      await AsyncStorage.setItem('@btntxtclr', '#000000');
       await AsyncStorage.setItem('@btntxt', 'Buttons');
-      global.btnColor1 = '#000000';
-      global.btnColor2 = '#000000';
+      global.btnColor1 = '#FFFFFF';
+      global.btnColor2 = '#FFFFFF';
       global.btnText = 'Buttons';
-      setBtncolor1('#000000');
-      setbtncolor2('#000000');
+      setBtncolor1('#FFFFFF');
+      setbtncolor2('#FFFFFF');
       setbtnText('Buttons');
-      setbtnTextColor('#ffffff');
-      global.btnTxt = '#ffffff';
+      setbtnTextColor('#000000');
+      global.btnTxt = '#000000';
     } else if (buttonPurchased[btnNo].item_code == 'save_earth_theme_button') {
       await AsyncStorage.setItem('@btnclr1', '#78AC6B');
       await AsyncStorage.setItem('@btnclr2', '#49843A');
@@ -271,6 +305,19 @@ export default function ProfileSetting(props) {
       setbtnText('Buttons');
       setbtnTextColor('#000000');
       global.btnTxt = '#000000';
+    } else if (buttonPurchased[btnNo].item_code == 'free_button_roygbiv_pink_1') {
+      await AsyncStorage.setItem('@btnclr1', '#EC6161');
+      await AsyncStorage.setItem('@btnclr2', '#EC6161');
+      await AsyncStorage.setItem('@btntxtclr', '#ffffff');
+      await AsyncStorage.setItem('@btntxt', 'Buttons');
+      global.btnColor1 = '#EC6161';
+      global.btnColor2 = '#EC6161';
+      global.btnText = 'Buttons';
+      setBtncolor1('#EC6161');
+      setbtncolor2('#EC6161');
+      setbtnText('Buttons');
+      setbtnTextColor('#ffffff');
+      global.btnTxt = '#ffffff';
     }
   }
 
@@ -403,6 +450,18 @@ export default function ProfileSetting(props) {
       global.WhichTab = '1';
     } else if (bottomTabicon[index].item_code == 'the_100_theme_icon') {
       dispatch(storeIconsBottomTabFN(3));
+      await AsyncStorage.setItem('@btnclr1', '#FFFFFF');
+      await AsyncStorage.setItem('@btnclr2', '#FFFFFF');
+      await AsyncStorage.setItem('@btntxtclr', '#000000');
+      await AsyncStorage.setItem('@btntxt', 'Buttons');
+      global.btnColor1 = '#FFFFFF';
+      global.btnColor2 = '#FFFFFF';
+      global.btnText = 'Buttons';
+      setBtncolor1('#FFFFFF');
+      setbtncolor2('#FFFFFF');
+      setbtnText('Buttons');
+      setbtnTextColor('#000000');
+      global.btnTxt = '#000000';
       global.WhichTab = '1';
     } else if (bottomTabicon[index].item_code == 'new_year_theme_icon') {
       dispatch(storeIconsBottomTabFN(4));
@@ -418,7 +477,34 @@ export default function ProfileSetting(props) {
       global.WhichTab = '0';
     } else if (bottomTabicon[index].item_code == 'memee_theme_generic_icon') {
       dispatch(storeIconsBottomTabFN(8));
+      await AsyncStorage.setItem('@btnclr1', '#FFD524');
+      await AsyncStorage.setItem('@btnclr2', '#ECB602');
+      await AsyncStorage.setItem('@btntxtclr', '#000000');
+      await AsyncStorage.setItem('@btntxt', 'Buttons');
+      global.btnColor1 = '#FFD524';
+      global.btnColor2 = '#ECB602';
+      global.btnText = 'Buttons';
+      setBtncolor1('#FFD524');
+      setbtncolor2('#ECB602');
+      setbtnText('Buttons');
+      setbtnTextColor('#000000');
+      global.btnTxt = '#000000';
       global.WhichTab = '0';
+    } else if (bottomTabicon[index].item_code == 'free_icon_roygbiv_pink_1') {
+      dispatch(storeIconsBottomTabFN(9));
+      await AsyncStorage.setItem('@btnclr1', '#EC6161');
+      await AsyncStorage.setItem('@btnclr2', '#EC6161');
+      await AsyncStorage.setItem('@btntxtclr', '#ffffff');
+      await AsyncStorage.setItem('@btntxt', 'Buttons');
+      global.btnColor1 = '#EC6161';
+      global.btnColor2 = '#EC6161';
+      global.btnText = 'Buttons';
+      setBtncolor1('#EC6161');
+      setbtncolor2('#EC6161');
+      setbtnText('Buttons');
+      setbtnTextColor('#ffffff');
+      global.btnTxt = '#ffffff';
+      global.WhichTab = '1';
     } else {
       console.log('wronge item code');
     }
@@ -791,11 +877,11 @@ export default function ProfileSetting(props) {
               data={bottomTabicon}
               renderItem={({item, index}) => (
                 <TouchableOpacity onPress={() => bottomTabColorChangeFN(index)}>
-                  <Image
-                    source={item.img}
-                    style={styles.buttomStyle}
-                    resizeMode="contain"
-                  />
+                    <Image
+                      source={item.img}
+                      style={styles.buttomStyle}
+                      resizeMode="contain"
+                    />
                 </TouchableOpacity>
               )}
               keyExtractor={item => item.id}

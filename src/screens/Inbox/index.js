@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
     height: (windowHeight * 80.5) / 100,
     width: (windowWidth * 90) / 100,
     /* width: '100%', */
-    backgroundColor: colors.backgroundColor,
+    backgroundColor: global.messageBG,
   },
   header: {
     marginHorizontal: '5%',
