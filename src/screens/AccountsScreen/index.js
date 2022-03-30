@@ -57,7 +57,7 @@ export default function AccountsScreen({navigation}) {
                 height: 70,
                 flexDirection: 'row',
                 alignItems: 'center',
-                borderBottomColor: '#1B1B1B',
+                borderBottomColor: global.resultsBorderBottomColor,
                 borderBottomWidth: 1,
               }}>
               <Avatar rounded size="medium" source={{uri: item.imgurl}} />

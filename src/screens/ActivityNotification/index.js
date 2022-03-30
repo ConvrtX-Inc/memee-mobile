@@ -81,7 +81,7 @@ export default function ActivityNotification() {
               paddingBottom: 20,
               flexDirection: 'row',
               alignItems: 'center',
-              borderBottomColor: '#1B1B1B',
+              borderBottomColor: global.activityBorderBottomColor,
               borderBottomWidth: 1,
             }}>
             <Image
@@ -124,7 +124,7 @@ export default function ActivityNotification() {
               {followRequests?.length > 0 ? (
                 <View
                   style={{
-                    backgroundColor: '#695CFF',
+                    backgroundColor: global.followRequestCountBG,
                     height: 26,
                     width: 26,
                     justifyContent: 'center',
@@ -134,7 +134,7 @@ export default function ActivityNotification() {
                   }}>
                   <Text
                     style={{
-                      color: '#fff',
+                      color: global.followRequestCountTextColor,
                       fontSize: 11,
                       fontFamily: global.fontSelect,
                     }}>

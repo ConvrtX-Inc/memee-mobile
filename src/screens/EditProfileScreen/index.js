@@ -303,7 +303,7 @@ export default function EditProfileScreen(props) {
               alignSelf: 'center',
               marginTop: 50,
               borderWidth: 3,
-              borderColor: '#fff',
+              borderColor: global.editProfileBorderColor,
               borderRadius: 80,
             }}>
             {showPimg == false ? (
@@ -372,6 +372,7 @@ export default function EditProfileScreen(props) {
             </Text>
           </View>
           <Input
+            screen="editprofile"
             placeholder="Name"
             onChangeText={text => setName(text)}
             value={name}
@@ -398,6 +399,7 @@ export default function EditProfileScreen(props) {
             </Text>
           </View>
           <Input
+            screen="editprofile"
             placeholder="Email"
             onChangeText={text => setEmail(text)}
             value={email}
@@ -425,11 +427,12 @@ export default function EditProfileScreen(props) {
             </Text>
           </View>
           <Input
+            screen="editprofile"
             placeholder="Phone"
             onChangeText={text => checkPhonFormat(text)}
             value={phone}
             secureTextEntry={false}
-            color={error.phone.error ? 'lightcoral' : global.colorTextPrimary}
+            color={error.phone.error ? 'red' : global.colorTextPrimary}
           />
 
           <View
@@ -451,6 +454,7 @@ export default function EditProfileScreen(props) {
             </Text>
           </View>
           <Input
+            screen="editprofile"
             placeholder="Bio"
             onChangeText={text => setBio(text)}
             value={bio}

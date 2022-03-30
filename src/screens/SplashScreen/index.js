@@ -194,6 +194,8 @@ function SplashScreen({navigation}) {
         global.bottomClr1 = '#FFD524';
         global.bottomClr2 = '#ECB602';
         global.WhichTab = '1';
+        global.addCoinsBtnColor1 = '#73FF66';
+        global.addCoinsBtnColor2 = '#19850F';
         global.iconBottomSelected = require('../../images/100theme.png');
       } else if (iconBottomItemCode == 'new_year_theme_icon') {
         dispatch(storeIconsBottomTabFN(4));
@@ -234,6 +236,22 @@ function SplashScreen({navigation}) {
         global.bottomClr2 = '#ffffff';
         global.WhichTab = '1';
         global.iconBottomSelected = require('../../images/whiteTheme.png');
+      } else if (iconBottomItemCode == 'free_icon_roygbiv_pink_1') {
+        dispatch(storeIconsBottomTabFN(9));
+
+        global.BottomIcon1 = require('../../images/Home.png');
+        global.BottomIcon2 = require('../../images/world.png');
+        global.BottomIcon3 = require('../../images/cup.png');
+        global.BottomIcon4 = require('../../images/person.png');
+        global.BottomMainIcon = require('../../images/mainM.png');;
+
+        global.bottomClr1 = '#EC6161';
+        global.bottomClr2 = '#EC6161';
+        global.WhichTab = '1';
+
+        global.addCoinsBtnColor1 = '#EC6161';
+        global.addCoinsBtnColor2 = '#EC6161';
+        global.iconBottomSelected = require('../../images/roygbivTabBar.png');
       } else {
         dispatch(storeIconsBottomTabFN(8));
         global.BottomIcon1 = require('../../images/Home.png');
@@ -245,6 +263,9 @@ function SplashScreen({navigation}) {
         global.bottomClr1 = '#292929';
         global.bottomClr2 = '#292929';
         global.WhichTab = '0';
+        global.colorPrimary = '#EC8989';
+        global.addCoinsBtnColor1 = '#73FF66';
+        global.addCoinsBtnColor2 = '#19850F';
         global.iconBottomSelected = require('../../images/Tabbar.png');
       }
 

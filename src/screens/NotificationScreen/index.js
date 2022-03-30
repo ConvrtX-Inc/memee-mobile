@@ -67,19 +67,19 @@ export default function NotificationScreen({navigation}) {
       setBtncolor1_1(global.btnColor1);
       setBtncolor1_2(global.btnColor2);
 
-      setBtncolor2_1('#201E23');
-      setBtncolor2_2('#201E23');
+      setBtncolor2_1(global.tabNotSelectedColor);
+      setBtncolor2_2(global.tabNotSelectedColor);
 
       setTxtcolor1(global.btnTxt);
-      setTxtcolor2('#ABABAD');
+      setTxtcolor2(global.tabNotSelectedTextColor);
     } else {
-      setBtncolor1_1('#201E23');
-      setBtncolor1_2('#201E23');
+      setBtncolor1_1(global.tabNotSelectedColor);
+      setBtncolor1_2(global.tabNotSelectedColor);
 
       setBtncolor2_1(global.btnColor1);
       setBtncolor2_2(global.btnColor2);
 
-      setTxtcolor1('#ABABAD');
+      setTxtcolor1(global.tabNotSelectedTextColor);
       setTxtcolor2(global.btnTxt);
     }
   }
@@ -112,7 +112,7 @@ export default function NotificationScreen({navigation}) {
       <View
         style={{
           flexDirection: 'row',
-          backgroundColor: '#201E23',
+          backgroundColor: global.tabColor,
           width: '96%',
           height: 60,
           alignSelf: 'center',

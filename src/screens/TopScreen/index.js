@@ -133,7 +133,7 @@ export default function TopScreen({navigation}) {
                 height: 70,
                 flexDirection: 'row',
                 alignItems: 'center',
-                borderBottomColor: '#1B1B1B',
+                borderBottomColor: global.resultsBorderBottomColor,
                 borderBottomWidth: 1,
               }}>
               <Avatar rounded size="medium" source={{uri: item.imgurl}} />
@@ -193,7 +193,7 @@ export default function TopScreen({navigation}) {
                 height: 70,
                 flexDirection: 'row',
                 alignItems: 'center',
-                borderBottomColor: '#1B1B1B',
+                borderBottomColor: global.resultsBorderBottomColor,
                 borderBottomWidth: 1,
               }}>
               <View
@@ -278,7 +278,7 @@ export default function TopScreen({navigation}) {
                     height: 70,
                     flexDirection: 'row',
                     alignItems: 'center',
-                    borderBottomColor: '#1B1B1B',
+                    borderBottomColor: global.resultsBorderBottomColor,
                     borderBottomWidth: 1,
                   }}>
                   <Avatar rounded size="medium" source={{uri: item.imgurl}} />

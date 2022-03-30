@@ -21,6 +21,7 @@ import {
   ViewBase,
   NativeModules,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Modal2 from "react-native-modalbox";
 import ButtonCoins from '../../component/ButtonCoins';
 import { Avatar } from 'react-native-elements';
@@ -128,6 +129,7 @@ export default function Dashboard(props) {
   const [btncolor3_1, setBtncolor3_1] = useState('#201E23');
   const [btncolor3_2, setBtncolor3_2] = useState('#201E23');
   const [txtcolor3, setTxtcolor3] = useState('#ABABAD');
+
   const [pimgChange, setPimgChange] = useState(global.userData.imgurl);
   const [refreshing, setRefreshing] = React.useState(false);
   const [loaderIndicator, setLoaderIndicator] = useState(true);
@@ -401,54 +403,54 @@ export default function Dashboard(props) {
       setBtncolor1_1(global.btnColor1);
       setBtncolor1_2(global.btnColor2);
 
-      setBtncolor2_1('#201E23');
-      setBtncolor2_2('#201E23');
+      setBtncolor2_1(global.tabNotSelectedColor);
+      setBtncolor2_2(global.tabNotSelectedColor);
 
-      setBtncolor3_1('#201E23');
-      setBtncolor3_2('#201E23');
+      setBtncolor3_1(global.tabNotSelectedColor);
+      setBtncolor3_2(global.tabNotSelectedColor);
 
       setTxtcolor1(global.btnTxt);
-      setTxtcolor2('#ABABAD');
-      setTxtcolor3('#ABABAD');
+      setTxtcolor2(global.tabNotSelectedTextColor);
+      setTxtcolor3(global.tabNotSelectedTextColor);
     } else if (btnNo == 2) {
-      setBtncolor1_1('#201E23');
-      setBtncolor1_2('#201E23');
+      setBtncolor1_1(global.tabNotSelectedColor);
+      setBtncolor1_2(global.tabNotSelectedColor);
 
       setBtncolor2_1(global.btnColor1);
       setBtncolor2_2(global.btnColor2);
 
-      setBtncolor3_1('#201E23');
-      setBtncolor3_2('#201E23');
+      setBtncolor3_1(global.tabNotSelectedColor);
+      setBtncolor3_2(global.tabNotSelectedColor);
 
-      setTxtcolor1('#ABABAD');
+      setTxtcolor1(global.tabNotSelectedTextColor);
       setTxtcolor2(global.btnTxt);
-      setTxtcolor3('#ABABAD');
+      setTxtcolor3(global.tabNotSelectedTextColor);
     } else if (btnNo == 3) {
-      setBtncolor1_1('#201E23');
-      setBtncolor1_2('#201E23');
+      setBtncolor1_1(global.tabNotSelectedColor);
+      setBtncolor1_2(global.tabNotSelectedColor);
 
-      setBtncolor2_1('#201E23');
-      setBtncolor2_2('#201E23');
+      setBtncolor2_1(global.tabNotSelectedColor);
+      setBtncolor2_2(global.tabNotSelectedColor);
 
       setBtncolor3_1(global.btnColor1);
       setBtncolor3_2(global.btnColor2);
 
-      setTxtcolor1('#ABABAD');
-      setTxtcolor2('#ABABAD');
+      setTxtcolor1(global.tabNotSelectedTextColor);
+      setTxtcolor2(global.tabNotSelectedTextColor);
       setTxtcolor3(global.btnTxt);
     } else {
       setBtncolor1_1(global.btnColor1);
       setBtncolor1_2(global.btnColor2);
 
-      setBtncolor2_1('#201E23');
-      setBtncolor2_2('#201E23');
+      setBtncolor2_1(global.tabNotSelectedColor);
+      setBtncolor2_2(global.tabNotSelectedColor);
 
-      setBtncolor3_1('#201E23');
-      setBtncolor3_2('#201E23');
+      setBtncolor3_1(global.tabNotSelectedColor);
+      setBtncolor3_2(global.tabNotSelectedColor);
 
       setTxtcolor1(global.btnTxt);
-      setTxtcolor2('#ABABAD');
-      setTxtcolor3('#ABABAD');
+      setTxtcolor2(global.tabNotSelectedTextColor);
+      setTxtcolor3(global.tabNotSelectedTextColor);
     }
   }
 
@@ -994,7 +996,7 @@ function openPhotoEditor(uri){
 
             <View style={{ width: '100%', backgroundColor: global.colorPrimary }}>
               <ImageBackground
-                source={require('../../images/Rectangle.png')}
+                source={global.postInteractionsBG}
                 resizeMode="stretch"
                 style={{
                   flexDirection: 'row',
@@ -1021,7 +1023,7 @@ function openPhotoEditor(uri){
                             width: 28,
                             marginLeft: 10,
                             marginRight: 2,
-                            tintColor: defaultHeartColor,
+                            tintColor: global.postInteractionsTextColor,
                           }}
                           resizeMode="stretch"
                           source={require('../../images/Vector.png')}
@@ -1049,7 +1051,7 @@ function openPhotoEditor(uri){
                   <Text
                     style={[
                       styles.txtReaction,
-                      { fontFamily: global.fontSelect },
+                      { fontFamily: global.fontSelect, color: global.postInteractionsTextColor },
                     ]}>
                     {item.like_count}
                   </Text>
@@ -1069,6 +1071,7 @@ function openPhotoEditor(uri){
                         width: 28,
                         marginLeft: 10,
                         marginRight: 2,
+                        tintColor: global.postInteractionsTextColor
                       }}
                       resizeMode="stretch"
                       source={require('../../images/sms.png')}
@@ -1077,7 +1080,7 @@ function openPhotoEditor(uri){
                   <Text
                     style={[
                       styles.txtReaction,
-                      { fontFamily: global.fontSelect },
+                      { fontFamily: global.fontSelect, color: global.postInteractionsTextColor },
                     ]}>
                     {item.comment_count}
                   </Text>
@@ -1088,7 +1091,7 @@ function openPhotoEditor(uri){
                     width: '32%',
                     flexDirection: 'row',
                     justifyContent: 'center',
-                    alignItems: 'center',
+                    alignItems: 'center'
                   }}>
                   <TouchableOpacity onPress={() => sharePostFN(index)}>
                     <Image
@@ -1097,6 +1100,7 @@ function openPhotoEditor(uri){
                         width: 28,
                         marginLeft: 10,
                         marginRight: 2,
+                        tintColor: global.postInteractionsTextColor
                       }}
                       resizeMode="stretch"
                       source={require('../../images/share.png')}
@@ -1105,7 +1109,7 @@ function openPhotoEditor(uri){
                   <Text
                     style={[
                       styles.txtReaction,
-                      { fontFamily: global.fontSelect },
+                      { fontFamily: global.fontSelect, color: global.postInteractionsTextColor },
                     ]}>
                     {item.share_count}
                   </Text>
@@ -1208,7 +1212,7 @@ function openPhotoEditor(uri){
             <View
               style={{
                 flexDirection: 'row',
-                backgroundColor: '#201E23',
+                backgroundColor: global.tabColor,
                 width: '93%',
                 height: 60,
                 alignSelf: 'center',
@@ -1296,7 +1300,7 @@ function openPhotoEditor(uri){
                     setAddStoryModalVisible={setAddStoryModalVisible}
                   />
                 ) : ( <TouchableOpacity onPress={() => setAddStoryModalVisible(true)}>
-                      <View style={{backgroundColor: '#201E23', height: 160, width: 115, borderRadius: 15 }}>
+                      <View style={{backgroundColor: global.colorSecondary, height: 160, width: 115, borderRadius: 15, marginLeft: 5 }}>
                           <View style={{flex: 2.5, flexDirection: 'column'}}>
                           <View style={{flex: 1, justifyContent: 'center'}}>
                               <Text style={{color: 'white', textAlign: 'center', fontSize: 16, fontWeight: 'normal'}}>Add story</Text>       
