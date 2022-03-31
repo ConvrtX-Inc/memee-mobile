@@ -270,11 +270,19 @@ export default function OrganizeBadges(props) {
               borderRadius: 32,
             }}>
             <TouchableOpacity>
-              <Image
-                style={{height: 23, width: 23, marginTop: 16, marginLeft: 15}}
-                resizeMode="stretch"
-                source={require('../../images/search.png')}
-              />
+              {global.searchInputColor == '#FFFFFF' ? (
+                <Image
+                  style={{height: 23, width: 23, marginTop: 16, marginLeft: 15}}
+                  resizeMode="stretch"
+                  source={require('../../images/searchBlck.png')}
+                />
+              ) : (
+                <Image
+                  style={{height: 23, width: 23, marginTop: 16, marginLeft: 15}}
+                  resizeMode="stretch"
+                  source={require('../../images/search.png')}
+                />
+              )}
             </TouchableOpacity>
             <TextInput
               style={{
@@ -544,7 +552,10 @@ export default function OrganizeBadges(props) {
                 style={{
                   padding: (windowWidth * 3.5) / 100,
                   borderRadius: (windowWidth * 5) / 100,
-                  backgroundColor: (index <= 1 && global.cust_item_code === 'roygbiv-pink') ? global.lockedBadgesBG : global.lockedBadgesAboveTop2,
+                  backgroundColor:
+                    index <= 1 && global.cust_item_code === 'roygbiv-pink'
+                      ? global.lockedBadgesBG
+                      : global.lockedBadgesAboveTop2,
                   width: (windowWidth * 40) / 100,
                   marginHorizontal: (windowWidth * 1.5) / 100,
                   marginTop: (windowWidth * 4) / 100,
@@ -596,7 +607,8 @@ export default function OrganizeBadges(props) {
                 </Text>
                 <Text
                   style={{
-                    color:  index > 1 ? '#FFF62A' : global.lockedBadgesSubTitleColor,
+                    color:
+                      index > 1 ? '#FFF62A' : global.lockedBadgesSubTitleColor,
                     fontSize: 10,
                     marginTop: (windowWidth * 0.8) / 100,
                   }}>

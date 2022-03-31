@@ -34,6 +34,9 @@ export default function TounamentScreen(props) {
   }, []);
 
   function enterIntoTournamentFN() {
+    console.log(
+      global.address + 'EnrollInTournament/' + global.userData.user_id,
+    );
     fetch(global.address + 'EnrollInTournament/' + global.userData.user_id, {
       method: 'POST',
       headers: {
@@ -44,7 +47,7 @@ export default function TounamentScreen(props) {
     })
       .then(response => response.json())
       .then(responseJson => {
-        /* console.log(responseJson); */
+        console.log(responseJson);
         global.userData.participated_in_tournament = 1;
         setEnterTournament(1);
 
