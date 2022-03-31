@@ -365,6 +365,118 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
 
     // Edit Profile Screen
     global.editProfileBorderColor = '#FFF62A';
+  } else if (themeIndex == 10) {
+    /* free roygbiv_pink_theme */
+    gradientColors = ['#FF8C00', '#FF8C00'];
+
+    global.cust_item_code = 'roygbiv-orange';
+
+    icons.push(require('../images/roygbiv1Home.png'));
+    icons.push(require('../images/roygbiv1Explore.png'));
+    icons.push(require('../images/roygbiv1Tourna.png'));
+    icons.push(require('../images/roygbiv1Profile.png'));
+
+    iconsSelected.push(require('../images/mainHomFille.png'));
+    iconsSelected.push(require('../images/roygbiv1GlobeFilled.png'));
+    iconsSelected.push(require('../images/trophyFilledmain.png'));
+    iconsSelected.push(require('../images/personMainFilled.png'));
+
+    centerIcon = require('../images/mainM.png');
+
+    selectedColor = '#FFCD2F';
+    unselectedColor = '#FFFFFF';
+
+    // setting colors from previous developer
+    global.colorPrimary = '#F7A745';
+    global.colorSecondary = 'rgba(255, 255, 255, 0.2)';
+    global.colorInput = '#FFFFFF';
+    global.colorTextPrimary = '#FFFFFF';
+    global.colorTextSecondary = '#FFFFFF';
+    global.colorTextActive = '#FFFFFF';
+    global.colorIcon = '#FFFFFF';
+    global.gradientColors = ['rgba(20, 19, 37, 1)', 'rgba(20, 19, 37, 1)'];
+
+    // ! SET COLORS HERE FOR NEW THEMES ! //
+
+    // tab color for dashboard `following | New Memes | Trending` || Tournament || Notification Inbox
+    global.tabSelectedColor = '#FF8C00';
+    global.tabNotSelectedColor = 'transparent';
+    global.tabColor = 'rgba(255, 255, 255, 0.4)';
+    global.tabSelectedTextColor = '#000000';
+    global.tabNotSelectedTextColor = '#000000';
+
+    // add coins color (two colors because default is gradient with 2 colors)
+    global.addCoinsBtnColor1 = 'rgba(255, 140, 0, 1)';
+    global.addCoinsBtnColor2 = 'rgba(255, 140, 0, 1)';
+
+    // like, comment and share
+    global.postInteractionsTextColor = '#FFFFFF';
+    global.postInteractionsBG = require('../images/roygbivorangeRectangle.png');
+
+    // inputs
+    global.searchInputColor = 'rgba(255, 255, 255, 0.2)';
+    global.searchInputTextColor = '#FFFFFF';
+    global.searchInputPlaceholderTextColor = '#FFDFDF';
+    global.commentInputColor = 'rgba(255, 255, 255, 0.2)';
+    global.commentInputPlaceholderTextColor = '#FFFFFF';
+    global.commentInputTextColor = '#FFFFFF';
+    global.inputColor = 'rgba(255, 255, 255, 0.2)';
+    global.inputPlaceholderTextColor = '#FFDFDF';
+    global.inputTextColor = '#FFFFFF';
+    global.editProfileInputBorderBottom = '#FFFFFF';
+
+    // trending tags in search color (gradient)
+    global.selectedTagsColor1 = 'rgba(255, 140, 0, 1)';
+    global.selectedTagsColor2 = 'rgba(255, 140, 0, 1)';
+    global.notSelectedTagsColor1 = 'transparent';
+    global.notSelectedTagsColor2 = 'transparent';
+    global.selectedTagText = '#FFFFFF';
+    global.notSelectedTagText = '#FFFFFF';
+    global.tagsBorderColor = '#FFFFFF';
+
+    // text button post text color (ex. post comment)
+    global.postTextComment = 'rgba(206, 100, 0, 1)';
+
+    // explore (TOP SCREEN)
+    global.resultsBorderBottomColor = 'transparent';
+
+    // buttons
+    global.followBtnBG1 = global.btnColor1;
+    global.followBtnBG2 = global.btnColor2;
+    global.followBtnTextColor = '#FFFFFF';
+    global.confirmBtnBG1 = global.btnColor1;
+    global.confirmBtnBG2 = global.btnColor2;
+    global.confirmBtnTextColor = '#FFFFFF';
+    global.declineButtonBG = '#000000';
+    global.declineButtonTextColor = '#FFFFFF';
+
+    // notification inbox > activity tab
+    global.activityBorderBottomColor = '#FFFFFF';
+    global.followRequestCountBG = '#FF0000';
+    global.followRequestCountTextColor = '#FFFFFF';
+
+    // message tab
+    global.messageBG = '#f4a8a4';
+
+    // organize badges screen
+    global.filterBtnColor = 'rgba(255, 140, 0, 1)';
+    global.earnedBadgesGradientColors = ['rgba(20, 19, 37, 1)', 'rgba(20, 19, 37, 1)'];
+    global.lockedBadgesBG = '#f4a8a4';
+    global.lockedBadgesAboveTop2 = '#292929';
+    global.lockedBadgesTitleColor = '#FFFFFF';
+    global.lockedBadgesSubTitleColor = '#FFFFFF';
+    global.lockedBadgesRarityColor = '#FFFFFF';
+    global.lockedBadgesPointsColor = '#FFFFFF';
+    global.filterSelectedBtn1 = '#000000';
+    global.filterSelectedBtn2 = '#000000';
+    global.filterNotSelectedBtn1 = '#ECB602';
+    global.filterNotSelectedBtn3 = '#ECB602';
+    global.filterSelectedText = '#FFFFFF';
+    global.filterNotSelectedTagText = '#000000';
+    global.filterTagsBorderColor = '#000000';
+
+    // Edit Profile Screen
+    global.editProfileBorderColor = '#FFF62A';
   } else if (themeIndex == 11) {
     /* free theme2 */
     gradientColors = ['#1EDAAD', '#00AF85'];
