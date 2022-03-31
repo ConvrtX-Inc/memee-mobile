@@ -165,15 +165,23 @@ export default function ProfileSetting(props) {
         }
 
         const freeThemes = [
-            {
-                datetime: undefined,
-                img: require('../../images/roygbivTabBar.png'),
-                item_code: 'free_icon_roygbiv_pink_1',
-                item_id: 'free-icon-roygbivpink-1',
-                purchase_id: undefined,
-                type: 'icon'
-            }
-        ]
+          {
+            datetime: undefined,
+            img: require('../../images/roygbivTabBar.png'),
+            item_code: 'free_icon_roygbiv_pink_1',
+            item_id: 'free-icon-roygbivpink-1',
+            purchase_id: undefined,
+            type: 'icon',
+          },
+          {
+            datetime: undefined,
+            img: require('../../images/theme2TabBar.png'),
+            item_code: 'free_icon_theme_2',
+            item_id: 'free-icon-theme-2',
+            purchase_id: undefined,
+            type: 'icon',
+          },
+        ];
 
         const freeButtons = [
           {
@@ -182,9 +190,17 @@ export default function ProfileSetting(props) {
             item_id: 'free-button-roygbivpink-1',
             purchase_id: undefined,
             type: 'button',
-            img: require('../../images/genericButton.png')
-          }
-        ]
+            img: require('../../images/genericButton.png'),
+          },
+          {
+            item_code: 'free_icon_theme_2',
+            datetime: undefined,
+            item_id: 'free-icon-theme-2',
+            purchase_id: undefined,
+            type: 'button',
+            img: require('../../images/genericButton.png'),
+          },
+        ];
 
         for (let index = 0; index < freeThemes.length; index++) {
           const freeTheme = freeThemes[index];
@@ -305,7 +321,9 @@ export default function ProfileSetting(props) {
       setbtnText('Buttons');
       setbtnTextColor('#000000');
       global.btnTxt = '#000000';
-    } else if (buttonPurchased[btnNo].item_code == 'free_button_roygbiv_pink_1') {
+    } else if (
+      buttonPurchased[btnNo].item_code == 'free_button_roygbiv_pink_1'
+    ) {
       await AsyncStorage.setItem('@btnclr1', '#EC6161');
       await AsyncStorage.setItem('@btnclr2', '#EC6161');
       await AsyncStorage.setItem('@btntxtclr', '#ffffff');
@@ -315,6 +333,19 @@ export default function ProfileSetting(props) {
       global.btnText = 'Buttons';
       setBtncolor1('#EC6161');
       setbtncolor2('#EC6161');
+      setbtnText('Buttons');
+      setbtnTextColor('#ffffff');
+      global.btnTxt = '#ffffff';
+    } else if (buttonPurchased[btnNo].item_code == 'free_icon_theme_2') {
+      await AsyncStorage.setItem('@btnclr1', '#1EDAAD');
+      await AsyncStorage.setItem('@btnclr2', '#00AF85');
+      await AsyncStorage.setItem('@btntxtclr', '#ffffff');
+      await AsyncStorage.setItem('@btntxt', 'Buttons');
+      global.btnColor1 = '#1EDAAD';
+      global.btnColor2 = '#00AF85';
+      global.btnText = 'Buttons';
+      setBtncolor1('#1EDAAD');
+      setbtncolor2('#00AF85');
       setbtnText('Buttons');
       setbtnTextColor('#ffffff');
       global.btnTxt = '#ffffff';
@@ -501,6 +532,21 @@ export default function ProfileSetting(props) {
       global.btnText = 'Buttons';
       setBtncolor1('#EC6161');
       setbtncolor2('#EC6161');
+      setbtnText('Buttons');
+      setbtnTextColor('#ffffff');
+      global.btnTxt = '#ffffff';
+      global.WhichTab = '1';
+    } else if (bottomTabicon[index].item_code == 'free_icon_theme_2') {
+      dispatch(storeIconsBottomTabFN(11));
+      await AsyncStorage.setItem('@btnclr1', '#1EDAAD');
+      await AsyncStorage.setItem('@btnclr2', '#00AF85');
+      await AsyncStorage.setItem('@btntxtclr', '#ffffff');
+      await AsyncStorage.setItem('@btntxt', 'Buttons');
+      global.btnColor1 = '#1EDAAD';
+      global.btnColor2 = '#00AF85';
+      global.btnText = 'Buttons';
+      setBtncolor1('#1EDAAD');
+      setbtncolor2('#00AF85');
       setbtnText('Buttons');
       setbtnTextColor('#ffffff');
       global.btnTxt = '#ffffff';
@@ -877,11 +923,11 @@ export default function ProfileSetting(props) {
               data={bottomTabicon}
               renderItem={({item, index}) => (
                 <TouchableOpacity onPress={() => bottomTabColorChangeFN(index)}>
-                    <Image
-                      source={item.img}
-                      style={styles.buttomStyle}
-                      resizeMode="contain"
-                    />
+                  <Image
+                    source={item.img}
+                    style={styles.buttomStyle}
+                    resizeMode="contain"
+                  />
                 </TouchableOpacity>
               )}
               keyExtractor={item => item.id}

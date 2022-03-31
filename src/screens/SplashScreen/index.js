@@ -243,7 +243,7 @@ function SplashScreen({navigation}) {
         global.BottomIcon2 = require('../../images/world.png');
         global.BottomIcon3 = require('../../images/cup.png');
         global.BottomIcon4 = require('../../images/person.png');
-        global.BottomMainIcon = require('../../images/mainM.png');;
+        global.BottomMainIcon = require('../../images/mainM.png');
 
         global.bottomClr1 = '#EC6161';
         global.bottomClr2 = '#EC6161';
@@ -252,6 +252,22 @@ function SplashScreen({navigation}) {
         global.addCoinsBtnColor1 = '#EC6161';
         global.addCoinsBtnColor2 = '#EC6161';
         global.iconBottomSelected = require('../../images/roygbivTabBar.png');
+      } else if (iconBottomItemCode == 'free_icon_theme_2') {
+        dispatch(storeIconsBottomTabFN(11));
+
+        global.BottomIcon1 = require('../../images/theme2Home.png');
+        global.BottomIcon2 = require('../../images/theme2Explore.png');
+        global.BottomIcon3 = require('../../images/theme2Tournament.png');
+        global.BottomIcon4 = require('../../images/theme2Profile.png');
+        global.BottomMainIcon = require('../../images/whiteMainM.png');
+
+        global.bottomClr1 = '#0E5241';
+        global.bottomClr2 = '#0E5241';
+        global.WhichTab = '1';
+
+        global.addCoinsBtnColor1 = '#1EDAAD';
+        global.addCoinsBtnColor2 = '#00AF85';
+        global.iconBottomSelected = require('../../images/theme2TabBar.png');
       } else {
         dispatch(storeIconsBottomTabFN(8));
         global.BottomIcon1 = require('../../images/Home.png');

@@ -25,16 +25,16 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 var windowWidth = Dimensions.get('window').width;
 
 //Banuba Video Editor
-const { VideoEditorModule } = NativeModules;
+const {VideoEditorModule} = NativeModules;
 
-const openEditor = (): Promise<{ videoUri: string } | null> => {
+const openEditor = (): Promise<{videoUri: string} | null> => {
   return VideoEditorModule.openVideoEditor();
 };
 
 export const openVideoEditor = async (): Promise<string | null> => {
   const response = await openEditor();
 
-  console.log('response',response)
+  console.log('response', response);
 
   if (!response) {
     return null;
@@ -44,11 +44,9 @@ export const openVideoEditor = async (): Promise<string | null> => {
 };
 
 async function getAndroidExportResult() {
-  
   return await VideoEditorModule.openVideoEditor();
 }
 //End Video Editor
-
 
 const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
   const [showImagePickerDialog, setShowImagePickerDialog] = useState(false);
@@ -154,7 +152,7 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
     global.searchInputTextColor = '#959595';
     global.searchInputPlaceholderTextColor = '#959595';
     global.commentInputColor = '#000000';
-    global.commentInputPlaceholderTextColor = '#9B9B9B'
+    global.commentInputPlaceholderTextColor = '#9B9B9B';
     global.commentInputTextColor = '#FFFFFF';
     global.inputColor = '#000000';
     global.inputPlaceholderTextColor = '#9B9B9B';
@@ -173,7 +171,7 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
     // buttons
     global.followBtnBG1 = '#000000';
     global.followBtnBG2 = '#000000';
-    global.followBtnTextColor = '#FFFFFF'
+    global.followBtnTextColor = '#FFFFFF';
     global.confirmBtnBG1 = '#000000';
     global.confirmBtnBG2 = '#000000';
     global.confirmBtnTextColor = '#FFFFFF';
@@ -213,8 +211,6 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
 
     // Edit Profile Screen
     global.editProfileBorderColor = '#FFF62A';
-
-    
   } else if (themeIndex == 4) {
     /* new_year_theme_icon */
     gradientColors = ['#413781', '#413781'];
@@ -310,7 +306,7 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
     global.searchInputTextColor = '#FFFFFF';
     global.searchInputPlaceholderTextColor = '#FFDFDF';
     global.commentInputColor = '#f4a8a4';
-    global.commentInputPlaceholderTextColor = '#FFDFDF'
+    global.commentInputPlaceholderTextColor = '#FFDFDF';
     global.commentInputTextColor = '#FFFFFF';
     global.inputColor = '#f4a8a4';
     global.inputPlaceholderTextColor = '#FFDFDF';
@@ -349,7 +345,7 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
 
     // message tab
     global.messageBG = '#f4a8a4';
-    
+
     // organize badges screen
     global.filterBtnColor = '#EC6161';
     global.earnedBadgesGradientColors = ['#f4a8a4', '#f4a8a4'];
@@ -369,6 +365,118 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
 
     // Edit Profile Screen
     global.editProfileBorderColor = '#FFF62A';
+  } else if (themeIndex == 11) {
+    /* free theme2 */
+    gradientColors = ['#1EDAAD', '#00AF85'];
+
+    global.cust_item_code = 'theme-2';
+
+    icons.push(require('../images/theme2Home.png'));
+    icons.push(require('../images/theme2Explore.png'));
+    icons.push(require('../images/theme2Tournament.png'));
+    icons.push(require('../images/theme2Profile.png'));
+
+    iconsSelected.push(require('../images/theme2Home.png'));
+    iconsSelected.push(require('../images/theme2Explore.png'));
+    iconsSelected.push(require('../images/theme2Tournament.png'));
+    iconsSelected.push(require('../images/theme2Profile.png'));
+
+    centerIcon = require('../images/whiteMainM.png');
+
+    selectedColor = '#FFCD2F';
+    unselectedColor = '#FFFFFF';
+
+    // setting colors from previous developer
+    global.colorPrimary = '#003528';
+    global.colorSecondary = '#0E5241';
+    global.colorInput = '#FFFFFF';
+    global.colorTextPrimary = '#FFFFFF';
+    global.colorTextSecondary = '#FFFFFF';
+    global.colorTextActive = '#FFFFFF';
+    global.colorIcon = '#FFFFFF';
+    global.gradientColors = ['#064233', '#064233'];
+
+    // ! SET COLORS HERE FOR NEW THEMES ! //
+
+    // tab color for dashboard `following | New Memes | Trending` || Tournament || Notification Inbox
+    global.tabSelectedColor = '#1EDAAD';
+    global.tabNotSelectedColor = '#064233';
+    global.tabColor = '#064233';
+    global.tabSelectedTextColor = '#FFFFFF';
+    global.tabNotSelectedTextColor = '#B6B6B6';
+
+    // add coins color (two colors because default is gradient with 2 colors)
+    global.addCoinsBtnColor1 = '#1EDAAD';
+    global.addCoinsBtnColor2 = '#00AF85';
+
+    // like, comment and share
+    global.postInteractionsTextColor = '#FFFFFF';
+    global.postInteractionsBG = require('../images/theme2Rectangle.png');
+
+    // inputs
+    global.searchInputColor = '#FFFFFF';
+    global.searchInputTextColor = '#565656';
+    global.searchInputPlaceholderTextColor = '#9B9B9B';
+    global.commentInputColor = '#FFFFFF';
+    global.commentInputPlaceholderTextColor = '#9B9B9B';
+    global.commentInputTextColor = '#565656';
+    global.inputColor = '#FFFFFF';
+    global.inputPlaceholderTextColor = '#9B9B9B';
+    global.inputTextColor = '#565656';
+    global.editProfileInputBorderBottom = '#064233';
+
+    // trending tags in search color (gradient)
+    global.selectedTagsColor1 = '#1EDAAD';
+    global.selectedTagsColor2 = '#00AF85';
+    global.notSelectedTagsColor1 = '#064233';
+    global.notSelectedTagsColor2 = '#064233';
+    global.selectedTagText = '#FFFFFF';
+    global.notSelectedTagText = '#FFFFFF';
+    global.tagsBorderColor = '#064233';
+
+    // text button post text color (ex. post comment)
+    global.postTextComment = '#08BA8F';
+
+    // explore (TOP SCREEN) // not changed
+    global.resultsBorderBottomColor = '#EC8989';
+
+    // buttons
+    global.followBtnBG1 = global.btnColor1;
+    global.followBtnBG2 = global.btnColor2;
+    global.followBtnTextColor = global.btnTxt;
+    global.confirmBtnBG1 = global.btnColor1;
+    global.confirmBtnBG2 = global.btnColor2;
+    global.confirmBtnTextColor = global.btnTxt;
+    global.declineButtonBG = '#000000';
+    global.declineButtonTextColor = '#FFFFFF';
+
+    // notification inbox > activity tab
+    global.activityBorderBottomColor = '#FFFFFF';
+    global.followRequestCountBG = '#FF0000';
+    global.followRequestCountTextColor = '#FFFFFF';
+
+    // message tab // not changed
+    global.messageBG = '#f4a8a4';
+
+    // organize badges screen
+    global.filterBtnColor = '#02B288';
+    global.earnedBadgesGradientColors = ['#064233', '#064233'];
+    global.lockedBadgesBG = '#064233';
+    global.lockedBadgesAboveTop2 = 'rgba(255, 255, 255, 0.1)';
+    global.lockedBadgesTitleColor = '#FFFFFF';
+    global.lockedBadgesSubTitleColor = '#FFFFFF';
+    global.lockedBadgesRarityColor = '#FFFFFF';
+    global.lockedBadgesPointsColor = '#FFFFFF';
+    global.filterSelectedBtn1 = '#000000';
+    global.filterSelectedBtn2 = '#000000';
+    global.filterNotSelectedBtn1 = '#ECB602'; // not
+    global.filterNotSelectedBtn3 = '#ECB602'; // not
+    global.filterSelectedText = '#FFFFFF';
+    global.filterNotSelectedTagText = '#9B9B9B';
+    global.filterTagsBorderColor = '#000000'; // not
+
+    // Edit Profile Screen
+    global.editProfileBorderColor = '#02B288';
   } else {
     /* main_theme  */
     gradientColors = ['#292929', '#292929'];
@@ -398,7 +506,7 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
     global.colorIcon = '#FFFFFF';
     global.gradientColors = ['#292929', '#292929'];
 
-    // ! SET COLORS HERE FOR NEW THEMES ! 
+    // ! SET COLORS HERE FOR NEW THEMES !
 
     // tab color for dashboard `following | New Memes | Trending` || Tournament || Notification Inbox
     global.tabSelectedColor = '#ECB602';
@@ -420,7 +528,7 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
     global.searchInputTextColor = '#FFFFFF';
     global.searchInputPlaceholderTextColor = '#707070';
     global.commentInputColor = '#201E23';
-    global.commentInputPlaceholderTextColor = '#707070'
+    global.commentInputPlaceholderTextColor = '#707070';
     global.commentInputTextColor = '#FFFFFF';
     global.inputColor = '#201E23';
     global.inputPlaceholderTextColor = '#707070';
@@ -505,8 +613,6 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
     });
   }
 
-
-
   const openCamera = async () => {
     setShowImagePickerDialog(false);
     let isStoragePermitted = await requestExternalWritePermission();
@@ -538,8 +644,7 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
   function openPhotoEditor(uri) {
     PESDK.openEditor({uri: uri}).then(
       result => {
-        
-        navigation.navigate('NewPost', {uri: result.image,type:'photo'});
+        navigation.navigate('NewPost', {uri: result.image, type: 'photo'});
       },
       error => {
         /* console.log(error); */
@@ -549,7 +654,12 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
 
   return (
     // <View style={[styles.barStyle,{justifyContent: 'center'}]}>
-    <View style={[{justifyContent: 'center'}]}>
+    //<View style={[{justifyContent: 'center'}]}>
+    <View
+      style={{
+        justifyContent: 'center',
+        marginTop: -31,
+      }}>
       <LinearGradient colors={gradientColors} style={styles.bottom} />
       <View style={{flexDirection: 'row', position: 'absolute'}}>
         <View style={styles.icon}>
@@ -683,17 +793,22 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
               onPress={() => {
                 setShowImagePickerDialog(false);
                 if (Platform.OS === 'android') {
-                  getAndroidExportResult().then(videoUri => {
-                    console.log(videoUri)
-                    // alert("VIDEO URI TO BE SAVED IN DB"+videoUri)
-                    navigation.navigate('NewPost', {uri: `file://${videoUri}`,type:'video'});
-                  }).catch(e => {
-                    console.log("error",e)
-                    console.log(e)
-                  })
+                  getAndroidExportResult()
+                    .then(videoUri => {
+                      console.log(videoUri);
+                      // alert("VIDEO URI TO BE SAVED IN DB"+videoUri)
+                      navigation.navigate('NewPost', {
+                        uri: `file://${videoUri}`,
+                        type: 'video',
+                      });
+                    })
+                    .catch(e => {
+                      console.log('error', e);
+                      console.log(e);
+                    });
                 } else {
                   const videoUri = openVideoEditor();
-                  console.log(videoUri)
+                  console.log(videoUri);
                 }
               }}>
               <Text style={{color: '#fff', opacity: 0.5, fontSize: 16}}>
