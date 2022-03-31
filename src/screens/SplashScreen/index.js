@@ -252,6 +252,22 @@ function SplashScreen({navigation}) {
         global.addCoinsBtnColor1 = '#EC6161';
         global.addCoinsBtnColor2 = '#EC6161';
         global.iconBottomSelected = require('../../images/roygbivTabBar.png');
+      } else if (iconBottomItemCode == 'free_icon_roygbiv_orange_1') {
+        dispatch(storeIconsBottomTabFN(10));
+
+        global.BottomIcon1 = require('../../images/Home.png');
+        global.BottomIcon2 = require('../../images/world.png');
+        global.BottomIcon3 = require('../../images/cup.png');
+        global.BottomIcon4 = require('../../images/person.png');
+        global.BottomMainIcon = require('../../images/mainM.png');
+
+        global.bottomClr1 = 'rgba(255, 140, 0, 1)';
+        global.bottomClr2 = 'rgba(255, 140, 0, 1)';
+        global.WhichTab = '1';
+
+        global.addCoinsBtnColor1 = 'rgba(255, 140, 0, 1)';
+        global.addCoinsBtnColor2 = 'rgba(255, 140, 0, 1)';
+        global.iconBottomSelected = require('../../images/roygbivOrangeTabBar.png');
       } else if (iconBottomItemCode == 'free_icon_theme_2') {
         dispatch(storeIconsBottomTabFN(11));
 

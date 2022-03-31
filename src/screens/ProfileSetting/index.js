@@ -175,6 +175,14 @@ export default function ProfileSetting(props) {
           },
           {
             datetime: undefined,
+            img: require('../../images/roygbivOrangeTabBar.png'),
+            item_code: 'free_icon_roygbiv_orange_1',
+            item_id: 'free-icon-roygbivorange-1',
+            purchase_id: undefined,
+            type: 'icon',
+          },
+          {
+            datetime: undefined,
             img: require('../../images/theme2TabBar.png'),
             item_code: 'free_icon_theme_2',
             item_id: 'free-icon-theme-2',
@@ -196,6 +204,14 @@ export default function ProfileSetting(props) {
             item_code: 'free_button_roygbiv_pink_1',
             datetime: undefined,
             item_id: 'free-button-roygbivpink-1',
+            purchase_id: undefined,
+            type: 'button',
+            img: require('../../images/genericButton.png'),
+          },
+          {
+            item_code: 'free_button_roygbiv_orange_1',
+            datetime: undefined,
+            item_id: 'free-button-roygbivorange-1',
             purchase_id: undefined,
             type: 'button',
             img: require('../../images/genericButton.png'),
@@ -352,7 +368,22 @@ export default function ProfileSetting(props) {
       setbtnText('Buttons');
       setbtnTextColor('#ffffff');
       global.btnTxt = '#ffffff';
-    } else if (buttonPurchased[btnNo].item_code == 'free_icon_theme_2') {
+    } else if (
+      buttonPurchased[btnNo].item_code == 'free_button_roygbiv_orange_1'
+    ) {
+      await AsyncStorage.setItem('@btnclr1', '#FF8C00');
+      await AsyncStorage.setItem('@btnclr2', '#FF8C00');
+      await AsyncStorage.setItem('@btntxtclr', '#000000');
+      await AsyncStorage.setItem('@btntxt', 'Buttons');
+      global.btnColor1 = '#FF8C00';
+      global.btnColor2 = '#FF8C00';
+      global.btnText = 'Buttons';
+      setBtncolor1('#FF8C00');
+      setbtncolor2('#FF8C00');
+      setbtnText('Buttons');
+      setbtnTextColor('#000000');
+      global.btnTxt = '#000000';
+    }  else if (buttonPurchased[btnNo].item_code == 'free_icon_theme_2') {
       await AsyncStorage.setItem('@btnclr1', '#1EDAAD');
       await AsyncStorage.setItem('@btnclr2', '#00AF85');
       await AsyncStorage.setItem('@btntxtclr', '#ffffff');
@@ -564,6 +595,21 @@ export default function ProfileSetting(props) {
       setbtnText('Buttons');
       setbtnTextColor('#ffffff');
       global.btnTxt = '#ffffff';
+      global.WhichTab = '1';
+    } else if (bottomTabicon[index].item_code == 'free_icon_roygbiv_orange_1') {
+      dispatch(storeIconsBottomTabFN(10));
+      await AsyncStorage.setItem('@btnclr1', '#FF8C00');
+      await AsyncStorage.setItem('@btnclr2', '#FF8C00');
+      await AsyncStorage.setItem('@btntxtclr', '#000000');
+      await AsyncStorage.setItem('@btntxt', 'Buttons');
+      global.btnColor1 = '#FF8C00';
+      global.btnColor2 = '#FF8C00';
+      global.btnText = 'Buttons';
+      setBtncolor1('#FF8C00');
+      setbtncolor2('#FF8C00');
+      setbtnText('Buttons');
+      setbtnTextColor('#000000');
+      global.btnTxt = '#000000';
       global.WhichTab = '1';
     } else if (bottomTabicon[index].item_code == 'free_icon_theme_2') {
       dispatch(storeIconsBottomTabFN(11));
