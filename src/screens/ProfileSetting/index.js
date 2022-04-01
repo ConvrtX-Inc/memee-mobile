@@ -197,6 +197,14 @@ export default function ProfileSetting(props) {
             purchase_id: undefined,
             type: 'icon',
           },
+          {
+            datetime: undefined,
+            img: require('../../images/theme4TabBar.png'),
+            item_code: 'free_icon_theme_4',
+            item_id: 'free-icon-theme-4',
+            purchase_id: undefined,
+            type: 'icon',
+          },
         ];
 
         const freeButtons = [
@@ -228,6 +236,14 @@ export default function ProfileSetting(props) {
             item_code: 'free_icon_theme_3',
             datetime: undefined,
             item_id: 'free-icon-theme-3',
+            purchase_id: undefined,
+            type: 'button',
+            img: require('../../images/genericButton.png'),
+          },
+          {
+            item_code: 'free_icon_theme_4',
+            datetime: undefined,
+            item_id: 'free-icon-theme-4',
             purchase_id: undefined,
             type: 'button',
             img: require('../../images/genericButton.png'),
@@ -383,7 +399,7 @@ export default function ProfileSetting(props) {
       setbtnText('Buttons');
       setbtnTextColor('#000000');
       global.btnTxt = '#000000';
-    }  else if (buttonPurchased[btnNo].item_code == 'free_icon_theme_2') {
+    } else if (buttonPurchased[btnNo].item_code == 'free_icon_theme_2') {
       await AsyncStorage.setItem('@btnclr1', '#1EDAAD');
       await AsyncStorage.setItem('@btnclr2', '#00AF85');
       await AsyncStorage.setItem('@btntxtclr', '#ffffff');
@@ -409,6 +425,19 @@ export default function ProfileSetting(props) {
       setbtnText('Buttons');
       setbtnTextColor('#ffffff');
       global.btnTxt = '#ffffff';
+    } else if (buttonPurchased[btnNo].item_code == 'free_icon_theme_4') {
+      await AsyncStorage.setItem('@btnclr1', '#FFF62A');
+      await AsyncStorage.setItem('@btnclr2', '#FFF62A');
+      await AsyncStorage.setItem('@btntxtclr', '#040216');
+      await AsyncStorage.setItem('@btntxt', 'Buttons');
+      global.btnColor1 = '#FFF62A';
+      global.btnColor2 = '#FFF62A';
+      global.btnText = 'Buttons';
+      setBtncolor1('#FFF62A');
+      setbtncolor2('#FFF62A');
+      setbtnText('Buttons');
+      setbtnTextColor('#040216');
+      global.btnTxt = '#040216';
     }
   }
 
@@ -640,6 +669,21 @@ export default function ProfileSetting(props) {
       setbtnText('Buttons');
       setbtnTextColor('#ffffff');
       global.btnTxt = '#ffffff';
+      global.WhichTab = '1';
+    } else if (bottomTabicon[index].item_code == 'free_icon_theme_4') {
+      dispatch(storeIconsBottomTabFN(12));
+      await AsyncStorage.setItem('@btnclr1', '#FFF62A');
+      await AsyncStorage.setItem('@btnclr2', '#FFF62A');
+      await AsyncStorage.setItem('@btntxtclr', '#040216');
+      await AsyncStorage.setItem('@btntxt', 'Buttons');
+      global.btnColor1 = '#FFF62A';
+      global.btnColor2 = '#FFF62A';
+      global.btnText = 'Buttons';
+      setBtncolor1('#FFF62A');
+      setbtncolor2('#FFF62A');
+      setbtnText('Buttons');
+      setbtnTextColor('#040216');
+      global.btnTxt = '#040216';
       global.WhichTab = '1';
     } else {
       console.log('wronge item code');
