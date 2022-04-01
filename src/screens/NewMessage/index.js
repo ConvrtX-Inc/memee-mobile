@@ -68,7 +68,7 @@ export default function NewMessage({navigation}) {
     users.push({userId: user.following_id, name: user.name});
     /* console.log(users); */
     axios
-      .post(`${global.address}/createConversation`, users)
+      .post(`${global.address}createConversation`, users)
       .then(function (response) {
         // setLoader(false)
         /* console.log(response.data); */
