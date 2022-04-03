@@ -460,7 +460,10 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
 
     // organize badges screen
     global.filterBtnColor = 'rgba(255, 140, 0, 1)';
-    global.earnedBadgesGradientColors = ['rgba(20, 19, 37, 1)', 'rgba(20, 19, 37, 1)'];
+    global.earnedBadgesGradientColors = [
+      'rgba(20, 19, 37, 1)',
+      'rgba(20, 19, 37, 1)',
+    ];
     global.lockedBadgesBG = '#f4a8a4';
     global.lockedBadgesAboveTop2 = '#292929';
     global.lockedBadgesTitleColor = '#FFFFFF';
@@ -701,6 +704,118 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
 
     // Edit Profile Screen
     global.editProfileBorderColor = '#EB3851';
+  } else if (themeIndex == 13) {
+    /* free theme3 */
+    gradientColors = ['#1B1C25', '#1B1C25'];
+
+    global.cust_item_code = 'theme-4';
+
+    icons.push(require('../images/mainHomFille.png'));
+    icons.push(require('../images/globeMainfilled.png'));
+    icons.push(require('../images/trophyFilledmain.png'));
+    icons.push(require('../images/personMainFilled.png'));
+
+    iconsSelected.push(require('../images/mainHomFille.png'));
+    iconsSelected.push(require('../images/globeMainfilled.png'));
+    iconsSelected.push(require('../images/trophyFilledmain.png'));
+    iconsSelected.push(require('../images/personMainFilled.png'));
+
+    centerIcon = require('../images/theme4MainM.png');
+
+    selectedColor = '#FFCD2F';
+    unselectedColor = '#FFFFFF';
+
+    // setting colors from previous developer
+    global.colorPrimary = '#040216';
+    global.colorSecondary = '#1B1C25';
+    global.colorInput = '#FFFFFF';
+    global.colorTextPrimary = '#FFFFFF';
+    global.colorTextSecondary = '#FFFFFF';
+    global.colorTextActive = '#FFFFFF';
+    global.colorIcon = '#FFFFFF';
+    global.gradientColors = ['#FFF62A', '#FFF62A'];
+
+    // ! SET COLORS HERE FOR NEW THEMES ! //
+
+    // tab color for dashboard `following | New Memes | Trending` || Tournament || Notification Inbox
+    global.tabSelectedColor = '#FFF62A';
+    global.tabNotSelectedColor = '#2B2A47';
+    global.tabColor = '#2B2A47';
+    global.tabSelectedTextColor = '#040216';
+    global.tabNotSelectedTextColor = '#B6B6B6';
+
+    // add coins color (two colors because default is gradient with 2 colors)
+    global.addCoinsBtnColor1 = '#FFF62A';
+    global.addCoinsBtnColor2 = '#FFF62A';
+
+    // like, comment and share
+    global.postInteractionsTextColor = '#FFFFFF';
+    global.postInteractionsBG = require('../images/theme4Rectangle.png');
+
+    // inputs
+    global.searchInputColor = '#2B2A47';
+    global.searchInputTextColor = '#FFFFFF';
+    global.searchInputPlaceholderTextColor = '#9B9B9B';
+    global.commentInputColor = '#2B2A47';
+    global.commentInputPlaceholderTextColor = '#9B9B9B';
+    global.commentInputTextColor = '#FFFFFF';
+    global.inputColor = '#FFFFFF';
+    global.inputPlaceholderTextColor = '#9B9B9B';
+    global.inputTextColor = '#FFFFFF';
+    global.editProfileInputBorderBottom = '#141325';
+
+    // trending tags in search color (gradient)
+    global.selectedTagsColor1 = '#FFF62A';
+    global.selectedTagsColor2 = '#FFF62A';
+    global.notSelectedTagsColor1 = '#2B2A47';
+    global.notSelectedTagsColor2 = '#2B2A47';
+    global.selectedTagText = '#040216';
+    global.notSelectedTagText = '#FFFFFF';
+    global.tagsBorderColor = '#040216';
+
+    // text button post text color (ex. post comment)
+    global.postTextComment = '#08BA8F';
+
+    // explore (TOP SCREEN) // not changed
+    global.resultsBorderBottomColor = '#EC8989';
+
+    // buttons
+    global.followBtnBG1 = global.btnColor1;
+    global.followBtnBG2 = global.btnColor2;
+    global.followBtnTextColor = global.btnTxt;
+    global.confirmBtnBG1 = global.btnColor1;
+    global.confirmBtnBG2 = global.btnColor2;
+    global.confirmBtnTextColor = global.btnTxt;
+    global.declineButtonBG = '#000000';
+    global.declineButtonTextColor = '#FFFFFF';
+
+    // notification inbox > activity tab
+    global.activityBorderBottomColor = '#FFFFFF';
+    global.followRequestCountBG = '#FF0000';
+    global.followRequestCountTextColor = '#FFFFFF';
+
+    // message tab // not changed
+    global.messageBG = '#f4a8a4';
+
+    // organize badges screen
+    global.filterBtnColor = '#FFF62A';
+    global.earnedBadgesGradientColors = ['#2B2A47', '#2B2A47'];
+    global.lockedBadgesBG = '#2B2A47';
+    global.lockedBadgesAboveTop2 = 'rgba(255, 255, 255, 0.1)';
+    global.lockedBadgesTitleColor = '#FFFFFF';
+    global.lockedBadgesSubTitleColor = '#FFFFFF';
+    global.lockedBadgesRarityColor = '#FFFFFF';
+    global.lockedBadgesPointsColor = '#FFFFFF';
+    global.filterSelectedBtn1 = '#230B34';
+    global.filterSelectedBtn2 = '#230B34';
+    global.filterNotSelectedBtn1 = '#ECB602'; // not
+    global.filterNotSelectedBtn3 = '#ECB602'; // not
+    global.filterSelectedText = '#FFFFFF';
+    global.filterNotSelectedTagText = '#9B9B9B';
+    global.filterTagsBorderColor = '#230B34'; // not
+
+    // Edit Profile Screen
+    global.editProfileBorderColor = '#FFF62A';
   } else {
     /* main_theme  */
     gradientColors = ['#292929', '#292929'];

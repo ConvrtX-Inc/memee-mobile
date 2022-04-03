@@ -300,6 +300,22 @@ function SplashScreen({navigation}) {
         global.addCoinsBtnColor1 = '#F23F58';
         global.addCoinsBtnColor2 = '#D4233B';
         global.iconBottomSelected = require('../../images/theme3TabBar.png');
+      } else if (iconBottomItemCode == 'free_icon_theme_4') {
+        dispatch(storeIconsBottomTabFN(13));
+
+        global.BottomIcon1 = require('../../images/mainHomFille.png');
+        global.BottomIcon2 = require('../../images/globeMainfilled.png');
+        global.BottomIcon3 = require('../../images/trophyFilledmain.png');
+        global.BottomIcon4 = require('../../images/personMainFilled.png');
+        global.BottomMainIcon = require('../../images/theme4MainM.png');
+
+        global.bottomClr1 = '#FFF62A';
+        global.bottomClr2 = '#FFF62A';
+        global.WhichTab = '1';
+
+        global.addCoinsBtnColor1 = '#FFF62A';
+        global.addCoinsBtnColor2 = '#FFF62A';
+        global.iconBottomSelected = require('../../images/theme4TabBar.png');
       } else {
         dispatch(storeIconsBottomTabFN(8));
         global.BottomIcon1 = require('../../images/Home.png');
