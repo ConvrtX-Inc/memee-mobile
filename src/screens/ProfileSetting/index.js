@@ -18,6 +18,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {currentDateFN, asignImageToProductsFN} from '../../Utility/Utils';
 import {useDispatch, useSelector} from 'react-redux';
 import {storeIconsBottomTabFN} from '../../redux/actions/Auth';
+import ThemeButton from '../../component/ThemeButton';
 
 var windowWidth = Dimensions.get('window').width;
 export default function ProfileSetting(props) {
@@ -671,7 +672,7 @@ export default function ProfileSetting(props) {
       global.btnTxt = '#ffffff';
       global.WhichTab = '1';
     } else if (bottomTabicon[index].item_code == 'free_icon_theme_4') {
-      dispatch(storeIconsBottomTabFN(12));
+      dispatch(storeIconsBottomTabFN(13));
       await AsyncStorage.setItem('@btnclr1', '#FFF62A');
       await AsyncStorage.setItem('@btnclr2', '#FFF62A');
       await AsyncStorage.setItem('@btntxtclr', '#040216');
@@ -965,20 +966,21 @@ export default function ProfileSetting(props) {
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={[styles.modalText, {fontFamily: selectFonts}]}>
+            <Text
+              style={[
+                styles.modalText,
+                {fontFamily: selectFonts, marginBottom: 15},
+              ]}>
               Custom Buttons
             </Text>
 
             <FlatList
               data={buttonPurchased}
               renderItem={({item, index}) => (
-                <TouchableOpacity onPress={() => btnDesignFN(index)}>
-                  <Image
-                    source={item.img}
-                    style={{width: (windowWidth * 70) / 100, marginTop: -20}}
-                    // style={styles.buttomStyle}
-                    resizeMode="contain"
-                  />
+                <TouchableOpacity
+                  onPress={() => btnDesignFN(index)}
+                  style={{marginBottom: 15}}>
+                  <ThemeButton item={item} selectFonts={selectFonts} />
                 </TouchableOpacity>
               )}
               keyExtractor={item => item.id}
