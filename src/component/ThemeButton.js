@@ -11,52 +11,59 @@ const ThemeButton = ({item, selectFonts}) => {
 
   useEffect(() => {
     if (item && !set) {
-      if (item.item_code == 'the_100_theme_button') {
-        setGradient(['#FFFFFF', '#FFFFFF']);
-        setBtnTextColor('#000000');
-        setSet(true);
-      } else if (item.item_code == 'unicorn_theme_button') {
-        setGradient(['#C83A6B', '#8D0E3A']);
-        setBtnTextColor('#ffffff');
-        setSet(true);
-      } else if (item.item_code == 'new_year_theme_button') {
-        setGradient(['#413781', '#413781']);
-        setBtnTextColor('#ffffff');
-        setSet(true);
-      } else if (item.item_code == 'space_theme_button') {
-        setGradient(['#5D33AD', '#171A59']);
-        setBtnTextColor('#ffffff');
-        setSet(true);
-      } else if (item.item_code == 'memee_theme_generic_button') {
-        setGradient(['#FFD524', '#ECB602']);
-        setBtnTextColor('#000000');
-        setSet(true);
-      } else if (item.item_code == 'free_button_roygbiv_pink_1') {
-        setGradient(['#EC6161', '#EC6161']);
-        setBtnTextColor('#ffffff');
-        setSet(true);
-      } else if (item.item_code == 'free_button_roygbiv_orange_1') {
-        setGradient(['#FF8C00', '#FF8C00']);
-        setBtnTextColor('#000000');
-        setSet(true);
-      } else if (item.item_code == 'free_icon_theme_2') {
-        setGradient(['#1EDAAD', '#00AF85']);
-        setBtnTextColor('#ffffff');
-        setSet(true);
-      } else if (item.item_code == 'free_icon_theme_3') {
-        setGradient(['#F23F58', '#D4233B']);
-        setBtnTextColor('#ffffff');
-        setSet(true);
-      } else if (item.item_code == 'free_icon_theme_4') {
-        setGradient(['#FFF62A', '#FFF62A']);
-        setBtnTextColor('#040216');
-        setSet(true);
-      } else if (item.item_code == 'free_icon_theme_4') {
-        setGradient(['#FFF62A', '#FFF62A']);
-        setBtnTextColor('#040216');
-        setSet(true);
-      } else {
-        setSet(false);
+      switch (item.item_code) {
+        case 'the_100_theme_button':
+          setGradient(['#FFFFFF', '#FFFFFF']);
+          setBtnTextColor('#000000');
+          setSet(true);
+          break;
+        case 'unicorn_theme_button':
+          setGradient(['#C83A6B', '#8D0E3A']);
+          setBtnTextColor('#ffffff');
+          setSet(true);
+          break;
+        case 'new_year_theme_button':
+          setGradient(['#413781', '#413781']);
+          setBtnTextColor('#ffffff');
+          setSet(true);
+          break;
+        case 'space_theme_button':
+          setGradient(['#5D33AD', '#171A59']);
+          setBtnTextColor('#ffffff');
+          setSet(true);
+          break;
+        case 'memee_theme_generic_button':
+          setGradient(['#FFD524', '#ECB602']);
+          setBtnTextColor('#000000');
+          setSet(true);
+          break;
+        case 'free_button_roygbiv_pink_1':
+          setGradient(['#EC6161', '#EC6161']);
+          setBtnTextColor('#ffffff');
+          setSet(true);
+          break;
+        case 'free_button_roygbiv_orange_1':
+          setGradient(['#FF8C00', '#FF8C00']);
+          setBtnTextColor('#000000');
+          setSet(true);
+          break;
+        case 'free_icon_theme_2':
+          setGradient(['#1EDAAD', '#00AF85']);
+          setBtnTextColor('#ffffff');
+          setSet(true);
+          break;
+        case 'free_icon_theme_3':
+          setGradient(['#F23F58', '#D4233B']);
+          setBtnTextColor('#ffffff');
+          setSet(true);
+          break;
+        case 'free_icon_theme_4':
+          setGradient(['#FFF62A', '#FFF62A']);
+          setBtnTextColor('#040216');
+          setSet(true);
+          break;
+        default:
+          setSet(false);
       }
     }
   }, [gradient, btnTextColor]);
