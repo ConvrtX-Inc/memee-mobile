@@ -30,7 +30,7 @@ export default function LoginScreen({navigation}) {
   function validation() {
     setIndicatButton(true);
 
-    var emailLowerCase = email.toLowerCase();
+    var emailLowerCase = email.toLowerCase().trim();
 
     if (email == '') {
       setIndicatButton(false);
