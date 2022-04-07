@@ -135,6 +135,9 @@ export default function Dashboard(props) {
   const [txtcolor3, setTxtcolor3] = useState('#ABABAD');
 
   const [pimgChange, setPimgChange] = useState(global.userData.imgurl);
+  const [pProfileName, setPProfileName] = useState(
+    global.userData.name.split(' ')[0],
+  );
   const [refreshing, setRefreshing] = React.useState(false);
   const [loaderIndicator, setLoaderIndicator] = useState(true);
   const flatlistRef = useRef();
@@ -1203,8 +1206,33 @@ export default function Dashboard(props) {
         ListHeaderComponent={() => (
           <View>
             <View style={styles.topView}>
-              <TouchableOpacity onPress={() => navigateToprofileFN()}>
+              <TouchableOpacity
+                onPress={() => navigateToprofileFN()}
+                style={{
+                  flexDirection: 'row',
+                }}>
                 <Avatar rounded size="medium" source={{uri: pimgChange}} />
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                  style={{
+                    color: 'white',
+                    marginLeft: 10,
+                    fontSize: 24,
+                    marginTop: 8,
+                    flexWrap: 'wrap',
+
+                    width: windowWidth * 0.4,
+                  }}>
+                  Hi{' '}
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      fontSize: 24,
+                    }}>
+                    {pProfileName},
+                  </Text>
+                </Text>
               </TouchableOpacity>
 
               <TouchableOpacity

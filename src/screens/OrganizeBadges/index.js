@@ -33,6 +33,7 @@ export default function OrganizeBadges(props) {
   const [modalVisible, setModalVisible] = useState(false);
   const [earndeBadges, setEarndeBadges] = useState([]);
   const [lockedBadges, setlockedBadges] = useState([]);
+  const [toUnlockBadge, setToUnlockBadge] = useState(null);
   const [filterArray, setFilterArray] = useState([
     {
       id: 1,
@@ -233,6 +234,12 @@ export default function OrganizeBadges(props) {
     }
     /* console.log('\n seachedCity ', seachedCity); */
   }
+
+  const DisplayUnlockedBadge = item => {
+    //console.log(item);
+    setToUnlockBadge(item);
+    setModalVisible(!modalVisible);
+  };
 
   return (
     <View
@@ -584,8 +591,7 @@ export default function OrganizeBadges(props) {
                     />
                   </View>
 
-                  <TouchableOpacity
-                    onPress={() => setModalVisible(!modalVisible)}>
+                  <TouchableOpacity onPress={() => DisplayUnlockedBadge(item)}>
                     <Image
                       style={{
                         width: (windowWidth * 4) / 100,
@@ -639,7 +645,7 @@ export default function OrganizeBadges(props) {
                 />
               </View>
             )}
-            keyExtractor={item => item.post_id}
+            keyExtractor={item => item.badge_id}
             style={{marginTop: (windowWidth * 3) / 100, marginBottom: 10}}
           />
         ) : null}
@@ -658,27 +664,57 @@ export default function OrganizeBadges(props) {
           <View style={styles.modalView}>
             <Image
               style={{
-                width: (windowWidth * 35) / 100,
+                width: (windowWidth * 25) / 100,
                 height: (windowWidth * 25) / 100,
                 marginBottom: 20,
               }}
               resizeMode="stretch"
-              source={require('../../images/1stPrize.png')}
+              source={{uri: toUnlockBadge?.image_url}}
+              //require('../../images/1stPrize.png')
             />
             <Text style={[styles.modalText, {fontFamily: global.fontSelect}]}>
-              1st Place Badge
+              {toUnlockBadge?.badge_name || '1st Place Badge'}
             </Text>
 
-            <Text
-              style={{
-                color: '#fff',
-                opacity: 0.5,
-                fontSize: 13,
-                textAlign: 'center',
-                fontFamily: global.fontSelect,
-              }}>
-              Congratulations!!! You have succesfully unlocked 1st place badge.
-            </Text>
+            {toUnlockBadge?.percentProgress >= 1 ? (
+              <Text
+                style={{
+                  color: '#fff',
+                  opacity: 0.5,
+                  fontSize: 13,
+                  textAlign: 'center',
+                  fontFamily: global.fontSelect,
+                }}>
+                Congratulations!!! You have succesfully unlocked{' '}
+                {toUnlockBadge?.badge_name || '1st place badge'}.
+              </Text>
+            ) : (
+              <View>
+                <Text
+                  style={{
+                    color: '#fff',
+                    opacity: 0.5,
+                    fontSize: 13,
+                    textAlign: 'center',
+                    fontFamily: global.fontSelect,
+                  }}>
+                  Sorry!!! You can't unlock this{' '}
+                  {toUnlockBadge?.badge_name || '1st place badge'} badge as of
+                  the moment.
+                </Text>
+                <Text
+                  style={{
+                    color: '#fff',
+                    opacity: 0.5,
+                    fontSize: 13,
+                    textAlign: 'center',
+                    fontFamily: global.fontSelect,
+                    fontWeight: 'bold',
+                  }}>
+                  Progress to UNLOCK: {toUnlockBadge?.percentProgress * 100}%
+                </Text>
+              </View>
+            )}
 
             <TouchableOpacity
               style={[styles.button, styles.buttonClose]}
