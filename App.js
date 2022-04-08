@@ -52,6 +52,7 @@ import Onboarding from './src/screens/Onboarding';
 import ChatScreen from './src/screens/ChatScreen';
 import Inbox from './src/screens/Inbox';
 import NewMessage from './src/screens/NewMessage';
+import CongratsScreen from './src/screens/CongratsScreen';
 
 import {Settings} from 'react-native-fbsdk-next';
 import {Provider} from 'react-redux';
@@ -118,6 +119,13 @@ function App() {
             <Stack.Screen name="NewPost" component={NewPost} />
             <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
             <Stack.Screen name="ProfileSetting" component={ProfileSetting} />
+            <Stack.Screen
+              name="CongratsScreen"
+              component={CongratsScreen}
+              screenOptions={{
+                headerShown: false,
+              }}
+            />
             <Stack.Screen
               name="NotificationScreen"
               component={NotificationScreen}

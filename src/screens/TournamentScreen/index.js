@@ -34,9 +34,9 @@ export default function TounamentScreen(props) {
   }, []);
 
   function enterIntoTournamentFN() {
-    console.log(
+    /*  console.log(
       global.address + 'EnrollInTournament/' + global.userData.user_id,
-    );
+    ); */
     fetch(global.address + 'EnrollInTournament/' + global.userData.user_id, {
       method: 'POST',
       headers: {
@@ -52,6 +52,9 @@ export default function TounamentScreen(props) {
         setEnterTournament(1);
 
         setModalVisible(!modalVisible);
+        // inset here for meme uploading
+        // if memee uploaded then display this congrats screen
+        navigation.navigate('CongratsScreen');
       })
       .catch(error => {
         console.error(error);
@@ -211,7 +214,6 @@ export default function TounamentScreen(props) {
           </Text>
         </ImageBackground>
         {/* </TouchableOpacity> */}
-
         <ButtonLarge
           title="View all ranking prizes"
           onPress={() => navigation.navigate('RankingScreen')}
@@ -231,7 +233,7 @@ export default function TounamentScreen(props) {
             txtClr={global.btnTxt}
           />
         ) : null}
-        <View style={{marginTop: 20}} />
+        <View style={{margin: 50}} />
       </ScrollView>
 
       <Modal
@@ -246,6 +248,13 @@ export default function TounamentScreen(props) {
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
+            <TouchableOpacity
+              onPress={() => setModalVisible(!modalVisible)}
+              style={{position: 'absolute', right: 0, top: -20, zIndex: 999}}>
+              <Image
+                source={require('../../images/cross.png')}
+                style={{width: 40, height: 40}}></Image>
+            </TouchableOpacity>
             <Text style={[styles.modalText, {fontFamily: global.fontSelect}]}>
               Rules & Regulations
             </Text>
@@ -286,7 +295,10 @@ export default function TounamentScreen(props) {
                   paddingHorizontal: 40,
                 }}>
                 <Text
-                  style={[styles.textStyle, {fontFamily: global.fontSelect}]}>
+                  style={[
+                    styles.textStyle,
+                    {fontFamily: global.fontSelect, color: global.btnTxt},
+                  ]}>
                   Agree
                 </Text>
               </LinearGradient>

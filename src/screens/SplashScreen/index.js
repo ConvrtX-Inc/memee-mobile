@@ -316,6 +316,22 @@ function SplashScreen({navigation}) {
         global.addCoinsBtnColor1 = '#FFF62A';
         global.addCoinsBtnColor2 = '#FFF62A';
         global.iconBottomSelected = require('../../images/theme4TabBar.png');
+      } else if (iconBottomItemCode == 'free_icon_theme_1') {
+        dispatch(storeIconsBottomTabFN(14));
+
+        global.BottomIcon1 = require('../../images/theme1Home.png');
+        global.BottomIcon2 = require('../../images/theme1Explore.png');
+        global.BottomIcon3 = require('../../images/theme1Tournament.png');
+        global.BottomIcon4 = require('../../images/theme1Profile.png');
+        global.BottomMainIcon = require('../../images/whiteMainM.png');
+
+        global.bottomClr1 = '#3C0C52';
+        global.bottomClr2 = '#3C0C52';
+        global.WhichTab = '1';
+
+        global.addCoinsBtnColor1 = '#BE31FF';
+        global.addCoinsBtnColor2 = '#8900C9';
+        global.iconBottomSelected = require('../../images/theme1TabBar.png');
       } else {
         dispatch(storeIconsBottomTabFN(8));
         global.BottomIcon1 = require('../../images/Home.png');
