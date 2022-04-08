@@ -816,6 +816,118 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
 
     // Edit Profile Screen
     global.editProfileBorderColor = '#FFF62A';
+  } else if (themeIndex == 14) {
+    /* free theme1 */
+    gradientColors = ['#3C0C52', '#3C0C52']; // this is for the bottom nav bar!
+
+    global.cust_item_code = 'theme-1';
+
+    icons.push(require('../images/theme1Home.png'));
+    icons.push(require('../images/theme1Explore.png'));
+    icons.push(require('../images/theme1Tournament.png'));
+    icons.push(require('../images/theme1Profile.png'));
+
+    iconsSelected.push(require('../images/theme1Home.png'));
+    iconsSelected.push(require('../images/theme1Explore.png'));
+    iconsSelected.push(require('../images/theme1Tournament.png'));
+    iconsSelected.push(require('../images/theme1Profile.png'));
+
+    centerIcon = require('../images/whiteMainM.png');
+
+    selectedColor = '#FFCD2F';
+    unselectedColor = '#FFFFFF';
+
+    // setting colors from previous developer
+    global.colorPrimary = '#220032';
+    global.colorSecondary = '#3C0C52';
+    global.colorInput = '#FFFFFF';
+    global.colorTextPrimary = '#FFFFFF';
+    global.colorTextSecondary = '#FFFFFF';
+    global.colorTextActive = '#FFFFFF';
+    global.colorIcon = '#FFFFFF';
+    global.gradientColors = ['#BE31FF', '#8900C9'];
+
+    // ! SET COLORS HERE FOR NEW THEMES ! //
+
+    // tab color for dashboard `following | New Memes | Trending` || Tournament || Notification Inbox
+    global.tabSelectedColor = '#BE31FF';
+    global.tabNotSelectedColor = '#320356';
+    global.tabColor = '#320356';
+    global.tabSelectedTextColor = '#FFFFFF';
+    global.tabNotSelectedTextColor = '#B6B6B6';
+
+    // add coins color (two colors because default is gradient with 2 colors)
+    global.addCoinsBtnColor1 = '#BE31FF';
+    global.addCoinsBtnColor2 = '#8900C9';
+
+    // like, comment and share
+    global.postInteractionsTextColor = '#FFFFFF';
+    global.postInteractionsBG = require('../images/theme1Rectangle.png');
+
+    // inputs
+    global.searchInputColor = '#FFFFFF';
+    global.searchInputTextColor = '#220032';
+    global.searchInputPlaceholderTextColor = '#9B9B9B';
+    global.commentInputColor = '#FFFFFF';
+    global.commentInputPlaceholderTextColor = '#9B9B9B';
+    global.commentInputTextColor = '#220032';
+    global.inputColor = '#220032';
+    global.inputPlaceholderTextColor = '#9B9B9B';
+    global.inputTextColor = '#FFFFFF';
+    global.editProfileInputBorderBottom = '#320356';
+
+    // trending tags in search color (gradient)
+    global.selectedTagsColor1 = '#BE31FF';
+    global.selectedTagsColor2 = '#8900C9';
+    global.notSelectedTagsColor1 = '#320356';
+    global.notSelectedTagsColor2 = '#320356';
+    global.selectedTagText = '#FFFFFF';
+    global.notSelectedTagText = '#FFFFFF';
+    global.tagsBorderColor = '#220032';
+
+    // text button post text color (ex. post comment)
+    global.postTextComment = '#8900C9';
+
+    // explore (TOP SCREEN) // not changed
+    global.resultsBorderBottomColor = '#EC8989';
+
+    // buttons
+    global.followBtnBG1 = global.btnColor1;
+    global.followBtnBG2 = global.btnColor2;
+    global.followBtnTextColor = global.btnTxt;
+    global.confirmBtnBG1 = global.btnColor1;
+    global.confirmBtnBG2 = global.btnColor2;
+    global.confirmBtnTextColor = global.btnTxt;
+    global.declineButtonBG = '#000000';
+    global.declineButtonTextColor = '#FFFFFF';
+
+    // notification inbox > activity tab
+    global.activityBorderBottomColor = '#FFFFFF';
+    global.followRequestCountBG = '#FF0000';
+    global.followRequestCountTextColor = '#FFFFFF';
+
+    // message tab // not changed
+    global.messageBG = '#f4a8a4';
+
+    // organize badges screen
+    global.filterBtnColor = '#8A01CA';
+    global.earnedBadgesGradientColors = ['#320356', '#320356'];
+    global.lockedBadgesBG = '#320356';
+    global.lockedBadgesAboveTop2 = 'rgba(255, 255, 255, 0.1)';
+    global.lockedBadgesTitleColor = '#FFFFFF';
+    global.lockedBadgesSubTitleColor = '#FFFFFF';
+    global.lockedBadgesRarityColor = '#FFFFFF';
+    global.lockedBadgesPointsColor = '#FFFFFF';
+    global.filterSelectedBtn1 = '#230B34';
+    global.filterSelectedBtn2 = '#230B34';
+    global.filterNotSelectedBtn1 = '#ECB602'; // not
+    global.filterNotSelectedBtn3 = '#ECB602'; // not
+    global.filterSelectedText = '#220032';
+    global.filterNotSelectedTagText = '#9B9B9B';
+    global.filterTagsBorderColor = '#230B34'; // not
+
+    // Edit Profile Screen
+    global.editProfileBorderColor = '#8A01CA';
   } else {
     /* main_theme  */
     gradientColors = ['#292929', '#292929'];

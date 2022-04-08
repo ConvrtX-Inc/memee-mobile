@@ -62,6 +62,11 @@ const ThemeButton = ({item, selectFonts}) => {
           setBtnTextColor('#040216');
           setSet(true);
           break;
+        case 'free_icon_theme_1':
+          setGradient(['#BE31FF', '#8900C9']);
+          setBtnTextColor('#FFFFFF');
+          setSet(true);
+          break;
         default:
           setSet(false);
       }
