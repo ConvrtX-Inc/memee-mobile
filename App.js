@@ -77,6 +77,7 @@ global.address = `${urls.baseUrl}/`;
 
 Settings.initializeSDK();
 function App() {
+  console.log('From App');
   useEffect(() => {
     const subscription = AppState.addEventListener('change', nextAppState => {
       if (global.userData) {

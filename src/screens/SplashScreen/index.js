@@ -6,6 +6,7 @@ import {useDispatch} from 'react-redux';
 import {coinsRecordFN, storeIconsBottomTabFN} from '../../redux/actions/Auth';
 import {currentDateFN} from '../../Utility/Utils';
 import SplashImages from '../../component/SplashImages';
+import Toast from 'react-native-toast-message';
 
 console.disableYellowBox = true;
 
@@ -396,7 +397,12 @@ function SplashScreen({navigation}) {
         }
       })
       .catch(error => {
-        console.error(error);
+        Toast.show({
+          type: 'error',
+          test1: 'Alert!',
+          text2: 'System down!',
+        });
+        console.error('SignupSocialFN', error);
       });
   }
 
@@ -424,7 +430,7 @@ function SplashScreen({navigation}) {
         }
       })
       .catch(error => {
-        console.error(error);
+        console.error('generalLogin', error);
         navigation.replace('Onboarding');
       });
   }
@@ -449,7 +455,7 @@ function SplashScreen({navigation}) {
         navigation.replace('Dashboard');
       })
       .catch(error => {
-        console.error(error);
+        console.error('loginData', error);
       });
   }
 

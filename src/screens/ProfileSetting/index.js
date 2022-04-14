@@ -267,14 +267,46 @@ export default function ProfileSetting(props) {
           },
         ];
 
-        for (let index = 0; index < freeThemes.length; index++) {
-          const freeTheme = freeThemes[index];
-          iconsVar.push(freeTheme);
+        const freeFonts = [
+          {
+            datetime: undefined,
+            font: 'ProductSans-Bold',
+            item_code: 'free_font_ProductSans',
+            item_id: 'free_font_ProductSans',
+            purchase_id: undefined,
+            type: 'font',
+          },
+          {
+            datetime: undefined,
+            font: 'PTSans-Bold',
+            item_code: 'free_font_PTSans',
+            item_id: 'free_font_PTSans',
+            purchase_id: undefined,
+            type: 'font',
+          },
+          {
+            datetime: undefined,
+            font: 'Unna-Bold',
+            item_code: 'free_font_Unna',
+            item_id: 'free_font_Unna',
+            purchase_id: undefined,
+            type: 'font',
+          },
+        ];
+
+        for (let index = 0; index < freeFonts.length; index++) {
+          const freeFont = freeFonts[index];
+          fontVar.push(freeFont);
         }
 
         for (let j = 0; j < freeButtons.length; j++) {
           const freeButton = freeButtons[j];
           buttonsVar.push(freeButton);
+        }
+
+        for (let index = 0; index < freeThemes.length; index++) {
+          const freeTheme = freeThemes[index];
+          iconsVar.push(freeTheme);
         }
 
         console.log('buttonsVar var', buttonsVar);
@@ -774,6 +806,18 @@ export default function ProfileSetting(props) {
       await AsyncStorage.setItem('@whichFontFam', 'Unkempt-Bold');
       global.fontSelect = 'Unkempt-Bold';
       setSelectFonts('Unkempt-Bold');
+    } else if (fontPurchased[index].item_code == 'free_font_ProductSans') {
+      await AsyncStorage.setItem('@whichFontFam', 'ProductSans-Bold');
+      global.fontSelect = 'ProductSans-Bold';
+      setSelectFonts('ProductSans-Bold');
+    } else if (fontPurchased[index].item_code == 'free_font_PTSans') {
+      await AsyncStorage.setItem('@whichFontFam', 'PTSans-Bold');
+      global.fontSelect = 'PTSans-Bold';
+      setSelectFonts('PTSans-Bold');
+    } else if (fontPurchased[index].item_code == 'free_font_Unna') {
+      await AsyncStorage.setItem('@whichFontFam', 'Unna-Bold');
+      global.fontSelect = 'Unna-Bold';
+      setSelectFonts('Unna-Bold');
     }
     setFontModalVisible(false);
   }
