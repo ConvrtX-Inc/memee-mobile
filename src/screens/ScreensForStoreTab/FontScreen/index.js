@@ -56,6 +56,10 @@ export default function FontScreen() {
     getprofileBgFN();
   }, []);
 
+  useEffect(() => {
+    console.log(iconList);
+  }, [iconList]);
+
   async function getprofileBgFN() {
     /* console.log('Button Screen Running...'); */
 
