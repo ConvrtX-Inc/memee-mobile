@@ -17,12 +17,26 @@ import ButtonLarge from '../../component/ButtonLarge';
 import LinearGradient from 'react-native-linear-gradient';
 import {useNavigation} from '@react-navigation/native';
 
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {
+  requestCameraPermission,
+  requestExternalWritePermission,
+} from '../../Utility/Utils';
+
 // import PhotoEditor from 'react-native-photo-editor'
 
 var windowWidth = Dimensions.get('window').width;
 var windowHeight = Dimensions.get('window').height;
 export default function TounamentScreen(props) {
   const navigation = useNavigation();
+  const [showImagePickerDialog, setShowImagePickerDialog] = useState(false);
+
+  let options = {
+    mediaType: 'photo',
+    maxWidth: 512,
+    maxHeight: 512,
+    quality: 1,
+  };
 
   const [indicatButton, setIndicatButton] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -33,10 +47,73 @@ export default function TounamentScreen(props) {
     setEnterTournament(global.userData.participated_in_tournament);
   }, []);
 
+  const openCamera = async () => {
+    setShowImagePickerDialog(false);
+    let isStoragePermitted = await requestExternalWritePermission();
+    let isCameraPermitted = await requestCameraPermission();
+    if (isCameraPermitted && isStoragePermitted) {
+      launchCamera(options, response => {
+        /* console.log('Response = ', response); */
+
+        if (response.didCancel) {
+          // alert('User cancelled camera picker');
+          return;
+        } else if (response.errorCode == 'camera_unavailable') {
+          // alert('Camera not available on device');
+          return;
+        } else if (response.errorCode == 'permission') {
+          // alert('Permission not satisfied');
+          return;
+        } else if (response.errorCode == 'others') {
+          // alert(response.errorMessage);
+          return;
+        }
+
+        let source = response.assets[0];
+        navigation.navigate('TournamentEntry', {
+          uri: source.uri,
+          type: 'photo',
+          details: source,
+        });
+      });
+    }
+  };
+
+  function openGallery() {
+    setShowImagePickerDialog(false);
+    launchImageLibrary(options, response => {
+      /* console.log('Response = ', response); */
+
+      if (response.didCancel) {
+        // alert('User cancelled camera picker');
+        return;
+      } else if (response.errorCode == 'camera_unavailable') {
+        // alert('Camera not available on device');
+        return;
+      } else if (response.errorCode == 'permission') {
+        // alert('Permission not satisfied');
+        return;
+      } else if (response.errorCode == 'others') {
+        // alert(response.errorMessage);
+        return;
+      }
+
+      let source = response.assets[0];
+      //openPhotoEditor(source.uri, source);
+      navigation.navigate('TournamentEntry', {
+        uri: source.uri,
+        type: 'photo',
+        details: source,
+      });
+    });
+  }
+
   function enterIntoTournamentFN() {
+    setModalVisible(!modalVisible);
+    setShowImagePickerDialog(!showImagePickerDialog);
     /*  console.log(
       global.address + 'EnrollInTournament/' + global.userData.user_id,
-    ); */
+    ); 
     fetch(global.address + 'EnrollInTournament/' + global.userData.user_id, {
       method: 'POST',
       headers: {
@@ -54,11 +131,11 @@ export default function TounamentScreen(props) {
         setModalVisible(!modalVisible);
         // inset here for meme uploading
         // if memee uploaded then display this congrats screen
-        navigation.navigate('CongratsScreen');
+        // navigation.navigate('CongratsScreen');
       })
       .catch(error => {
         console.error(error);
-      });
+      });*/
   }
 
   return (
@@ -255,7 +332,16 @@ export default function TounamentScreen(props) {
                 source={require('../../images/cross.png')}
                 style={{width: 40, height: 40}}></Image>
             </TouchableOpacity>
-            <Text style={[styles.modalText, {fontFamily: global.fontSelect}]}>
+            <Text
+              style={[
+                styles.modalText,
+                {
+                  fontFamily: global.fontSelect,
+                  marginBottom: 20,
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                },
+              ]}>
               Rules & Regulations
             </Text>
 
@@ -300,6 +386,62 @@ export default function TounamentScreen(props) {
                     {fontFamily: global.fontSelect, color: global.btnTxt},
                   ]}>
                   Agree
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={showImagePickerDialog}
+        onRequestClose={() => {
+          setShowImagePickerDialog(!showImagePickerDialog);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalViewImgPicker}>
+            <Text
+              style={{
+                color: '#fff',
+                fontWeight: 'bold',
+                fontSize: 18,
+                marginBottom: '15%',
+                marginTop: '3%',
+              }}>
+              Select File
+            </Text>
+
+            <TouchableOpacity
+              style={{marginBottom: '8%'}}
+              onPress={() => openCamera()}>
+              <Text style={{color: '#fff', opacity: 0.5, fontSize: 16}}>
+                Take photo...
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={{marginBottom: '6%'}}
+              onPress={() => openGallery()}>
+              <Text style={{color: '#fff', opacity: 0.5, fontSize: 16}}>
+                Choose Photo from library...
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.button, styles.buttonOpen, {marginTop: '20%'}]}
+              onPress={() => setShowImagePickerDialog(false)}>
+              <LinearGradient
+                colors={[global.btnColor1, global.btnColor2]}
+                style={{
+                  paddingHorizontal: 27,
+                  paddingVertical: 15,
+                  justifyContent: 'center',
+                  alignSelf: 'center',
+                  borderRadius: 22,
+                }}>
+                <Text style={[styles.modalText, {color: global.btnTxt}]}>
+                  Close
                 </Text>
               </LinearGradient>
             </TouchableOpacity>
@@ -396,5 +538,42 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  modalViewImgPicker: {
+    margin: 20,
+    height: 300,
+    width: '65%',
+    backgroundColor: '#201E23',
+    borderRadius: 15,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: '6%',
+  },
+  modalText: {
+    marginBottom: 0,
+    marginTop: 0,
+    textAlign: 'center',
+  },
+  buttonOpen: {
+    backgroundColor: '#FBC848',
+    alignSelf: 'center',
+  },
+  button: {
+    borderRadius: 25,
+    elevation: 2,
+    marginRight: '1%',
+    marginTop: '1%',
   },
 });
