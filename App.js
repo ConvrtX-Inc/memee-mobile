@@ -53,6 +53,7 @@ import ChatScreen from './src/screens/ChatScreen';
 import Inbox from './src/screens/Inbox';
 import NewMessage from './src/screens/NewMessage';
 import CongratsScreen from './src/screens/CongratsScreen';
+import TournamentEntry from './src/screens/TournamentEntry';
 
 import {Settings} from 'react-native-fbsdk-next';
 import {Provider} from 'react-redux';
@@ -118,6 +119,7 @@ function App() {
             <Stack.Screen name="Dashboard" component={Dashboard} />
             <Stack.Screen name="CommentScreen" component={CommentScreen} />
             <Stack.Screen name="NewPost" component={NewPost} />
+            <Stack.Screen name="TournamentEntry" component={TournamentEntry} />
             <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
             <Stack.Screen name="ProfileSetting" component={ProfileSetting} />
             <Stack.Screen

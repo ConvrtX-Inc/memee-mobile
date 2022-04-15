@@ -267,7 +267,7 @@ export default function JudgeScreen(props) {
               marginLeft: 10,
               fontSize: 15,
             }}>
-            You haven't judeged any meme yet!
+            You haven't judged any meme yet!
           </Text>
         )}
 

@@ -433,3 +433,10 @@ export const isStrongPassword = txt => {
   }
 };
  */
+
+export const heightScaleByWidth = (cWidth, width, height) => {
+  // fit image to screen and scale it properly
+  var base = cWidth > width ? cWidth : width;
+  var widthBase = base == width ? cWidth : width;
+  return ((base - widthBase) / base + 1) * height;
+};

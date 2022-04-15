@@ -49,9 +49,11 @@ export default function Tournament(props) {
   const [dBottomFont, setdBottomFont] = useState(global.fontSelect);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const [postNo, setPostNo] = useState('1');
+  const [postNo, setPostNo] = useState('2');
 
   useEffect(() => {
+    setdBottomFont(global.fontSelect);
+    SelectedBtnFN(2);
     const backAction = () => {
       navigation.goBack();
       return true;
@@ -65,11 +67,12 @@ export default function Tournament(props) {
     return () => backHandler.remove();
   }, []);
 
-  useEffect(() => {
-    /* console.log("coinsStored", coinsStored) */
+  /*  useEffect(() => {
+    // console.log("coinsStored", coinsStored) 
     setdBottomFont(global.fontSelect);
     const unsubscribe = navigation.addListener('focus', () => {
       setdBottomFont(global.fontSelect);
+      console.log('global.navigateTournament', global.navigateTournament);
       if (global.navigateTournament == -1) {
         checkNavi = 1;
       } else {
@@ -79,7 +82,7 @@ export default function Tournament(props) {
     });
 
     return unsubscribe;
-  }, [navigation]);
+  }, [navigation]); */
 
   function SelectedBtnFN(btnNo) {
     global.navigateTournament = btnNo;
