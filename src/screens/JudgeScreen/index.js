@@ -39,7 +39,7 @@ export default function JudgeScreen(props) {
   }, [navigation]);
 
   function GetJudgePostFN() {
-    var today = new Date();
+    /* var today = new Date();
     var yyy = today.getFullYear();
 
     var month = today.getMonth() + 1;
@@ -52,6 +52,7 @@ export default function JudgeScreen(props) {
     }
 
     var date = yyy + '-' + month + '-' + ddd;
+    console.log(global.address + 'JudgeHistory/' + global.userData.user_id);
 
     fetch(global.address + 'JudgeHistory/' + global.userData.user_id, {
       method: 'POST',
@@ -63,6 +64,7 @@ export default function JudgeScreen(props) {
     })
       .then(response => response.json())
       .then(responseJson => {
+        console.log(responseJson);
         var tempArr = [];
         for (let i = 0; i < responseJson.History.length; i++) {
           var time = '00' + ':' + '00' + ':' + '00';
@@ -70,7 +72,7 @@ export default function JudgeScreen(props) {
           var currentTime = date + 'T' + time;
           var resDate = responseJson.History[i].date + 'T' + time;
 
-          /* console.log('Current Time : ' + currentTime); */
+          // console.log('Current Time : ' + currentTime); 
           var respDate = new Date(resDate);
           var todayDate = new Date(currentTime);
 
@@ -78,11 +80,11 @@ export default function JudgeScreen(props) {
           var diffsec = Math.ceil(diffTime / 1000);
 
           var days = parseInt(diffsec) / 86400 + 1;
-          /* console.log('days : ', days); */
+          // console.log('days : ', days); 
           tempArr.push(days);
         }
 
-        /* console.log('tempArr', tempArr); */
+        // console.log('tempArr', tempArr); 
         var ind = 0;
         responseJson.History.forEach(function (element) {
           if (tempArr[ind] < 10) {
@@ -97,11 +99,36 @@ export default function JudgeScreen(props) {
       })
       .catch(error => {
         console.error(error);
-      });
+      }); */
+
+    // mock data
+    setRankingData([
+      {
+        days: '01',
+        NoOfPosts: 60,
+      },
+      {
+        days: '02',
+        NoOfPosts: 100,
+      },
+      {
+        days: '03',
+        NoOfPosts: 100,
+      },
+      {
+        days: '04',
+        NoOfPosts: 100,
+      },
+      {
+        days: '05',
+        NoOfPosts: 10,
+      },
+    ]);
   }
 
   function navigatToJudgeScreenFN() {
-    if (global.userData.participated_in_tournament == 0) {
+    navigation.navigate('JudgeMeme');
+    /* if (global.userData.participated_in_tournament == 0) {
       Toast.show({
         type: 'error',
         test1: 'Alert!',
@@ -109,7 +136,7 @@ export default function JudgeScreen(props) {
       });
     } else {
       navigation.navigate('JudgeMeme');
-    }
+    } */
   }
 
   return (

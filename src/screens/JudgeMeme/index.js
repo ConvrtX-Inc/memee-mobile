@@ -49,6 +49,9 @@ export default function JudgeMeme(props) {
     });
 
   function GetJudgePostFN() {
+    /* console.log(
+      global.address + 'GetPostsForJudgement/' + global.userData.user_id,
+    );
     fetch(global.address + 'GetPostsForJudgement/' + global.userData.user_id, {
       method: 'POST',
       headers: {
@@ -60,6 +63,7 @@ export default function JudgeMeme(props) {
       .then(response => response.json())
       .then(responseJson => {
         let data = responseJson.Posts;
+        console.log(responseJson);
 
         data.forEach(async function (element, index) {
           if (element.JudgeResult == 1 || element.JudgeResult == -1) {
@@ -70,7 +74,7 @@ export default function JudgeMeme(props) {
           element.calHeight = height * ratio;
           element.calWidth = windowWidth;
 
-          /* console.log(index, element.calHeight); */
+          // console.log(index, element.calHeight); 
 
           if (index == data.length - 1) {
             setPosts(data);
@@ -79,7 +83,36 @@ export default function JudgeMeme(props) {
       })
       .catch(error => {
         console.error(error);
-      });
+      }); */
+
+    //mock data
+    setPosts([
+      {
+        img_url: `https://www.memesmonkey.com/images/memesmonkey/ad/ad92e10bb8d7a4e6a25677db215feaf3.jpeg`,
+        JudgeResult: 0,
+        calHeight: 500,
+      },
+      {
+        img_url: `https://www.memesmonkey.com/images/memesmonkey/ad/ad92e10bb8d7a4e6a25677db215feaf3.jpeg`,
+        JudgeResult: 1,
+        calHeight: 500,
+      },
+      {
+        img_url: `https://www.memesmonkey.com/images/memesmonkey/ad/ad92e10bb8d7a4e6a25677db215feaf3.jpeg`,
+        JudgeResult: -1,
+        calHeight: 500,
+      },
+      {
+        img_url: `https://www.memesmonkey.com/images/memesmonkey/ad/ad92e10bb8d7a4e6a25677db215feaf3.jpeg`,
+        JudgeResult: 1,
+        calHeight: 500,
+      },
+      {
+        img_url: `https://www.memesmonkey.com/images/memesmonkey/ad/ad92e10bb8d7a4e6a25677db215feaf3.jpeg`,
+        JudgeResult: -1,
+        calHeight: 500,
+      },
+    ]);
   }
 
   function judgeReactFN(index, react) {
