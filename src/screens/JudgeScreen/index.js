@@ -39,7 +39,7 @@ export default function JudgeScreen(props) {
   }, [navigation]);
 
   function GetJudgePostFN() {
-    /* var today = new Date();
+    var today = new Date();
     var yyy = today.getFullYear();
 
     var month = today.getMonth() + 1;
@@ -72,7 +72,7 @@ export default function JudgeScreen(props) {
           var currentTime = date + 'T' + time;
           var resDate = responseJson.History[i].date + 'T' + time;
 
-          // console.log('Current Time : ' + currentTime); 
+          // console.log('Current Time : ' + currentTime);
           var respDate = new Date(resDate);
           var todayDate = new Date(currentTime);
 
@@ -80,11 +80,11 @@ export default function JudgeScreen(props) {
           var diffsec = Math.ceil(diffTime / 1000);
 
           var days = parseInt(diffsec) / 86400 + 1;
-          // console.log('days : ', days); 
+          // console.log('days : ', days);
           tempArr.push(days);
         }
 
-        // console.log('tempArr', tempArr); 
+        // console.log('tempArr', tempArr);
         var ind = 0;
         responseJson.History.forEach(function (element) {
           if (tempArr[ind] < 10) {
@@ -99,10 +99,10 @@ export default function JudgeScreen(props) {
       })
       .catch(error => {
         console.error(error);
-      }); */
+      });
 
     // mock data
-    setRankingData([
+    /* setRankingData([
       {
         days: '01',
         NoOfPosts: 60,
@@ -123,7 +123,7 @@ export default function JudgeScreen(props) {
         days: '05',
         NoOfPosts: 10,
       },
-    ]);
+    ]); */
   }
 
   function navigatToJudgeScreenFN() {

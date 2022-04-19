@@ -49,7 +49,7 @@ export default function JudgeMeme(props) {
     });
 
   function GetJudgePostFN() {
-    /* console.log(
+    console.log(
       global.address + 'GetPostsForJudgement/' + global.userData.user_id,
     );
     fetch(global.address + 'GetPostsForJudgement/' + global.userData.user_id, {
@@ -74,7 +74,7 @@ export default function JudgeMeme(props) {
           element.calHeight = height * ratio;
           element.calWidth = windowWidth;
 
-          // console.log(index, element.calHeight); 
+          // console.log(index, element.calHeight);
 
           if (index == data.length - 1) {
             setPosts(data);
@@ -83,10 +83,10 @@ export default function JudgeMeme(props) {
       })
       .catch(error => {
         console.error(error);
-      }); */
+      });
 
     //mock data
-    setPosts([
+    /* setPosts([
       {
         img_url: `https://www.memesmonkey.com/images/memesmonkey/ad/ad92e10bb8d7a4e6a25677db215feaf3.jpeg`,
         JudgeResult: 0,
@@ -112,7 +112,7 @@ export default function JudgeMeme(props) {
         JudgeResult: -1,
         calHeight: 500,
       },
-    ]);
+    ]); */
   }
 
   function judgeReactFN(index, react) {

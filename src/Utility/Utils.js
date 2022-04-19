@@ -440,3 +440,11 @@ export const heightScaleByWidth = (cWidth, width, height) => {
   var widthBase = base == width ? cWidth : width;
   return ((base - widthBase) / base + 1) * height;
 };
+
+/* move specific item of an array to specific location(index) of an array */
+export function moveItemArray(from, to, arr) {
+  const newArr = [...arr];
+  const item = newArr.splice(from, 1)[0];
+  newArr.splice(to, 0, item);
+  return newArr;
+}

@@ -29,7 +29,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import TwitterTextView from 'react-native-twitter-textview';
-import {currentDateFN} from '../../Utility/Utils';
+import {currentDateFN, moveItemArray} from '../../Utility/Utils';
 import messaging from '@react-native-firebase/messaging';
 import {firebaseConfig} from '../../redux/constants';
 import BottomNavBar from '../../component/BottomNavBar';
@@ -231,7 +231,7 @@ export default function Dashboard(props) {
       }
 
       // move(): put the story of the logged in user in the first of story lists
-      setStories(move(storyIndexOfLoggedInUser, 0, filterStories));
+      setStories(moveItemArray(storyIndexOfLoggedInUser, 0, filterStories));
       setLoadingStoriesItems(false);
       setRefreshing(false);
       return;
@@ -330,14 +330,6 @@ export default function Dashboard(props) {
           },
         ])
       : setAddStoryModalVisible(false);
-  }
-
-  /* move specific item of an array to specific location(index) of an array */
-  function move(from, to, arr) {
-    const newArr = [...arr];
-    const item = newArr.splice(from, 1)[0];
-    newArr.splice(to, 0, item);
-    return newArr;
   }
 
   useEffect(() => {
@@ -679,7 +671,7 @@ export default function Dashboard(props) {
     }
   }
 
-  const mock = [
+  /* const mock = [
     {
       ParentUserId: 0,
       UserImage:
@@ -691,7 +683,7 @@ export default function Dashboard(props) {
       ParentUserName:
         'Leo duis ut diam quam nulla. Vitae proin sagittis nisl rhoncus mattis rhoncus urna neque viverra. ',
     },
-  ];
+  ]; */
   /* global.colorPrimary */
 
   function openGallery() {
