@@ -109,7 +109,7 @@ function App() {
             // hidden={hidden}
           />
           <Stack.Navigator
-            initialRouteName="SplashScreen"
+            initialRouteName="CoinsConfirmation"
             screenOptions={{
               headerShown: false,
             }}>
