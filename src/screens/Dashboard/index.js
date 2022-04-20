@@ -100,6 +100,11 @@ export default function Dashboard(props) {
   const [dBottomFont, setdBottomFont] = useState(global.fontSelect);
   const dispatch = useDispatch();
   const [followingPost, setFollowingPost] = useState([]);
+  const [newMemePost, setNewMemePost] = useState([]);
+  const [tendingPost, setTrendingPost] = useState([]);
+
+  const [tabNumber, setTabNumber] = useState(0);
+
   const [modalVisible, setModalVisible] = useState('');
 
   const [storyPage, setStoryPage] = useState(1);
@@ -405,6 +410,7 @@ export default function Dashboard(props) {
   }
 
   function selectTab(index) {
+    setTabNumber(index);
     SelectedBtnFN(index);
     getPosts(index);
   }
@@ -482,6 +488,8 @@ export default function Dashboard(props) {
     // setLoaderIndicator(true)
     /* console.log('getting posts'); */
 
+    setLoaderIndicator(true);
+
     var postApiName = '';
     if (tabNo == 1) {
       postApiName = 'GetFollowingPosts';
@@ -519,8 +527,10 @@ export default function Dashboard(props) {
       .then(response => response.json())
       .then(responseJson => {
         setRefreshing(false);
+        /* if (followingPost.length > 0) setRefreshing(false);
+        else setRefreshing(true); */
 
-        console.log('responseJson', responseJson);
+        /* console.log('responseJson', responseJson); */
 
         let data = [];
 
@@ -528,9 +538,10 @@ export default function Dashboard(props) {
         else if (tabNo == 2) data = responseJson.NewPosts;
         else if (tabNo == 3) data = responseJson.TrendingPosts;
 
-        /* console.log('response, data', responseJson, data); */
+        console.log('response, data', data.length);
 
-        if (data.length == 0) setLoaderIndicator(false);
+        /* if (data.length == 0) setLoaderIndicator(true); */
+
         data.forEach(async function (element, index) {
           if (!element.img_url.includes('mp4')) {
             element.showMenu = false;
@@ -540,14 +551,24 @@ export default function Dashboard(props) {
             element.calWidth = windowWidth;
             if (index == data.length - 1) {
               setTimeout(() => {
-                scroll ? followingPost.push(data) : setFollowingPost(data);
-                setLoaderIndicator(false);
-              }, 2500);
+                if (tabNo == 1)
+                  data = scroll
+                    ? followingPost.push(data)
+                    : setFollowingPost(data);
+                else if (tabNo == 2)
+                  data = scroll ? newMemePost.push(data) : setNewMemePost(data);
+                else if (tabNo == 3)
+                  data = scroll
+                    ? tendingPost.push(data)
+                    : setTrendingPost(data);
+              }, 1000);
             }
           } else {
             element.paused = true;
           }
         });
+
+        setLoaderIndicator(false);
       })
       .catch(error => {
         setRefreshing(false);
@@ -770,7 +791,15 @@ export default function Dashboard(props) {
     <View style={{flex: 1, backgroundColor: global.colorPrimary}}>
       <FlatList
         ref={flatlistRef}
-        data={followingPost}
+        data={
+          tabNumber == 1
+            ? followingPost
+            : tabNumber == 2
+            ? newMemePost
+            : tabNumber == 3
+            ? tendingPost
+            : []
+        }
         /* data={mock} */
         onEndReached={() => getPosts(global.navigateDashboard, true)}
         refreshControl={
@@ -1192,7 +1221,17 @@ export default function Dashboard(props) {
                 color={global.colorTextActive}
                 style={{alignSelf: 'center', marginTop: '10%'}}
               />
-            ) : null}
+            ) : (
+              <View>
+                {followingPost.length < 1 && (
+                  <View style={{flex: 1, width: '100%', alignItems: 'center'}}>
+                    <Text style={{color: global.colorTextPrimary}}>
+                      No available posts.
+                    </Text>
+                  </View>
+                )}
+              </View>
+            )}
           </View>
         )}
         ListHeaderComponent={() => (
