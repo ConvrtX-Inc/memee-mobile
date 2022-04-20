@@ -11,6 +11,7 @@ import React from 'react';
 var windowWidth = Dimensions.get('window').width;
 var windowHeight = Dimensions.get('window').height;
 const CongratsScreen = ({navigation}) => {
+  // joining a tournament
   return (
     <TouchableOpacity onPress={() => navigation.navigate('Tournament')}>
       <Image

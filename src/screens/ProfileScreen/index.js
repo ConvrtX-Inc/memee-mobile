@@ -32,6 +32,7 @@ import {TextInput} from 'react-native-gesture-handler';
 import {color} from 'react-native-reanimated';
 import {getBucketOptions} from '../../Utility/Utils';
 import storage from '@react-native-firebase/storage';
+import SelectDropdown from 'react-native-select-dropdown';
 
 const axios = require('axios');
 
@@ -46,9 +47,31 @@ var imgURlSelect = '';
 
 var windowWidth = Dimensions.get('window').width;
 var windowHeight = Dimensions.get('window').height;
+
+const months = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+
 export default function ProfileScreen(props) {
+  const currentDateTime = new Date();
+  const currentMonth = currentDateTime.getMonth();
+  const [selectedMonth, setSelectedMonth] = useState(currentMonth);
   const navigation = useNavigation();
-  const [profilePostData, setProfilePostData] = useState('');
+  const [profilePostData, setProfilePostData] = useState([]);
+  const [tournamentEntry, setTournamentEntry] = useState([]);
+  const [postToShow, setPostToShow] = useState([]);
+  const [filteredPost, setFilteredPost] = useState([]);
   const [profileData, setProfileData] = useState('');
   const [filePath, setFilePath] = useState({});
   const [showPimg, setShowPimg] = useState(false);
@@ -61,12 +84,38 @@ export default function ProfileScreen(props) {
   const [bagesActivit, setdBagesActivity] = useState('true');
   const [loader, setLoader] = useState(false);
 
+  const [btncolor1_1, setBtncolor1_1] = useState('#FFE299');
+  const [btncolor1_2, setBtncolor1_2] = useState('#F6B202');
+  const [txtcolor1, setTxtcolor1] = useState('#000000');
+
+  const [btncolor2_1, setBtncolor2_1] = useState('#201E23');
+  const [btncolor2_2, setBtncolor2_2] = useState('#201E23');
+  const [txtcolor2, setTxtcolor2] = useState('#ABABAD');
+
   const dispatch = useDispatch();
   const {coinsStored, scrollDown, selectedBadges, ImageBottoms} = useSelector(
     ({authRed}) => authRed,
   );
 
   useEffect(() => {
+    selectTab(1);
+  }, []);
+
+  useEffect(() => {
+    if (postToShow.length > 0) {
+      var posts = postToShow.filter(
+        item =>
+          new Date(Date.parse(item.datetime.split(' ')[0])).getMonth() ==
+          selectedMonth,
+      );
+      setFilteredPost(posts);
+    } else {
+      setFilteredPost([]);
+    }
+  }, [postToShow, selectedMonth]);
+
+  useEffect(() => {
+    selectTab(1);
     const backAction = () => {
       navigation.goBack();
       return true;
@@ -84,7 +133,7 @@ export default function ProfileScreen(props) {
     const unsubscribe = navigation.addListener('focus', () => {
       //Screen Navigation
       global.TabButton = 4;
-      profileDataFN();
+
       setProfileBGPick(global.profileBGgl);
 
       if (
@@ -97,6 +146,48 @@ export default function ProfileScreen(props) {
     });
     return unsubscribe;
   }, []);
+
+  function selectTab(index) {
+    SelectedBtnFN(index);
+    profileDataFN(index);
+    getUserTournamentEntries(index);
+    //getPosts(index);
+  }
+
+  function SelectedBtnFN(btnNo) {
+    /* console.log('Selected tab : ', btnNo); */
+
+    //global.navigateDashboard = btnNo;
+
+    if (btnNo == 1) {
+      setBtncolor1_1(global.btnColor1);
+      setBtncolor1_2(global.btnColor2);
+
+      setBtncolor2_1(global.tabNotSelectedColor);
+      setBtncolor2_2(global.tabNotSelectedColor);
+
+      setTxtcolor1(global.btnTxt);
+      setTxtcolor2(global.tabNotSelectedTextColor);
+    } else if (btnNo == 2) {
+      setBtncolor1_1(global.tabNotSelectedColor);
+      setBtncolor1_2(global.tabNotSelectedColor);
+
+      setBtncolor2_1(global.btnColor1);
+      setBtncolor2_2(global.btnColor2);
+
+      setTxtcolor1(global.tabNotSelectedTextColor);
+      setTxtcolor2(global.btnTxt);
+    } else {
+      setBtncolor1_1(global.btnColor1);
+      setBtncolor1_2(global.btnColor2);
+
+      setBtncolor2_1(global.tabNotSelectedColor);
+      setBtncolor2_2(global.tabNotSelectedColor);
+
+      setTxtcolor1(global.btnTxt);
+      setTxtcolor2(global.tabNotSelectedTextColor);
+    }
+  }
 
   function openChat() {
     if (profileData == null) return;
@@ -147,7 +238,7 @@ export default function ProfileScreen(props) {
       });
   }
 
-  function profileDataFN() {
+  function profileDataFN(tab) {
     /* console.log('profile screen running ...');
     console.log(global.profileID); */
     userBio = '';
@@ -176,6 +267,50 @@ export default function ProfileScreen(props) {
 
         setProfileData(responseJson.profile);
         setProfilePostData(responseJson.posts);
+        //onsole.log(responseJson.posts);
+
+        if (tab == 1) {
+          setPostToShow(responseJson.posts);
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
+
+  function getUserTournamentEntries(tab) {
+    // this is where Tournament Posts API call should be
+
+    userBio = '';
+    fetch(global.address + 'GetUserProfile/' + global.profileID, {
+      method: 'get',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        authToken: global.token,
+      },
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        userName = responseJson.profile.name;
+        userId = responseJson.profile.user_id;
+        userEmail = responseJson.profile.email;
+        userGender = responseJson.profile.gender;
+        userPassword = responseJson.profile.password;
+        userBio = responseJson.profile.bio;
+        userimgUrl = responseJson.profile.imgurl;
+
+        if (userBio == '') {
+          /* console.log('bio is empty...'); */
+          userBio = '';
+        }
+
+        //setProfileData(responseJson.profile);
+        setTournamentEntry(responseJson.posts);
+
+        if (tab == 2) {
+          setPostToShow(responseJson.posts);
+        }
       })
       .catch(error => {
         console.error(error);
@@ -450,7 +585,7 @@ export default function ProfileScreen(props) {
   }
 
   function showImageFN(index) {
-    global.selectedPost = profilePostData[index];
+    //global.selectedPost = profilePostData[index];
     navigation.navigate('ProfileImageShow');
   }
 
@@ -865,11 +1000,148 @@ export default function ProfileScreen(props) {
             )}
           </View>
         </LinearGradient>
+        <View
+          style={{
+            flexDirection: 'row',
+            backgroundColor: global.tabColor,
+            width: '100%',
+            height: 60,
+            alignSelf: 'center',
+            borderRadius: 30,
+            marginVertical: 15,
+          }}>
+          <TouchableOpacity onPress={() => selectTab(1)} style={{width: '50%'}}>
+            <LinearGradient
+              colors={[btncolor1_1, btncolor1_2]}
+              style={{
+                height: 60,
+                width: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+                alignSelf: 'center',
+                borderRadius: 30,
+              }}>
+              <Text style={{color: txtcolor1, fontFamily: global.fontSelect}}>
+                Posts
+              </Text>
+            </LinearGradient>
+            {/* </View> */}
+          </TouchableOpacity>
 
+          <TouchableOpacity onPress={() => selectTab(2)} style={{width: '50%'}}>
+            <LinearGradient
+              colors={[btncolor2_1, btncolor2_2]}
+              style={{
+                height: 60,
+                width: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+                alignSelf: 'center',
+                borderRadius: 30,
+              }}>
+              <Text style={{color: txtcolor2, fontFamily: global.fontSelect}}>
+                Tournament Entry
+              </Text>
+            </LinearGradient>
+            {/* </View> */}
+          </TouchableOpacity>
+        </View>
+        <View
+          style={{
+            marginBottom: 15,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <Text
+            style={{
+              color: 'rgba(255, 255, 255, 0.7)',
+              fontSize: 26,
+              fontWeight: 'bold',
+              marginLeft: 15,
+            }}>
+            {filteredPost.length} Post{filteredPost.length > 1 ? 's' : ''}
+          </Text>
+          <TouchableOpacity style={{height: 50, borderRadius: 25}}>
+            <LinearGradient
+              colors={global.gradientColors}
+              style={{
+                height: 50,
+                borderRadius: 25,
+                justifyContent: 'space-between',
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingHorizontal: 10,
+              }}>
+              {/* <Text style={{color: global.colorTextPrimary}}>April</Text>
+              <Image
+                source={require('../../images/downV.png')}
+                style={{
+                  resizeMode: 'contain',
+                  width: 15,
+                  height: 15,
+                  transform: [{rotateY: '180deg'}],
+                }}
+              /> */}
+              <SelectDropdown
+                buttonStyle={{
+                  height: 40,
+                  backgroundColor: global.gradientColors[1],
+                  padding: 0,
+                }}
+                buttonTextStyle={{
+                  color: colorTextPrimary,
+                  padding: 0,
+                  margin: 0,
+                }}
+                renderDropdownIcon={isOpened => {
+                  return (
+                    <View>
+                      {isOpened ? (
+                        <Image
+                          source={require('../../images/upVector.png')}
+                          style={{
+                            resizeMode: 'contain',
+                            width: 15,
+                            height: 15,
+                          }}></Image>
+                      ) : (
+                        <Image
+                          source={require('../../images/downV.png')}
+                          style={{
+                            resizeMode: 'contain',
+                            width: 15,
+                            height: 15,
+                          }}></Image>
+                      )}
+                    </View>
+                  );
+                }}
+                data={months}
+                defaultButtonText={months[currentMonth]}
+                onSelect={(selectedItem, index) => {
+                  setSelectedMonth(index);
+                }}
+                buttonTextAfterSelection={(selectedItem, index) => {
+                  return selectedItem;
+                }}
+                rowTextForSelection={(item, index) => {
+                  return item;
+                }}
+                dropdownStyle={{
+                  backgroundColor: global.gradientColors[0],
+                  borderRadius: 25,
+                }}
+                rowStyle={{borderBottomColor: global.gradientColors[1]}}
+                rowTextStyle={{color: colorTextPrimary}}
+              />
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
         <FlatList
           // horizontal={true}
           numColumns={2}
-          data={profilePostData}
+          data={filteredPost}
           renderItem={({item, index}) => (
             <View
               style={{
@@ -877,11 +1149,24 @@ export default function ProfileScreen(props) {
                 borderWidth: 1,
                 borderColor: global.colorPrimary,
               }}>
-              <TouchableOpacity onPress={() => showImageFN(index)}>
+              <TouchableOpacity
+                onPress={() => showImageFN(index)}
+                style={{
+                  borderTopLeftRadius: index == 0 ? 30 : 0,
+                  borderTopRightRadius: index == 1 ? 30 : 0,
+                }}>
                 <Image
-                  style={{width: '100%', height: windowWidth / 2}}
+                  style={{
+                    width: '100%',
+                    height: windowWidth / 2,
+                    borderTopLeftRadius: index == 0 ? 30 : 0,
+                    borderTopRightRadius: index == 1 ? 30 : 0,
+                  }}
                   source={{uri: item.img_url}}
                 />
+                {/* <Text style={{color: 'white', fontSize: 20}}>
+                  {item.datetime}
+                </Text> */}
               </TouchableOpacity>
             </View>
           )}

@@ -19,8 +19,7 @@ export default function CoinsConfirmation({navigation, route}) {
   const [coinsPurchased, setCoinsPurchased] = useState('');
 
   useEffect(() => {
-    coins = route.params.coins;
-    /* console.log("coins : ", coins) */
+    coins = route.params?.coins || 0;
 
     setCoinsPurchased(coins);
   }, []);

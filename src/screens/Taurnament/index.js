@@ -67,14 +67,14 @@ export default function Tournament(props) {
     return () => backHandler.remove();
   }, []);
 
-  /*  useEffect(() => {
-    // console.log("coinsStored", coinsStored) 
+  useEffect(() => {
+    // console.log("coinsStored", coinsStored)
     setdBottomFont(global.fontSelect);
     const unsubscribe = navigation.addListener('focus', () => {
       setdBottomFont(global.fontSelect);
       console.log('global.navigateTournament', global.navigateTournament);
       if (global.navigateTournament == -1) {
-        checkNavi = 1;
+        checkNavi = 2;
       } else {
         checkNavi = global.navigateTournament;
       }
@@ -82,7 +82,7 @@ export default function Tournament(props) {
     });
 
     return unsubscribe;
-  }, [navigation]); */
+  }, [navigation]);
 
   function SelectedBtnFN(btnNo) {
     global.navigateTournament = btnNo;

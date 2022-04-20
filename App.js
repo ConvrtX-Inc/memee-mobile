@@ -161,10 +161,10 @@ function App() {
             <Stack.Screen name="Store" component={Store} />
             <Stack.Screen name="JudgeScreen" component={JudgeScreen} />
             <Stack.Screen name="JudgeMeme" component={JudgeMeme} />
-            <Stack.Screen name="PaymentMethod" component={PaymentMethod} />
             <Stack.Screen name="AddCoins" component={AddCoins} />
             <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
             <Stack.Screen name="VerifyEmail" component={VerifyEmail} />
+            <Stack.Screen name="PaymentMethod" component={PaymentMethod} />
             <Stack.Screen name="NewPassword" component={NewPassword} />
             <Stack.Screen name="StoreTab" component={StoreTab} />
             <Stack.Screen name="IconsScreen" component={IconsScreen} />

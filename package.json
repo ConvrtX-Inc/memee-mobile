@@ -53,6 +53,7 @@
     "react-native-restart": "^0.0.22",
     "react-native-safe-area-context": "^3.2.0",
     "react-native-screens": "^3.1.0",
+    "react-native-select-dropdown": "^1.11.0",
     "react-native-skeleton-placeholder": "^5.0.0",
     "react-native-snap-carousel": "^3.9.1",
     "react-native-swipe-gestures": "^1.0.5",
