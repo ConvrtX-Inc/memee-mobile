@@ -84,11 +84,69 @@ export default function TournamentEntry(routes) {
     );
   }
 
-  function uploadUmageToFirebase() {
-    navigation.navigate('CongratsScreen');
+  function setStatusJoined() {
+    fetch(global.address + 'EnrollInTournament/' + global.userData.user_id, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        authToken: global.token,
+      },
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log(responseJson);
+        global.userData.participated_in_tournament = 1;
+        setIndicatButton(false);
+        navigation.navigate('CongratsScreen');
+      })
+      .catch(error => {
+        setIndicatButton(false);
+        console.error(error);
+        Toast.show({
+          type: 'error',
+          text2: 'Something went wrong. Please try again later!',
+        });
+      });
+  }
 
-    //we need the API endpoint here!!
-    /*
+  function joinTournament(post_id) {
+    fetch(global.address + 'JoinTournament', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        authToken: global.token,
+      },
+      body: JSON.stringify({
+        user_id: global.userData.user_id,
+        post_id: post_id,
+      }),
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log('responseJson', responseJson);
+        if (response.statusCode == 200) {
+          setStatusJoined();
+        } else {
+          setIndicatButton(false);
+          Toast.show({
+            type: 'error',
+            text2: 'Failed to post image to a tournament!',
+          });
+        }
+      })
+      .catch(error => {
+        setIndicatButton(false);
+        console.error(error);
+        Toast.show({
+          type: 'error',
+          text2: 'Something went wrong. Please try again later!',
+        });
+      });
+  }
+
+  function uploadUmageToFirebase() {
     setIndicatButton(true);
 
     const file =
@@ -111,18 +169,18 @@ export default function TournamentEntry(routes) {
       .then(response => {
         console.log('Image uploaded to the bucket!');
         reference.getDownloadURL().then(response => {
-           console.log('Image downloaded from the bucket!', response); 
+          console.log('Image downloaded from the bucket!', response);
           postUploadFN(response);
         });
       })
       .catch(e => {
+        setIndicatButton(false);
         console.log('uploading image error => ', e);
         Toast.show({
           type: 'error',
           text2: 'Unable to post. Please try again later!',
         });
       });
-      */
   }
 
   function postUploadFN(location) {
@@ -138,7 +196,7 @@ export default function TournamentEntry(routes) {
       body: JSON.stringify({
         userID: global.userData.user_id,
         ImgUrl: location,
-        description: post,
+        description: '',
         dateTime: currentDate,
       }),
     })
@@ -146,10 +204,14 @@ export default function TournamentEntry(routes) {
       .then(responseJson => {
         if (responseJson.Status == '201') {
           setPost('');
-          global.refresh = true;
-          navigation.navigate('Dashboard');
+
+          console.log('responseJson', responseJson);
+          /* global.refresh = true;
+          navigation.navigate('Dashboard'); */
+
+          // get post id and proceed with joining the tournament
+          // joinTournament();
         }
-        setIndicatButton(false);
       })
       .catch(error => {
         setIndicatButton(false);
