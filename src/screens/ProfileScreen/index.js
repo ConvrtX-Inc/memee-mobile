@@ -106,8 +106,9 @@ export default function ProfileScreen(props) {
       var posts = postToShow.filter(
         item =>
           new Date(Date.parse(item.datetime.split(' ')[0])).getMonth() ==
-          selectedMonth,
+            selectedMonth && !item.img_url.includes('.mp4'),
       );
+      //console.log(posts);
       setFilteredPost(posts);
     } else {
       setFilteredPost([]);
@@ -242,6 +243,7 @@ export default function ProfileScreen(props) {
     /* console.log('profile screen running ...');
     console.log(global.profileID); */
     userBio = '';
+    /* console.log(global.address + 'GetUserProfile/' + global.profileID); */
     fetch(global.address + 'GetUserProfile/' + global.profileID, {
       method: 'get',
       headers: {
@@ -282,34 +284,25 @@ export default function ProfileScreen(props) {
     // this is where Tournament Posts API call should be
 
     userBio = '';
-    fetch(global.address + 'GetUserProfile/' + global.profileID, {
-      method: 'get',
+    fetch(global.address + 'GetUsersEntries', {
+      method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         authToken: global.token,
       },
+      body: JSON.stringify({
+        user_id: global.profileID,
+      }),
     })
       .then(response => response.json())
       .then(responseJson => {
-        userName = responseJson.profile.name;
-        userId = responseJson.profile.user_id;
-        userEmail = responseJson.profile.email;
-        userGender = responseJson.profile.gender;
-        userPassword = responseJson.profile.password;
-        userBio = responseJson.profile.bio;
-        userimgUrl = responseJson.profile.imgurl;
-
-        if (userBio == '') {
-          /* console.log('bio is empty...'); */
-          userBio = '';
-        }
-
         //setProfileData(responseJson.profile);
-        setTournamentEntry(responseJson.posts);
+        setTournamentEntry(responseJson.Data);
+        //console.log('getUserTournamentEntries', responseJson.Data[1].img_url);
 
         if (tab == 2) {
-          setPostToShow(responseJson.posts);
+          setPostToShow(responseJson.Data);
         }
       })
       .catch(error => {
@@ -1028,23 +1021,26 @@ export default function ProfileScreen(props) {
             {/* </View> */}
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => selectTab(2)} style={{width: '50%'}}>
-            <LinearGradient
-              colors={[btncolor2_1, btncolor2_2]}
-              style={{
-                height: 60,
-                width: '100%',
-                justifyContent: 'center',
-                alignItems: 'center',
-                alignSelf: 'center',
-                borderRadius: 30,
-              }}>
-              <Text style={{color: txtcolor2, fontFamily: global.fontSelect}}>
-                Tournament Entry
-              </Text>
-            </LinearGradient>
-            {/* </View> */}
-          </TouchableOpacity>
+          {global.userData.user_id == global.profileID && (
+            <TouchableOpacity
+              onPress={() => selectTab(2)}
+              style={{width: '50%'}}>
+              <LinearGradient
+                colors={[btncolor2_1, btncolor2_2]}
+                style={{
+                  height: 60,
+                  width: '100%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  alignSelf: 'center',
+                  borderRadius: 30,
+                }}>
+                <Text style={{color: txtcolor2, fontFamily: global.fontSelect}}>
+                  Tournament Entry
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          )}
         </View>
         <View
           style={{
@@ -1117,7 +1113,7 @@ export default function ProfileScreen(props) {
                     </View>
                   );
                 }}
-                data={months}
+                data={months.slice(0, currentMonth + 1)}
                 defaultButtonText={months[currentMonth]}
                 onSelect={(selectedItem, index) => {
                   setSelectedMonth(index);
@@ -1174,7 +1170,7 @@ export default function ProfileScreen(props) {
           style={{borderRadius: 100, marginTop: 3}}
         />
 
-        <View style={{marginBottom: 35}}></View>
+        <View style={{margin: 50}}></View>
       </ScrollView>
 
       <Modal

@@ -300,17 +300,16 @@ export default function TounamentScreen(props) {
           txtClr="#fff"
         />
 
-        {enterTournament == 0 ? (
-          <ButtonLarge
-            title="Enter Tournament"
-            onPress={() => setModalVisible(true)}
-            bgClrFirst={global.btnColor1}
-            bgClrSecond={global.btnColor2}
-            font={global.fontSelect}
-            txtClr={global.btnTxt}
-          />
-        ) : null}
-        <View style={{margin: 50}} />
+        <ButtonLarge
+          title="Enter Tournament"
+          onPress={() => setModalVisible(true)}
+          bgClrFirst={global.btnColor1}
+          bgClrSecond={global.btnColor2}
+          font={global.fontSelect}
+          txtClr={global.btnTxt}
+        />
+
+        <View style={{margin: 50}}></View>
       </ScrollView>
 
       <Modal
@@ -340,6 +339,7 @@ export default function TounamentScreen(props) {
                   marginBottom: 20,
                   fontSize: 20,
                   fontWeight: 'bold',
+                  color: 'white',
                 },
               ]}>
               Rules & Regulations

@@ -49,9 +49,9 @@ export default function JudgeMeme(props) {
     });
 
   function GetJudgePostFN() {
-    console.log(
+    /* console.log(
       global.address + 'GetPostsForJudgement/' + global.userData.user_id,
-    );
+    ); */
     fetch(global.address + 'GetPostsForJudgement/' + global.userData.user_id, {
       method: 'POST',
       headers: {
@@ -60,10 +60,12 @@ export default function JudgeMeme(props) {
         authToken: global.token,
       },
     })
-      .then(response => response.json())
-      .then(responseJson => {
+      .then(response => {
+        console.log(response);
+      })
+      /* .then(responseJson => {
         let data = responseJson.Posts;
-        console.log(responseJson);
+        console.log('GetJudgePostFN', responseJson);
 
         data.forEach(async function (element, index) {
           if (element.JudgeResult == 1 || element.JudgeResult == -1) {
@@ -80,9 +82,9 @@ export default function JudgeMeme(props) {
             setPosts(data);
           }
         });
-      })
+      }) */
       .catch(error => {
-        console.error(error);
+        console.error('GetJudgePostFN', error);
       });
 
     //mock data
