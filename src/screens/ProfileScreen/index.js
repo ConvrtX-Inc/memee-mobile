@@ -108,7 +108,7 @@ export default function ProfileScreen(props) {
           new Date(Date.parse(item.datetime.split(' ')[0])).getMonth() ==
             selectedMonth && !item.img_url.includes('.mp4'),
       );
-      console.log(posts);
+      //console.log(posts);
       setFilteredPost(posts);
     } else {
       setFilteredPost([]);
@@ -243,7 +243,7 @@ export default function ProfileScreen(props) {
     /* console.log('profile screen running ...');
     console.log(global.profileID); */
     userBio = '';
-    console.log('global.profileID', global.profileID);
+    /* console.log(global.address + 'GetUserProfile/' + global.profileID); */
     fetch(global.address + 'GetUserProfile/' + global.profileID, {
       method: 'get',
       headers: {

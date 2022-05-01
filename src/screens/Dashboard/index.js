@@ -504,7 +504,18 @@ export default function Dashboard(props) {
     var limit = 50;
     offset = scroll ? offset + 50 : 0;
 
-    /* console.log('global.userData', global.userData); */
+    //console.log('global.userData', global.userData);
+
+    /* console.log(
+      global.address +
+        postApiName +
+        '/' +
+        global.userData.user_id +
+        '/' +
+        offset +
+        '/' +
+        limit,
+    ); */
 
     fetch(
       global.address +
@@ -538,9 +549,9 @@ export default function Dashboard(props) {
         else if (tabNo == 2) data = responseJson.NewPosts;
         else if (tabNo == 3) data = responseJson.TrendingPosts;
 
-        console.log('response, data', data.length);
+        //console.log('response, data', data);
 
-        /* if (data.length == 0) setLoaderIndicator(true); */
+        //if (data.length == 0) setLoaderIndicator(true);
 
         data.forEach(async function (element, index) {
           if (!element.img_url.includes('mp4')) {
@@ -659,8 +670,19 @@ export default function Dashboard(props) {
   }
 
   function navigationToProfileFN(index) {
-    global.profileID = followingPost[index].user_id;
-    navigation.navigate('ProfileScreen');
+    if (index) {
+      var id =
+        tabNumber == 1
+          ? followingPost[index].user_id
+          : tabNumber == 2
+          ? newMemePost[index].user_id
+          : tabNumber == 3
+          ? tendingPost[index].user_id
+          : 0;
+
+      global.profileID = id;
+      navigation.navigate('ProfileScreen');
+    }
   }
 
   function sharePostFN(index) {
