@@ -16,6 +16,7 @@ import {
 import ButtonLarge from '../../component/ButtonLarge';
 import LinearGradient from 'react-native-linear-gradient';
 import {useNavigation} from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {
@@ -25,11 +26,29 @@ import {
 
 // import PhotoEditor from 'react-native-photo-editor'
 
+const months = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+
 var windowWidth = Dimensions.get('window').width;
 var windowHeight = Dimensions.get('window').height;
 export default function TounamentScreen(props) {
   const navigation = useNavigation();
   const [showImagePickerDialog, setShowImagePickerDialog] = useState(false);
+  const currentDateTime = new Date();
+  const currentMonth = currentDateTime.getMonth();
+  const currentYear = currentDateTime.getFullYear();
 
   let options = {
     mediaType: 'photo',
@@ -46,6 +65,41 @@ export default function TounamentScreen(props) {
     /* console.log(global.userData); */
     setEnterTournament(global.userData.participated_in_tournament);
   }, []);
+
+  const checkIfJoinedTournament = () => {
+    fetch(global.address + 'checkUserJoinedTournament', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        authToken: global.token,
+      },
+      body: JSON.stringify({
+        user_id: global.userData.user_id,
+        month: months[currentMonth],
+        year: currentYear,
+      }),
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        //console.log('checkIfJoinedTournament', responseJson);
+        if (responseJson?.Data?.joined_already) {
+          Toast.show({
+            type: 'info',
+            text2: `Already joined the tournament for the month of ${months[currentMonth]}!`,
+          });
+        } else {
+          setShowImagePickerDialog(!showImagePickerDialog);
+        }
+      })
+      .catch(error => {
+        console.error('checkIfJoinedTournament', error);
+        Toast.show({
+          type: 'error',
+          text2: 'Something went wrong. Please try again later!',
+        });
+      });
+  };
 
   const openCamera = async () => {
     setShowImagePickerDialog(false);
@@ -109,33 +163,8 @@ export default function TounamentScreen(props) {
   }
 
   function enterIntoTournamentFN() {
+    checkIfJoinedTournament();
     setModalVisible(!modalVisible);
-    setShowImagePickerDialog(!showImagePickerDialog);
-    /*  console.log(
-      global.address + 'EnrollInTournament/' + global.userData.user_id,
-    ); 
-    fetch(global.address + 'EnrollInTournament/' + global.userData.user_id, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        authToken: global.token,
-      },
-    })
-      .then(response => response.json())
-      .then(responseJson => {
-        console.log(responseJson);
-        global.userData.participated_in_tournament = 1;
-        setEnterTournament(1);
-
-        setModalVisible(!modalVisible);
-        // inset here for meme uploading
-        // if memee uploaded then display this congrats screen
-        // navigation.navigate('CongratsScreen');
-      })
-      .catch(error => {
-        console.error(error);
-      });*/
   }
 
   return (

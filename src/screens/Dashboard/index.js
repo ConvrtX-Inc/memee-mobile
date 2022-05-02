@@ -1,5 +1,4 @@
 import React, {useState, useEffect, useRef} from 'react';
-import _, {filter} from 'lodash';
 import {
   View,
   Text,
@@ -29,7 +28,11 @@ import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import TwitterTextView from 'react-native-twitter-textview';
-import {currentDateFN, moveItemArray} from '../../Utility/Utils';
+import {
+  currentDateFN,
+  moveItemArray,
+  removeItemOnce,
+} from '../../Utility/Utils';
 import messaging from '@react-native-firebase/messaging';
 import {firebaseConfig} from '../../redux/constants';
 import BottomNavBar from '../../component/BottomNavBar';
@@ -101,7 +104,7 @@ export default function Dashboard(props) {
   const dispatch = useDispatch();
   const [followingPost, setFollowingPost] = useState([]);
   const [newMemePost, setNewMemePost] = useState([]);
-  const [tendingPost, setTrendingPost] = useState([]);
+  const [trendingPost, setTrendingPost] = useState([]);
 
   const [tabNumber, setTabNumber] = useState(0);
 
@@ -482,14 +485,7 @@ export default function Dashboard(props) {
       });
     });
 
-  function getPosts(tabNo, scroll = false) {
-    if (scroll && followingPost.length < 50) return;
-
-    // setLoaderIndicator(true)
-    /* console.log('getting posts'); */
-
-    setLoaderIndicator(true);
-
+  const getDashboardPosts = async (tabNo, scroll) => {
     var postApiName = '';
     if (tabNo == 1) {
       postApiName = 'GetFollowingPosts';
@@ -503,90 +499,111 @@ export default function Dashboard(props) {
 
     var limit = 50;
     offset = scroll ? offset + 50 : 0;
-
-    //console.log('global.userData', global.userData);
-
-    /* console.log(
-      global.address +
-        postApiName +
-        '/' +
-        global.userData.user_id +
-        '/' +
-        offset +
-        '/' +
-        limit,
-    ); */
-
-    fetch(
-      global.address +
-        postApiName +
-        '/' +
-        global.userData.user_id +
-        '/' +
-        offset +
-        '/' +
-        limit,
-      {
-        method: 'get',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          authToken: global.token,
+    try {
+      const res = await fetch(
+        global.address +
+          postApiName +
+          '/' +
+          global.userData.user_id +
+          '/' +
+          offset +
+          '/' +
+          limit,
+        {
+          method: 'get',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            authToken: global.token,
+          },
         },
-      },
+      );
+
+      const resJSON = await res.json();
+
+      let data = resJSON;
+      setRefreshing(false);
+
+      return data;
+    } catch (error) {
+      console.error('getDashboardPosts', error);
+      return [];
+    }
+  };
+
+  const getPosts = async (tabNo, scroll = false) => {
+    if (
+      scroll &&
+      (followingPost.length < 50 ||
+        newMemePost.length < 50 ||
+        trendingPost.length < 50)
     )
-      .then(response => response.json())
-      .then(responseJson => {
-        setRefreshing(false);
-        /* if (followingPost.length > 0) setRefreshing(false);
-        else setRefreshing(true); */
+      return;
 
-        /* console.log('responseJson', responseJson); */
+    setLoaderIndicator(true);
 
-        let data = [];
+    const res = await getDashboardPosts(tabNo, scroll);
 
-        if (tabNo == 1) data = responseJson.FollowerPosts;
-        else if (tabNo == 2) data = responseJson.NewPosts;
-        else if (tabNo == 3) data = responseJson.TrendingPosts;
+    let data = [];
+    let treatedData = [];
+    let filteredData = [];
 
-        //console.log('response, data', data);
+    if (tabNo == 1) data = res.FollowerPosts;
+    else if (tabNo == 2) data = res.NewPosts;
+    else if (tabNo == 3) data = res.TrendingPosts;
 
-        //if (data.length == 0) setLoaderIndicator(true);
+    console.log(typeof data);
+    console.log(typeof filteredData);
 
-        data.forEach(async function (element, index) {
-          if (!element.img_url.includes('mp4')) {
-            element.showMenu = false;
-            const [width, height] = await getImageSize(element.img_url);
+    if (data[0]?.tournament) {
+      filteredData = data.filter(item => item.tournament.length < 1);
+    } else {
+      filteredData = data;
+    }
+    //treatedData = filteredData;
+
+    const treatTheData = async data => {
+      try {
+        var resData = data;
+        for (let i = 0; i < data.length; i++) {
+          if (!data[i].img_url.includes('mp4')) {
+            resData[i].showMenu = false;
+            const [width, height] = await getImageSize(data[i].img_url);
             const ratio = windowWidth / width;
-            element.calHeight = height * ratio;
-            element.calWidth = windowWidth;
-            if (index == data.length - 1) {
-              setTimeout(() => {
-                if (tabNo == 1)
-                  data = scroll
-                    ? followingPost.push(data)
-                    : setFollowingPost(data);
-                else if (tabNo == 2)
-                  data = scroll ? newMemePost.push(data) : setNewMemePost(data);
-                else if (tabNo == 3)
-                  data = scroll
-                    ? tendingPost.push(data)
-                    : setTrendingPost(data);
-              }, 1000);
-            }
+            resData[i].calHeight = height * ratio;
+            resData[i].calWidth = windowWidth;
           } else {
-            element.paused = true;
+            resData[i].paused = true;
           }
-        });
+        }
 
-        setLoaderIndicator(false);
-      })
-      .catch(error => {
-        setRefreshing(false);
-        setLoaderIndicator(false);
+        return resData;
+      } catch (error) {
         console.error(error);
-      });
-  }
+        return data;
+      }
+    };
+
+    treatedData = await treatTheData(filteredData);
+
+    //console.error('filteredData', filteredData);
+    //console.error('treatedData', treatedData);
+
+    if (tabNo == 1)
+      scroll
+        ? setFollowingPost(followingPost => [...followingPost, treatedData])
+        : setFollowingPost(treatedData);
+    else if (tabNo == 2)
+      scroll
+        ? setNewMemePost(newMemePost => [...newMemePost, treatedData])
+        : setNewMemePost(treatedData);
+    else if (tabNo == 3)
+      scroll
+        ? setTrendingPost(trendingPost => [...trendingPost, treatedData])
+        : setTrendingPost(treatedData);
+
+    setLoaderIndicator(false);
+  };
 
   function navigateToprofileFN() {
     global.profileID = global.userData.user_id;
@@ -677,7 +694,7 @@ export default function Dashboard(props) {
           : tabNumber == 2
           ? newMemePost[index].user_id
           : tabNumber == 3
-          ? tendingPost[index].user_id
+          ? trendingPost[index].user_id
           : 0;
 
       global.profileID = id;
@@ -819,7 +836,7 @@ export default function Dashboard(props) {
             : tabNumber == 2
             ? newMemePost
             : tabNumber == 3
-            ? tendingPost
+            ? trendingPost
             : []
         }
         /* data={mock} */
