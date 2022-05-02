@@ -110,7 +110,7 @@ export default function TournamentEntry(routes) {
       });
   }
 
-  function checkIfJoined() {
+  /* function checkIfJoined() {
     fetch(global.address + 'JoinTournament', {
       method: 'POST',
       headers: {
@@ -136,7 +136,7 @@ export default function TournamentEntry(routes) {
           return true;
         }
       });
-  }
+  } */
 
   function joinTournament(post_id) {
     fetch(global.address + 'JoinTournament', {
@@ -177,9 +177,9 @@ export default function TournamentEntry(routes) {
   function uploadUmageToFirebase() {
     setIndicatButton(true);
 
-    if (checkIfJoined()) {
+    /* if (checkIfJoined()) {
       return;
-    }
+    } */
 
     const file =
       fileType == 'photo'
