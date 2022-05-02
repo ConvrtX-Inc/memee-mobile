@@ -267,12 +267,22 @@ export default function ProfileScreen(props) {
           userBio = '';
         }
 
+        let data = responseJson.posts;
+        let filteredData = [];
+
+        if (data[0]?.tournament) {
+          filteredData = data.filter(item => item.tournament.length < 1);
+        } else {
+          filteredData = data;
+        }
+
         setProfileData(responseJson.profile);
-        setProfilePostData(responseJson.posts);
-        //onsole.log(responseJson.posts);
+        setProfilePostData(filteredData);
+
+        //console.log(responseJson.posts);
 
         if (tab == 1) {
-          setPostToShow(responseJson.posts);
+          setPostToShow(filteredData);
         }
       })
       .catch(error => {

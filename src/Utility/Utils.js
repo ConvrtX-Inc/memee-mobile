@@ -1,4 +1,4 @@
-import {PermissionsAndroid, Platform} from 'react-native';
+import {PermissionsAndroid, Platform, Image} from 'react-native';
 import storage from '@react-native-firebase/storage';
 
 export default function DateDifference(date) {
@@ -448,3 +448,12 @@ export function moveItemArray(from, to, arr) {
   newArr.splice(to, 0, item);
   return newArr;
 }
+
+// remove specific item in an array
+export const removeItemOnce = (arr, value) => {
+  var index = arr.indexOf(value);
+  if (index > -1) {
+    arr.splice(index, 1);
+  }
+  return arr;
+};
