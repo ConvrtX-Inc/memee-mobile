@@ -457,3 +457,18 @@ export const removeItemOnce = (arr, value) => {
   }
   return arr;
 };
+
+export const MonthsArray = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];

@@ -49,21 +49,24 @@ export default function JudgeMeme(props) {
     });
 
   function GetJudgePostFN() {
-    /* console.log(
+    console.log(
       global.address + 'GetPostsForJudgement/' + global.userData.user_id,
-    ); */
+    );
+    console.log({
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      authToken: global.token,
+    });
     fetch(global.address + 'GetPostsForJudgement/' + global.userData.user_id, {
-      method: 'POST',
+      method: 'GET',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         authToken: global.token,
       },
     })
-      .then(response => {
-        console.log(response);
-      })
-      /* .then(responseJson => {
+      .then(response => response.json())
+      .then(responseJson => {
         let data = responseJson.Posts;
         console.log('GetJudgePostFN', responseJson);
 
@@ -79,10 +82,10 @@ export default function JudgeMeme(props) {
           // console.log(index, element.calHeight);
 
           if (index == data.length - 1) {
-            setPosts(data);
+            //setPosts(data);
           }
         });
-      }) */
+      })
       .catch(error => {
         console.error('GetJudgePostFN', error);
       });
