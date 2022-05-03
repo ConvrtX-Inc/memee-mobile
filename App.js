@@ -64,6 +64,7 @@ import Congradulation from './src/screens/Congradulation';
 import Toast from 'react-native-toast-message';
 import {toggleOnlineStatus} from './src/redux/actions/Auth';
 import {urls} from './src/api/urls';
+import TournamentImageShow from './src/screens/TournamentImageShow';
 
 const {store, persistor} = configureStore();
 
@@ -122,6 +123,10 @@ function App() {
             <Stack.Screen name="TournamentEntry" component={TournamentEntry} />
             <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
             <Stack.Screen name="ProfileSetting" component={ProfileSetting} />
+            <Stack.Screen
+              name="TournamentImageShow"
+              component={TournamentImageShow}
+            />
             <Stack.Screen
               name="CongratsScreen"
               component={CongratsScreen}

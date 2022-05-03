@@ -17,6 +17,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import Toast from 'react-native-toast-message';
 
 import {useNavigation} from '@react-navigation/native';
+import {MonthsArray} from '../../Utility/Utils';
 
 var windowWidth = Dimensions.get('window').width;
 windowWidth = (windowWidth * 85) / 100;
@@ -24,10 +25,13 @@ var seassionWidth = (windowWidth * 80) / 100;
 var windowWidthSeasion = (windowWidth * 20) / 100;
 var Width3rd = (windowWidth * 33) / 100;
 export default function JudgeScreen(props) {
+  const currentDateTime = new Date();
+  const currentMonth = currentDateTime.getMonth();
   const navigation = useNavigation();
   const [indicatButton, setIndicatButton] = useState(false);
   const [rankingData, setRankingData] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [summaryData, setSummaryData] = useState([]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -52,9 +56,9 @@ export default function JudgeScreen(props) {
     }
 
     var date = yyy + '-' + month + '-' + ddd;
-    console.log(global.address + 'JudgeHistory/' + global.userData.user_id);
+    //console.log(global.address + 'JudgeHistory/' + global.userData.user_id);
 
-    fetch(global.address + 'JudgeHistory/' + global.userData.user_id, {
+    fetch(global.address + 'availableTournaments/' + global.userData.user_id, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -64,38 +68,36 @@ export default function JudgeScreen(props) {
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson);
-        var tempArr = [];
-        for (let i = 0; i < responseJson.History.length; i++) {
-          var time = '00' + ':' + '00' + ':' + '00';
+        //console.log(responseJson);
 
-          var currentTime = date + 'T' + time;
-          var resDate = responseJson.History[i].date + 'T' + time;
-
-          // console.log('Current Time : ' + currentTime);
-          var respDate = new Date(resDate);
-          var todayDate = new Date(currentTime);
-
-          var diffTime = Math.abs(todayDate - respDate);
-          var diffsec = Math.ceil(diffTime / 1000);
-
-          var days = parseInt(diffsec) / 86400 + 1;
-          // console.log('days : ', days);
-          tempArr.push(days);
-        }
-
-        // console.log('tempArr', tempArr);
-        var ind = 0;
-        responseJson.History.forEach(function (element) {
-          if (tempArr[ind] < 10) {
-            element.days = '0' + tempArr[ind];
-          } else {
-            element.days = tempArr[ind];
+        var data = responseJson.Data;
+        let temp = [];
+        data.forEach((element, index) => {
+          if (index < 1) {
+            var m = MonthsArray.indexOf(element.month);
+            temp.push({
+              ...element,
+              NoOfPosts: data.filter(
+                item => item.tournament_id == element.tournament_id,
+              ).length,
+              months: m,
+              ongoing: m == currentMonth ? 1 : 0,
+            });
+          } else if (element.tournament_id != data[index - 1].tournament_id) {
+            var m = MonthsArray.indexOf(element.month);
+            temp.push({
+              ...element,
+              NoOfPosts: data.filter(
+                item => item.tournament_id == element.tournament_id,
+              ).length,
+              months: m,
+              ongoing: m == currentMonth ? 1 : 0,
+            });
           }
-          ind = ind + 1;
         });
+        //console.error(temp);
 
-        setRankingData(responseJson.History);
+        setRankingData(temp);
       })
       .catch(error => {
         console.error(error);
@@ -223,7 +225,7 @@ export default function JudgeScreen(props) {
                     fontFamily: global.fontSelect,
                     fontWeight: 'bold',
                   }}>
-                  Days
+                  Month
                 </Text>
               </LinearGradient>
             </View>
@@ -294,14 +296,14 @@ export default function JudgeScreen(props) {
               marginLeft: 10,
               fontSize: 15,
             }}>
-            You haven't judged any meme yet!
+            No tournament available!
           </Text>
         )}
 
         <FlatList
           // horizontal={true}
           // showsHorizontalScrollIndicator={false}
-          data={rankingData}
+          data={rankingData.reverse()}
           renderItem={({item, index}) => (
             <View>
               {/* <TouchableOpacity> */}
@@ -330,8 +332,9 @@ export default function JudgeScreen(props) {
                         color: '#fff',
                         fontSize: 15,
                         fontFamily: global.fontSelect,
+                        fontWeight: 'bold',
                       }}>
-                      {item.days}
+                      {item.months}
                     </Text>
                   </LinearGradient>
                 </View>
@@ -351,7 +354,7 @@ export default function JudgeScreen(props) {
                 </View>
 
                 <View style={{marginLeft: '19%', width: '17%', marginTop: 9}}>
-                  {item.days != '01' ? (
+                  {item.ongoing == 0 ? (
                     <ImageBackground
                       resizeMode="stretch"
                       style={{
@@ -380,6 +383,7 @@ export default function JudgeScreen(props) {
             </View>
           )}
         />
+        <View style={{margin: 50}}></View>
       </ScrollView>
     </View>
   );

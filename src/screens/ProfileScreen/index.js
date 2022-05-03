@@ -78,6 +78,7 @@ export default function ProfileScreen(props) {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisibleImg, setModalVisibleImg] = useState(false);
   const [modalVisibleImgPicker, setModalVisibleImgPicker] = useState(false);
+  const [tabNumber, setTabNumber] = useState(1);
 
   const [bioChange, setBioChange] = useState(false);
   const [profileBGPick, setProfileBGPick] = useState(global.profileBGgl);
@@ -149,6 +150,7 @@ export default function ProfileScreen(props) {
   }, []);
 
   function selectTab(index) {
+    setTabNumber(index);
     SelectedBtnFN(index);
     profileDataFN(index);
     getUserTournamentEntries(index);
@@ -588,8 +590,18 @@ export default function ProfileScreen(props) {
   }
 
   function showImageFN(index) {
-    //global.selectedPost = profilePostData[index];
-    navigation.navigate('ProfileImageShow');
+    //
+
+    //console.error(filteredPost[index]);
+
+    if (tabNumber == 1) {
+      global.selectedPost = filteredPost[index];
+      navigation.navigate('ProfileImageShow');
+    } else {
+      navigation.navigate('TournamentImageShow', {
+        post: filteredPost[index],
+      });
+    }
   }
 
   // For Bottom Tab
