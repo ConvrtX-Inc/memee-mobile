@@ -41,6 +41,20 @@ export default function JudgeMeme(props) {
     return unsubscribe;
   }, [navigation]);
 
+  const settingPosts = postArray => {
+    var unJudged = [];
+    var judged = [];
+    postArray.forEach(item => {
+      if (item.JudgeResult == 0) {
+        unJudged.push(item);
+      } else {
+        judged.push(item);
+      }
+    });
+    var allPosts = unJudged.concat(judged);
+    setPosts(allPosts);
+  };
+
   const getImageSize = async uri =>
     new Promise(resolve => {
       Image.getSize(uri, (width, height) => {
@@ -67,8 +81,10 @@ export default function JudgeMeme(props) {
     })
       .then(response => response.json())
       .then(responseJson => {
-        let data = responseJson.Posts;
-        console.log('GetJudgePostFN', responseJson);
+        let data = responseJson.Posts.filter(
+          element => !element.img_url.includes('.mp4'),
+        );
+        console.log('GetJudgePostFN', data);
 
         data.forEach(async function (element, index) {
           if (element.JudgeResult == 1 || element.JudgeResult == -1) {
@@ -82,7 +98,7 @@ export default function JudgeMeme(props) {
           // console.log(index, element.calHeight);
 
           if (index == data.length - 1) {
-            //setPosts(data);
+            settingPosts(data);
           }
         });
       })
@@ -137,7 +153,7 @@ export default function JudgeMeme(props) {
 
     posts[index].JudgeResult = react;
 
-    setPosts([...posts]);
+    settingPosts([...posts]);
 
     count = count + 1;
     fetch(global.address + 'JudgePost', {
@@ -249,7 +265,7 @@ export default function JudgeMeme(props) {
                         <Image
                           style={{width: 18, height: 18, tintColor: '#00A344'}}
                           resizeMode="stretch"
-                          source={require('../../images/checkedjudge.png')}
+                          source={require('../../images/hertGreen.png')}
                         />
                       </View>
                     </TouchableOpacity>
@@ -303,7 +319,7 @@ export default function JudgeMeme(props) {
                         <Image
                           style={{width: 18, height: 18, tintColor: '#fff'}}
                           resizeMode="stretch"
-                          source={require('../../images/checkedjudge.png')}
+                          source={require('../../images/hertGreen.png')}
                         />
                       </View>
                     ) : (
@@ -322,7 +338,7 @@ export default function JudgeMeme(props) {
                         <Image
                           style={{width: 18, height: 18, tintColor: '#00A344'}}
                           resizeMode="stretch"
-                          source={require('../../images/checkedjudge.png')}
+                          source={require('../../images/hertGreen.png')}
                         />
                       </View>
                     )}
