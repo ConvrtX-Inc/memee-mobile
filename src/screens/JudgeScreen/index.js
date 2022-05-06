@@ -74,24 +74,24 @@ export default function JudgeScreen(props) {
         let temp = [];
         data.forEach((element, index) => {
           if (index < 1) {
-            var m = MonthsArray.indexOf(element.month);
+            var m = MonthsArray.indexOf(element.month) + 1;
             temp.push({
               ...element,
               NoOfPosts: data.filter(
                 item => item.tournament_id == element.tournament_id,
               ).length,
               months: m,
-              ongoing: m == currentMonth ? 1 : 0,
+              ongoing: m == currentMonth + 1 ? 1 : 0,
             });
           } else if (element.tournament_id != data[index - 1].tournament_id) {
-            var m = MonthsArray.indexOf(element.month);
+            var m = MonthsArray.indexOf(element.month) + 1;
             temp.push({
               ...element,
               NoOfPosts: data.filter(
                 item => item.tournament_id == element.tournament_id,
               ).length,
               months: m,
-              ongoing: m == currentMonth ? 1 : 0,
+              ongoing: m == currentMonth + 1 ? 1 : 0,
             });
           }
         });

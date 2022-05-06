@@ -18,6 +18,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {CheckBox} from 'react-native-elements';
 
 import {useNavigation} from '@react-navigation/native';
+import {MonthsArray} from '../../Utility/Utils';
 // import PhotoEditor from 'react-native-photo-editor'
 
 var windowWidth = Dimensions.get('window').width;
@@ -28,6 +29,9 @@ var Width3rd = (windowWidth * 33) / 100;
 var count = 0;
 export default function JudgeMeme(props) {
   const navigation = useNavigation();
+
+  const currentDateTime = new Date();
+  const currentMonth = currentDateTime.getMonth();
 
   const [indicatButton, setIndicatButton] = useState(false);
   const [posts, setPosts] = useState([]);
@@ -63,14 +67,14 @@ export default function JudgeMeme(props) {
     });
 
   function GetJudgePostFN() {
-    console.log(
+    /* console.log(
       global.address + 'GetPostsForJudgement/' + global.userData.user_id,
     );
     console.log({
       Accept: 'application/json',
       'Content-Type': 'application/json',
       authToken: global.token,
-    });
+    }); */
     fetch(global.address + 'GetPostsForJudgement/' + global.userData.user_id, {
       method: 'GET',
       headers: {
@@ -82,9 +86,13 @@ export default function JudgeMeme(props) {
       .then(response => response.json())
       .then(responseJson => {
         let data = responseJson.Posts.filter(
-          element => !element.img_url.includes('.mp4'),
+          element =>
+            !element.img_url.includes('.mp4') &&
+            element.month == MonthsArray[currentMonth] &&
+            element.user_id != global.userData.user_id,
         );
-        console.log('GetJudgePostFN', data);
+        /* console.log('GetJudgePostFN data', data);
+        console.log('GetJudgePostFN data', global.userData.user_id); */
 
         data.forEach(async function (element, index) {
           if (element.JudgeResult == 1 || element.JudgeResult == -1) {
@@ -221,7 +229,7 @@ export default function JudgeMeme(props) {
           // showsHorizontalScrollIndicator={false}
           data={posts}
           renderItem={({item, index}) => (
-            <View>
+            <View key={index}>
               {/* <TouchableOpacity> */}
               <View
                 style={{
