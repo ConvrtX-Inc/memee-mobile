@@ -36,7 +36,7 @@ const TournamentImageShow = ({navigation, route}) => {
     const [width, height] = await getImageSize(tempPost.img_url);
     const ratio = windowWidth / width;
     tempPost.calHeight = height * ratio;
-    //console.log(tempPost);
+    console.log(tempPost);
     setSelectedPostState(tempPost);
   };
 
@@ -149,7 +149,9 @@ const TournamentImageShow = ({navigation, route}) => {
               style={{width: 13, height: 13, marginHorizontal: 5}}
               source={require('../../images/hertGreen.png')}
             />
-            <Text style={{color: '#00A344', fontSize: 22}}>0</Text>
+            <Text style={{color: '#00A344', fontSize: 22}}>
+              {selectedPostState.up_vote}
+            </Text>
           </View>
           <View
             style={{
@@ -166,7 +168,9 @@ const TournamentImageShow = ({navigation, route}) => {
               style={{width: 13, height: 13, marginHorizontal: 5}}
               source={require('../../images/xRed.png')}
             />
-            <Text style={{color: '#F44336', fontSize: 22}}>0</Text>
+            <Text style={{color: '#F44336', fontSize: 22}}>
+              {selectedPostState.down_vote}
+            </Text>
           </View>
         </View>
         <View style={{margin: 50}}></View>
