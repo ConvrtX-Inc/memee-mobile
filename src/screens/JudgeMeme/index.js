@@ -161,7 +161,7 @@ export default function JudgeMeme(props) {
 
     posts[index].JudgeResult = react;
 
-    settingPosts([...posts]);
+    setPosts([...posts]);
 
     count = count + 1;
     fetch(global.address + 'JudgePost', {
