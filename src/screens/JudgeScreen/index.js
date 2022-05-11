@@ -30,6 +30,8 @@ export default function JudgeScreen(props) {
   const navigation = useNavigation();
   const [indicatButton, setIndicatButton] = useState(false);
   const [rankingData, setRankingData] = useState([]);
+  const [tempRankingData, setTempRankingData] = useState([]);
+
   const [modalVisible, setModalVisible] = useState(false);
   const [summaryData, setSummaryData] = useState([]);
 
@@ -42,7 +44,7 @@ export default function JudgeScreen(props) {
     return unsubscribe;
   }, [navigation]);
 
-  function GetJudgePostFN() {
+  const GetJudgePostFN = async () => {
     var today = new Date();
     var yyy = today.getFullYear();
 
@@ -56,52 +58,55 @@ export default function JudgeScreen(props) {
     }
 
     var date = yyy + '-' + month + '-' + ddd;
-    //console.log(global.address + 'JudgeHistory/' + global.userData.user_id);
+    // console.log(global.address + 'JudgeHistory/' + global.userData.user_id);
 
-    fetch(global.address + 'availableTournaments/' + global.userData.user_id, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        authToken: global.token,
+    let result = await fetch(
+      global.address + 'JudgeHistory/' + global.userData.user_id,
+      {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          authToken: global.token,
+        },
       },
-    })
+    )
       .then(response => response.json())
       .then(responseJson => {
-        //console.log(responseJson);
-
-        var data = responseJson.Data;
-        let temp = [];
-        data.forEach((element, index) => {
-          if (index < 1) {
-            var m = MonthsArray.indexOf(element.month) + 1;
-            temp.push({
-              ...element,
-              NoOfPosts: data.filter(
-                item => item.tournament_id == element.tournament_id,
-              ).length,
-              months: m,
-              ongoing: m == currentMonth + 1 ? 1 : 0,
-            });
-          } else if (element.tournament_id != data[index - 1].tournament_id) {
-            var m = MonthsArray.indexOf(element.month) + 1;
-            temp.push({
-              ...element,
-              NoOfPosts: data.filter(
-                item => item.tournament_id == element.tournament_id,
-              ).length,
-              months: m,
-              ongoing: m == currentMonth + 1 ? 1 : 0,
-            });
-          }
-        });
-        //console.error(temp);
-
-        setRankingData(temp);
+        // console.log('HIstory', responseJson.History);
+        return responseJson.History;
       })
       .catch(error => {
-        console.error(error);
+        console.error('error', error);
       });
+    console.log('ress', result);
+    console.log('resss', tempRankingData);
+
+    let data = result;
+    let temp = result === [] ? [] : [result[0]];
+    console.log(temp);
+    // data.push({NoOfPosts: '5', date: `2022-05-01`, user_id: '0'});
+    let day = parseInt(new Date(data[0].date).getDate());
+    // console.log('lastadasy', data.length);
+    // console.log(temp);
+    for (let i = day - 1; i > 0; i--) {
+      temp.push({NoOfPosts: '0', date: `2022-05-0${i}`, user_id: '0'});
+    }
+    // console.log('lastadassy', data);
+    // console.log('lastadassy', temp);
+
+    for (let x = 0; x < data.length; x++) {
+      console.log('days', data[x].NoOfPosts);
+      for (let y = day - 1; y > 0; y--) {
+        if (data[x].date === temp[y].date) {
+          console.log('true');
+          temp[y] = data[x];
+        }
+      }
+    }
+    console.log('array', result.length);
+    result.length !== 0 ? setRankingData(temp) : null;
+    // console.log(tempRankingData);
 
     // mock data
     /* setRankingData([
@@ -126,7 +131,7 @@ export default function JudgeScreen(props) {
         NoOfPosts: 10,
       },
     ]); */
-  }
+  };
 
   function navigatToJudgeScreenFN() {
     navigation.navigate('JudgeMeme');
@@ -303,85 +308,89 @@ export default function JudgeScreen(props) {
         <FlatList
           // horizontal={true}
           // showsHorizontalScrollIndicator={false}
-          data={rankingData.reverse()}
-          renderItem={({item, index}) => (
-            <View>
-              {/* <TouchableOpacity> */}
-              <View
-                style={{
-                  width: '100%',
-                  marginTop: 5,
-                  marginBottom: 5,
-                  height: 50,
-                  borderRadius: 25,
-                  flexDirection: 'row',
-                  backgroundColor: '#292929',
-                }}>
-                <View style={{width: '28%', height: 50, borderRadius: 22}}>
-                  <LinearGradient
-                    colors={['#B461F4', '#671BA3']}
-                    style={{
-                      height: 50,
-                      width: '100%',
-                      borderRadius: 22,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
+          data={rankingData}
+          renderItem={({item, index}) => {
+            // let day = new Date(item.date).getDate();
+            // console.log('day', item.NoOfPosts);
+            return (
+              <View key={index}>
+                {/* <TouchableOpacity> */}
+                <View
+                  style={{
+                    width: '100%',
+                    marginTop: 5,
+                    marginBottom: 5,
+                    height: 50,
+                    borderRadius: 25,
+                    flexDirection: 'row',
+                    backgroundColor: '#292929',
+                  }}>
+                  <View style={{width: '28%', height: 50, borderRadius: 22}}>
+                    <LinearGradient
+                      colors={['#B461F4', '#671BA3']}
+                      style={{
+                        height: 50,
+                        width: '100%',
+                        borderRadius: 22,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}>
+                      <Text
+                        style={{
+                          color: '#fff',
+                          fontSize: 15,
+                          fontFamily: global.fontSelect,
+                          fontWeight: 'bold',
+                        }}>
+                        {new Date(item.date).getDate()}
+                      </Text>
+                    </LinearGradient>
+                  </View>
+
+                  <View style={{width: '38%'}}>
                     <Text
                       style={{
                         color: '#fff',
-                        fontSize: 15,
-                        fontFamily: global.fontSelect,
+                        fontSize: 17,
                         fontWeight: 'bold',
+                        marginTop: 11,
+                        textAlign: 'center',
+                        fontFamily: global.fontSelect,
                       }}>
-                      {item.months}
+                      {item.NoOfPosts}/100
                     </Text>
-                  </LinearGradient>
-                </View>
+                  </View>
 
-                <View style={{width: '38%'}}>
-                  <Text
-                    style={{
-                      color: '#fff',
-                      fontSize: 17,
-                      fontWeight: 'bold',
-                      marginTop: 11,
-                      textAlign: 'center',
-                      fontFamily: global.fontSelect,
-                    }}>
-                    {item.NoOfPosts}/100
-                  </Text>
-                </View>
-
-                <View style={{marginLeft: '19%', width: '17%', marginTop: 9}}>
-                  {item.ongoing == 0 ? (
-                    <ImageBackground
-                      resizeMode="stretch"
-                      style={{
-                        height: 32,
-                        width: 32,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                      source={require('../../images/uncheckedjudge.png')}>
+                  <View style={{marginLeft: '19%', width: '17%', marginTop: 9}}>
+                    {index != 0 ? (
+                      <ImageBackground
+                        resizeMode="stretch"
+                        style={{
+                          height: 32,
+                          width: 32,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                        source={require('../../images/uncheckedjudge.png')}>
+                        <Image
+                          resizeMode="stretch"
+                          style={{height: 12, width: 12}}
+                          source={require('../../images/checkedjudge.png')}
+                        />
+                      </ImageBackground>
+                    ) : (
                       <Image
                         resizeMode="stretch"
-                        style={{height: 12, width: 12}}
-                        source={require('../../images/checkedjudge.png')}
+                        style={{height: 32, width: 32}}
+                        source={require('../../images/uncheckedjudge.png')}
                       />
-                    </ImageBackground>
-                  ) : (
-                    <Image
-                      resizeMode="stretch"
-                      style={{height: 32, width: 32}}
-                      source={require('../../images/uncheckedjudge.png')}
-                    />
-                  )}
+                    )}
+                  </View>
                 </View>
+                {/* </TouchableOpacity> */}
               </View>
-              {/* </TouchableOpacity> */}
-            </View>
-          )}
+            );
+          }}
         />
         <View style={{margin: 50}}></View>
       </ScrollView>
