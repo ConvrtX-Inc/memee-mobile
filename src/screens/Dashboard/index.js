@@ -162,6 +162,7 @@ export default function Dashboard(props) {
   // fetching of Stories
   useEffect(() => {
     fetchStories();
+    console.log('token', global.userData);
   }, [updatedStories]);
 
   // upload image/video
