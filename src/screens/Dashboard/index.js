@@ -611,10 +611,16 @@ export default function Dashboard(props) {
   }
 
   function likeOrUnlikeFN(index) {
-    var postID = followingPost[index].post_id;
+    var postList =
+      tabNumber == 1
+        ? followingPost
+        : tabNumber == 2
+        ? newMemePost
+        : trendingPost;
+    var postID = postList[index].post_id;
     var arrayTemp = '';
 
-    var arrayTemp = followingPost;
+    var arrayTemp = postList;
 
     if (arrayTemp[index].IsLiked == 0) {
       arrayTemp[index].IsLiked = 1;
@@ -623,7 +629,10 @@ export default function Dashboard(props) {
       arrayTemp[index].IsLiked = 0;
       arrayTemp[index].like_count = parseInt(arrayTemp[index].like_count) - 1;
     }
-    setFollowingPost([...arrayTemp]);
+
+    if (tabNumber == 1) setFollowingPost([...arrayTemp]);
+    else if (tabNumber == 2) setNewMemePost([...arrayTemp]);
+    else setTrendingPost([...arrayTemp]);
 
     fetch(global.address + 'reactToPost', {
       method: 'POST',
@@ -641,18 +650,36 @@ export default function Dashboard(props) {
   }
 
   function showMenuFN(index) {
-    var followinVar = followingPost;
-    (followinVar[index].showMenu = !followingPost[index].showMenu),
-      setFollowingPost([...followinVar]);
+    var postList =
+      tabNumber == 1
+        ? followingPost
+        : tabNumber == 2
+        ? newMemePost
+        : trendingPost;
+    (postList[index].showMenu = !postList[index].showMenu),
+      tabNumber == 1
+        ? setFollowingPost([...postList])
+        : tabNumber == 2
+        ? setNewMemePost([...postList])
+        : setTrendingPost([...postList]);
   }
 
   function showMenueModalFN(index) {
     gloIndex = index;
-    var followinVar = followingPost;
-    (followinVar[index].showMenu = !followingPost[index].showMenu),
-      setFollowingPost([...followinVar]);
+    var postList =
+      tabNumber == 1
+        ? followingPost
+        : tabNumber == 2
+        ? newMemePost
+        : trendingPost;
+    (postList[index].showMenu = !postList[index].showMenu),
+      tabNumber == 1
+        ? setFollowingPost([...postList])
+        : tabNumber == 2
+        ? setNewMemePost([...postList])
+        : setTrendingPost([...postList]);
     setModalVisible(true);
-    setPostIdToDelete(followingPost[index].post_id);
+    setPostIdToDelete(postList[index].post_id);
   }
 
   function deleteMemeeFN() {
@@ -668,9 +695,19 @@ export default function Dashboard(props) {
     })
       .then(response => response.json())
       .then(responseJson => {
-        var postDelArr = followingPost;
-        postDelArr.splice(gloIndex, 1);
-        setFollowingPost([...postDelArr]);
+        var postList =
+          tabNumber == 1
+            ? followingPost
+            : tabNumber == 2
+            ? newMemePost
+            : trendingPost;
+        postList.splice(gloIndex, 1);
+
+        tabNumber == 1
+          ? setFollowingPost([...postList])
+          : tabNumber == 2
+          ? setNewMemePost([...postList])
+          : setTrendingPost([...postList]);
       })
       .catch(error => {
         Toast.show({
@@ -682,7 +719,13 @@ export default function Dashboard(props) {
   }
 
   function navigateToComment(index) {
-    global.postId = followingPost[index].post_id;
+    var postList =
+      tabNumber == 1
+        ? followingPost
+        : tabNumber == 2
+        ? newMemePost
+        : trendingPost;
+    global.postId = postList[index].post_id;
     navigation.navigate('CommentScreen');
   }
 
@@ -710,7 +753,14 @@ export default function Dashboard(props) {
     // setFollowingPost(([...arrForSC]));
     // var DateTimeCurrent = currentDateFN()
 
-    global.sharePost = followingPost[index];
+    var postList =
+      tabNumber == 1
+        ? followingPost
+        : tabNumber == 2
+        ? newMemePost
+        : trendingPost;
+
+    global.sharePost = postList[index];
 
     /* console.log('global.sharePost : ', global.sharePost); */
     navigation.navigate('SharePost');
