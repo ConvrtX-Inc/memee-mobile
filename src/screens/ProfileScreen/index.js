@@ -33,6 +33,7 @@ import {color} from 'react-native-reanimated';
 import {getBucketOptions} from '../../Utility/Utils';
 import storage from '@react-native-firebase/storage';
 import SelectDropdown from 'react-native-select-dropdown';
+import Toast from 'react-native-toast-message';
 
 const axios = require('axios');
 
@@ -632,46 +633,78 @@ export default function ProfileScreen(props) {
           imageStyle={{borderBottomRightRadius: 30, borderBottomLeftRadius: 30}}
           style={styles.image}>
           <View style={styles.topView}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('ProfileSetting')}>
-              <LinearGradient
-                colors={['#ffffff44', '#ffffff55']}
-                // style={styles.imgProfileBtn}
-                style={{
-                  height: 40,
-                  width: 40,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: 20,
-                }}>
-                <Image
-                  style={{height: 23, width: 23, marginLeft: 0, marginTop: 0}}
-                  resizeMode="stretch"
-                  source={require('../../images/Left.png')}
-                />
-              </LinearGradient>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => navigation.navigate('SettingScreen')}>
-              <LinearGradient
-                colors={['#ffffff44', '#ffffff55']}
-                // style={styles.imgProfileBtn}
-                style={{
-                  marginLeft: 8,
-                  height: 40,
-                  width: 40,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: 20,
-                }}>
-                <Image
-                  style={{height: 20, width: 20, marginLeft: 0, marginTop: 0}}
-                  resizeMode="stretch"
-                  source={require('../../images/setting.png')}
-                />
-              </LinearGradient>
-            </TouchableOpacity>
+            {global.userData.user_id == global.profileID ? (
+              <View style={{flexDirection: 'row'}}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('ProfileSetting')}>
+                  <LinearGradient
+                    colors={['#ffffff44', '#ffffff55']}
+                    style={{
+                      height: 40,
+                      width: 40,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: 20,
+                    }}>
+                    <Image
+                      style={{
+                        height: 23,
+                        width: 23,
+                        marginLeft: 0,
+                        marginTop: 0,
+                      }}
+                      resizeMode="stretch"
+                      source={require('../../images/Left.png')}
+                    />
+                  </LinearGradient>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('SettingScreen')}>
+                  <LinearGradient
+                    colors={['#ffffff44', '#ffffff55']}
+                    // style={styles.imgProfileBtn}
+                    style={{
+                      marginLeft: 8,
+                      height: 40,
+                      width: 40,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: 20,
+                    }}>
+                    <Image
+                      style={{
+                        height: 20,
+                        width: 20,
+                        marginLeft: 0,
+                        marginTop: 0,
+                      }}
+                      resizeMode="stretch"
+                      source={require('../../images/setting.png')}
+                    />
+                  </LinearGradient>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <View style={{flexDirection: 'row'}}>
+                <TouchableOpacity
+                  onPress={() => navigation.goBack()}
+                  style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Image
+                    style={[styles.tinyLogo, {tintColor: global.colorIcon}]}
+                    source={require('../../images/back1.png')}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 25,
+                      color: global.colorIcon,
+                      fontFamily: global.fontSelect,
+                    }}>
+                    {' '}
+                    Profile
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
 
             <View style={{marginTop: 20, marginLeft: 'auto'}}>
               <ButtonCoins
@@ -889,7 +922,18 @@ export default function ProfileScreen(props) {
                 </Text>
               </TouchableOpacity>
             </View>
-          ) : null}
+          ) : (
+            <View style={{width: '85%', alignSelf: 'center', marginTop: 15}}>
+              <Text
+                style={{
+                  color: '#fff',
+                  alignSelf: 'center',
+                  fontFamily: global.fontSelect,
+                }}>
+                {profileData.bio ? '"' + profileData.bio + '"' : ''}
+              </Text>
+            </View>
+          )}
           {/* </ImageBackground> */}
         </ImageBackground>
 

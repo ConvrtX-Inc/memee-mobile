@@ -10,6 +10,7 @@ import {
 import SimpleInput from '../../component/SimpleTextInput';
 import {useFocusEffect} from '@react-navigation/native';
 const axios = require('axios');
+import Toast from 'react-native-toast-message';
 
 export default function NewMessage({navigation}) {
   const [searchTxt, setSearchTxt] = useState('');
@@ -60,7 +61,7 @@ export default function NewMessage({navigation}) {
   };
 
   function openChat(user) {
-    console.log('hello')
+    console.log('openChat', user);
     // setLoader(true)
 
     let users = [];
