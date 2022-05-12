@@ -201,22 +201,37 @@ export default function ProfileScreen(props) {
     users.push({userId: global.userData.user_id, name: global.userData.name});
     users.push({userId: global.profileID, name: profileData.name});
 
-    axios
-      .post(`${global.address}createConversation`, users)
-      .then(function (response) {
-        setLoader(false);
-        navigation.navigate('ChatScreen', {
-          conversationId: response.data.ConversationID,
-          name: response.data.Title,
-        });
-      })
-      .catch(function (error) {
-        console.log(error);
+    console.log('GLOBAL ID ', global.userData.user_id);
+    console.log('GLOBAL NAME ', global.userData.name);
+    /*console.log('GLOBAL Profile ID ', global.profileID);
+    console.log('GLOBAL profileData name ', profileData.name);
+    console.log('GLOBAL URL ', `${global.address}createConversation`);*/
+
+    axios({
+      method: 'post',
+      url: `${global.address}createConversation`,
+      // data: data,
+      validateStatus: status => {
+        return true;
+      },
+    })
+      .catch(error => {
+        // loginError()
+        console.log('GLOBAL er ', error);
         Toast.show({
           type: 'error',
           text2: 'Something went wrong',
-        });
+          });
         setLoader(false);
+      })
+      .then(Response => {
+        /* console.log('products Response: WITH TOKEN', Response.data); */
+
+        setLoader(false);
+        navigation.navigate('ChatScreen', {
+          conversationId: Response.data.ConversationID,
+          name: Response.data.Title,
+        });
       });
   }
 

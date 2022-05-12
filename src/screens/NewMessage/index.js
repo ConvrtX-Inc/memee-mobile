@@ -67,24 +67,50 @@ export default function NewMessage({navigation}) {
     users.push({userId: global.userData.user_id, name: global.userData.name});
     users.push({userId: user.following_id, name: user.name});
     /* console.log(users); */
-    axios
-      .post(`${global.address}createConversation`, users)
-      .then(function (response) {
-        // setLoader(false)
-        /* console.log(response.data); */
-        navigation.navigate('ChatScreen', {
-          conversationId: response.data.ConversationID,
-          name: user.name,
-          image: user.img,
-        });
+    
+    // axios
+    //   .post(`${global.address}createConversation`, users)
+    //   .then(function (response) {
+    //     // setLoader(false)
+    //     /* console.log(response.data); */
+    //     navigation.navigate('ChatScreen', {
+    //       conversationId: response.data.ConversationID,
+    //       name: user.name,
+    //       image: user.img,
+    //     });
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //     Toast.show({
+    //       type: 'error',
+    //       text2: 'Something went wrong',
+    //     });
+    //     // setLoader(false)
+    //   });
+
+    axios({
+      method: 'post',
+      url: `${global.address}createConversation`,
+      // data: data,
+        validateStatus: status => {
+          return true;
+        },
       })
-      .catch(function (error) {
-        console.log(error);
+      .catch(error => {
+        // loginError()
+        console.log('GLOBAL er ', error);
         Toast.show({
           type: 'error',
           text2: 'Something went wrong',
+          });
+      })
+      .then(Response => {
+        /* console.log('products Response: WITH TOKEN', Response.data); */
+        navigation.navigate('ChatScreen', {
+          conversationId: Response.data.ConversationID,
+          name: Response.data.Title,
+          image: user.img,
         });
-        // setLoader(false)
       });
   }
 

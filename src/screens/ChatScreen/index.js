@@ -106,14 +106,29 @@ const ChatScreen = ({route}) => {
       SentBy: global.userData.user_id,
     };
 
+    console.log('data', data);
+
     setMessages(previousMessages => GiftedChat.append(previousMessages, msg));
 
-    axios
-      .post(`${global.address}sendMessage`, data)
-      .then(function (response) {})
-      .catch(function (error) {
+    axios({
+      method: 'post',
+      url: `${global.address}sendMessage`,
+      data: data,
+      validateStatus: status => {
+        return true;
+      },
+    })
+      .catch(error => {
         console.log(error);
-      });
+      })
+      .then(Response => {});
+
+    // axios
+    //   .post(`${global.address}sendMessage`, data)
+    //   .then(function (response) {})
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
   }
 
   useEffect(() => {
