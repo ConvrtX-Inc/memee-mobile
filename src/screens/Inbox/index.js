@@ -44,20 +44,39 @@ const Inbox = ({showValue}) => {
   );
 
   function getConversations() {
-    axios
-      .get(`${global.address}getConversations/${global.userData.user_id}`)
-      .then(function (response) {
-        // handle success
-        setConversationsView(response.data);
-      })
-      .catch(function (error) {
+    axios({
+      method: 'get',
+      url: `${global.address}getConversations/${global.userData.user_id}`,
+      // data: data,
+      validateStatus: status => {
+        return true;
+      },
+    })
+      .catch(error => {
         // handle error
         console.log(error);
-      })
-      .then(function () {
         setLoading(false);
-        // always executed
+      })
+      .then(Response => {
+        setConversationsView(Response.data);
+        setLoading(false);
       });
+
+
+    // axios
+    //   .get(`${global.address}getConversations/${global.userData.user_id}`)
+    //   .then(function (response) {
+    //     // handle success
+    //     setConversationsView(response.data);
+    //   })
+    //   .catch(function (error) {
+    //     // handle error
+    //     console.log(error);
+    //   })
+    //   .then(function () {
+    //     setLoading(false);
+    //     // always executed
+    //   });
   }
 
   function setConversationsView(data) {
