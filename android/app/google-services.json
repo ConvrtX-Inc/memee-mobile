@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "628249846461",
+    "firebase_url": "https://memee-app-d35d3-default-rtdb.firebaseio.com",
     "project_id": "memee-app-d35d3",
     "storage_bucket": "memee-app-d35d3.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "628249846461-cr9ovfj0pnadq22g5nklgdfaduid74au.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.convrtx.memee",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
         {
           "client_id": "628249846461-u50ij37aidhtm6m5e12vab1lin15lb18.apps.googleusercontent.com",
           "client_type": 3
@@ -29,6 +38,13 @@
             {
               "client_id": "628249846461-u50ij37aidhtm6m5e12vab1lin15lb18.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "628249846461-chkgkacs8dald86mdt2psec819mbil91.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.convrtx.memee"
+              }
             }
           ]
         }
