@@ -731,16 +731,18 @@ export default function Dashboard(props) {
   }
 
   function navigationToProfileFN(index) {
-    if (index) {
-      var id =
+    //console.log('index', index);
+    if (index > -1 && index != null) {
+      var user =
         tabNumber == 1
-          ? followingPost[index].user_id
+          ? followingPost[index]
           : tabNumber == 2
-          ? newMemePost[index].user_id
+          ? newMemePost[index]
           : tabNumber == 3
-          ? trendingPost[index].user_id
+          ? trendingPost[index]
           : 0;
-
+      var id = user.user_id;
+      //console.log('user', user, id);
       global.profileID = id;
       navigation.navigate('ProfileScreen');
     }
