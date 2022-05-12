@@ -13,6 +13,7 @@ import {
   FlatList,
   ImageBackground,
   ViewBase,
+  TextInput,
 } from 'react-native';
 import {Avatar} from 'react-native-elements';
 import {useNavigation} from '@react-navigation/native';
@@ -56,6 +57,16 @@ export default function SharePost() {
     }
     setIndicatButton(true);
     var currentDate = currentDateFN();
+    var unicodeString = '';
+    console.log('desc', desc);
+    for (var i = 0; i < desc.length; i++) {
+      var theUnicode = desc.charCodeAt(i).toString(16).toUpperCase();
+      while (theUnicode.length < 4) {
+        theUnicode = '0' + theUnicode;
+      }
+      theUnicode = '\\u' + theUnicode;
+      unicodeString += theUnicode;
+    }
     fetch(global.address + 'SharePost', {
       method: 'POST',
       headers: {
@@ -68,7 +79,7 @@ export default function SharePost() {
         userId: global.userData.user_id,
         dateTime: currentDate,
         imgUrl: global.sharePost.img_url,
-        description: desc,
+        description: unicodeString,
       }),
     })
       .then(response => response.json())

@@ -36,7 +36,10 @@ import {
 import messaging from '@react-native-firebase/messaging';
 import {firebaseConfig} from '../../redux/constants';
 import BottomNavBar from '../../component/BottomNavBar';
-import {getNotifications} from '../../redux/actions/Auth';
+import {
+  getNotifications,
+} from '../../redux/actions/Auth';
+
 import Toast from 'react-native-toast-message';
 import Video from 'react-native-video';
 import VideoPlayer from 'react-native-video-controls';
@@ -89,9 +92,13 @@ async function getAndroidExportResult() {
 
 export default function Dashboard(props) {
   const navigation = useNavigation();
-  const {coinsStored, scrollDown, ImageBottoms, notifications} = useSelector(
-    ({authRed}) => authRed,
-  );
+  const {
+    coinsStored,
+    scrollDown,
+    ImageBottoms,
+    notifications,
+    tournamentRanking,
+  } = useSelector(({authRed}) => authRed);
 
   let options = {
     mediaType: 'photo',
@@ -162,7 +169,7 @@ export default function Dashboard(props) {
   // fetching of Stories
   useEffect(() => {
     fetchStories();
-    console.log('token', global.userData);
+    // console.log('token', global.userData);
   }, [updatedStories]);
 
   // upload image/video
@@ -359,7 +366,7 @@ export default function Dashboard(props) {
       }
 
       dispatch(getNotifications());
-
+      
       messaging()
         .getToken()
         .then(deviceToken => {
@@ -826,7 +833,15 @@ export default function Dashboard(props) {
       openPhotoEditor(source.uri);
     });
   }
-
+  const getDescription = text => {
+    try {
+      return decodeURIComponent(
+        JSON.parse('"' + text.replace(/\"/g, '\\"') + '"'),
+      );
+    } catch (err) {
+      return text;
+    }
+  };
   const openCamera = async () => {
     setIsOpenMedia(true);
     let isStoragePermitted = await requestExternalWritePermission();
@@ -897,413 +912,426 @@ export default function Dashboard(props) {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
-        renderItem={({item, index}) => (
-          <View
-            style={{width: windowWidth, alignSelf: 'center', marginBottom: 10}}>
-            <View style={{flexDirection: 'row', marginBottom: 10}}>
-              {item.ParentUserId > 0 ? (
-                <View>
-                  <TouchableOpacity
-                    onPress={() => navigationToProfileFN(index)}>
-                    <View
-                      style={{
-                        marginTop: 15,
-                        paddingLeft: 15,
-                        flexDirection: 'row',
-                      }}>
-                      <View>
-                        <View
-                          style={{
-                            borderRadius: 35,
-                            borderColor: '#fff',
-                            borderWidth: 2,
-                          }}>
-                          <Avatar
-                            rounded
-                            size="medium"
-                            source={{uri: item.UserImage}}
-                          />
-                        </View>
-                      </View>
-
-                      <View
-                        style={{
-                          marginLeft: 10,
-                          flexDirection: 'row',
-                          alignItems: 'baseline',
-                        }}>
-                        <Text
-                          numberOfLines={1}
-                          style={{
-                            fontSize: 18,
-                            color: global.colorTextPrimary,
-                            marginTop: 0,
-                            fontFamily: global.fontSelect,
-                            width: textMaximumWidth - 100,
-                          }}>
-                          <Text style={{width: 5}}>{item.UserName} </Text>
-                        </Text>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: global.colorTextPrimary,
-                          }}>
-                          shared this Memee
-                        </Text>
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    onPress={() => navigationToProfileFN(index)}>
-                    <View
-                      style={{
-                        marginTop: -25,
-                        paddingLeft: 45,
-                        flexDirection: 'row',
-                      }}>
-                      <View>
-                        <View
-                          style={{
-                            borderRadius: 35,
-                            borderColor: '#fff',
-                            borderWidth: 2,
-                          }}>
-                          <Avatar
-                            rounded
-                            size="small"
-                            source={{uri: item.ParentUserImage}}
-                          />
-                        </View>
-                      </View>
-
-                      <View style={{marginLeft: 10}}>
-                        <Text
-                          numberOfLines={3}
-                          ellipsizeMode="tail"
-                          style={{
-                            fontSize: 15,
-                            color: global.colorTextPrimary,
-                            marginTop: 6,
-                            fontFamily: global.fontSelect,
-                            width: textMaximumWidth,
-                          }}>
-                          {item.ParentUserName}
-                        </Text>
-                        {/* <Text style={{ fontSize: 10, color: '#D1BCD4' }}>{item.UserBio}</Text> */}
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              ) : (
-                <View>
-                  <TouchableOpacity
-                    onPress={() => navigationToProfileFN(index)}>
-                    <View
-                      style={{
-                        marginTop: 15,
-                        paddingLeft: 15,
-                        flexDirection: 'row',
-                      }}>
-                      <View>
-                        <View
-                          style={{
-                            borderRadius: 35,
-                            borderColor: '#fff',
-                            borderWidth: 2,
-                          }}>
-                          <Avatar
-                            rounded
-                            size="medium"
-                            source={{uri: item.UserImage}}
-                          />
-                        </View>
-                      </View>
-
-                      <View style={{marginLeft: 10}}>
-                        <Text
-                          numberOfLines={3}
-                          ellipsizeMode="tail"
-                          style={{
-                            fontSize: 18,
-                            color: global.colorTextPrimary,
-                            fontFamily: global.fontSelect,
-                            width: textMaximumWidth,
-                          }}>
-                          {item.UserName}
-                        </Text>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: global.colorTextPrimary,
-                            fontFamily: global.fontSelect,
-                            width: textMaximumWidth,
-                          }}>
-                          {item.UserBio}
-                        </Text>
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              )}
-              {global.userData.user_id == item.user_id ? (
-                <TouchableOpacity
-                  onPress={() => showMenuFN(index)}
-                  style={{marginLeft: 'auto', marginTop: 27, marginRight: 10}}>
-                  <View>
-                    <Image
-                      style={{
-                        height: 22,
-                        width: 22,
-                        marginLeft: 10,
-                        marginRight: 2,
-                        tintColor: global.colorIcon,
-                      }}
-                      resizeMode="stretch"
-                      source={require('../../images/more.png')}
-                    />
-                  </View>
-                </TouchableOpacity>
-              ) : null}
-            </View>
-
-            <TwitterTextView
-              onPressHashtag={() => {}}
-              hashtagStyle={{color: global.colorTextActive}}
-              style={{
-                color: global.colorTextPrimary,
-                marginLeft: '5%',
-                marginTop: 5,
-                marginRight: '5%',
-                fontFamily: global.fontSelect,
-                marginBottom: 15,
-              }}>
-              {item.description}
-            </TwitterTextView>
-
-            {item.img_url.includes('mp4') ? (
-              <View key={item.img_url}>
-                <VideoPlayer
-                  key={item.post_id}
-                  source={{uri: item.img_url}}
-                  disableFullscreen
-                  disableBack
-                  paused={true}
-                  controlTimeout={2500}
-                  tapAnywhereToPause={true}
-                  showOnStart={true}
-                  style={{
-                    width: '100%',
-                    height: videoHeight,
-                  }}
-                  resizeMode="cover"
-                  onLoad={response => {
-                    const {width, height} = response.naturalSize;
-                    const heightScaled =
-                      height * (Dimensions.get('screen').width / width);
-
-                    if (heightScaled > 500) {
-                      setVideoHeight(500);
-                    } else {
-                      setVideoHeight(heightScaled);
-                    }
-                  }}
-                />
-              </View>
-            ) : (
-              <ImageBackground
-                source={{uri: item.img_url}}
-                resizeMode="contain"
-                style={{
-                  height: item.calHeight ? item.calHeight : windowWidth,
-                  width: '100%',
-                }}>
-                <LinearGradient
-                  colors={[global.overlay1, global.overlay3]}
-                  style={{height: '100%', width: '100%'}}
-                />
-              </ImageBackground>
-            )}
-
-            <View style={{width: '100%', backgroundColor: global.colorPrimary}}>
-              <ImageBackground
-                source={global.postInteractionsBG}
-                resizeMode="stretch"
-                style={{
-                  flexDirection: 'row',
-                  width: windowWidth - (windowWidth * 25) / 100,
-                  marginLeft: '0%',
-                  marginTop: 15,
-                  height: windowWidth - (windowWidth * 79) / 100,
-                  borderRadius: 40,
-                  alignSelf: 'center',
-                }}>
-                <View
-                  style={{
-                    width: '26%',
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  {item.IsLiked == 0 ? (
-                    <TouchableOpacity onPress={() => likeOrUnlikeFN(index)}>
-                      <View>
-                        <Image
-                          style={{
-                            height: 28,
-                            width: 28,
-                            marginLeft: 10,
-                            marginRight: 2,
-                            tintColor: global.postInteractionsTextColor,
-                          }}
-                          resizeMode="stretch"
-                          source={require('../../images/Vector.png')}
-                        />
-                      </View>
-                    </TouchableOpacity>
-                  ) : (
-                    <TouchableOpacity onPress={() => likeOrUnlikeFN(index)}>
-                      <View>
-                        <Image
-                          style={{
-                            height: 28,
-                            width: 28,
-                            marginLeft: 10,
-                            marginRight: 2,
-                            tintColor: heartColor,
-                          }}
-                          resizeMode="stretch"
-                          source={require('../../images/Vector.png')}
-                        />
-                      </View>
-                    </TouchableOpacity>
-                  )}
-
-                  <Text
-                    style={[
-                      styles.txtReaction,
-                      {
-                        fontFamily: global.fontSelect,
-                        color: global.postInteractionsTextColor,
-                      },
-                    ]}>
-                    {item.like_count}
-                  </Text>
-                </View>
-
-                <View
-                  style={{
-                    width: '40%',
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <TouchableOpacity onPress={() => navigateToComment(index)}>
-                    <Image
-                      style={{
-                        height: 28,
-                        width: 28,
-                        marginLeft: 10,
-                        marginRight: 2,
-                        tintColor: global.postInteractionsTextColor,
-                      }}
-                      resizeMode="stretch"
-                      source={require('../../images/sms.png')}
-                    />
-                  </TouchableOpacity>
-                  <Text
-                    style={[
-                      styles.txtReaction,
-                      {
-                        fontFamily: global.fontSelect,
-                        color: global.postInteractionsTextColor,
-                      },
-                    ]}>
-                    {item.comment_count}
-                  </Text>
-                </View>
-
-                <View
-                  style={{
-                    width: '32%',
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <TouchableOpacity onPress={() => sharePostFN(index)}>
-                    <Image
-                      style={{
-                        height: 28,
-                        width: 28,
-                        marginLeft: 10,
-                        marginRight: 2,
-                        tintColor: global.postInteractionsTextColor,
-                      }}
-                      resizeMode="stretch"
-                      source={require('../../images/share.png')}
-                    />
-                  </TouchableOpacity>
-                  <Text
-                    style={[
-                      styles.txtReaction,
-                      {
-                        fontFamily: global.fontSelect,
-                        color: global.postInteractionsTextColor,
-                      },
-                    ]}>
-                    {item.share_count}
-                  </Text>
-                </View>
-              </ImageBackground>
-            </View>
-
+        renderItem={({item, index}) => {
+          var sd = '"' + item.description.replace(/\"/g, '\\"') + '"';
+          sd.replace(/\n/g, ' ');
+          return (
             <View
               style={{
-                width: '100%',
-                height: 3,
-                backgroundColor: global.colorSecondary,
-                marginTop: 20,
-              }}></View>
-
-            {item.showMenu == true ? (
-              <View
-                style={{
-                  padding: 10,
-                  borderRadius: 20,
-                  position: 'absolute',
-                  top: 30,
-                  right: 22,
-                  backgroundColor: '#fff',
-                }}>
-                {global.userData.user_id == item.user_id ? (
+                width: windowWidth,
+                alignSelf: 'center',
+                marginBottom: 10,
+              }}>
+              <View style={{flexDirection: 'row', marginBottom: 10}}>
+                {item.ParentUserId > 0 ? (
                   <View>
-                    <TouchableOpacity onPress={() => showMenueModalFN(index)}>
-                      <View style={{flexDirection: 'row', marginVertical: 5}}>
-                        <Image
+                    <TouchableOpacity
+                      onPress={() => navigationToProfileFN(index)}>
+                      <View
+                        style={{
+                          marginTop: 15,
+                          paddingLeft: 15,
+                          flexDirection: 'row',
+                        }}>
+                        <View>
+                          <View
+                            style={{
+                              borderRadius: 35,
+                              borderColor: '#fff',
+                              borderWidth: 2,
+                            }}>
+                            <Avatar
+                              rounded
+                              size="medium"
+                              source={{uri: item.UserImage}}
+                            />
+                          </View>
+                        </View>
+
+                        <View
                           style={{
-                            height: 22,
-                            width: 22,
-                            marginLeft: 0,
-                            marginRight: 10,
-                          }}
-                          resizeMode="stretch"
-                          source={require('../../images/delete.png')}
-                        />
-                        <Text
-                          style={{
-                            fontFamily: global.fontSelect,
-                            marginRight: 5,
+                            marginLeft: 10,
+                            flexDirection: 'row',
+                            alignItems: 'baseline',
                           }}>
-                          Delete
-                        </Text>
+                          <Text
+                            numberOfLines={1}
+                            style={{
+                              fontSize: 18,
+                              color: global.colorTextPrimary,
+                              marginTop: 0,
+                              fontFamily: global.fontSelect,
+                              width: textMaximumWidth - 100,
+                            }}>
+                            <Text style={{width: 5}}>{item.UserName} </Text>
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: global.colorTextPrimary,
+                            }}>
+                            shared this Memee
+                          </Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      onPress={() => navigationToProfileFN(index)}>
+                      <View
+                        style={{
+                          marginTop: -25,
+                          paddingLeft: 45,
+                          flexDirection: 'row',
+                        }}>
+                        <View>
+                          <View
+                            style={{
+                              borderRadius: 35,
+                              borderColor: '#fff',
+                              borderWidth: 2,
+                            }}>
+                            <Avatar
+                              rounded
+                              size="small"
+                              source={{uri: item.ParentUserImage}}
+                            />
+                          </View>
+                        </View>
+
+                        <View style={{marginLeft: 10}}>
+                          <Text
+                            numberOfLines={3}
+                            ellipsizeMode="tail"
+                            style={{
+                              fontSize: 15,
+                              color: global.colorTextPrimary,
+                              marginTop: 6,
+                              fontFamily: global.fontSelect,
+                              width: textMaximumWidth,
+                            }}>
+                            {item.ParentUserName}
+                          </Text>
+                          {/* <Text style={{ fontSize: 10, color: '#D1BCD4' }}>{item.UserBio}</Text> */}
+                        </View>
                       </View>
                     </TouchableOpacity>
                   </View>
+                ) : (
+                  <View>
+                    <TouchableOpacity
+                      onPress={() => navigationToProfileFN(index)}>
+                      <View
+                        style={{
+                          marginTop: 15,
+                          paddingLeft: 15,
+                          flexDirection: 'row',
+                        }}>
+                        <View>
+                          <View
+                            style={{
+                              borderRadius: 35,
+                              borderColor: '#fff',
+                              borderWidth: 2,
+                            }}>
+                            <Avatar
+                              rounded
+                              size="medium"
+                              source={{uri: item.UserImage}}
+                            />
+                          </View>
+                        </View>
+
+                        <View style={{marginLeft: 10}}>
+                          <Text
+                            numberOfLines={3}
+                            ellipsizeMode="tail"
+                            style={{
+                              fontSize: 18,
+                              color: global.colorTextPrimary,
+                              fontFamily: global.fontSelect,
+                              width: textMaximumWidth,
+                            }}>
+                            {item.UserName}
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: global.colorTextPrimary,
+                              fontFamily: global.fontSelect,
+                              width: textMaximumWidth,
+                            }}>
+                            {item.UserBio}
+                          </Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                )}
+                {global.userData.user_id == item.user_id ? (
+                  <TouchableOpacity
+                    onPress={() => showMenuFN(index)}
+                    style={{
+                      marginLeft: 'auto',
+                      marginTop: 27,
+                      marginRight: 10,
+                    }}>
+                    <View>
+                      <Image
+                        style={{
+                          height: 22,
+                          width: 22,
+                          marginLeft: 10,
+                          marginRight: 2,
+                          tintColor: global.colorIcon,
+                        }}
+                        resizeMode="stretch"
+                        source={require('../../images/more.png')}
+                      />
+                    </View>
+                  </TouchableOpacity>
                 ) : null}
               </View>
-            ) : null}
-          </View>
-        )}
+              {console.log('asdsss', sd)}
+              <TwitterTextView
+                // onPressHashtag={() => {}}
+                hashtagStyle={{color: global.colorTextActive}}
+                style={{
+                  color: global.colorTextPrimary,
+                  marginLeft: '5%',
+                  marginTop: 5,
+                  marginRight: '5%',
+                  fontFamily: global.fontSelect,
+                  marginBottom: 15,
+                }}>
+                {getDescription(item.description)}
+              </TwitterTextView>
+
+              {item.img_url.includes('mp4') ? (
+                <View key={item.img_url}>
+                  <VideoPlayer
+                    key={item.post_id}
+                    source={{uri: item.img_url}}
+                    disableFullscreen
+                    disableBack
+                    paused={true}
+                    controlTimeout={2500}
+                    tapAnywhereToPause={true}
+                    showOnStart={true}
+                    style={{
+                      width: '100%',
+                      height: videoHeight,
+                    }}
+                    resizeMode="cover"
+                    onLoad={response => {
+                      const {width, height} = response.naturalSize;
+                      const heightScaled =
+                        height * (Dimensions.get('screen').width / width);
+
+                      if (heightScaled > 500) {
+                        setVideoHeight(500);
+                      } else {
+                        setVideoHeight(heightScaled);
+                      }
+                    }}
+                  />
+                </View>
+              ) : (
+                <ImageBackground
+                  source={{uri: item.img_url}}
+                  resizeMode="contain"
+                  style={{
+                    height: item.calHeight ? item.calHeight : windowWidth,
+                    width: '100%',
+                  }}>
+                  <LinearGradient
+                    colors={[global.overlay1, global.overlay3]}
+                    style={{height: '100%', width: '100%'}}
+                  />
+                </ImageBackground>
+              )}
+
+              <View
+                style={{width: '100%', backgroundColor: global.colorPrimary}}>
+                <ImageBackground
+                  source={global.postInteractionsBG}
+                  resizeMode="stretch"
+                  style={{
+                    flexDirection: 'row',
+                    width: windowWidth - (windowWidth * 25) / 100,
+                    marginLeft: '0%',
+                    marginTop: 15,
+                    height: windowWidth - (windowWidth * 79) / 100,
+                    borderRadius: 40,
+                    alignSelf: 'center',
+                  }}>
+                  <View
+                    style={{
+                      width: '26%',
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    {item.IsLiked == 0 ? (
+                      <TouchableOpacity onPress={() => likeOrUnlikeFN(index)}>
+                        <View>
+                          <Image
+                            style={{
+                              height: 28,
+                              width: 28,
+                              marginLeft: 10,
+                              marginRight: 2,
+                              tintColor: global.postInteractionsTextColor,
+                            }}
+                            resizeMode="stretch"
+                            source={require('../../images/Vector.png')}
+                          />
+                        </View>
+                      </TouchableOpacity>
+                    ) : (
+                      <TouchableOpacity onPress={() => likeOrUnlikeFN(index)}>
+                        <View>
+                          <Image
+                            style={{
+                              height: 28,
+                              width: 28,
+                              marginLeft: 10,
+                              marginRight: 2,
+                              tintColor: heartColor,
+                            }}
+                            resizeMode="stretch"
+                            source={require('../../images/Vector.png')}
+                          />
+                        </View>
+                      </TouchableOpacity>
+                    )}
+
+                    <Text
+                      style={[
+                        styles.txtReaction,
+                        {
+                          fontFamily: global.fontSelect,
+                          color: global.postInteractionsTextColor,
+                        },
+                      ]}>
+                      {item.like_count}
+                    </Text>
+                  </View>
+
+                  <View
+                    style={{
+                      width: '40%',
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <TouchableOpacity onPress={() => navigateToComment(index)}>
+                      <Image
+                        style={{
+                          height: 28,
+                          width: 28,
+                          marginLeft: 10,
+                          marginRight: 2,
+                          tintColor: global.postInteractionsTextColor,
+                        }}
+                        resizeMode="stretch"
+                        source={require('../../images/sms.png')}
+                      />
+                    </TouchableOpacity>
+                    <Text
+                      style={[
+                        styles.txtReaction,
+                        {
+                          fontFamily: global.fontSelect,
+                          color: global.postInteractionsTextColor,
+                        },
+                      ]}>
+                      {item.comment_count}
+                    </Text>
+                  </View>
+
+                  <View
+                    style={{
+                      width: '32%',
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <TouchableOpacity onPress={() => sharePostFN(index)}>
+                      <Image
+                        style={{
+                          height: 28,
+                          width: 28,
+                          marginLeft: 10,
+                          marginRight: 2,
+                          tintColor: global.postInteractionsTextColor,
+                        }}
+                        resizeMode="stretch"
+                        source={require('../../images/share.png')}
+                      />
+                    </TouchableOpacity>
+                    <Text
+                      style={[
+                        styles.txtReaction,
+                        {
+                          fontFamily: global.fontSelect,
+                          color: global.postInteractionsTextColor,
+                        },
+                      ]}>
+                      {item.share_count}
+                    </Text>
+                  </View>
+                </ImageBackground>
+              </View>
+
+              <View
+                style={{
+                  width: '100%',
+                  height: 3,
+                  backgroundColor: global.colorSecondary,
+                  marginTop: 20,
+                }}></View>
+
+              {item.showMenu == true ? (
+                <View
+                  style={{
+                    padding: 10,
+                    borderRadius: 20,
+                    position: 'absolute',
+                    top: 30,
+                    right: 22,
+                    backgroundColor: '#fff',
+                  }}>
+                  {global.userData.user_id == item.user_id ? (
+                    <View>
+                      <TouchableOpacity onPress={() => showMenueModalFN(index)}>
+                        <View style={{flexDirection: 'row', marginVertical: 5}}>
+                          <Image
+                            style={{
+                              height: 22,
+                              width: 22,
+                              marginLeft: 0,
+                              marginRight: 10,
+                            }}
+                            resizeMode="stretch"
+                            source={require('../../images/delete.png')}
+                          />
+                          <Text
+                            style={{
+                              fontFamily: global.fontSelect,
+                              marginRight: 5,
+                            }}>
+                            Delete
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                  ) : null}
+                </View>
+              ) : null}
+            </View>
+          );
+        }}
         keyExtractor={item => item.post_id}
         ListFooterComponent={() => (
           <View>

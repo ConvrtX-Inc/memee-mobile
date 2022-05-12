@@ -142,6 +142,7 @@ export default class CommentScreen extends React.Component {
   }
 
   commentPlacedFN() {
+    console.log('cooms', this.state.comment);
     if (this.state.placeholderStat == 'Write a comment') {
       parentID = '0';
     }
@@ -164,7 +165,7 @@ export default class CommentScreen extends React.Component {
       }, 1600);
     } else {
       var currentDate = currentDateFN();
-
+      
       fetch(global.address + 'PostComment', {
         method: 'POST',
         headers: {
@@ -374,7 +375,11 @@ export default class CommentScreen extends React.Component {
                             color: global.colorTextPrimary,
                             fontFamily: global.fontSelect,
                           }}>
-                          {item.text}
+                          {decodeURIComponent(
+                            JSON.parse(
+                              '"' + item.text.replace(/\"/g, '\\"') + '"',
+                            ),
+                          )}
                         </Text>
                       </View>
                     </View>
@@ -564,9 +569,27 @@ export default class CommentScreen extends React.Component {
               ]}
               placeholder={this.state.placeholderStat}
               placeholderTextColor={global.commentInputPlaceholderTextColor}
-              value={this.state.comment}
+              value={decodeURIComponent(
+                JSON.parse(
+                  '"' + this.state.comment.replace(/\"/g, '\\"') + '"',
+                ),
+              )}
               multiline={true}
-              onChangeText={text => this.setState({comment: text})}
+              onChangeText={text => {
+                var unicodeString = '';
+                for (var i = 0; i < text.length; i++) {
+                  var theUnicode = text
+                    .charCodeAt(i)
+                    .toString(16)
+                    .toUpperCase();
+                  while (theUnicode.length < 4) {
+                    theUnicode = '0' + theUnicode;
+                  }
+                  theUnicode = '\\u' + theUnicode;
+                  unicodeString += theUnicode;
+                }
+                this.setState({comment: unicodeString});
+              }}
               secureTextEntry={false}
               ref={'secondTextInput'}
             />
