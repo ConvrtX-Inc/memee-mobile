@@ -87,13 +87,20 @@ export default function JudgeScreen(props) {
     console.log(temp);
     // data.push({NoOfPosts: '5', date: `2022-05-01`, user_id: '0'});
     let day = parseInt(new Date(data[0].date).getDate());
+    let year = parseInt(new Date(data[0].date).getFullYear());
+    // let Month = parseInt(new Date(data[0].date).getMonth());
+    // console.log('years', year);
+    // console.log('month', Month);
     // console.log('lastadasy', data.length);
     // console.log(temp);
     for (let i = day - 1; i > 0; i--) {
-      temp.push({NoOfPosts: '0', date: `2022-05-0${i}`, user_id: '0'});
+      console.log('lenssd', i.length);
+      var dateText =
+        i < 10 ? `${year}-${month}-0${i}` : `${year}-${month}-${i}`;
+      temp.push({NoOfPosts: '0', date: dateText, user_id: '0'});
     }
     // console.log('lastadassy', data);
-    // console.log('lastadassy', temp);
+    console.log('lastadassy', temp);
 
     for (let x = 0; x < data.length; x++) {
       console.log('days', data[x].NoOfPosts);
