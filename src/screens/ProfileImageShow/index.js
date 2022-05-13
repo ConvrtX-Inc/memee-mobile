@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -13,52 +13,39 @@ import {Avatar} from 'react-native-elements';
 import TwitterTextView from 'react-native-twitter-textview';
 import LinearGradient from 'react-native-linear-gradient';
 import {currentDateFN} from '../../Utility/Utils';
+import Video from 'react-native-video';
+import VideoPlayer from 'react-native-video-controls';
 
 var windowWidth = Dimensions.get('window').width;
 
-export default class ProfileImageShow extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectedPostState: '',
-      defaultHeartColor: '#89789A',
-      heartColor: '#EC1C1C',
-    };
-  }
+const index = ({navigation}) => {
+  const [selectedPostState, setSelectedPostState] = useState(
+    global.selectedPost,
+  );
+  const [defaultHeartColor, setDefaultHeartColor] = useState('#89789A');
+  const [heartColor, setHeartColor] = useState('#EC1C1C');
+  const [videoHeight, setVideoHeight] = useState(400);
 
-  getImageSize = async uri =>
+  const getImageSize = async uri =>
     new Promise(resolve => {
       Image.getSize(uri, (width, height) => {
         resolve([width, height]);
       });
     });
 
-  async componentDidMount() {
-    /* console.log(global.selectedPost.img_url); */
-    const [width, height] = await this.getImageSize(
-      global.selectedPost.img_url,
-    );
-    const ratio = windowWidth / width;
-    global.selectedPost.calHeight = height * ratio;
-
-    this.setState({
-      selectedPostState: global.selectedPost,
-    });
-  }
-
-  likeOrUnlikeFN() {
-    var postID = this.state.selectedPostState.post_id;
+  const likeOrUnlikeFN = () => {
+    var postID = selectedPostState.post_id;
 
     var likeOrUnlikeApi = '';
     var arrayTemp = '';
 
-    if (this.state.selectedPostState.IsLiked == 1) {
+    if (selectedPostState.IsLiked == 1) {
       likeOrUnlikeApi = 'UnLikePost';
     } else {
       likeOrUnlikeApi = 'LikePost';
     }
 
-    var arrayTemp = this.state.selectedPostState;
+    var arrayTemp = {...selectedPostState};
 
     if (arrayTemp.IsLiked == 0) {
       arrayTemp.IsLiked = 1;
@@ -67,10 +54,7 @@ export default class ProfileImageShow extends React.Component {
       arrayTemp.IsLiked = 0;
       arrayTemp.like_count = parseInt(arrayTemp.like_count) - 1;
     }
-
-    this.setState({
-      selectedPostState: arrayTemp,
-    });
+    setSelectedPostState(arrayTemp);
 
     fetch(global.address + 'reactToPost', {
       method: 'POST',
@@ -92,211 +76,256 @@ export default class ProfileImageShow extends React.Component {
       .catch(error => {
         console.error(error);
       });
-  }
+  };
 
-  navigateToComment() {
-    global.postId = this.state.selectedPostState.post_id;
+  const navigateToComment = () => {
+    global.postId = selectedPostState.post_id;
 
-    this.props.navigation.navigate('CommentScreen');
-  }
+    navigation.navigate('CommentScreen');
+  };
 
-  sharePostFN() {
-    /* console.log(this.state.selectedPostState); */
+  const sharePostFN = () => {
+    /* console.log( selectedPostState); */
 
-    global.sharePost = this.state.selectedPostState;
-    this.props.navigation.navigate('SharePost');
-  }
+    global.sharePost = selectedPostState;
+    navigation.navigate('SharePost');
+  };
 
-  render() {
-    return (
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: global.colorPrimary,
-          marginBottom: -30,
-        }}>
-        <ScrollView style={{marginBottom: 40}}>
+  const setUpData = async () => {
+    var data = global.selectedPost;
+    if (!data.img_url.includes('mp4')) {
+      const [width, height] = await getImageSize(data.img_url);
+      const ratio = windowWidth / width;
+      data.calHeight = height * ratio;
+    }
+    setSelectedPostState(data);
+    //console.log(data);
+  };
+
+  useEffect(() => {
+    setUpData();
+  }, []);
+
+  return (
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: global.colorPrimary,
+        marginBottom: -30,
+      }}>
+      <ScrollView style={{marginBottom: 40}}>
+        {selectedPostState.img_url.includes('mp4') ? (
+          <View key={selectedPostState.img_url}>
+            <VideoPlayer
+              key={selectedPostState.post_id}
+              source={{uri: selectedPostState.img_url}}
+              disableFullscreen
+              disableBack
+              controlTimeout={2500}
+              tapAnywhereToPause={true}
+              showOnStart={true}
+              style={{
+                width: '100%',
+                height: videoHeight,
+              }}
+              resizeMode="cover"
+              onLoad={response => {
+                const {width, height} = response.naturalSize;
+                const heightScaled =
+                  height * (Dimensions.get('screen').width / width);
+
+                if (heightScaled > 500) {
+                  setVideoHeight(500);
+                } else {
+                  setVideoHeight(heightScaled);
+                }
+              }}
+            />
+          </View>
+        ) : (
           <ImageBackground
             style={{
               width: '100%',
-              height: this.state.selectedPostState.calHeight,
+              height: selectedPostState?.calHeight || 500,
             }}
             resizeMode="stretch"
-            source={{uri: this.state.selectedPostState.img_url}}>
+            source={{uri: selectedPostState.img_url}}>
             <LinearGradient
               colors={[global.overlay1, global.overlay3]}
               style={{
-                height: this.state.selectedPostState.calHeight,
+                height: selectedPostState.calHeight,
                 width: '100%',
               }}
             />
           </ImageBackground>
+        )}
 
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('ProfileScreen')}
-            style={{position: 'absolute', top: 30, left: 18}}>
-            <View
+        <TouchableOpacity
+          onPress={() => navigation.navigate('ProfileScreen')}
+          style={{position: 'absolute', top: 30, left: 18}}>
+          <View
+            style={{
+              opacity: 0.5,
+              backgroundColor: '#000',
+              height: 45,
+              width: 45,
+              justifyContent: 'center',
+              borderRadius: 45,
+            }}>
+            <Image
               style={{
-                opacity: 0.5,
-                backgroundColor: '#000',
-                height: 45,
-                width: 45,
-                justifyContent: 'center',
-                borderRadius: 45,
-              }}>
+                height: 20,
+                width: 20,
+                tintColor: '#fff',
+                alignSelf: 'center',
+                marginRight: 5,
+              }}
+              resizeMode="stretch"
+              source={require('../../images/back1.png')}
+            />
+          </View>
+        </TouchableOpacity>
+
+        <ImageBackground
+          source={require('../../images/Rectangle.png')}
+          resizeMode="stretch"
+          style={{
+            flexDirection: 'row',
+            width: '85%',
+            marginLeft: '11%',
+            marginTop: 10,
+            height: 80,
+            borderRadius: 40,
+            alignSelf: 'center',
+          }}>
+          <View
+            style={{
+              width: '28%',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            {selectedPostState.IsLiked == 0 ? (
+              <TouchableOpacity onPress={() => likeOrUnlikeFN()}>
+                <View>
+                  <Image
+                    style={{
+                      height: 28,
+                      width: 28,
+                      marginLeft: 10,
+                      marginRight: 2,
+                      tintColor: defaultHeartColor,
+                    }}
+                    resizeMode="stretch"
+                    source={require('../../images/Vector.png')}
+                  />
+                </View>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={() => likeOrUnlikeFN()}>
+                <View>
+                  <Image
+                    style={{
+                      height: 28,
+                      width: 28,
+                      marginLeft: 10,
+                      marginRight: 2,
+                      tintColor: heartColor,
+                    }}
+                    resizeMode="stretch"
+                    source={require('../../images/Vector.png')}
+                  />
+                </View>
+              </TouchableOpacity>
+            )}
+            <Text style={{fontFamily: global.fontSelect}}>
+              {selectedPostState.like_count}
+            </Text>
+          </View>
+
+          <View
+            style={{
+              width: '28%',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <TouchableOpacity onPress={() => navigateToComment()}>
               <Image
                 style={{
-                  height: 20,
-                  width: 20,
-                  tintColor: '#fff',
-                  alignSelf: 'center',
-                  marginRight: 5,
+                  height: 28,
+                  width: 28,
+                  marginLeft: 10,
+                  marginRight: 2,
                 }}
                 resizeMode="stretch"
-                source={require('../../images/back1.png')}
+                source={require('../../images/sms.png')}
               />
-            </View>
-          </TouchableOpacity>
-
-          <ImageBackground
-            source={require('../../images/Rectangle.png')}
-            resizeMode="stretch"
-            style={{
-              flexDirection: 'row',
-              width: '85%',
-              marginLeft: '11%',
-              marginTop: 10,
-              height: 80,
-              borderRadius: 40,
-              alignSelf: 'center',
-            }}>
-            <View
-              style={{
-                width: '28%',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              {this.state.selectedPostState.IsLiked == 0 ? (
-                <TouchableOpacity onPress={() => this.likeOrUnlikeFN()}>
-                  <View>
-                    <Image
-                      style={{
-                        height: 28,
-                        width: 28,
-                        marginLeft: 10,
-                        marginRight: 2,
-                        tintColor: this.state.defaultHeartColor,
-                      }}
-                      resizeMode="stretch"
-                      source={require('../../images/Vector.png')}
-                    />
-                  </View>
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity onPress={() => this.likeOrUnlikeFN()}>
-                  <View>
-                    <Image
-                      style={{
-                        height: 28,
-                        width: 28,
-                        marginLeft: 10,
-                        marginRight: 2,
-                        tintColor: this.state.heartColor,
-                      }}
-                      resizeMode="stretch"
-                      source={require('../../images/Vector.png')}
-                    />
-                  </View>
-                </TouchableOpacity>
-              )}
-              <Text style={{fontFamily: global.fontSelect}}>
-                {this.state.selectedPostState.like_count}
-              </Text>
-            </View>
-
-            <View
-              style={{
-                width: '28%',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <TouchableOpacity onPress={() => this.navigateToComment()}>
-                <Image
-                  style={{
-                    height: 28,
-                    width: 28,
-                    marginLeft: 10,
-                    marginRight: 2,
-                  }}
-                  resizeMode="stretch"
-                  source={require('../../images/sms.png')}
-                />
-              </TouchableOpacity>
-              <Text style={{fontFamily: global.fontSelect}}>
-                {this.state.selectedPostState.comment_count}
-              </Text>
-            </View>
-
-            <View
-              style={{
-                width: '28%',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <TouchableOpacity onPress={() => this.sharePostFN()}>
-                <Image
-                  style={{
-                    height: 28,
-                    width: 28,
-                    marginLeft: 10,
-                    marginRight: 2,
-                  }}
-                  resizeMode="stretch"
-                  source={require('../../images/share.png')}
-                />
-              </TouchableOpacity>
-              <Text style={{fontFamily: global.fontSelect}}>
-                {this.state.selectedPostState.share_count}
-              </Text>
-            </View>
-          </ImageBackground>
-
-          <View style={{flexDirection: 'row', marginLeft: 10}}>
-            <Avatar
-              rounded
-              size="small"
-              source={{uri: this.state.selectedPostState.UserImage}}
-            />
-
-            <Text
-              style={{
-                fontFamily: global.fontSelect,
-                color: global.colorTextPrimary,
-                marginTop: 10,
-                marginLeft: 4,
-                fontWeight: 'bold',
-              }}>
-              {this.state.selectedPostState.UserName}
+            </TouchableOpacity>
+            <Text style={{fontFamily: global.fontSelect}}>
+              {selectedPostState.comment_count}
             </Text>
-            <TwitterTextView
-              onPressHashtag={() => {}}
-              hashtagStyle={{color: global.colorTextActive}}
-              style={{
-                color: global.colorTextPrimary,
-                marginLeft: 8,
-                marginTop: 10,
-              }}>
-              {this.state.selectedPostState.description}
-            </TwitterTextView>
           </View>
-        </ScrollView>
-      </View>
-    );
-  }
-}
+
+          <View
+            style={{
+              width: '28%',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <TouchableOpacity onPress={() => sharePostFN()}>
+              <Image
+                style={{
+                  height: 28,
+                  width: 28,
+                  marginLeft: 10,
+                  marginRight: 2,
+                }}
+                resizeMode="stretch"
+                source={require('../../images/share.png')}
+              />
+            </TouchableOpacity>
+            <Text style={{fontFamily: global.fontSelect}}>
+              {selectedPostState.share_count}
+            </Text>
+          </View>
+        </ImageBackground>
+
+        <View style={{flexDirection: 'row', marginLeft: 10}}>
+          <Avatar
+            rounded
+            size="small"
+            source={{uri: selectedPostState.UserImage}}
+          />
+
+          <Text
+            style={{
+              fontFamily: global.fontSelect,
+              color: global.colorTextPrimary,
+              marginTop: 10,
+              marginLeft: 4,
+              fontWeight: 'bold',
+            }}>
+            {selectedPostState.UserName}
+          </Text>
+          <TwitterTextView
+            onPressHashtag={() => {}}
+            hashtagStyle={{color: global.colorTextActive}}
+            style={{
+              color: global.colorTextPrimary,
+              marginLeft: 8,
+              marginTop: 10,
+            }}>
+            {selectedPostState.description}
+          </TwitterTextView>
+        </View>
+      </ScrollView>
+    </View>
+  );
+};
+
+export default index;
 
 const styles = StyleSheet.create({
   topView: {
