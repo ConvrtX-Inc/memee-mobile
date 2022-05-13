@@ -108,7 +108,7 @@ export default function ProfileScreen(props) {
       var posts = postToShow.filter(
         item =>
           new Date(Date.parse(item.datetime.split(' ')[0])).getMonth() ==
-            selectedMonth && !item.img_url.includes('.mp4'),
+          selectedMonth,
       );
       //console.log(posts);
       setFilteredPost(posts);
@@ -222,7 +222,7 @@ export default function ProfileScreen(props) {
         Toast.show({
           type: 'error',
           text2: 'Something went wrong',
-          });
+        });
         setLoader(false);
       })
       .then(Response => {
@@ -1232,15 +1232,27 @@ export default function ProfileScreen(props) {
                   borderTopLeftRadius: index == 0 ? 30 : 0,
                   borderTopRightRadius: index == 1 ? 30 : 0,
                 }}>
-                <Image
-                  style={{
-                    width: '100%',
-                    height: windowWidth / 2,
-                    borderTopLeftRadius: index == 0 ? 30 : 0,
-                    borderTopRightRadius: index == 1 ? 30 : 0,
-                  }}
-                  source={{uri: item.img_url}}
-                />
+                {item.img_url.includes('.mp4') ? (
+                  <Image
+                    style={{
+                      width: '100%',
+                      height: windowWidth / 2,
+                      borderTopLeftRadius: index == 0 ? 30 : 0,
+                      borderTopRightRadius: index == 1 ? 30 : 0,
+                    }}
+                    source={require('../../images/pause.jpg')}
+                  />
+                ) : (
+                  <Image
+                    style={{
+                      width: '100%',
+                      height: windowWidth / 2,
+                      borderTopLeftRadius: index == 0 ? 30 : 0,
+                      borderTopRightRadius: index == 1 ? 30 : 0,
+                    }}
+                    source={{uri: item.img_url}}
+                  />
+                )}
                 {/* <Text style={{color: 'white', fontSize: 20}}>
                   {item.datetime}
                 </Text> */}

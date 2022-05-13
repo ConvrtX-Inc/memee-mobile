@@ -69,13 +69,13 @@ export default function SignUpScreen({navigation}) {
       global.OtpData = [
         {
           full_name: name,
-          email: email.toLowerCase(),
-          password: password,
+          email: email.toLowerCase().trim(),
+          password: password.trim(),
         },
       ];
 
       let body = JSON.stringify({
-        email: email.toLowerCase(),
+        email: email.toLowerCase().trim(),
         action: 'sign-up',
       });
       /* console.log(body); */
