@@ -36,9 +36,7 @@ import {
 import messaging from '@react-native-firebase/messaging';
 import {firebaseConfig} from '../../redux/constants';
 import BottomNavBar from '../../component/BottomNavBar';
-import {
-  getNotifications,
-} from '../../redux/actions/Auth';
+import {getNotifications} from '../../redux/actions/Auth';
 
 import Toast from 'react-native-toast-message';
 import Video from 'react-native-video';
@@ -196,12 +194,12 @@ export default function Dashboard(props) {
       .then(res => {
         console.log('Image uploaded to the bucket!');
         reference.getDownloadURL().then(response => {
-          console.log('Image downloaded from the bucket!', response);
+          //console.log('Image downloaded from the bucket!', response);
           addStory(response);
         });
       })
       .catch(e => {
-        console.log('uploading image error => ', e);
+        console.error('uploading image error => ', e);
         Toast.show({
           type: 'error',
           text2: 'Unable to add story. Please try again later!',
@@ -296,7 +294,7 @@ export default function Dashboard(props) {
 
   async function updateStoryOffset(offset, page, limit) {
     setLoadingNewStory(true);
-    console.log('New story request page:', {offset, page, limit});
+    //console.log('New story request page:', {offset, page, limit});
     const response = await API.GetDayStories({
       user_id: global.userData.user_id,
       limit: storyLimit,
@@ -366,7 +364,7 @@ export default function Dashboard(props) {
       }
 
       dispatch(getNotifications());
-      
+
       messaging()
         .getToken()
         .then(deviceToken => {
@@ -502,7 +500,7 @@ export default function Dashboard(props) {
     } else if (tabNo == 3) {
       postApiName = 'GetTrendingPosts';
     } else {
-      console.log('wrong tab');
+      console.error('wrong tab');
     }
 
     var limit = 50;
@@ -560,8 +558,8 @@ export default function Dashboard(props) {
     else if (tabNo == 2) data = res.NewPosts;
     else if (tabNo == 3) data = res.TrendingPosts;
 
-    console.log(typeof data);
-    console.log(typeof filteredData);
+    //console.log(typeof data);
+    //console.log(typeof filteredData);
 
     if (data[0]?.tournament) {
       filteredData = data.filter(item => item.tournament.length < 1);
@@ -776,11 +774,20 @@ export default function Dashboard(props) {
     navigation.navigate('SharePost');
   }
 
+  const toTop = () => {
+    // use current
+    flatlistRef.current.scrollToOffset({animated: true, offset: 0});
+  };
+
   // for bottom tab
   function activeTab(counter) {
     global.TabButton = counter;
     if (counter == 1) {
-      navigation.navigate('Dashboard');
+      //should refresh here
+      //navigation.navigate('Dashboard');
+      //selectTab(tabNumber);
+      toTop();
+      onRefresh();
     } else if (counter == 2) {
       navigation.navigate('ExploreScreen');
     } else if (counter == 3) {
@@ -809,7 +816,7 @@ export default function Dashboard(props) {
   function openGallery() {
     setIsOpenMedia(true);
     launchImageLibrary(options, response => {
-      console.log('Response = ', response);
+      //console.log('Response = ', response);
 
       if (response.didCancel) {
         // alert('User cancelled camera picker');
@@ -848,7 +855,7 @@ export default function Dashboard(props) {
     let isCameraPermitted = await requestCameraPermission();
     if (isCameraPermitted && isStoragePermitted) {
       launchCamera(options, response => {
-        console.log('Response = ', response);
+        //console.log('Response = ', response);
 
         if (response.didCancel) {
           // alert('User cancelled camera picker');
@@ -885,7 +892,7 @@ export default function Dashboard(props) {
         setFile({type: 'photo', uri: result.image});
       },
       error => {
-        console.log(error);
+        console.error(error);
       },
     );
   }
@@ -1092,7 +1099,6 @@ export default function Dashboard(props) {
                   </TouchableOpacity>
                 ) : null}
               </View>
-              {console.log('asdsss', sd)}
               <TwitterTextView
                 // onPressHashtag={() => {}}
                 hashtagStyle={{color: global.colorTextActive}}
@@ -1677,12 +1683,11 @@ export default function Dashboard(props) {
                               setFile({type: 'video', uri: videoUri});
                             })
                             .catch(e => {
-                              console.log('error', e);
-                              console.log(e);
+                              console.error('error', e);
                             });
                         } else {
                           const videoUri = openVideoEditor();
-                          console.log(videoUri);
+                          //console.log(videoUri);
                         }
                         setIsOpenMedia(false);
                       }}>
