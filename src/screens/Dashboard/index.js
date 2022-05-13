@@ -98,6 +98,7 @@ export default function Dashboard(props) {
     ImageBottoms,
     notifications,
     tournamentRanking,
+    followRequests,
   } = useSelector(({authRed}) => authRed);
 
   let options = {
@@ -366,7 +367,7 @@ export default function Dashboard(props) {
       }
 
       dispatch(getNotifications());
-      
+
       messaging()
         .getToken()
         .then(deviceToken => {
@@ -1040,7 +1041,6 @@ export default function Dashboard(props) {
                   </TouchableOpacity>
                 ) : null}
               </View>
-              {console.log('asdsss', sd)}
               <TwitterTextView
                 // onPressHashtag={() => {}}
                 hashtagStyle={{color: global.colorTextActive}}
@@ -1346,7 +1346,8 @@ export default function Dashboard(props) {
                   }}
                   resizeMode="contain"
                   source={
-                    notifications.some(n => n.status == 0)
+                    notifications.some(n => n.status == 0) ||
+                    followRequests?.length > 0
                       ? require('../../images/notifications.png')
                       : require('../../images/no_notifications.png')
                   }
