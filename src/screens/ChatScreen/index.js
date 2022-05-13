@@ -79,6 +79,9 @@ const ChatScreen = ({route}) => {
 
     setCurrentChatUser(users.find(element => element.userId == currentUserID));
     setMessages(messages);
+
+    console.log('messages', messages);
+    console.log('users', users);
   }
 
   function getConversation(offset) {
@@ -341,81 +344,107 @@ const ChatScreen = ({route}) => {
   };
 
   return (
-    <View style={styles.containerStyle}>
-      {otherChatUser ? (
-        <View style={styles.header}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={styles.headerArrow}>
-            <Icon name="arrowleft" size={24} color={colors.textColor} />
-          </TouchableOpacity>
-          {otherChatUser.avatar != '' ? (
-            <Image
-              source={{uri: otherChatUser.avatar}}
-              style={[styles.addFriendImage, {}]}
-              resizeMode="cover"
-            />
-          ) : (
-            <Image
-              source={require('../../images/person1.png')}
-              style={[styles.addFriendImage, {}]}
-              resizeMode="cover"
-            />
-          )}
-          {otherChatUser.onlineStatus == '1' ? (
-            <View>
-              <Image
-                source={require('../../images/online.png')}
-                style={{
-                  height: 18,
-                  width: 18,
-                  borderRadius: 10,
-                  marginLeft: -15,
-                  marginTop: 20,
-                }}
-                resizeMode="cover"
-              />
-            </View>
-          ) : null}
-          <View style={{flexDirection: 'column'}}>
-            <Text style={styles.headerText}>{otherChatUser.name}</Text>
-            {otherChatUser.onlineStatus == '0' && otherChatUser.lastSeen ? (
-              <Text style={styles.simpleText}>
-                {getLastSeenFormat(otherChatUser.lastSeen)}
-              </Text>
+    <View
+      style={{
+        flex: 1,
+        paddingHorizontal: '5%',
+        paddingTop: '5%',
+        backgroundColor: global.colorPrimary,
+      }}>
+
+      <View style={{flexDirection: 'row'}}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Image
+            style={[styles.tinyLogo, {tintColor: global.colorIcon}]}
+            source={require('../../images/back1.png')}
+        />
+        </TouchableOpacity>
+          <Text
+            style={[
+              styles.title,
+              {fontFamily: global.fontSelect, color: global.colorIcon},
+            ]}>
+            {/* {global.userData.name} */}
+          </Text>
+      </View>
+
+      <View style={styles.containerStyle}>
+            {otherChatUser ? (
+              <View style={styles.header}>
+                <TouchableOpacity
+                  onPress={() => navigation.goBack()}
+                  style={styles.headerArrow}>
+                  <Icon name="arrowleft" size={24} color={colors.textColor} />
+                </TouchableOpacity>
+                {otherChatUser.avatar != '' ? (
+                  <Image
+                    source={{uri: otherChatUser.avatar}}
+                    style={[styles.addFriendImage, {}]}
+                    resizeMode="cover"
+                  />
+                ) : (
+                  <Image
+                    source={require('../../images/person1.png')}
+                    style={[styles.addFriendImage, {}]}
+                    resizeMode="cover"
+                  />
+                )}
+                {otherChatUser.onlineStatus == '1' ? (
+                  <View>
+                    <Image
+                      source={require('../../images/online.png')}
+                      style={{
+                        height: 18,
+                        width: 18,
+                        borderRadius: 10,
+                        marginLeft: -15,
+                        marginTop: 20,
+                      }}
+                      resizeMode="cover"
+                    />
+                  </View>
+                ) : null}
+                <View style={{flexDirection: 'column'}}>
+                  <Text style={styles.headerText}>{otherChatUser.name}</Text>
+                  {otherChatUser.onlineStatus == '0' && otherChatUser.lastSeen ? (
+                    <Text style={styles.simpleText}>
+                      {getLastSeenFormat(otherChatUser.lastSeen)}
+                    </Text>
+                  ) : null}
+                </View>
+              </View>
             ) : null}
-          </View>
-        </View>
-      ) : null}
-      <GiftedChat
-        alwaysShowSend
-        placeholder="Type a message"
-        messages={messages}
-        onSend={msg => onSend(msg)}
-        user={currentChatUser}
-        renderAvatar={renderAvatar}
-        showUserAvatar={true}
-        renderBubble={renderBubble}
-        renderTime={props => renderTime(props)}
-        renderSend={props => (
-          <Send {...props}>
-            <Image
-              source={require('../../images/send.png')}
-              style={{height: 22, width: 22, marginBottom: 15, marginLeft: 10}}
+            <GiftedChat
+              alwaysShowSend
+              placeholder="Type a message"
+              messages={messages}
+              onSend={msg => onSend(msg)}
+              user={currentChatUser}
+              renderAvatar={renderAvatar}
+              showUserAvatar={true}
+              renderBubble={renderBubble}
+              renderTime={props => renderTime(props)}
+              renderSend={props => (
+                <Send {...props}>
+                  <Image
+                    source={require('../../images/send.png')}
+                    style={{height: 22, width: 22, marginBottom: 15, marginLeft: 10}}
+                  />
+                </Send>
+              )}
+              renderInputToolbar={props => renderInputToolbar(props)}
+              renderActions={messages => galleryButton(messages)}
+              textInputStyle={{
+                backgroundColor: '#292929',
+                borderRadius: 20,
+                paddingLeft: 20,
+                paddingRight: 20,
+                color: 'white',
+              }}
             />
-          </Send>
-        )}
-        renderInputToolbar={props => renderInputToolbar(props)}
-        renderActions={messages => galleryButton(messages)}
-        textInputStyle={{
-          backgroundColor: '#292929',
-          borderRadius: 20,
-          paddingLeft: 20,
-          paddingRight: 20,
-          color: 'white',
-        }}
-      />
+          </View>
     </View>
+    
   );
 };
 
@@ -512,5 +541,16 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
     borderRadius: 50 / 2,
+  },
+  tinyLogo: {
+    width: 30,
+    height: 20,
+    marginTop: 10,
+    tintColor: '#ffffff',
+  },
+  title: {
+    fontSize: 25,
+    color: '#E6E6E6',
+    marginBottom: 25,
   },
 });

@@ -13,6 +13,7 @@ const axios = require('axios');
 import Toast from 'react-native-toast-message';
 
 export default function NewMessage({navigation}) {
+  const [isLoading, setIsLoading] = useState(true);
   const [searchTxt, setSearchTxt] = useState('');
   const [followingList, setFollowingList] = useState('');
   const [myuserList, setMyuserList] = useState('');
@@ -42,22 +43,29 @@ export default function NewMessage({navigation}) {
         /* console.log('\n following called.... \n', responseJson.Requests); */
         setMyuserList(responseJson.Requests);
         setFollowingList(responseJson.Requests);
+        setIsLoading(false);
       })
       .catch(error => {
         console.error(error);
+        setIsLoading(true);
       });
   }
 
   const searchUserFN = text => {
     /* console.log('text', text); */
+
     setSearchTxt(text);
-    var seachedUser = myuserList?.filter(function search(user) {
-      return (
-        user.name.toUpperCase().includes(text.toUpperCase()) ||
-        user.email.toUpperCase().includes(text.toUpperCase())
-      );
-    });
-    setFollowingList(seachedUser);
+    
+    if(!isLoading){
+      var seachedUser = myuserList?.filter(function search(user) {
+        return (
+          user.name.toUpperCase().includes(text.toUpperCase()) ||
+          user.email.toUpperCase().includes(text.toUpperCase())
+        );
+      });
+      setFollowingList(seachedUser);
+    }
+    
   };
 
   function openChat(user) {
@@ -67,7 +75,7 @@ export default function NewMessage({navigation}) {
     let users = [];
     users.push({userId: global.userData.user_id, name: global.userData.name});
     users.push({userId: user.following_id, name: user.name});
-    /* console.log(users); */
+    console.log('users', users);
     
     // axios
     //   .post(`${global.address}createConversation`, users)
@@ -92,7 +100,7 @@ export default function NewMessage({navigation}) {
     axios({
       method: 'post',
       url: `${global.address}createConversation`,
-      // data: data,
+      data: users,
         validateStatus: status => {
           return true;
         },
@@ -112,6 +120,8 @@ export default function NewMessage({navigation}) {
           name: Response.data.Title,
           image: user.img,
         });
+
+        console.log('conversationId', Response.data.ConversationID);
       });
   }
 
