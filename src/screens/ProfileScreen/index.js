@@ -100,10 +100,6 @@ export default function ProfileScreen(props) {
   );
 
   useEffect(() => {
-    selectTab(1);
-  }, []);
-
-  useEffect(() => {
     if (postToShow.length > 0) {
       var posts = postToShow.filter(
         item =>
@@ -138,6 +134,10 @@ export default function ProfileScreen(props) {
       global.TabButton = 4;
 
       setProfileBGPick(global.profileBGgl);
+
+      if (global.refresh) {
+        selectTab(1);
+      }
 
       if (
         global.refreshBadges ||
