@@ -169,7 +169,7 @@ export default function Onboarding({navigation}) {
         userImage:
           imageVar != null && imageVar != ''
             ? imageVar
-            : 'https://memee-bucket.s3.amazonaws.com/posts%2F32886c6d-2c41-4a9b-bf5f-d47220140091.jpg',
+            : 'https://www.cognite.com/hubfs/raw_assets/public/tc_custom/images/unknown_user.jpg',
         loginType: loginTypeVar,
       }),
     })
