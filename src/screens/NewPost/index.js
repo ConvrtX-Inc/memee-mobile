@@ -119,6 +119,16 @@ export default function NewPost(routes) {
   function postUploadFN(location) {
     console.log("LOCATION: ", location);
     var currentDate = currentDateFN();
+    var unicodeString = '';
+    console.log('post', post);
+    for (var i = 0; i < post.length; i++) {
+      var theUnicode = post.charCodeAt(i).toString(16).toUpperCase();
+      while (theUnicode.length < 4) {
+        theUnicode = '0' + theUnicode;
+      }
+      theUnicode = '\\u' + theUnicode;
+      unicodeString += theUnicode;
+    }
     fetch(global.address + 'AddPost', {
       method: 'POST',
       headers: {
@@ -129,7 +139,7 @@ export default function NewPost(routes) {
       body: JSON.stringify({
         userID: global.userData.user_id,
         ImgUrl: location,
-        description: post,
+        description: unicodeString,
         dateTime: currentDate,
       }),
     })
