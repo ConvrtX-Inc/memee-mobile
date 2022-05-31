@@ -18,7 +18,6 @@ import {readNotifications} from '../../redux/actions/Auth';
 export default function ActivityNotification() {
   const {notifications, followRequests} = useSelector(({authRed}) => authRed);
   const dispatch = useDispatch();
-
   const navigation = useNavigation();
 
   useFocusEffect(
@@ -27,18 +26,57 @@ export default function ActivityNotification() {
       /* console.log(followRequests); */
       showFollowRequestFN();
       dispatch(readNotifications());
+
       // Do something when the screen is focused
       return () => {
         /* console.log('Screen was unfocused'); */
       };
     }, []),
   );
-
+  // function profileDataFN() {
+  //   fetch(global.address + 'GetUserProfile/' + global.profileID, {
+  //     method: 'get',
+  //     headers: {
+  //       Accept: 'application/json',
+  //       'Content-Type': 'application/json',
+  //       authToken: global.token,
+  //     },
+  //   })
+  //     .then(response => response.json())
+  //     .then(responseJson => {
+  //       console.log('asds', responseJson.posts);
+  //     })
+  //     .catch(error => {
+  //       console.error(error);
+  //     });
+  // }
   function handleNotificationClick(data) {
     /* console.log(data); */
     if (data.type == 'comment') {
       global.postId = data.object_id;
       navigation.navigate('CommentScreen');
+    } else if (data.type == 'like') {
+      console.log('Liked click');
+    } else if (data.type == 'share') {
+      console.log('shared click');
+      global.selectedPost = {
+        post_id: '711',
+        user_id: '125',
+        img_url:
+          'https://firebasestorage.googleapis.com/v0/b/memee-app-d35d3.appspot.com/o/538bec8d-eda3-4e78-99d2-ac4af6e8e86a.jpg?alt=media&token=e0da5206-e74c-4470-848a-9fb523e4e7b4',
+        like_count: '1',
+        comment_count: '1',
+        share_count: '0',
+        description:
+          '\\u0049\\u0020\\u0077\\u0061\\u006E\\u0074\\u0020\\u0074\\u006F\\u0020\\u0066\\u006C\\u0079\\u0020\\u0061\\u0077\\u0061\\u0079\\u0020',
+        datetime: '2022-05-1714:09:36',
+        UserName: 'test account vince',
+        UserImage:
+          'https://firebasestorage.googleapis.com/v0/b/memee-app-d35d3.appspot.com/o/ecaf9651-d996-4be2-825b-3039e9779dfc.jpg?alt=media&token=f6e0c943-42c7-41d6-833c-b3c1413bd0aa',
+        IsLiked: '1',
+        tournament: [],
+      };
+      navigation.navigate('ProfileImageShow');
     }
   }
 
@@ -164,7 +202,7 @@ export default function ActivityNotification() {
           data={notifications}
           renderItem={({item, index}) => (
             <TouchableOpacity
-              disabled={true}
+              // disabled={true}
               onPress={() => handleNotificationClick(item)}
               style={{
                 width: '100%',

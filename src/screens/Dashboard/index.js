@@ -212,6 +212,7 @@ export default function Dashboard(props) {
   // fetch stories = query /user_id=xxxx&limit=xx
   const fetchStories = async () => {
     setLoadingStoriesItems(true);
+    // console.log('sds', global.userData.user_id);
     setStoryOffset(0);
     const response = await API.GetDayStories({
       user_id: global.userData.user_id,
