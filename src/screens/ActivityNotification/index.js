@@ -54,13 +54,16 @@ export default function ActivityNotification() {
     /* console.log(data); */
     if (data.type == 'comment') {
       global.postId = data.object_id;
+      console.log(global.postId)
       navigation.navigate('CommentScreen');
     } else if (data.type == 'like') {
       console.log('Liked click');
+      global.postId = data.object_id;
+      navigation.navigate('CommentScreen');
     } else if (data.type == 'share') {
       console.log('shared click');
       global.selectedPost = {
-        post_id: '711',
+        post_id: data.object_id,
         user_id: '125',
         img_url:
           'https://firebasestorage.googleapis.com/v0/b/memee-app-d35d3.appspot.com/o/538bec8d-eda3-4e78-99d2-ac4af6e8e86a.jpg?alt=media&token=e0da5206-e74c-4470-848a-9fb523e4e7b4',
