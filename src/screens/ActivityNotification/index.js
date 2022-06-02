@@ -14,6 +14,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {formatDateTime} from '../../Utility/Utils';
 import {FOLLOW_REQUESTS} from '../../redux/constants';
 import {readNotifications} from '../../redux/actions/Auth';
+import Toast from 'react-native-toast-message';
 
 export default function ActivityNotification() {
   const {notifications, followRequests} = useSelector(({authRed}) => authRed);
@@ -50,36 +51,46 @@ export default function ActivityNotification() {
   //       console.error(error);
   //     });
   // }
+  function getPostData(senderId, postId) {
+    fetch(global.address + 'GetPostById/' + senderId + '/' + postId, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        authToken: global.token,
+      },
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log('asd', responseJson);
+
+        global.selectedPost = responseJson.Post;
+        if (global.selectedPost !== null)
+          navigation.navigate('ProfileImageShow');
+        else
+          Toast.show({
+            type: 'error',
+            test1: 'Alert!',
+            text2: 'Memee Deleted',
+          });
+      })
+      .catch(error => {
+        console.log('error', error);
+      });
+  }
+
   function handleNotificationClick(data) {
     /* console.log(data); */
     if (data.type == 'comment') {
       global.postId = data.object_id;
-      console.log(global.postId)
+      console.log(global.postId);
       navigation.navigate('CommentScreen');
     } else if (data.type == 'like') {
-      console.log('Liked click');
-      global.postId = data.object_id;
-      navigation.navigate('CommentScreen');
+      console.log('like click');
+      getPostData(data.receiver_id, data.object_id);
     } else if (data.type == 'share') {
       console.log('shared click');
-      global.selectedPost = {
-        post_id: data.object_id,
-        user_id: '125',
-        img_url:
-          'https://firebasestorage.googleapis.com/v0/b/memee-app-d35d3.appspot.com/o/538bec8d-eda3-4e78-99d2-ac4af6e8e86a.jpg?alt=media&token=e0da5206-e74c-4470-848a-9fb523e4e7b4',
-        like_count: '1',
-        comment_count: '1',
-        share_count: '0',
-        description:
-          '\\u0049\\u0020\\u0077\\u0061\\u006E\\u0074\\u0020\\u0074\\u006F\\u0020\\u0066\\u006C\\u0079\\u0020\\u0061\\u0077\\u0061\\u0079\\u0020',
-        datetime: '2022-05-1714:09:36',
-        UserName: 'test account vince',
-        UserImage:
-          'https://firebasestorage.googleapis.com/v0/b/memee-app-d35d3.appspot.com/o/ecaf9651-d996-4be2-825b-3039e9779dfc.jpg?alt=media&token=f6e0c943-42c7-41d6-833c-b3c1413bd0aa',
-        IsLiked: '1',
-        tournament: [],
-      };
-      navigation.navigate('ProfileImageShow');
+      getPostData(data.sender_id, data.object_id);
     }
   }
 

@@ -200,7 +200,7 @@ const index = ({navigation}) => {
         )}
 
         <TouchableOpacity
-          onPress={() => navigation.navigate('ProfileScreen')}
+          onPress={() => navigation.goBack()}
           style={{position: 'absolute', top: 30, left: 18}}>
           <View
             style={{
