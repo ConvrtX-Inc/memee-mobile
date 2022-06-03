@@ -91,6 +91,10 @@ export default function ActivityNotification() {
     } else if (data.type == 'share') {
       console.log('shared click');
       getPostData(data.sender_id, data.object_id);
+    } else if(data.type == 'follow_request_approved')
+    {
+      global.profileID = data.sender_id;
+      navigation.navigate('ProfileScreen');
     }
   }
 
@@ -116,6 +120,7 @@ export default function ActivityNotification() {
     if (val == 'like') return 'has liked your memee.';
     if (val == 'comment') return 'has commented on your memee.';
     if (val == 'share') return 'has shared your memee.';
+    if (val == 'follow_request_approved') return 'has approved your request';
   }
 
   return (
