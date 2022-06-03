@@ -64,6 +64,7 @@ export default function ActivityNotification() {
     if (val == 'like') return 'has liked your memee.';
     if (val == 'comment') return 'has commented on your memee.';
     if (val == 'share') return 'has shared your memee.';
+    if (val == 'follow_request_approved') return 'has approve your request.';
   }
 
   return (
