@@ -70,11 +70,16 @@ var gloIndex = '';
 const {VideoEditorModule} = NativeModules;
 
 const openEditor = async () => {
-  return await VideoEditorModule.openVideoEditor();
+  console.log('niagi diri');
+  const res = await VideoEditorModule.openVideoEditor();
+  console.log('f res', res);
+  return res;
 };
 
 export const openVideoEditor = async () => {
+  console.log('hello');
   const response = await openEditor();
+  console.log('responsee------', response);
 
   if (!response) {
     return null;
@@ -817,8 +822,10 @@ export default function Dashboard(props) {
 
   function openGallery() {
     setIsOpenMedia(true);
-    launchImageLibrary(options, response => {
-      //console.log('Response = ', response);
+    console.log('this is true');
+    launchImageLibrary(options, (response) => {
+      console.log('Response = ', response);
+      console.log('Response = ');
 
       if (response.didCancel) {
         // alert('User cancelled camera picker');
@@ -839,6 +846,7 @@ export default function Dashboard(props) {
       }
 
       let source = response.assets[0];
+      console.log('source', source)
       openPhotoEditor(source.uri);
     });
   }
@@ -855,9 +863,11 @@ export default function Dashboard(props) {
     setIsOpenMedia(true);
     let isStoragePermitted = await requestExternalWritePermission();
     let isCameraPermitted = await requestCameraPermission();
+    console.log({isStoragePermitted, isCameraPermitted});
     if (isCameraPermitted && isStoragePermitted) {
       launchCamera(options, response => {
-        //console.log('Response = ', response);
+        console.log('Response = ', response);
+        console.log('Response = ');
 
         if (response.didCancel) {
           // alert('User cancelled camera picker');
@@ -884,6 +894,7 @@ export default function Dashboard(props) {
   };
 
   function openPhotoEditor(uri) {
+    console.log('tata uri', uri);
     setIsOpenMedia(true);
     PESDK.openEditor({uri: uri}).then(
       result => {
@@ -1678,7 +1689,7 @@ export default function Dashboard(props) {
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={{marginBottom: '6%'}}
-                      onPress={() => {
+                      onPress={async () => {
                         setIsOpenMedia(true);
                         if (Platform.OS === 'android') {
                           getAndroidExportResult()
@@ -1689,8 +1700,8 @@ export default function Dashboard(props) {
                               console.error('error', e);
                             });
                         } else {
-                          const videoUri = openVideoEditor();
-                          //console.log(videoUri);
+                          const videoUri = await openVideoEditor();
+                          console.log('videoUri',videoUri);
                         }
                         setIsOpenMedia(false);
                       }}>
