@@ -63,6 +63,8 @@ export default function Onboarding({navigation}) {
     LoginManager.logInWithPermissions(['public_profile', 'email']).then(
       function (result) {
         if (result.isCancelled) {
+          console.log('User Cancelled ');
+          setIsLoading(false);
         } else {
           const currentProfile = Profile.getCurrentProfile().then(
             function (currentProfile) {
@@ -124,19 +126,27 @@ export default function Onboarding({navigation}) {
       loginTypeVar = 'Google';
       SignupFN();
     } catch (error) {
-      Toast.show({
-        type: 'error',
-        text2: 'Please check your internet connection.',
-      });
+      // Toast.show({
+      //   type: 'error',
+      //   text2: 'Please check your internet connection.',
+      // });
       console.log(error);
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
+        setIsLoading(false);
       } else if (error.code === statusCodes.IN_PROGRESS) {
         // operation (e.g. sign in) is in progress already
+        setIsLoading(false);
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
         // play services not available or outdated
+        setIsLoading(false);
       } else {
         // some other error happened
+        Toast.show({
+          type: 'error',
+          text2: 'Please check your internet connection.',
+        });
+        setIsLoading(false);
       }
     }
   };
@@ -330,7 +340,7 @@ export default function Onboarding({navigation}) {
               style={{
                 textAlign: 'left',
                 fontFamily: 'OpenSans-SemiBold',
-                fontSize: 16,
+                fontSize: 14,
                 color: '#fff',
               }}>
               Continue with Facebook
