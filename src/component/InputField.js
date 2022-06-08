@@ -26,4 +26,4 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontFamily: 'OpenSans-Regular', 
     }
-})
+})c
