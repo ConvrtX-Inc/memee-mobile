@@ -89,7 +89,7 @@ export default function AddCoins(props) {
   async function getProducts() {
     await RNIap.initConnection();
     const productIds = Platform.select({
-      ios: ['com.convrtx.memee.coins10000'],
+      ios: ['com.convrtx.memeeapp.coins10000'],
       android: ['coins10000', 'coins1000'],
     });
     /* console.log('PIDS: ' + productIds); */
