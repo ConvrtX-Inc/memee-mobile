@@ -1,4 +1,4 @@
-package com.convrtx.memee;
+package com.convrtx.memeeapp;
 
 import android.app.Application;
 import android.content.Context;
@@ -11,7 +11,7 @@ import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import com.convrtx.memee.videoeditor.di.VideoEditorKoinModule;
+import com.convrtx.memeeapp.videoeditor.di.VideoEditorKoinModule;
 
 import com.banuba.sdk.arcloud.di.ArCloudKoinModule;
 import com.banuba.sdk.audiobrowser.di.AudioBrowserKoinModule;
@@ -100,7 +100,7 @@ public class MainApplication extends androidx.multidex.MultiDexApplication imple
          * We use reflection here to pick up the class that initializes Flipper,
          * since Flipper library is not available in release mode
          */
-        Class<?> aClass = Class.forName("com.convrtx.memee.ReactNativeFlipper");
+        Class<?> aClass = Class.forName("com.convrtx.memeeapp.ReactNativeFlipper");
         aClass
             .getMethod("initializeFlipper", Context.class, ReactInstanceManager.class)
             .invoke(null, context, reactInstanceManager);

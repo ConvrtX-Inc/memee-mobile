@@ -1,4 +1,4 @@
-package com.convrtx.memee.videoeditor.impl
+package com.convrtx.memeeapp.videoeditor.impl
 import android.graphics.Bitmap
 import com.banuba.sdk.ve.effects.WatermarkProvider
 

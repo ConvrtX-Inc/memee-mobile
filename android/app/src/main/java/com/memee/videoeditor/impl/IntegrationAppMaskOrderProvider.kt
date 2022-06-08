@@ -1,4 +1,4 @@
-package com.convrtx.memee.videoeditor.impl
+package com.convrtx.memeeapp.videoeditor.impl
 
 import com.banuba.sdk.core.data.OrderProvider
 import com.banuba.sdk.core.domain.BackgroundSeparationActionDataProvider
