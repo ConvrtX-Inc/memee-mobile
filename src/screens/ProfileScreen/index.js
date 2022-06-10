@@ -202,38 +202,41 @@ export default function ProfileScreen(props) {
     users.push({userId: global.userData.user_id, name: global.userData.name});
     users.push({userId: global.profileID, name: profileData.name});
 
-    console.log('GLOBAL ID ', global.userData.user_id);
+    console.log('GLOBAL ID ', profileData);
     console.log('GLOBAL NAME ', global.userData.name);
     /*console.log('GLOBAL Profile ID ', global.profileID);
     console.log('GLOBAL profileData name ', profileData.name);
     console.log('GLOBAL URL ', `${global.address}createConversation`);*/
+    navigation.navigate('ChatScreen', {
+      conversationId: 225,
+      user: profileData,
+    });
+    // axios({
+    //   method: 'post',
+    //   url: `${global.address}createConversation`,
+    //   // data: data,
+    //   validateStatus: status => {
+    //     return true;
+    //   },
+    // })
+    //   .catch(error => {
+    //     // loginError()
+    //     console.log('GLOBAL er ', error);
+    //     Toast.show({
+    //       type: 'error',
+    //       text2: 'Something went wrong',
+    //     });
+    //     setLoader(false);
+    //   })
+    //   .then(Response => {
+    //     console.log('products Response: WITH TOKEN', Response.data);
 
-    axios({
-      method: 'post',
-      url: `${global.address}createConversation`,
-      // data: data,
-      validateStatus: status => {
-        return true;
-      },
-    })
-      .catch(error => {
-        // loginError()
-        console.log('GLOBAL er ', error);
-        Toast.show({
-          type: 'error',
-          text2: 'Something went wrong',
-        });
-        setLoader(false);
-      })
-      .then(Response => {
-        /* console.log('products Response: WITH TOKEN', Response.data); */
-
-        setLoader(false);
-        navigation.navigate('ChatScreen', {
-          conversationId: Response.data.ConversationID,
-          name: Response.data.Title,
-        });
-      });
+    //     setLoader(false);
+    //     navigation.navigate('ChatScreen', {
+    //       conversationId: Response.data.ConversationID,
+    //       name: Response.data.Title,
+    //     });
+    //   });
   }
 
   function getOrganizedBadgesFN() {
