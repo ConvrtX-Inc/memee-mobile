@@ -85,7 +85,11 @@ export default function ActivityNotification() {
       global.postId = data.object_id;
       console.log(global.postId);
       navigation.navigate('CommentScreen');
-    } else if (data.type == 'like') {
+    } else if (data.type == 'comment_like') {
+      global.postId = data.object_id;
+      console.log(global.postId);
+      navigation.navigate('CommentScreen');
+    }else if (data.type == 'like') {
       console.log('like click');
       getPostData(data.receiver_id, data.object_id);
     } else if (data.type == 'share') {
@@ -120,6 +124,7 @@ export default function ActivityNotification() {
     if (val == 'like') return 'has liked your memee.';
     if (val == 'comment') return 'has commented on your memee.';
     if (val == 'share') return 'has shared your memee.';
+    if (val == 'comment_like') return 'has liked your comment.';
     if (val == 'follow_request_approved') return 'has approved your request';
   }
 

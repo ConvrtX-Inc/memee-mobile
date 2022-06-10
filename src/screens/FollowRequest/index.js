@@ -110,7 +110,7 @@ export default class FollowRequest extends React.Component {
         '/' +
         global.userData.user_id +
         '/' +
-        this.state.followData[index].following_id,
+        this.state.followData[index].user_id,
       {
         method: 'get',
         headers: {
