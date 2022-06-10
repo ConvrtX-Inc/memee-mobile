@@ -1,4 +1,4 @@
-package com.convrtx.memeeapp
+package com.convrtx.memee
 
 import android.app.Activity
 import android.content.Intent

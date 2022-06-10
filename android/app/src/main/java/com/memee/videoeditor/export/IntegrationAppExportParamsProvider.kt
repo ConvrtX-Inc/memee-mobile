@@ -1,4 +1,4 @@
-package com.convrtx.memeeapp.videoeditor.export
+package com.convrtx.memee.videoeditor.export
 
 import android.net.Uri
 import androidx.core.net.toFile

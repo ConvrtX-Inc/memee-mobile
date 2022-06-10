@@ -29,13 +29,14 @@ import messaging from '@react-native-firebase/messaging';
 }; */
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyCfzO2GC4QYg-EBmN0def7CRZS59Z3Qyog',
-  authDomain: 'memee-f9aca.firebaseapp.com',
-  projectId: 'memee-f9aca',
-  storageBucket: 'memee-f9aca.appspot.com',
-  messagingSenderId: '422086856195',
-  appId: '1:422086856195:web:59bd5707f2247e3eb58836',
-  measurementId: 'G-YK9V5ZWGSH',
+  apiKey: 'AIzaSyD9J-gxMObldqQJGX1SKYY24A3rBmc89bk',
+  authDomain: 'memee-app-d35d3.firebaseapp.com',
+  databaseURL: 'https://memee-app-d35d3-default-rtdb.firebaseio.com',
+  projectId: 'memee-app-d35d3',
+  storageBucket: 'memee-app-d35d3.appspot.com',
+  messagingSenderId: '628249846461',
+  appId: '1:628249846461:web:0c55fc1c27ffdf52698dd4',
+  measurementId: 'G-7ZC1956Z48',
 };
 
 if (!firebase.apps.length) {

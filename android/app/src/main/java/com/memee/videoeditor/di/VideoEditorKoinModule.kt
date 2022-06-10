@@ -1,4 +1,4 @@
-package com.convrtx.memeeapp.videoeditor.di
+package com.convrtx.memee.videoeditor.di
 
 import androidx.fragment.app.Fragment
 import com.banuba.sdk.arcloud.data.source.ArEffectsRepositoryProvider
@@ -16,11 +16,11 @@ import com.banuba.sdk.export.data.ForegroundExportFlowManager
 import com.banuba.sdk.ve.effects.WatermarkProvider
 import com.banuba.sdk.ve.flow.FlowEditorModule
 import com.banuba.sdk.veui.domain.CoverProvider
-import com.convrtx.memeeapp.videoeditor.export.IntegrationAppExportParamsProvider
-import com.convrtx.memeeapp.videoeditor.impl.IntegrationAppColorFilterOrderProvider
-import com.convrtx.memeeapp.videoeditor.impl.IntegrationAppMaskOrderProvider
-import com.convrtx.memeeapp.videoeditor.impl.IntegrationAppWatermarkProvider
-import com.convrtx.memeeapp.videoeditor.impl.IntegrationTimerStateProvider
+import com.convrtx.memee.videoeditor.export.IntegrationAppExportParamsProvider
+import com.convrtx.memee.videoeditor.impl.IntegrationAppColorFilterOrderProvider
+import com.convrtx.memee.videoeditor.impl.IntegrationAppMaskOrderProvider
+import com.convrtx.memee.videoeditor.impl.IntegrationAppWatermarkProvider
+import com.convrtx.memee.videoeditor.impl.IntegrationTimerStateProvider
 import org.koin.core.definition.BeanDefinition
 import org.koin.core.qualifier.named
 

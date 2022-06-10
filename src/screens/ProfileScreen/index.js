@@ -1077,35 +1077,44 @@ export default function ProfileScreen(props) {
             )}
           </View>
         </LinearGradient>
-        <View
-          style={{
-            flexDirection: 'row',
-            backgroundColor: global.tabColor,
-            width: '100%',
-            height: 60,
-            alignSelf: 'center',
-            borderRadius: 30,
-            marginVertical: 15,
-          }}>
-          <TouchableOpacity onPress={() => selectTab(1)} style={{width: '50%'}}>
-            <LinearGradient
-              colors={[btncolor1_1, btncolor1_2]}
-              style={{
-                height: 60,
-                width: '100%',
-                justifyContent: 'center',
-                alignItems: 'center',
-                alignSelf: 'center',
-                borderRadius: 30,
-              }}>
-              <Text style={{color: txtcolor1, fontFamily: global.fontSelect}}>
-                Posts
-              </Text>
-            </LinearGradient>
-            {/* </View> */}
-          </TouchableOpacity>
+        {global.userData.user_id != global.profileID && (
+          <View
+            style={{
+              marginVertical: 5,
+            }}
+          />
+        )}
+        {global.userData.user_id == global.profileID && (
+          <View
+            style={{
+              flexDirection: 'row',
+              backgroundColor: global.tabColor,
+              width: '100%',
+              height: 60,
+              alignSelf: 'center',
+              borderRadius: 30,
+              marginVertical: 15,
+            }}>
+            <TouchableOpacity
+              onPress={() => selectTab(1)}
+              style={{width: '50%'}}>
+              <LinearGradient
+                colors={[btncolor1_1, btncolor1_2]}
+                style={{
+                  height: 60,
+                  width: '100%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  alignSelf: 'center',
+                  borderRadius: 30,
+                }}>
+                <Text style={{color: txtcolor1, fontFamily: global.fontSelect}}>
+                  Posts
+                </Text>
+              </LinearGradient>
+              {/* </View> */}
+            </TouchableOpacity>
 
-          {global.userData.user_id == global.profileID && (
             <TouchableOpacity
               onPress={() => selectTab(2)}
               style={{width: '50%'}}>
@@ -1124,8 +1133,8 @@ export default function ProfileScreen(props) {
                 </Text>
               </LinearGradient>
             </TouchableOpacity>
-          )}
-        </View>
+          </View>
+        )}
         <View
           style={{
             marginBottom: 15,

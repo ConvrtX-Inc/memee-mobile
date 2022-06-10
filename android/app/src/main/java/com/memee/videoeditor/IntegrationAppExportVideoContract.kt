@@ -1,4 +1,4 @@
-package com.convrtx.memeeapp.videoeditor
+package com.convrtx.memee.videoeditor
 
 import android.app.Activity
 import android.content.Context

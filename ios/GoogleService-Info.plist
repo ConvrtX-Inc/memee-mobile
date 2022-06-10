@@ -3,23 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>422086856195-90qspo1pep69qm223hsnsb3spcjj72qa.apps.googleusercontent.com</string>
+	<string>628249846461-chkgkacs8dald86mdt2psec819mbil91.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.422086856195-90qspo1pep69qm223hsnsb3spcjj72qa</string>
-	<key>ANDROID_CLIENT_ID</key>
-	<string>422086856195-o0d8s6i94tirkqc8cks1kqmovgiv28ad.apps.googleusercontent.com</string>
+	<string>com.googleusercontent.apps.628249846461-chkgkacs8dald86mdt2psec819mbil91</string>
 	<key>API_KEY</key>
-	<string>AIzaSyC3a90SNtNRHiMyGC2D-dkNV9fhNhtfXHY</string>
+	<string>AIzaSyBwUCAwgmfIwxjUrly9-b45_cBD6Do4PJA</string>
 	<key>GCM_SENDER_ID</key>
-	<string>422086856195</string>
+	<string>628249846461</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.convrtx.memeeapp</string>
+	<string>com.convrtx.memee</string>
 	<key>PROJECT_ID</key>
-	<string>memee-f9aca</string>
+	<string>memee-app-d35d3</string>
 	<key>STORAGE_BUCKET</key>
-	<string>memee-f9aca.appspot.com</string>
+	<string>memee-app-d35d3.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,8 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:422086856195:ios:f6afb46d1e118a7bb58836</string>
-	<key>DATABASE_URL</key>
-	<string>https://memee-f9aca-default-rtdb.firebaseio.com</string>
+	<string>1:628249846461:ios:bd93589c0d52b3a0698dd4</string>
 </dict>
 </plist>
