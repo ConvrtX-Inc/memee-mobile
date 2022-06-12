@@ -23,24 +23,22 @@ const Tab = createMaterialTopTabNavigator();
 export default function SearchScreen() {
 
     return (
-        <Tab.Navigator
-            tabBarOptions={{    
-                activeTintColor: global.colorTextPrimary,
-                inactiveTintColor: global.colorTextPrimary,
-                labelStyle: { fontSize: 12 },
-                style: { backgroundColor: global.colorPrimary },
-                labelStyle: { textTransform: 'none' },
-                indicatorStyle: {
-                    backgroundColor: global.colorTextPrimary,
-                },
-            }}
-
-        >
-            <Tab.Screen name="Top" component={Top} />
-            <Tab.Screen name="Accounts" component={Accounts} />
-            <Tab.Screen name="Tags" component={Tags} />
-            {/* <Tab.Screen name= "Places" component={Places} /> */}
-        </Tab.Navigator>
-    )
+      <Tab.Navigator
+        tabBarOptions={{
+          activeTintColor: global.colorTextPrimary,
+          inactiveTintColor: global.colorTextPrimary,
+          labelStyle: {fontSize: 12},
+          style: {backgroundColor: global.colorPrimary},
+          labelStyle: {textTransform: 'none'},
+          indicatorStyle: {
+            backgroundColor: global.colorTextPrimary,
+          },
+        }}>
+        <Tab.Screen name="Top" component={Top} />
+        <Tab.Screen name="Accounts" component={Accounts} />
+        <Tab.Screen name="Tags" component={Tags} />
+        {/* <Tab.Screen name= "Places" component={Places} /> */}
+      </Tab.Navigator>
+    );
 
 }

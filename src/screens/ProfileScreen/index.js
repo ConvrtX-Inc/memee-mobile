@@ -202,38 +202,41 @@ export default function ProfileScreen(props) {
     users.push({userId: global.userData.user_id, name: global.userData.name});
     users.push({userId: global.profileID, name: profileData.name});
 
-    console.log('GLOBAL ID ', global.userData.user_id);
+    console.log('GLOBAL ID ', profileData);
     console.log('GLOBAL NAME ', global.userData.name);
     /*console.log('GLOBAL Profile ID ', global.profileID);
     console.log('GLOBAL profileData name ', profileData.name);
     console.log('GLOBAL URL ', `${global.address}createConversation`);*/
+    navigation.navigate('ChatScreen', {
+      conversationId: 225,
+      user: profileData,
+    });
+    // axios({
+    //   method: 'post',
+    //   url: `${global.address}createConversation`,
+    //   // data: data,
+    //   validateStatus: status => {
+    //     return true;
+    //   },
+    // })
+    //   .catch(error => {
+    //     // loginError()
+    //     console.log('GLOBAL er ', error);
+    //     Toast.show({
+    //       type: 'error',
+    //       text2: 'Something went wrong',
+    //     });
+    //     setLoader(false);
+    //   })
+    //   .then(Response => {
+    //     console.log('products Response: WITH TOKEN', Response.data);
 
-    axios({
-      method: 'post',
-      url: `${global.address}createConversation`,
-      // data: data,
-      validateStatus: status => {
-        return true;
-      },
-    })
-      .catch(error => {
-        // loginError()
-        console.log('GLOBAL er ', error);
-        Toast.show({
-          type: 'error',
-          text2: 'Something went wrong',
-        });
-        setLoader(false);
-      })
-      .then(Response => {
-        /* console.log('products Response: WITH TOKEN', Response.data); */
-
-        setLoader(false);
-        navigation.navigate('ChatScreen', {
-          conversationId: Response.data.ConversationID,
-          name: Response.data.Title,
-        });
-      });
+    //     setLoader(false);
+    //     navigation.navigate('ChatScreen', {
+    //       conversationId: Response.data.ConversationID,
+    //       name: Response.data.Title,
+    //     });
+    //   });
   }
 
   function getOrganizedBadgesFN() {
@@ -1074,35 +1077,44 @@ export default function ProfileScreen(props) {
             )}
           </View>
         </LinearGradient>
-        <View
-          style={{
-            flexDirection: 'row',
-            backgroundColor: global.tabColor,
-            width: '100%',
-            height: 60,
-            alignSelf: 'center',
-            borderRadius: 30,
-            marginVertical: 15,
-          }}>
-          <TouchableOpacity onPress={() => selectTab(1)} style={{width: '50%'}}>
-            <LinearGradient
-              colors={[btncolor1_1, btncolor1_2]}
-              style={{
-                height: 60,
-                width: '100%',
-                justifyContent: 'center',
-                alignItems: 'center',
-                alignSelf: 'center',
-                borderRadius: 30,
-              }}>
-              <Text style={{color: txtcolor1, fontFamily: global.fontSelect}}>
-                Posts
-              </Text>
-            </LinearGradient>
-            {/* </View> */}
-          </TouchableOpacity>
+        {global.userData.user_id != global.profileID && (
+          <View
+            style={{
+              marginVertical: 5,
+            }}
+          />
+        )}
+        {global.userData.user_id == global.profileID && (
+          <View
+            style={{
+              flexDirection: 'row',
+              backgroundColor: global.tabColor,
+              width: '100%',
+              height: 60,
+              alignSelf: 'center',
+              borderRadius: 30,
+              marginVertical: 15,
+            }}>
+            <TouchableOpacity
+              onPress={() => selectTab(1)}
+              style={{width: '50%'}}>
+              <LinearGradient
+                colors={[btncolor1_1, btncolor1_2]}
+                style={{
+                  height: 60,
+                  width: '100%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  alignSelf: 'center',
+                  borderRadius: 30,
+                }}>
+                <Text style={{color: txtcolor1, fontFamily: global.fontSelect}}>
+                  Posts
+                </Text>
+              </LinearGradient>
+              {/* </View> */}
+            </TouchableOpacity>
 
-          {global.userData.user_id == global.profileID && (
             <TouchableOpacity
               onPress={() => selectTab(2)}
               style={{width: '50%'}}>
@@ -1121,8 +1133,8 @@ export default function ProfileScreen(props) {
                 </Text>
               </LinearGradient>
             </TouchableOpacity>
-          )}
-        </View>
+          </View>
+        )}
         <View
           style={{
             marginBottom: 15,

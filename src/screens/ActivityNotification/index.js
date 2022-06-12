@@ -14,11 +14,11 @@ import {useSelector, useDispatch} from 'react-redux';
 import {formatDateTime} from '../../Utility/Utils';
 import {FOLLOW_REQUESTS} from '../../redux/constants';
 import {readNotifications} from '../../redux/actions/Auth';
+import Toast from 'react-native-toast-message';
 
 export default function ActivityNotification() {
   const {notifications, followRequests} = useSelector(({authRed}) => authRed);
   const dispatch = useDispatch();
-
   const navigation = useNavigation();
 
   useFocusEffect(
@@ -27,18 +27,78 @@ export default function ActivityNotification() {
       /* console.log(followRequests); */
       showFollowRequestFN();
       dispatch(readNotifications());
+
       // Do something when the screen is focused
       return () => {
         /* console.log('Screen was unfocused'); */
       };
     }, []),
   );
+  // function profileDataFN() {
+  //   fetch(global.address + 'GetUserProfile/' + global.profileID, {
+  //     method: 'get',
+  //     headers: {
+  //       Accept: 'application/json',
+  //       'Content-Type': 'application/json',
+  //       authToken: global.token,
+  //     },
+  //   })
+  //     .then(response => response.json())
+  //     .then(responseJson => {
+  //       console.log('asds', responseJson.posts);
+  //     })
+  //     .catch(error => {
+  //       console.error(error);
+  //     });
+  // }
+  function getPostData(senderId, postId) {
+    fetch(global.address + 'GetPostById/' + senderId + '/' + postId, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        authToken: global.token,
+      },
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log('asd', responseJson);
+
+        global.selectedPost = responseJson.Post;
+        if (global.selectedPost !== null)
+          navigation.navigate('ProfileImageShow');
+        else
+          Toast.show({
+            type: 'error',
+            test1: 'Alert!',
+            text2: 'Memee Deleted',
+          });
+      })
+      .catch(error => {
+        console.log('error', error);
+      });
+  }
 
   function handleNotificationClick(data) {
     /* console.log(data); */
     if (data.type == 'comment') {
       global.postId = data.object_id;
+      console.log(global.postId);
       navigation.navigate('CommentScreen');
+    } else if (data.type == 'comment_like') {
+      global.postId = data.object_id;
+      console.log(global.postId);
+      navigation.navigate('CommentScreen');
+    }else if (data.type == 'like') {
+      console.log('like click');
+      getPostData(data.receiver_id, data.object_id);
+    } else if (data.type == 'share') {
+      console.log('shared click');
+      getPostData(data.sender_id, data.object_id);
+    } else if(data.type == 'follow_request_approved')
+    {
+      global.profileID = data.sender_id;
+      navigation.navigate('ProfileScreen');
     }
   }
 
@@ -64,6 +124,8 @@ export default function ActivityNotification() {
     if (val == 'like') return 'has liked your memee.';
     if (val == 'comment') return 'has commented on your memee.';
     if (val == 'share') return 'has shared your memee.';
+    if (val == 'comment_like') return 'has liked your comment.';
+    if (val == 'follow_request_approved') return 'has approved your request';
   }
 
   return (
@@ -164,7 +226,7 @@ export default function ActivityNotification() {
           data={notifications}
           renderItem={({item, index}) => (
             <TouchableOpacity
-              disabled={true}
+              // disabled={true}
               onPress={() => handleNotificationClick(item)}
               style={{
                 width: '100%',
