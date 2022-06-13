@@ -361,7 +361,7 @@ const ChatScreen = ({route}) => {
           />
         </TouchableOpacity>
         <Image
-          source={{uri: user.img}}
+          source={{uri: user.imgurl}}
           style={[styles.addFriendImage, {}]}
           resizeMode="cover"
         />
@@ -380,7 +380,13 @@ const ChatScreen = ({route}) => {
         </View>
 
         <View style={{flexDirection: 'column'}}>
-          <Text style={styles.headerText}>{user.name}</Text>
+          <Text
+            style={[
+              styles.headerText,
+              {fontSize: user.name.length > 20 ? 16 : 20},
+            ]}>
+            {user.name}
+          </Text>
           {user.onlineStatus == '0' && user.lastSeen ? (
             <Text style={styles.simpleText}>
               {getLastSeenFormat(user.lastSeen)}
