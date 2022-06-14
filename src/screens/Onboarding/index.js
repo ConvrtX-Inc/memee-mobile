@@ -34,8 +34,8 @@ const {RNTwitterSignIn} = NativeModules;
 import {decode as atob, encode as btoa} from 'base-64';
 
 RNTwitterSignIn.init(
-  '7Yg35MGJX38own2WE9lxp3I05',
-  `27L8uE0Vyafin9kKceG0fWFbNiNVDggrKAFDxOFBhrUW7aQoM0`,
+  'Njir3nTj38mr0X9MO8kDd9jR9',
+  `hOBGHlFpII3HjPmvS4oYt2jbyQkMXuQgw8h6J7mrfceFhc5vKo`,
 ).then(() => console.log('Twitter SDK initialized'));
 
 Settings.initializeSDK();
@@ -244,10 +244,11 @@ export default function Onboarding({navigation}) {
       await SignupFN();
     } catch (e) {
       console.log('error twitter', e);
-      Toast.show({
-        type: 'error',
-        text2: 'Twitter Login Error',
-      });
+      // temporary hide the toast as it will show the error eventhough the user only cancel the login
+      // Toast.show({
+      //   type: 'error',
+      //   text2: 'Twitter Login Error',
+      // });
     }
 
     setIsLoading(false);

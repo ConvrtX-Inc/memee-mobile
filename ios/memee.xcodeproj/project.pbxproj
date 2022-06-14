@@ -12,6 +12,10 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		148C1CF5285372A100FC2D96 /* TwitterCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 148C1CED285371D500FC2D96 /* TwitterCore.framework */; };
+		148C1CF6285372A100FC2D96 /* TwitterKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 148C1CEE285371D600FC2D96 /* TwitterKit.framework */; };
+		148C1CF7285372A100FC2D96 /* TwitterKitResources.bundle in Frameworks */ = {isa = PBXBuildFile; fileRef = 148C1CEF285371D800FC2D96 /* TwitterKitResources.bundle */; };
+		148C1CF8285372A100FC2D96 /* TwitterShareExtensionUIResources.bundle in Frameworks */ = {isa = PBXBuildFile; fileRef = 148C1CF0285371D800FC2D96 /* TwitterShareExtensionUIResources.bundle */; };
 		14FFC45D2849BD54006B6785 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 14FFC45C2849BD54006B6785 /* main.jsbundle */; };
 		369A8EC47D0D43DC86E7018A /* OpenSans-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C8B1D55648E42CA930C60B3 /* OpenSans-MediumItalic.ttf */; };
 		44E30DAF53594178A2EE2427 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 83535F6D73E34035A2CD5760 /* OpenSans-Light.ttf */; };
@@ -102,6 +106,10 @@
 		141BEFC6283DCAEF00819049 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Regular.ttf"; sourceTree = "<group>"; };
 		1425E8890DB44DCD997C44C9 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		1446E3F0283E5B6C00C2EB00 /* memee.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = memee.entitlements; path = memee/memee.entitlements; sourceTree = "<group>"; };
+		148C1CED285371D500FC2D96 /* TwitterCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TwitterCore.framework; sourceTree = "<group>"; };
+		148C1CEE285371D600FC2D96 /* TwitterKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TwitterKit.framework; sourceTree = "<group>"; };
+		148C1CEF285371D800FC2D96 /* TwitterKitResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TwitterKitResources.bundle; sourceTree = "<group>"; };
+		148C1CF0285371D800FC2D96 /* TwitterShareExtensionUIResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TwitterShareExtensionUIResources.bundle; sourceTree = "<group>"; };
 		14F374AB283DCFFC00D20C83 /* OpenSans-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-SemiBold.ttf"; sourceTree = "<group>"; };
 		14F374AC283DCFFC00D20C83 /* OpenSans-SemiBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
 		14FFC45C2849BD54006B6785 /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
@@ -148,6 +156,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				651ABAA6AF7EEC93B41E8CF5 /* libPods-memee.a in Frameworks */,
+				148C1CF5285372A100FC2D96 /* TwitterCore.framework in Frameworks */,
+				148C1CF6285372A100FC2D96 /* TwitterKit.framework in Frameworks */,
+				148C1CF7285372A100FC2D96 /* TwitterKitResources.bundle in Frameworks */,
+				148C1CF8285372A100FC2D96 /* TwitterShareExtensionUIResources.bundle in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -232,6 +244,10 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				148C1CED285371D500FC2D96 /* TwitterCore.framework */,
+				148C1CEE285371D600FC2D96 /* TwitterKit.framework */,
+				148C1CEF285371D800FC2D96 /* TwitterKitResources.bundle */,
+				148C1CF0285371D800FC2D96 /* TwitterShareExtensionUIResources.bundle */,
 				14FFC45C2849BD54006B6785 /* main.jsbundle */,
 				14F374AB283DCFFC00D20C83 /* OpenSans-SemiBold.ttf */,
 				14F374AC283DCFFC00D20C83 /* OpenSans-SemiBoldItalic.ttf */,
@@ -390,6 +406,8 @@
 				Base,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
+			packageReferences = (
+			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -628,6 +646,10 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LNKFW3HHLL;
 				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = memee/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -655,6 +677,10 @@
 				CODE_SIGN_ENTITLEMENTS = memee/memee.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LNKFW3HHLL;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = memee/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
