@@ -31,7 +31,7 @@ const Inbox = ({showValue}) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const {conversations} = useSelector(({authRed}) => authRed);
-
+  console.log('conver', conversations);
   useFocusEffect(
     React.useCallback(() => {
       /* console.log('Screen was focused'); */
@@ -54,14 +54,13 @@ const Inbox = ({showValue}) => {
     })
       .catch(error => {
         // handle error
-        console.log(error);
+        console.log('error getConverstation');
         setLoading(false);
       })
       .then(Response => {
         setConversationsView(Response.data);
         setLoading(false);
       });
-
 
     // axios
     //   .get(`${global.address}getConversations/${global.userData.user_id}`)
@@ -158,7 +157,7 @@ const Inbox = ({showValue}) => {
         <View>
           <FlatList
             data={conversations}
-            /* data={mock} */
+            // data={mock}
             renderItem={({item, index}) => (
               <TouchableOpacity
                 style={{flexDirection: 'column'}}

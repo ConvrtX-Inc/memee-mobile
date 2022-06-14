@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import ButtonWithImage from '../../component/ButtonWithImage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { appleAuth } from '@invertase/react-native-apple-authentication'
 import {
   LoginManager,
   AccessToken,
@@ -185,8 +186,13 @@ export default function Onboarding({navigation}) {
     })
       .then(response => response.json())
       .then(async responseJson => {
+
+        
+
         if (responseJson.Status == 409) {
           if (loginTypeVar == 'Google') logoutFromGoogle();
+
+ 
 
           console.log('Error', responseJson);
 
@@ -229,6 +235,8 @@ export default function Onboarding({navigation}) {
       await GoogleSignin.signOut();
     } catch (e) {}
   }
+
+
 
   async function onTwitterButtonPress() {
     // Perform the login request
@@ -273,6 +281,76 @@ export default function Onboarding({navigation}) {
     }
   };
 
+  const onAppleLoginTap = async() => {
+      try{
+
+      //apple login continuation
+      
+      const appleAuthResponse = await appleAuth.performRequest({
+        requestedOperation: appleAuth.Operation.LOGIN,
+        requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+      });  
+      
+      const { identityToken, fullName, email } = appleAuthResponse
+
+      const loginDatas =  {
+        identityToken,
+        fullName,
+        email
+      }
+
+      try{
+        const loginData = await AsyncStorage.getItem('appleLogin')
+        const parsedLoginData = JSON.parse(loginData)
+
+          if (loginData == null){
+
+            // console.log(loginDatas)
+            AsyncStorage.setItem('appleLogin',JSON.stringify(loginDatas),(err)=> {
+              if (err){
+                console.log("an error")
+                throw err
+              } 
+
+              
+              emailVar = parsedLoginData?.email
+              nameVar = parsedLoginData?.fullName?.givenName +" "+ parsedLoginData?.fullName?.familyName;
+              imageVar = null;
+              loginTypeVar = 'apple';
+
+              SignupFN()
+
+
+
+            }).catch((err) => {
+              console.log("error is:" + err)
+            })
+
+          }else{
+
+              emailVar = parsedLoginData?.email
+              nameVar = parsedLoginData?.fullName?.givenName +" "+ parsedLoginData?.fullName?.familyName;
+              imageVar = null;
+              loginTypeVar = 'apple';
+
+              await SignupFN()
+          
+            
+          }
+        }catch(error){
+//error  
+          AsyncStorage.removeItem("appleLogin")
+       
+
+      }
+
+
+      }catch (error){
+        console.log('error apple'+error)
+      }
+  }
+  
+
   return (
     <View
       style={{
@@ -307,6 +385,17 @@ export default function Onboarding({navigation}) {
           img={require('../../images/emailSignIn.png')}
         />
 
+        <ButtonWithImage
+          title="Continue with Apple"
+          onPress={onAppleLoginTap}
+          bgClrFirst={global.btnColor1}
+          bgClrSecond={global.btnColor2}
+          txtClr={global.btnTxt}
+          font={global.fontSelect}
+          img={require('../../images/emailSignIn.png')}
+          
+        />
+
         <TouchableOpacity
           activeOpacity={0.5}
           onPress={() => onLogin('google')}
@@ -319,7 +408,7 @@ export default function Onboarding({navigation}) {
             <Text
               style={{
                 textAlign: 'center',
-                fontFamily: 'OpenSans-SemiBold',
+                fontFamily: 'OpenSansSemiBold',
                 fontSize: 16,
                 color: '#fff',
               }}>
@@ -340,8 +429,10 @@ export default function Onboarding({navigation}) {
             <Text
               style={{
                 textAlign: 'left',
+
                 fontFamily: 'OpenSans-SemiBold',
                 fontSize: 14,
+
                 color: '#fff',
               }}>
               Continue with Facebook
@@ -361,7 +452,7 @@ export default function Onboarding({navigation}) {
             <Text
               style={{
                 textAlign: 'left',
-                fontFamily: 'OpenSans-SemiBold',
+                fontFamily: 'OpenSansSemiBold',
                 fontSize: 16,
                 color: '#fff',
               }}>

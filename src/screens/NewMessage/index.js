@@ -70,59 +70,38 @@ export default function NewMessage({navigation}) {
 
   function openChat(user) {
     console.log('openChat', user);
-    // setLoader(true)
-
     let users = [];
     users.push({userId: global.userData.user_id, name: global.userData.name});
     users.push({userId: user.following_id, name: user.name});
     console.log('users', users);
-    
-    // axios
-    //   .post(`${global.address}createConversation`, users)
-    //   .then(function (response) {
-    //     // setLoader(false)
-    //     /* console.log(response.data); */
-    //     navigation.navigate('ChatScreen', {
-    //       conversationId: response.data.ConversationID,
-    //       name: user.name,
-    //       image: user.img,
-    //     });
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
+    navigation.navigate('ChatScreen', {
+      conversationId: 225,
+      user: user,
+    });
+
+    // axios({
+    //   method: 'post',
+    //   url: `${global.address}createConversation`,
+    //   data: users,
+    // })
+    //   .catch(error => {
+    //     // loginError()
+    //     console.log('GLOBAL er ', error);
     //     Toast.show({
     //       type: 'error',
     //       text2: 'Something went wrong',
     //     });
-    //     // setLoader(false)
+    //   })
+    //   .then(Response => {
+    //     console.log('products Response: WITH TOKEN', Response.data);
+    //     navigation.navigate('ChatScreen', {
+    //       conversationId: Response.data.ConversationID,
+    //       name: Response.data.Title,
+    //       image: user.img,
+    //     });
+
+    //     console.log('conversationId', Response.data.ConversationID);
     //   });
-
-    axios({
-      method: 'post',
-      url: `${global.address}createConversation`,
-      data: users,
-        validateStatus: status => {
-          return true;
-        },
-      })
-      .catch(error => {
-        // loginError()
-        console.log('GLOBAL er ', error);
-        Toast.show({
-          type: 'error',
-          text2: 'Something went wrong',
-          });
-      })
-      .then(Response => {
-        /* console.log('products Response: WITH TOKEN', Response.data); */
-        navigation.navigate('ChatScreen', {
-          conversationId: Response.data.ConversationID,
-          name: Response.data.Title,
-          image: user.img,
-        });
-
-        console.log('conversationId', Response.data.ConversationID);
-      });
   }
 
   return (

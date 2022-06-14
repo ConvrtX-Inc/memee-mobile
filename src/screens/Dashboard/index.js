@@ -620,6 +620,7 @@ export default function Dashboard(props) {
 
   function navigateToprofileFN() {
     global.profileID = global.userData.user_id;
+    console.log('asd', global.profileID);
     navigation.navigate('ProfileScreen');
   }
 
@@ -743,7 +744,7 @@ export default function Dashboard(props) {
   }
 
   function navigationToProfileFN(index) {
-    //console.log('index', index);
+    console.log('indexs', index);
     if (index > -1 && index != null) {
       var user =
         tabNumber == 1
@@ -753,9 +754,9 @@ export default function Dashboard(props) {
           : tabNumber == 3
           ? trendingPost[index]
           : 0;
-      var id = user.user_id;
+      // var id = user.user_id;
       //console.log('user', user, id);
-      global.profileID = id;
+      global.profileID = index;
       navigation.navigate('ProfileScreen');
     }
   }
@@ -933,6 +934,7 @@ export default function Dashboard(props) {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
         renderItem={({item, index}) => {
+          console.log('skwa', item);
           var sd = '"' + item.description.replace(/\"/g, '\\"') + '"';
           sd.replace(/\n/g, ' ');
           return (
@@ -946,7 +948,7 @@ export default function Dashboard(props) {
                 {item.ParentUserId > 0 ? (
                   <View>
                     <TouchableOpacity
-                      onPress={() => navigationToProfileFN(index)}>
+                      onPress={() => navigationToProfileFN(item.user_id)}>
                       <View
                         style={{
                           marginTop: 15,
@@ -997,7 +999,7 @@ export default function Dashboard(props) {
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                      onPress={() => navigationToProfileFN(index)}>
+                      onPress={() => navigationToProfileFN(item.ParentUserId)}>
                       <View
                         style={{
                           marginTop: -25,
@@ -1040,7 +1042,7 @@ export default function Dashboard(props) {
                 ) : (
                   <View>
                     <TouchableOpacity
-                      onPress={() => navigationToProfileFN(index)}>
+                      onPress={() => navigationToProfileFN(item.user_id)}>
                       <View
                         style={{
                           marginTop: 15,
@@ -2317,3 +2319,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+    
