@@ -207,6 +207,7 @@ export default function ProfileScreen(props) {
     /*console.log('GLOBAL Profile ID ', global.profileID);
     console.log('GLOBAL profileData name ', profileData.name);
     console.log('GLOBAL URL ', `${global.address}createConversation`);*/
+    setLoader(false);
     navigation.navigate('ChatScreen', {
       conversationId: 225,
       user: profileData,
