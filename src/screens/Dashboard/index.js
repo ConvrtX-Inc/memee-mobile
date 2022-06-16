@@ -1394,7 +1394,7 @@ export default function Dashboard(props) {
                     marginTop: 8,
                     flexWrap: 'wrap',
 
-                    width: windowWidth * 0.4,
+                    width: windowWidth * 0.35,
                   }}>
                   Hi{' '}
                   <Text
@@ -1402,10 +1402,15 @@ export default function Dashboard(props) {
                       fontWeight: 'bold',
                       fontSize: 24,
                     }}>
-                    {pProfileName},
+                    {windowWidth < 400
+                      ? pProfileName.substring(0, 2)
+                      : pProfileName}
+                    ,
                   </Text>
                 </Text>
               </TouchableOpacity>
+
+              {console.log(windowWidth)}
 
               <TouchableOpacity
                 onPress={() => navigation.navigate('NotificationScreen')}
@@ -1703,7 +1708,7 @@ export default function Dashboard(props) {
                             });
                         } else {
                           const videoUri = await openVideoEditor();
-                          console.log('videoUri',videoUri);
+                          console.log('videoUri', videoUri);
                         }
                         setIsOpenMedia(false);
                       }}>
