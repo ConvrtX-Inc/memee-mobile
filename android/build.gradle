@@ -10,7 +10,7 @@ buildscript {
         maven { url "https://artifactory.img.ly/artifactory/imgly" }
     }
     dependencies {
-        classpath 'ly.img.android.sdk:plugin:9.2.0'
+        classpath 'ly.img.android.sdk:plugin:10.1.1'
          classpath 'com.google.gms:google-services:4.3.10'
       
     }
