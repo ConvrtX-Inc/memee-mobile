@@ -12,7 +12,7 @@ import {
   TextInput,
   TouchableHighlight,
 } from 'react-native';
-
+import firestore from '@react-native-firebase/firestore';
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import {useSelector, useDispatch} from 'react-redux';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -31,17 +31,37 @@ const Inbox = ({showValue}) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const {conversations} = useSelector(({authRed}) => authRed);
-  console.log('conver', conversations);
-  useFocusEffect(
-    React.useCallback(() => {
-      /* console.log('Screen was focused'); */
-      getConversations();
-      // Do something when the screen is focused
-      return () => {
-        /* console.log('Screen was unfocused'); */
-      };
-    }, []),
-  );
+  const [threads, setThreads] = useState([]);
+  useEffect(() => {
+    global.OppositeChatUser = 'Heroroo';
+    console.log('ereh', global.userData.user_id);
+    const unsubscribe = firestore()
+      .collection('MESSAGE_THREADZS')
+      .where('receiver_id', '!=', global.userData.user_id)
+      .get()
+      .then(querySnapshot => {
+        const threads = querySnapshot.docs.map(documentSnapshot => {
+          return {
+            _id: documentSnapshot.id,
+            name: '',
+            latestMessage: {text: ''},
+            ...documentSnapshot.data(),
+          };
+        });
+
+        setThreads(threads);
+        console.log('asd', threads);
+        if (loading) {
+          setLoading(false);
+        }
+      });
+
+    return () => unsubscribe();
+  }, []);
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#555" />;
+  }
 
   function getConversations() {
     axios({
@@ -156,24 +176,26 @@ const Inbox = ({showValue}) => {
                 </View> */}
         <View>
           <FlatList
-            data={conversations}
+            data={threads}
             // data={mock}
             renderItem={({item, index}) => (
               <TouchableOpacity
                 style={{flexDirection: 'column'}}
                 onPress={() =>
                   navigation.navigate('ChatScreen', {
-                    conversationId: item.id,
-                    name: item.name,
-                    image: item.image,
-                    online: item.online,
+                    user: {
+                      _id: item._id,
+                      conversationId: item.conversationId,
+                      name: item.name,
+                      imgurl: item.imgurl,
+                    },
                   })
                 }>
                 <View style={[styles.itemView, {}]}>
                   <View>
-                    {item.image != '' ? (
+                    {item.imgurl != '' ? (
                       <Image
-                        source={{uri: item.image}}
+                        source={{uri: item.imgurl}}
                         style={[styles.addFriendImage, {}]}
                         resizeMode="cover"
                       />

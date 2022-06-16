@@ -30,6 +30,7 @@ import {RNS3} from 'react-native-aws3';
 import {getLastSeenFormat} from '../../Utility/Utils';
 import {getBucketOptions} from '../../Utility/Utils';
 import storage from '@react-native-firebase/storage';
+import firestore from '@react-native-firebase/firestore';
 
 const ChatScreen = ({route}) => {
   const navigation = useNavigation();
@@ -41,6 +42,7 @@ const ChatScreen = ({route}) => {
   const {conversationId, user} = route.params;
 
   useEffect(() => {
+    console.log('asd', global.OppositeChatUser);
     setOtherChatUser(user);
     setCurrentChatUser({
       _id: global.userData.user_id,
@@ -50,37 +52,100 @@ const ChatScreen = ({route}) => {
     });
   }, [1]);
 
-  useEffect(() => {
-    messaging().onMessage(async remoteMessage => {
-      var msg = {
-        _id: remoteMessage.messageId,
-        text:
-          remoteMessage.notification.body.trim() == 'Shared this image'
-            ? ''
-            : remoteMessage.notification.body,
-        user: users.find(
-          element => element.userId == remoteMessage.data.objectId,
-        ),
-        image:
-          remoteMessage.notification.body.trim() == 'Shared this image'
-            ? remoteMessage.data.image
-            : null,
-      };
-      if (msg.user.userId != global.userData.user_id)
-        setMessages(previousMessages =>
-          GiftedChat.append(previousMessages, msg),
-        );
-    });
-  }, []);
+  // useEffect(async () => {
+  //   console.log('here');
 
-  const onSend = useCallback((messages = []) => {
-    setMessages(previousMessages =>
-      GiftedChat.append(previousMessages, messages),
-    );
+  //   var docRef = firestore()
+  //     .collection('MESSAGE_THREAD')
+  //     .doc(user.conversationId);
+
+  //   docRef
+  //     .get()
+  //     .then(doc => {
+  //       if (doc.exists) {
+  //         console.log('Document data:', doc.data());
+  //       } else {
+  //         console.log('No such document!');
+  //       }
+  //     })
+  //     .catch(error => {
+  //       console.log('Error getting document:', error);
+  //       setFirebase();
+  //     });
+  // }, [1]);
+  useEffect(() => {
+    const unsubscribeListener = firestore()
+      .collection('MESSAGE_THREADZS')
+      .doc(user.conversationId)
+      .collection('MESSAGES')
+      .orderBy('createdAt', 'desc')
+      .onSnapshot(querySnapshot => {
+        const messages = querySnapshot.docs.map(doc => {
+          const firebaseData = doc.data();
+          const data = {
+            _id: doc.id,
+            text: '',
+            createdAt: new Date().getTime(),
+            ...firebaseData,
+          };
+          return data;
+        });
+        setMessages(messages);
+      });
+
+    return () => unsubscribeListener();
   }, []);
+  const setFirebase = () => {
+    console.log('ehhol');
+    firestore()
+      .collection('MESSAGE_THREADZS')
+      // .doc(user.conversationId)
+      // .doc(currentChatUser._id)
+      .add({
+        sender_id: global.userData._id,
+        receiver_id: user._id,
+        name: user.name,
+        imgurl: user.img,
+        conversationId: user.conversationId,
+        latestMessage: {
+          text: `New Conversation`,
+          createdAt: new Date().getTime(),
+        },
+      });
+  };
+  const onSend = async messages => {
+    setFirebase()
+    const text = messages[0].text;
+    console.log('er', messages);
+    firestore()
+      .collection('MESSAGE_THREADZS')
+      .doc(user.conversationId)
+      .collection('MESSAGES')
+      .add({
+        text,
+        createdAt: new Date().getTime(),
+        user: currentChatUser,
+      });
+    await firestore()
+      .collection('MESSAGE_THREADZS')
+      .doc(user.conversationId)
+      .collection('MESSAGES')
+      .set(
+        {
+          latestMessage: {
+            text,
+            createdAt: new Date().getTime(),
+          },
+        },
+        {merge: true},
+      );
+  };
 
   function renderBubble(props) {
-    console.log('sda', props);
+    // if (messages.length == 1) {
+    //   console.log('elfs', messages);
+    //   setFirebase();
+    // }
     return (
       <Bubble
         {...props}
