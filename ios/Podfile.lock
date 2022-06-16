@@ -491,8 +491,8 @@ PODS:
   - RNVectorIcons (8.1.0):
     - React-Core
   - TwitterCore (3.2.0)
-  - TwitterKit (3.4.2):
-    - TwitterCore (>= 3.2.0)
+  - TwitterKit (3.3.0):
+    - TwitterCore (>= 3.1.0)
   - VEEffectsSDK (1.23.0)
   - VEExportSDK (1.23.0)
   - VEPlaybackSDK (1.23.0)
@@ -571,6 +571,7 @@ DEPENDENCIES:
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNTextGradientView (from `../node_modules/react-native-text-gradient`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
+  - TwitterKit (~> 3.3.0)
   - VEEffectsSDK (= 1.23.0)
   - VEExportSDK (= 1.23.0)
   - VEPlaybackSDK (= 1.23.0)
@@ -828,13 +829,13 @@ SPEC CHECKSUMS:
   RNTextGradientView: 3eb4744303f801546fad35ac47a53cc82257cb25
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
   TwitterCore: 8cbc9ad34d91c63a0035ea05bfbfc0d7ca72a28c
-  TwitterKit: 5e4f41d70b9abdb41df5467f52d7aa2c0fd26ebb
+  TwitterKit: a2e60ddcedbf54091eac6f27685ca7a87681e1d7
   VEEffectsSDK: 31f600a7f0b46d6780e54a6651ed2896bbc1c3ff
   VEExportSDK: cbcfaf9af5e3a0539c32b3f2462edc3671a647dc
   VEPlaybackSDK: 7aba27222a11b8155c4e77c68de7f4db13755c82
   VideoEditor: d61253a121cdb8780f8dcfd525c9a07faae019ec
   Yoga: 8c8436d4171c87504c648ae23b1d81242bdf3bbf
 
-PODFILE CHECKSUM: a454e02591825a42032d522439bfdc7328b86c7e
+PODFILE CHECKSUM: fcff7b68a45196db3b86f009dcfb133df8656c85
 
 COCOAPODS: 1.11.3

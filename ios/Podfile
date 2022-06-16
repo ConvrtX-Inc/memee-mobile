@@ -16,8 +16,7 @@ target 'memee' do
     :hermes_enabled => false
   )
   
-  pod 'react-native-twitter-signin', :path => '../node_modules/react-native-twitter-signin'
-
+  pod 'TwitterKit', '~> 3.3.0'
   pod 'BanubaARCloudSDK', '1.23.0' #optional
   pod 'BanubaVideoEditorSDK', '1.23.0'
   pod 'BanubaAudioBrowserSDK', '1.23.0' #optional
@@ -39,6 +38,7 @@ target 'memee' do
   pod 'VEExportSDK', '1.23.0'
   pod 'VEEffectsSDK', '1.23.0'
   pod 'VEPlaybackSDK', '1.23.0'
+
 
   # target 'memeeTests' do
   #   inherit! :complete
