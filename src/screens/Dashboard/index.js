@@ -150,7 +150,7 @@ export default function Dashboard(props) {
 
   const [pimgChange, setPimgChange] = useState(global.userData.imgurl);
   const [pProfileName, setPProfileName] = useState(
-    global.userData?.name?.split(' ')[0] || 'Memee',
+    global.userData.name.split(' ')[0],
   );
   const [refreshing, setRefreshing] = React.useState(false);
   const [loaderIndicator, setLoaderIndicator] = useState(true);
@@ -923,7 +923,7 @@ export default function Dashboard(props) {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
         renderItem={({item, index}) => {
-          /* console.log('skwa', item); */
+          console.log('skwa', item);
           var sd = '"' + item.description.replace(/\"/g, '\\"') + '"';
           sd.replace(/\n/g, ' ');
           return (
