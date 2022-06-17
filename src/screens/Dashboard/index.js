@@ -150,7 +150,7 @@ export default function Dashboard(props) {
 
   const [pimgChange, setPimgChange] = useState(global.userData.imgurl);
   const [pProfileName, setPProfileName] = useState(
-    global.userData.name.split(' ')[0],
+    global.userData?.name?.split(' ')[0] || 'Memee',
   );
   const [refreshing, setRefreshing] = React.useState(false);
   const [loaderIndicator, setLoaderIndicator] = useState(true);
@@ -923,7 +923,7 @@ export default function Dashboard(props) {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
         renderItem={({item, index}) => {
-          console.log('skwa', item);
+          /* console.log('skwa', item); */
           var sd = '"' + item.description.replace(/\"/g, '\\"') + '"';
           sd.replace(/\n/g, ' ');
           return (
@@ -1383,7 +1383,7 @@ export default function Dashboard(props) {
                     marginTop: 8,
                     flexWrap: 'wrap',
 
-                    width: windowWidth * 0.4,
+                    width: windowWidth * 0.35,
                   }}>
                   Hi{' '}
                   <Text
@@ -1391,7 +1391,10 @@ export default function Dashboard(props) {
                       fontWeight: 'bold',
                       fontSize: 24,
                     }}>
-                    {pProfileName},
+                    {windowWidth < 400
+                      ? pProfileName.substring(0, 2)
+                      : pProfileName}
+                    ,
                   </Text>
                 </Text>
               </TouchableOpacity>
