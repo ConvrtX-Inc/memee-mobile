@@ -258,6 +258,13 @@ export function asignImageToProductsFN(itemCode, type) {
       
     } else {
       console.log('wrong icon type');
+      var iconArray = [
+        {
+          imag: require('../images/Tabbar.png'),
+          themeName: itemCode,
+        },
+      ];
+      return iconArray;
     }
   } else if (type == 'font') {
     if (itemCode == 'font1') {
@@ -284,8 +291,39 @@ export function asignImageToProductsFN(itemCode, type) {
         },
       ];
       return fontArray;
-    } else {
+    }else if (itemCode == 'ProductSans-Bold') {
+      var fontArray = [
+        {
+          font: 'Unkempt-Bold',
+          themeName: 'Memee Font 3',
+        },
+      ];
+      return fontArray;
+    } else if (itemCode == 'free_font_PTSans') {
+      var fontArray = [
+        {
+          font: 'PTSans-Bold',
+          themeName: 'Memee Font 4',
+        },
+      ];
+      return fontArray;
+    } else if (itemCode == 'free_font_Una') {
+      var fontArray = [
+        {
+          font: 'Unna-Bold',
+          themeName: 'Memee Font 5',
+        },
+      ];
+      return fontArray;
+    }  else {
       console.log('wrong Font type');
+      var fontArray = [
+        {
+          font: 'Arial',
+          themeName: itemCode,
+        },
+      ];
+      return fontArray;
     }
   } else if (type == 'profile_background') {
     if (itemCode == 'memee_theme_white_profile_background') {
@@ -321,6 +359,54 @@ export function asignImageToProductsFN(itemCode, type) {
         {
           imag: require('../images/UniconButton.png'),
           themeName: 'Unicorn',
+        },
+      ];
+      return buttonArray;
+    }else if (itemCode == 'free_button_roygbiv_pink_1') {
+      var buttonArray = [
+        {
+          imag: require('../images/MemeeButton.png'),
+          themeName: 'ROYGBIV Pink',
+        },
+      ];
+      return buttonArray;
+    }else if (itemCode == 'free_button_roygbiv_orange_1') {
+      var buttonArray = [
+        {
+          imag: require('../images/MemeeButton.png'),
+          themeName: 'ROYGBIV Orange',
+        },
+      ];
+      return buttonArray;
+    }else if (itemCode == 'free_button_theme_2') {
+      var buttonArray = [
+        {
+          imag: require('../images/MemeeButton.png'),
+          themeName: 'Theme 2',
+        },
+      ];
+      return buttonArray;
+    }else if (itemCode == 'free_button_theme_3') {
+      var buttonArray = [
+        {
+          imag: require('../images/MemeeButton.png'),
+          themeName: 'Theme 3',
+        },
+      ];
+      return buttonArray;
+    }else if (itemCode == 'free_button_theme_4') {
+      var buttonArray = [
+        {
+          imag: require('../images/MemeeButton.png'),
+          themeName: 'Theme 4',
+        },
+      ];
+      return buttonArray;
+    }else if (itemCode == 'free_button_theme_1') {
+      var buttonArray = [
+        {
+          imag: require('../images/MemeeButton.png'),
+          themeName: 'Theme 1',
         },
       ];
       return buttonArray;
@@ -366,6 +452,13 @@ export function asignImageToProductsFN(itemCode, type) {
       return buttonArray;
     } else {
       console.log('wrong Button type');
+      var buttonArray = [
+        {
+          imag: require('../images/genericButton.png'),
+          themeName: itemCode,
+        },
+      ];
+      return buttonArray;
     }
   } else if (type == 'background_overlay') {
     if (itemCode == 'memee_theme_white_background_overlay') {

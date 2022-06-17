@@ -47,22 +47,22 @@ const ThemeButton = ({item, selectFonts}) => {
           setBtnTextColor('#000000');
           setSet(true);
           break;
-        case 'free_icon_theme_2':
+        case 'free_button_theme_2':
           setGradient(['#1EDAAD', '#00AF85']);
           setBtnTextColor('#ffffff');
           setSet(true);
           break;
-        case 'free_icon_theme_3':
+        case 'free_button_theme_3':
           setGradient(['#F23F58', '#D4233B']);
           setBtnTextColor('#ffffff');
           setSet(true);
           break;
-        case 'free_icon_theme_4':
+        case 'free_button_theme_4':
           setGradient(['#FFF62A', '#FFF62A']);
           setBtnTextColor('#040216');
           setSet(true);
           break;
-        case 'free_icon_theme_1':
+        case 'free_button_theme_1':
           setGradient(['#BE31FF', '#8900C9']);
           setBtnTextColor('#FFFFFF');
           setSet(true);
