@@ -75,8 +75,14 @@ export default function NewMessage({navigation}) {
     users.push({userId: user.following_id, name: user.name});
     console.log('users', users);
     navigation.navigate('ChatScreen', {
-      conversationId: 225,
-      user: user,
+      user: {
+        _id: user.following_id,
+        receiver_id: user.following_id,
+        conversationId: user.following_id,
+        name: user.name,
+        img: user.img,
+        online: user.online,
+      },
     });
 
     // axios({

@@ -12,7 +12,7 @@ import {
   TextInput,
   TouchableHighlight,
 } from 'react-native';
-
+import firestore from '@react-native-firebase/firestore';
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import {useSelector, useDispatch} from 'react-redux';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -31,78 +31,115 @@ const Inbox = ({showValue}) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const {conversations} = useSelector(({authRed}) => authRed);
-  console.log('conver', conversations);
-  useFocusEffect(
-    React.useCallback(() => {
-      /* console.log('Screen was focused'); */
-      getConversations();
-      // Do something when the screen is focused
-      return () => {
-        /* console.log('Screen was unfocused'); */
-      };
-    }, []),
-  );
-
-  function getConversations() {
-    axios({
-      method: 'get',
-      url: `${global.address}getConversations/${global.userData.user_id}`,
-      // data: data,
-      validateStatus: status => {
-        return true;
-      },
-    })
-      .catch(error => {
-        // handle error
-        console.log('error getConverstation');
-        setLoading(false);
-      })
-      .then(Response => {
-        setConversationsView(Response.data);
-        setLoading(false);
+  const [threads, setThreads] = useState([]);
+  const [add, setAdd] = useState();
+  useEffect(() => {
+    const unsubscribe = firestore()
+      .collection('Mem_Conversation')
+      .orderBy('latestMessage.createdAt', 'desc')
+      .onSnapshot(querySnapshot => {
+        if (querySnapshot != null) {
+          const threads = querySnapshot.docs.map(documentSnapshot => {
+            console.log('documentSnapshot', documentSnapshot.data());
+            var add = documentSnapshot.data().receiver_id;
+            var img = documentSnapshot.data().receiver_img;
+            var name = documentSnapshot.data().receiver_name;
+            if (documentSnapshot.data().sender_id != global.userData.user_id) {
+              console.log(documentSnapshot.data().sender_id);
+              add = documentSnapshot.data().sender_id;
+              img = documentSnapshot.data().sender_img;
+              name = documentSnapshot.data().sender_name;
+            }
+            if (
+              documentSnapshot.data().sender_id == global.userData.user_id ||
+              documentSnapshot.data().receiver_id == global.userData.user_id
+            ) {
+              return {
+                _id: documentSnapshot.id,
+                asd: add,
+                names: name,
+                imgs: img,
+                online: 1,
+                latestMessage: {text: ''},
+                ...documentSnapshot.data(),
+              };
+            } else {
+              console.log('soes');
+            }
+          });
+          const results = threads.filter(element => {
+            return element !== undefined;
+          });
+          setThreads(results);
+          console.log('qwer', threads);
+        } else {
+          console.log('it is null');
+        }
+        if (loading) {
+          setLoading(false);
+        }
       });
 
-    // axios
-    //   .get(`${global.address}getConversations/${global.userData.user_id}`)
-    //   .then(function (response) {
-    //     // handle success
-    //     setConversationsView(response.data);
-    //   })
-    //   .catch(function (error) {
-    //     // handle error
-    //     console.log(error);
-    //   })
-    //   .then(function () {
-    //     setLoading(false);
-    //     // always executed
-    //   });
+    return () => unsubscribe();
+  }, []);
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#555" />;
   }
 
-  function setConversationsView(data) {
-    let convs = [];
-    data.forEach(element => {
-      if (element.users.length == 1 && element.LastMessageDate) {
-        convs.push({
-          id: element.ConversationID,
-          name: element.users[0].name,
-          lastMessage:
-            (element.LastMessageSenderID == global.userData.user_id
-              ? 'You: '
-              : '') +
-            (element.LastMessageType == 'text'
-              ? element.LastMessage
-              : element.LastMessageType == 'image'
-              ? 'Shared this image'
-              : ''),
-          image: element.users[0].imgurl,
-          online: element.users[0].onlineStatus,
-          date: element.LastMessageDate,
-        });
-      }
-    });
-
-    dispatch({type: CONVERSATIONS, data: convs});
+  async function profileDataFN(userId) {
+    const data = await Promise.all(
+      fetch(global.address + 'GetUserProfile/' + userId, {
+        method: 'get',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          authToken: global.token,
+        },
+      })
+        .then(response => response.json())
+        .then(responseJson => {
+          console.log('gotcha', responseJson.profile.name);
+          return {
+            user: {
+              name: responseJson.profile.name,
+              img: responseJson.profile.img_url,
+            },
+          };
+        })
+        .catch(error => {
+          console.error(error);
+        }),
+    );
+    console.log('diresu', userId);
+    return data;
   }
+
+  // function setConversationsView(data) {
+  //   let convs = [];
+  //   data.forEach(element => {
+  //     if (element.users.length == 1 && element.LastMessageDate) {
+  //       convs.push({
+  //         id: element.ConversationID,
+  //         name: element.users[0].name,
+  //         lastMessage:
+  //           (element.LastMessageSenderID == global.userData.user_id
+  //             ? 'You: '
+  //             : '') +
+  //           (element.LastMessageType == 'text'
+  //             ? element.LastMessage
+  //             : element.LastMessageType == 'image'
+  //             ? 'Shared this image'
+  //             : ''),
+  //         image: element.users[0].imgurl,
+  //         online: element.users[0].onlineStatus,
+  //         date: element.LastMessageDate,
+  //       });
+  //     }
+  //   });
+
+  //   dispatch({type: CONVERSATIONS, data: convs});
+  // }
 
   const mock = [
     {
@@ -156,24 +193,27 @@ const Inbox = ({showValue}) => {
                 </View> */}
         <View>
           <FlatList
-            data={conversations}
+            data={threads}
             // data={mock}
             renderItem={({item, index}) => (
               <TouchableOpacity
                 style={{flexDirection: 'column'}}
                 onPress={() =>
                   navigation.navigate('ChatScreen', {
-                    conversationId: item.id,
-                    name: item.name,
-                    image: item.image,
-                    online: item.online,
+                    user: {
+                      _id: item._id,
+                      receiver_id: item.asd,
+                      conversationId: item.conversationId,
+                      name: item.names,
+                      img: item.imgs,
+                    },
                   })
                 }>
                 <View style={[styles.itemView, {}]}>
                   <View>
-                    {item.image != '' ? (
+                    {item.imgs != '' ? (
                       <Image
-                        source={{uri: item.image}}
+                        source={{uri: item.imgs}}
                         style={[styles.addFriendImage, {}]}
                         resizeMode="cover"
                       />
@@ -209,13 +249,13 @@ const Inbox = ({showValue}) => {
                         styles.addText,
                         {textAlign: 'left', color: colors.textColor},
                       ]}>
-                      {item.name}
+                      {item.names}
                     </Text>
                     <Text
                       numberOfLines={2}
                       ellipsizeMode="tail"
                       style={[styles.nameText, {color: colors.textColor}]}>
-                      {item.lastMessage}
+                      {item.latestMessage.text}
                     </Text>
                   </View>
                   <Text
@@ -223,9 +263,9 @@ const Inbox = ({showValue}) => {
                       styles.nameText,
                       {marginLeft: 'auto', color: colors.textColor},
                     ]}>
-                    {item.date == null
+                    {item.latestMessage.createdAt == 'New Connection'
                       ? 'New Connection'
-                      : formatDateTime(item.date)}
+                      : formatDateTime('2022-06-11 12:12:12')}
                   </Text>
                   <Image
                     source={require('../../images/arrowR.png')}
