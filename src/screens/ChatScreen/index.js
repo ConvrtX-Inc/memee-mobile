@@ -40,9 +40,8 @@ const ChatScreen = ({route}) => {
   const [otherChatUser, setOtherChatUser] = useState();
   const [currentChatUser, setCurrentChatUser] = useState();
   const {conversationId, user} = route.params;
-
-  useEffect(() => {
-    console.log('asd', global.OppositeChatUser);
+  const [primaryKey, setPrimaryKey] = useState();
+  useEffect(async () => {
     setOtherChatUser(user);
     setCurrentChatUser({
       _id: global.userData.user_id,
@@ -50,33 +49,19 @@ const ChatScreen = ({route}) => {
       avatar: global.userData.imgurl,
       userId: global.userData.user_id,
     });
+    await isNewConversation(
+      parseInt(global.userData.user_id) + parseInt(user.receiver_id),
+    );
+    setPrimaryKey(
+      parseInt(global.userData.user_id) + parseInt(user.receiver_id),
+    );
   }, [1]);
-
-  // useEffect(async () => {
-  //   console.log('here');
-
-  //   var docRef = firestore()
-  //     .collection('MESSAGE_THREAD')
-  //     .doc(user.conversationId);
-
-  //   docRef
-  //     .get()
-  //     .then(doc => {
-  //       if (doc.exists) {
-  //         console.log('Document data:', doc.data());
-  //       } else {
-  //         console.log('No such document!');
-  //       }
-  //     })
-  //     .catch(error => {
-  //       console.log('Error getting document:', error);
-  //       setFirebase();
-  //     });
-  // }, [1]);
-  useEffect(() => {
+  useEffect(async () => {
+    var docId = parseInt(global.userData.user_id) + parseInt(user.receiver_id);
+    console.log('docid', docId);
     const unsubscribeListener = firestore()
-      .collection('MESSAGE_THREADZS')
-      .doc(user.conversationId)
+      .collection('Mem_Conversation')
+      .doc(`${docId}`)
       .collection('MESSAGES')
       .orderBy('createdAt', 'desc')
       .onSnapshot(querySnapshot => {
@@ -85,41 +70,65 @@ const ChatScreen = ({route}) => {
           const data = {
             _id: doc.id,
             text: '',
-            createdAt: new Date().getTime(),
+            createdAt: 'New Connection',
             ...firebaseData,
           };
           return data;
         });
+        console.log('essameg', messages);
         setMessages(messages);
       });
 
     return () => unsubscribeListener();
   }, []);
-  const setFirebase = () => {
-    console.log('ehhol');
+
+  const isNewConversation = async primaryKey => {
+    var flag = false;
+    console.log(primaryKey);
     firestore()
-      .collection('MESSAGE_THREADZS')
-      // .doc(user.conversationId)
-      // .doc(currentChatUser._id)
-      .add({
-        sender_id: global.userData._id,
-        receiver_id: user._id,
-        name: user.name,
-        imgurl: user.img,
-        conversationId: user.conversationId,
+      .collection('Mem_Conversation')
+      .onSnapshot(querySnapshot => {
+        if (querySnapshot != null) {
+          const result = querySnapshot.docs.some(documentSnapshot => {
+            console.log('asdss', documentSnapshot.id);
+            if (documentSnapshot.id == primaryKey) {
+              return (flag = true);
+            }
+          });
+          console.log('asd', result);
+          if (!result) {
+            setFirebase(primaryKey);
+            console.log('sdfakse');
+          } else {
+            console.log('true');
+          }
+        }
+      });
+  };
+  const setFirebase = async primaryKey => {
+    console.log('ehhosl', user.img);
+    await firestore()
+      .collection('Mem_Conversation')
+      .doc(`${primaryKey}`)
+      .set({
+        sender_id: global.userData.user_id,
+        sender_name: global.userData.name,
+        sender_img: global.userData.imgurl,
+        receiver_id: user.receiver_id,
+        receiver_name: user.name,
+        receiver_img: user.img,
         latestMessage: {
-          text: `New Conversation`,
+          text: `New Connection`,
           createdAt: new Date().getTime(),
         },
       });
   };
   const onSend = async messages => {
-    setFirebase()
     const text = messages[0].text;
-    console.log('er', messages);
+    console.log('erdaz', primaryKey);
     firestore()
-      .collection('MESSAGE_THREADZS')
-      .doc(user.conversationId)
+      .collection('Mem_Conversation')
+      .doc(`${primaryKey}`)
       .collection('MESSAGES')
       .add({
         text,
@@ -127,11 +136,16 @@ const ChatScreen = ({route}) => {
         user: currentChatUser,
       });
     await firestore()
-      .collection('MESSAGE_THREADZS')
-      .doc(user.conversationId)
-      .collection('MESSAGES')
+      .collection('Mem_Conversation')
+      .doc(`${primaryKey}`)
       .set(
         {
+          sender_id: global.userData.user_id,
+          sender_name: global.userData.name,
+          sender_img: global.userData.imgurl,
+          receiver_id: user.receiver_id,
+          receiver_name: user.name,
+          receiver_img: user.img,
           latestMessage: {
             text,
             createdAt: new Date().getTime(),
@@ -142,10 +156,6 @@ const ChatScreen = ({route}) => {
   };
 
   function renderBubble(props) {
-    // if (messages.length == 1) {
-    //   console.log('elfs', messages);
-    //   setFirebase();
-    // }
     return (
       <Bubble
         {...props}
@@ -249,9 +259,9 @@ const ChatScreen = ({route}) => {
         let task = reference.putFile(file.uri);
 
         task
-          .then(response => {
+          .then(async response => {
             console.log('Image uploaded to the bucket!');
-            reference.getDownloadURL().then(response => {
+            reference.getDownloadURL().then(async response => {
               var valueToPush = {};
               valueToPush['_id'] = Math.floor(Math.random() * 100000);
               valueToPush['text'] = '';
@@ -263,11 +273,38 @@ const ChatScreen = ({route}) => {
               let msg = [];
               msg.push(valueToPush);
               console.log('asd', msg);
-              onSend({
-                _id: conversationId,
-                image: msg[0].image,
-                user: currentChatUser,
-              });
+              // onSend({
+              //   _id: conversationId,
+              //   image: msg[0].image,
+              //   user: currentChatUser,
+              // });
+              firestore()
+                .collection('Mem_Conversation')
+                .doc(`${primaryKey}`)
+                .collection('MESSAGES')
+                .add({
+                  image: msg[0].image,
+                  createdAt: new Date().getTime(),
+                  user: currentChatUser,
+                });
+              await firestore()
+                .collection('Mem_Conversation')
+                .doc(`${primaryKey}`)
+                .set(
+                  {
+                    sender_id: global.userData.user_id,
+                    sender_name: global.userData.name,
+                    sender_img: global.userData.imgurl,
+                    receiver_id: user.receiver_id,
+                    receiver_name: user.name,
+                    receiver_img: user.img,
+                    latestMessage: {
+                      text: 'You sent a photo',
+                      createdAt: new Date().getTime(),
+                    },
+                  },
+                  {merge: true},
+                );
             });
           })
           .catch(e => {
@@ -318,7 +355,7 @@ const ChatScreen = ({route}) => {
           />
         </TouchableOpacity>
         <Image
-          source={{uri: user.imgurl}}
+          source={{uri: user.img}}
           style={[styles.addFriendImage, {}]}
           resizeMode="cover"
         />

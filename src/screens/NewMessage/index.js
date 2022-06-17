@@ -77,6 +77,7 @@ export default function NewMessage({navigation}) {
     navigation.navigate('ChatScreen', {
       user: {
         _id: user.following_id,
+        receiver_id: user.following_id,
         conversationId: user.following_id,
         name: user.name,
         img: user.img,
