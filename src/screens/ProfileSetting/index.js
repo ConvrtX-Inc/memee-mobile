@@ -165,7 +165,7 @@ export default function ProfileSetting(props) {
           }
         }
 
-        const freeThemes = [
+        /* const freeThemes = [
           {
             datetime: undefined,
             img: require('../../images/roygbivTabBar.png'),
@@ -307,9 +307,9 @@ export default function ProfileSetting(props) {
         for (let index = 0; index < freeThemes.length; index++) {
           const freeTheme = freeThemes[index];
           iconsVar.push(freeTheme);
-        }
+        } */
 
-        console.log('buttonsVar var', buttonsVar);
+        //console.log('buttonsVar var', buttonsVar);
 
         setFontPurchased(fontVar);
         setButtonPurchased(buttonsVar);

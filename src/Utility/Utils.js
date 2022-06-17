@@ -201,6 +201,61 @@ export function asignImageToProductsFN(itemCode, type) {
         },
       ];
       return iconArray;
+      
+    }else if (itemCode == 'free_icon_roygbiv_pink_1') {
+      var iconArray = [
+        {
+          imag: require('../images/roygbivTabBar.png'),
+          themeName: 'ROYGBIV Pink',
+        },
+      ];
+      return iconArray;
+      
+    }else if (itemCode == 'free_icon_roygbiv_orange_1') {
+      var iconArray = [
+        {
+          imag: require('../images/roygbivOrangeTabBar.png'),
+          themeName: 'ROYGBIV Orange',
+        },
+      ];
+      return iconArray;
+      
+    }else if (itemCode == 'free_icon_theme_2') {
+      var iconArray = [
+        {
+          imag: require('../images/theme2TabBar.png'),
+          themeName: 'Theme 2',
+        },
+      ];
+      return iconArray;
+      
+    }else if (itemCode == 'free_icon_theme_3') {
+      var iconArray = [
+        {
+          imag: require('../images/theme3TabBar.png'),
+          themeName: 'Theme 3',
+        },
+      ];
+      return iconArray;
+      
+    }else if (itemCode == 'free_icon_theme_4') {
+      var iconArray = [
+        {
+          imag: require('../images/theme4TabBar.png'),
+          themeName: 'Theme 4',
+        },
+      ];
+      return iconArray;
+      
+    }else if (itemCode == 'free_icon_theme_1') {
+      var iconArray = [
+        {
+          imag: require('../images/theme1TabBar.png'),
+          themeName: 'Theme 1',
+        },
+      ];
+      return iconArray;
+      
     } else {
       console.log('wrong icon type');
     }

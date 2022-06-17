@@ -52,8 +52,8 @@ export default function ButtonsScreen() {
     )
       .then(response => response.json())
       .then(async responseJson => {
-        /* console.log('Button get....');
-        console.log(responseJson.StoreItems); */
+        console.log('Button get....');
+        console.log(responseJson.StoreItems);
 
         responseJson.StoreItems.forEach(function (element) {
           element.img = '';
