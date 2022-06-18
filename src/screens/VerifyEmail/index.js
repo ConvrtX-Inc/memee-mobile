@@ -139,7 +139,35 @@ function VerifyEmail({navigation, route}) {
         setLoader(false);
       });
   }
+  const resentOPT = () => {
+    let body = JSON.stringify({
+      email: email.toLowerCase().trim(),
+      action: 'sign-up',
+    });
+    /* console.log(body); */
 
+    fetch(global.address + 'SendOTP', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: body,
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        setLoader(false);
+        /* console.log(responseJson); */
+      })
+      .catch(error => {
+        Toast.show({
+          type: 'error',
+          text2: 'Please check your internet connection.',
+        });
+        setLoader(false);
+        console.error(error);
+      });
+  };
   return (
     <View style={styles.container}>
       <ScrollView style={{padding: 10}}>
@@ -194,7 +222,7 @@ function VerifyEmail({navigation, route}) {
           ]}>
           Didn't receive code?
         </Text>
-        <TouchableOpacity style={styles.resendButton}>
+        <TouchableOpacity style={styles.resendButton} onPres={resentOPT}>
           <Text
             style={[
               styles.resendText,
