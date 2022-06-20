@@ -55,8 +55,8 @@ export default function NewMessage({navigation}) {
     /* console.log('text', text); */
 
     setSearchTxt(text);
-    
-    if(!isLoading){
+
+    if (!isLoading) {
       var seachedUser = myuserList?.filter(function search(user) {
         return (
           user.name.toUpperCase().includes(text.toUpperCase()) ||
@@ -65,7 +65,6 @@ export default function NewMessage({navigation}) {
       });
       setFollowingList(seachedUser);
     }
-    
   };
 
   function openChat(user) {
@@ -78,6 +77,7 @@ export default function NewMessage({navigation}) {
       user: {
         _id: user.following_id,
         receiver_id: user.following_id,
+        selectedUserId: user.following_id,
         conversationId: user.following_id,
         name: user.name,
         img: user.img,

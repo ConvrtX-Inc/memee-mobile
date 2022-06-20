@@ -35,7 +35,7 @@ const Inbox = ({showValue}) => {
   const [add, setAdd] = useState();
   useEffect(() => {
     const unsubscribe = firestore()
-      .collection('Mem_Conversation')
+      .collection('Memes_Conversation')
       .orderBy('latestMessage.createdAt', 'desc')
       .onSnapshot(querySnapshot => {
         if (querySnapshot != null) {
@@ -82,7 +82,14 @@ const Inbox = ({showValue}) => {
 
     return () => unsubscribe();
   }, []);
-
+  // useEffect(async () => {
+  //   console.log('waiting...');
+  //   const data = await firestore()
+  //     .collection('Mem_Conversation')
+  //     .doc('PXkMR5Z3AlfHme95Nzna')
+  //     .get();
+  //   console.log('adata', data);
+  // }, []);
   if (loading) {
     return <ActivityIndicator size="large" color="#555" />;
   }
@@ -202,7 +209,7 @@ const Inbox = ({showValue}) => {
                   navigation.navigate('ChatScreen', {
                     user: {
                       _id: item._id,
-                      receiver_id: item.asd,
+                      selectedUserId: item.asd,
                       conversationId: item.conversationId,
                       name: item.names,
                       img: item.imgs,

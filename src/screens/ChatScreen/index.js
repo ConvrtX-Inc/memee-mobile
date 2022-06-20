@@ -49,18 +49,24 @@ const ChatScreen = ({route}) => {
       avatar: global.userData.imgurl,
       userId: global.userData.user_id,
     });
-    await isNewConversation(
-      parseInt(global.userData.user_id) + parseInt(user.receiver_id),
-    );
-    setPrimaryKey(
-      parseInt(global.userData.user_id) + parseInt(user.receiver_id),
-    );
+
+    var conversationId =
+      parseInt(global.userData.user_id) > parseInt(user.selectedUserId)
+        ? global.userData.user_id + ':' + user.selectedUserId
+        : user.selectedUserId + ':' + global.userData.user_id;
+    console.log('asdss', conversationId);
+    await isNewConversation(conversationId);
+    setPrimaryKey(conversationId);
   }, [1]);
   useEffect(async () => {
-    var docId = parseInt(global.userData.user_id) + parseInt(user.receiver_id);
+    const conversationId =
+      parseInt(global.userData.user_id) > parseInt(user.selectedUserId)
+        ? global.userData.user_id + ':' + user.selectedUserId
+        : user.selectedUserId + ':' + global.userData.user_id;
+    var docId = conversationId;
     console.log('docid', docId);
     const unsubscribeListener = firestore()
-      .collection('Mem_Conversation')
+      .collection('Memes_Conversation')
       .doc(`${docId}`)
       .collection('MESSAGES')
       .orderBy('createdAt', 'desc')
@@ -86,7 +92,7 @@ const ChatScreen = ({route}) => {
     var flag = false;
     console.log(primaryKey);
     firestore()
-      .collection('Mem_Conversation')
+      .collection('Memes_Conversation')
       .onSnapshot(querySnapshot => {
         if (querySnapshot != null) {
           const result = querySnapshot.docs.some(documentSnapshot => {
@@ -108,7 +114,7 @@ const ChatScreen = ({route}) => {
   const setFirebase = async primaryKey => {
     console.log('ehhosl', user.img);
     await firestore()
-      .collection('Mem_Conversation')
+      .collection('Memes_Conversation')
       .doc(`${primaryKey}`)
       .set({
         sender_id: global.userData.user_id,
@@ -127,7 +133,7 @@ const ChatScreen = ({route}) => {
     const text = messages[0].text;
     console.log('erdaz', primaryKey);
     firestore()
-      .collection('Mem_Conversation')
+      .collection('Memes_Conversation')
       .doc(`${primaryKey}`)
       .collection('MESSAGES')
       .add({
@@ -136,7 +142,7 @@ const ChatScreen = ({route}) => {
         user: currentChatUser,
       });
     await firestore()
-      .collection('Mem_Conversation')
+      .collection('Memes_Conversation')
       .doc(`${primaryKey}`)
       .set(
         {
@@ -279,7 +285,7 @@ const ChatScreen = ({route}) => {
               //   user: currentChatUser,
               // });
               firestore()
-                .collection('Mem_Conversation')
+                .collection('Memes_Conversation')
                 .doc(`${primaryKey}`)
                 .collection('MESSAGES')
                 .add({
@@ -288,7 +294,7 @@ const ChatScreen = ({route}) => {
                   user: currentChatUser,
                 });
               await firestore()
-                .collection('Mem_Conversation')
+                .collection('Memes_Conversation')
                 .doc(`${primaryKey}`)
                 .set(
                   {
