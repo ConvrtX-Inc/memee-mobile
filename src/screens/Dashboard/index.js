@@ -59,6 +59,7 @@ import {RNS3} from 'react-native-aws3';
 import {getBucketOptions, generateUID} from '../../Utility/Utils';
 import storage from '@react-native-firebase/storage';
 import moment from 'moment';
+import {toggleOnlineStatus} from '../../redux/actions/Auth';
 
 var offset = 0;
 global.navigateDashboard = 1;
@@ -166,9 +167,11 @@ export default function Dashboard(props) {
   }, []);
 
   // fetching of Stories
-  useEffect(() => {
+  useEffect(async () => {
+    await toggleOnlineStatus('1');
+
+    console.log('token', global.userData);
     fetchStories();
-    console.log('token', global.userData.user_id);
   }, [updatedStories]);
 
   // upload image/video
@@ -615,7 +618,6 @@ export default function Dashboard(props) {
 
   function navigateToprofileFN() {
     global.profileID = global.userData.user_id;
-    console.log('asd', global.profileID);
     navigation.navigate('ProfileScreen');
   }
 
@@ -739,7 +741,6 @@ export default function Dashboard(props) {
   }
 
   function navigationToProfileFN(index) {
-    console.log('indexs', index);
     if (index > -1 && index != null) {
       var user =
         tabNumber == 1
@@ -923,7 +924,6 @@ export default function Dashboard(props) {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
         renderItem={({item, index}) => {
-          console.log('skwa', item);
           var sd = '"' + item.description.replace(/\"/g, '\\"') + '"';
           sd.replace(/\n/g, ' ');
           return (
