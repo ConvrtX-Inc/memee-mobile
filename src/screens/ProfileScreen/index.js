@@ -828,7 +828,7 @@ export default function ProfileScreen(props) {
                 btnTxtClr={'black'}
                 font={global.fontSelect}
                 loader={loader}
-                onPress={() => openChat()}
+                // onPress={() => openChat()}
               />
             </View>
           ) : null}
