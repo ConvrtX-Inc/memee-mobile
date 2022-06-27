@@ -365,19 +365,21 @@ const ChatScreen = ({route}) => {
           style={[styles.addFriendImage, {}]}
           resizeMode="cover"
         />
-        <View>
-          <Image
-            source={require('../../images/online.png')}
-            style={{
-              height: 18,
-              width: 18,
-              borderRadius: 10,
-              marginLeft: -15,
-              marginTop: 20,
-            }}
-            resizeMode="cover"
-          />
-        </View>
+        {user.online == '1' ? (
+          <View>
+            <Image
+              source={require('../../images/online.png')}
+              style={{
+                height: 18,
+                width: 18,
+                borderRadius: 10,
+                marginLeft: -15,
+                marginTop: 20,
+              }}
+              resizeMode="cover"
+            />
+          </View>
+        ) : null}
 
         <View style={{flexDirection: 'column'}}>
           <Text
