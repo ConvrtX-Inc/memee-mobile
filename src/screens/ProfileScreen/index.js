@@ -209,8 +209,15 @@ export default function ProfileScreen(props) {
     console.log('GLOBAL URL ', `${global.address}createConversation`);*/
     setLoader(false);
     navigation.navigate('ChatScreen', {
-      conversationId: 225,
-      user: profileData,
+      user: {
+        _id: profileData.user_id,
+        receiver_id: profileData.user_id,
+        selectedUserId: profileData.user_id,
+        conversationId: profileData.user_id,
+        name: profileData.name,
+        img: profileData.imgurl,
+        online: profileData.online,
+      },
     });
     // axios({
     //   method: 'post',

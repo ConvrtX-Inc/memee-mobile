@@ -59,7 +59,7 @@ const Inbox = ({showValue}) => {
                 asd: add,
                 names: name,
                 imgs: img,
-                online: 1,
+                onlineStatus: 1,
                 latestMessage: {text: ''},
                 ...documentSnapshot.data(),
               };
@@ -213,6 +213,7 @@ const Inbox = ({showValue}) => {
                       conversationId: item.conversationId,
                       name: item.names,
                       img: item.imgs,
+                      onlineStatus: item.onlineStatus,
                     },
                   })
                 }>

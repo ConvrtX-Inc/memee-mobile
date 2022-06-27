@@ -72,7 +72,7 @@ export default function NewMessage({navigation}) {
     let users = [];
     users.push({userId: global.userData.user_id, name: global.userData.name});
     users.push({userId: user.following_id, name: user.name});
-    console.log('users', users);
+    console.log('users', user.onlineStatus);
     navigation.navigate('ChatScreen', {
       user: {
         _id: user.following_id,
@@ -81,7 +81,7 @@ export default function NewMessage({navigation}) {
         conversationId: user.following_id,
         name: user.name,
         img: user.img,
-        online: user.online,
+        online: user.onlineStatus,
       },
     });
 

@@ -366,17 +366,19 @@ const ChatScreen = ({route}) => {
           resizeMode="cover"
         />
         <View>
-          <Image
-            source={require('../../images/online.png')}
-            style={{
-              height: 18,
-              width: 18,
-              borderRadius: 10,
-              marginLeft: -15,
-              marginTop: 20,
-            }}
-            resizeMode="cover"
-          />
+          {user.onlineStatus == 1 ? (
+            <Image
+              source={require('../../images/online.png')}
+              style={{
+                height: 18,
+                width: 18,
+                borderRadius: 10,
+                marginLeft: -15,
+                marginTop: 20,
+              }}
+              resizeMode="cover"
+            />
+          ) : null}
         </View>
 
         <View style={{flexDirection: 'column'}}>
