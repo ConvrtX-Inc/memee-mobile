@@ -192,8 +192,30 @@ export default function ProfileScreen(props) {
       setTxtcolor2(global.tabNotSelectedTextColor);
     }
   }
+  async function GetOnlineStatus(userId) {
+    const data = await fetch(global.address + 'GetOnlineStatus/' + userId, {
+      method: 'get',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        authToken: global.token,
+      },
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log('gotcha', responseJson);
+        return {
+          responseJson,
+        };
+      })
+      .catch(error => {
+        console.error(error);
+      });
 
-  function openChat() {
+    return data;
+  }
+
+  async function openChat() {
     if (profileData == null) return;
 
     setLoader(true);
@@ -208,6 +230,8 @@ export default function ProfileScreen(props) {
     console.log('GLOBAL profileData name ', profileData.name);
     console.log('GLOBAL URL ', `${global.address}createConversation`);*/
     setLoader(false);
+    const online = await GetOnlineStatus(profileData.user_id);
+    console.log('is online', online);
     navigation.navigate('ChatScreen', {
       user: {
         _id: profileData.user_id,
@@ -216,7 +240,8 @@ export default function ProfileScreen(props) {
         conversationId: profileData.user_id,
         name: profileData.name,
         img: profileData.imgurl,
-        online: profileData.online,
+        onlineStatus: online.responseJson.onlineStatus,
+        lastSeen: online.responseJson.lastSeen,
       },
     });
     // axios({
@@ -835,7 +860,7 @@ export default function ProfileScreen(props) {
                 btnTxtClr={'black'}
                 font={global.fontSelect}
                 loader={loader}
-                // onPress={() => openChat()}
+                onPress={() => openChat()}
               />
             </View>
           ) : null}

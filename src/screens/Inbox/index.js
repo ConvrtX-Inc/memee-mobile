@@ -38,7 +38,7 @@ const Inbox = ({showValue}) => {
     toggleOnlineStatus('1');
 
     const unsubscribe = firestore()
-      .collection('Memes_Conversation')
+      .collection('Mems_Conversation')
       .orderBy('latestMessage.createdAt', 'desc')
       .onSnapshot(querySnapshot => {
         if (querySnapshot != null) {
@@ -63,6 +63,7 @@ const Inbox = ({showValue}) => {
                 names: name,
                 imgs: img,
                 online: '1',
+                lastSeen: '',
                 latestMessage: {text: ''},
                 ...documentSnapshot.data(),
               };
@@ -74,7 +75,9 @@ const Inbox = ({showValue}) => {
           const results = threads.filter(async element => {
             if (element !== undefined) {
               const isOnline = await GetOnlineStatus(element.asd);
+              console.log('asds', isOnline.responseJson.onlineStatus);
               element.online = isOnline.responseJson.onlineStatus;
+              element.lastSeen = isOnline.responseJson.lastSeen;
               res.push(element);
               setThreads(res);
             }
@@ -92,7 +95,7 @@ const Inbox = ({showValue}) => {
   // useEffect(async () => {
   //   console.log('waiting...');
   //   const data = await firestore()
-  //     .collection('Mem_Conversation')
+  //     .collection('Mems_Conversation')
   //     .doc('PXkMR5Z3AlfHme95Nzna')
   //     .get();
   //   console.log('adata', data);
@@ -215,7 +218,8 @@ const Inbox = ({showValue}) => {
                       conversationId: item.conversationId,
                       name: item.names,
                       img: item.imgs,
-                      onlineStatus: item.onlineStatus,
+                      onlineStatus: item.online,
+                      lastSeen: item.lastSeen,
                     },
                   })
                 }>

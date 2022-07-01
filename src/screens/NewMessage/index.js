@@ -105,7 +105,8 @@ export default function NewMessage({navigation}) {
         conversationId: user.following_id,
         name: user.name,
         img: user.img,
-        online: isOnline.responseJson.onlineStatus,
+        onlineStatus: isOnline.responseJson.onlineStatus,
+        lastSeen: isOnline.responseJson.lastSeen,
       },
     });
 

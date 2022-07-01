@@ -201,8 +201,7 @@ export function asignImageToProductsFN(itemCode, type) {
         },
       ];
       return iconArray;
-      
-    }else if (itemCode == 'free_icon_roygbiv_pink_1') {
+    } else if (itemCode == 'free_icon_roygbiv_pink_1') {
       var iconArray = [
         {
           imag: require('../images/roygbivTabBar.png'),
@@ -210,8 +209,7 @@ export function asignImageToProductsFN(itemCode, type) {
         },
       ];
       return iconArray;
-      
-    }else if (itemCode == 'free_icon_roygbiv_orange_1') {
+    } else if (itemCode == 'free_icon_roygbiv_orange_1') {
       var iconArray = [
         {
           imag: require('../images/roygbivOrangeTabBar.png'),
@@ -219,8 +217,7 @@ export function asignImageToProductsFN(itemCode, type) {
         },
       ];
       return iconArray;
-      
-    }else if (itemCode == 'free_icon_theme_2') {
+    } else if (itemCode == 'free_icon_theme_2') {
       var iconArray = [
         {
           imag: require('../images/theme2TabBar.png'),
@@ -228,8 +225,7 @@ export function asignImageToProductsFN(itemCode, type) {
         },
       ];
       return iconArray;
-      
-    }else if (itemCode == 'free_icon_theme_3') {
+    } else if (itemCode == 'free_icon_theme_3') {
       var iconArray = [
         {
           imag: require('../images/theme3TabBar.png'),
@@ -237,8 +233,7 @@ export function asignImageToProductsFN(itemCode, type) {
         },
       ];
       return iconArray;
-      
-    }else if (itemCode == 'free_icon_theme_4') {
+    } else if (itemCode == 'free_icon_theme_4') {
       var iconArray = [
         {
           imag: require('../images/theme4TabBar.png'),
@@ -246,8 +241,7 @@ export function asignImageToProductsFN(itemCode, type) {
         },
       ];
       return iconArray;
-      
-    }else if (itemCode == 'free_icon_theme_1') {
+    } else if (itemCode == 'free_icon_theme_1') {
       var iconArray = [
         {
           imag: require('../images/theme1TabBar.png'),
@@ -255,7 +249,6 @@ export function asignImageToProductsFN(itemCode, type) {
         },
       ];
       return iconArray;
-      
     } else {
       console.log('wrong icon type');
       var iconArray = [
@@ -291,7 +284,7 @@ export function asignImageToProductsFN(itemCode, type) {
         },
       ];
       return fontArray;
-    }else if (itemCode == 'ProductSans-Bold') {
+    } else if (itemCode == 'ProductSans-Bold') {
       var fontArray = [
         {
           font: 'Unkempt-Bold',
@@ -315,7 +308,7 @@ export function asignImageToProductsFN(itemCode, type) {
         },
       ];
       return fontArray;
-    }  else {
+    } else {
       console.log('wrong Font type');
       var fontArray = [
         {
@@ -362,7 +355,7 @@ export function asignImageToProductsFN(itemCode, type) {
         },
       ];
       return buttonArray;
-    }else if (itemCode == 'free_button_roygbiv_pink_1') {
+    } else if (itemCode == 'free_button_roygbiv_pink_1') {
       var buttonArray = [
         {
           imag: require('../images/MemeeButton.png'),
@@ -370,7 +363,7 @@ export function asignImageToProductsFN(itemCode, type) {
         },
       ];
       return buttonArray;
-    }else if (itemCode == 'free_button_roygbiv_orange_1') {
+    } else if (itemCode == 'free_button_roygbiv_orange_1') {
       var buttonArray = [
         {
           imag: require('../images/MemeeButton.png'),
@@ -378,7 +371,7 @@ export function asignImageToProductsFN(itemCode, type) {
         },
       ];
       return buttonArray;
-    }else if (itemCode == 'free_button_theme_2') {
+    } else if (itemCode == 'free_button_theme_2') {
       var buttonArray = [
         {
           imag: require('../images/MemeeButton.png'),
@@ -386,7 +379,7 @@ export function asignImageToProductsFN(itemCode, type) {
         },
       ];
       return buttonArray;
-    }else if (itemCode == 'free_button_theme_3') {
+    } else if (itemCode == 'free_button_theme_3') {
       var buttonArray = [
         {
           imag: require('../images/MemeeButton.png'),
@@ -394,7 +387,7 @@ export function asignImageToProductsFN(itemCode, type) {
         },
       ];
       return buttonArray;
-    }else if (itemCode == 'free_button_theme_4') {
+    } else if (itemCode == 'free_button_theme_4') {
       var buttonArray = [
         {
           imag: require('../images/MemeeButton.png'),
@@ -402,7 +395,7 @@ export function asignImageToProductsFN(itemCode, type) {
         },
       ];
       return buttonArray;
-    }else if (itemCode == 'free_button_theme_1') {
+    } else if (itemCode == 'free_button_theme_1') {
       var buttonArray = [
         {
           imag: require('../images/MemeeButton.png'),

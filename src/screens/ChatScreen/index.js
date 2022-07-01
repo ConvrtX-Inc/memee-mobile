@@ -42,6 +42,9 @@ const ChatScreen = ({route}) => {
   const {conversationId, user} = route.params;
   const [primaryKey, setPrimaryKey] = useState();
   useEffect(async () => {
+    console.log('lastseens', user.lastSeen);
+    console.log('onleine', user.onlineStatus);
+
     setOtherChatUser(user);
     setCurrentChatUser({
       _id: global.userData.user_id,
@@ -66,7 +69,7 @@ const ChatScreen = ({route}) => {
     var docId = conversationId;
     console.log('docid', docId);
     const unsubscribeListener = firestore()
-      .collection('Memes_Conversation')
+      .collection('Mems_Conversation')
       .doc(`${docId}`)
       .collection('MESSAGES')
       .orderBy('createdAt', 'desc')
@@ -92,7 +95,7 @@ const ChatScreen = ({route}) => {
     var flag = false;
     console.log(primaryKey);
     firestore()
-      .collection('Memes_Conversation')
+      .collection('Mems_Conversation')
       .onSnapshot(querySnapshot => {
         if (querySnapshot != null) {
           const result = querySnapshot.docs.some(documentSnapshot => {
@@ -114,7 +117,7 @@ const ChatScreen = ({route}) => {
   const setFirebase = async primaryKey => {
     console.log('ehhosl', user.img);
     await firestore()
-      .collection('Memes_Conversation')
+      .collection('Mems_Conversation')
       .doc(`${primaryKey}`)
       .set({
         sender_id: global.userData.user_id,
@@ -133,7 +136,7 @@ const ChatScreen = ({route}) => {
     const text = messages[0].text;
     console.log('erdaz', primaryKey);
     firestore()
-      .collection('Memes_Conversation')
+      .collection('Mems_Conversation')
       .doc(`${primaryKey}`)
       .collection('MESSAGES')
       .add({
@@ -142,7 +145,7 @@ const ChatScreen = ({route}) => {
         user: currentChatUser,
       });
     await firestore()
-      .collection('Memes_Conversation')
+      .collection('Mems_Conversation')
       .doc(`${primaryKey}`)
       .set(
         {
@@ -285,7 +288,7 @@ const ChatScreen = ({route}) => {
               //   user: currentChatUser,
               // });
               firestore()
-                .collection('Memes_Conversation')
+                .collection('Mems_Conversation')
                 .doc(`${primaryKey}`)
                 .collection('MESSAGES')
                 .add({
@@ -294,7 +297,7 @@ const ChatScreen = ({route}) => {
                   user: currentChatUser,
                 });
               await firestore()
-                .collection('Memes_Conversation')
+                .collection('Mems_Conversation')
                 .doc(`${primaryKey}`)
                 .set(
                   {
@@ -365,7 +368,7 @@ const ChatScreen = ({route}) => {
           style={[styles.addFriendImage, {}]}
           resizeMode="cover"
         />
-        {user.online == '1' ? (
+        {user.onlineStatus == '1' ? (
           <View>
             <Image
               source={require('../../images/online.png')}
@@ -393,7 +396,11 @@ const ChatScreen = ({route}) => {
             <Text style={styles.simpleText}>
               {getLastSeenFormat(user.lastSeen)}
             </Text>
-          ) : null}
+          ) : (
+            <Text style={styles.simpleText}>
+              {/* {getLastSeenFormat(user.lastSeen)} */}
+            </Text>
+          )}
         </View>
       </View>
 
