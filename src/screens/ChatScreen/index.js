@@ -365,8 +365,8 @@ const ChatScreen = ({route}) => {
           style={[styles.addFriendImage, {}]}
           resizeMode="cover"
         />
-        <View>
-          {user.onlineStatus == 1 ? (
+        {user.online == '1' ? (
+          <View>
             <Image
               source={require('../../images/online.png')}
               style={{
@@ -378,8 +378,8 @@ const ChatScreen = ({route}) => {
               }}
               resizeMode="cover"
             />
-          ) : null}
-        </View>
+          </View>
+        ) : null}
 
         <View style={{flexDirection: 'column'}}>
           <Text

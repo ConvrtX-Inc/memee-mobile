@@ -21,6 +21,7 @@ import moment from 'moment';
 import LinearGradient from 'react-native-linear-gradient';
 import {CONVERSATIONS} from '../../redux/constants';
 import {colors} from '../../Utility/colors';
+import {toggleOnlineStatus} from '../../redux/actions/Auth';
 
 const axios = require('axios');
 var windowWidth = Dimensions.get('window').width;
@@ -33,14 +34,16 @@ const Inbox = ({showValue}) => {
   const {conversations} = useSelector(({authRed}) => authRed);
   const [threads, setThreads] = useState([]);
   const [add, setAdd] = useState();
-  useEffect(() => {
+  useEffect(async () => {
+    toggleOnlineStatus('1');
+
     const unsubscribe = firestore()
       .collection('Memes_Conversation')
       .orderBy('latestMessage.createdAt', 'desc')
       .onSnapshot(querySnapshot => {
         if (querySnapshot != null) {
           const threads = querySnapshot.docs.map(documentSnapshot => {
-            console.log('documentSnapshot', documentSnapshot.data());
+            // console.log('documentSnapshot', documentSnapshot.data());
             var add = documentSnapshot.data().receiver_id;
             var img = documentSnapshot.data().receiver_img;
             var name = documentSnapshot.data().receiver_name;
@@ -59,7 +62,7 @@ const Inbox = ({showValue}) => {
                 asd: add,
                 names: name,
                 imgs: img,
-                onlineStatus: 1,
+                online: '1',
                 latestMessage: {text: ''},
                 ...documentSnapshot.data(),
               };
@@ -67,11 +70,15 @@ const Inbox = ({showValue}) => {
               console.log('soes');
             }
           });
-          const results = threads.filter(element => {
-            return element !== undefined;
+          var res = [];
+          const results = threads.filter(async element => {
+            if (element !== undefined) {
+              const isOnline = await GetOnlineStatus(element.asd);
+              element.online = isOnline.responseJson.onlineStatus;
+              res.push(element);
+              setThreads(res);
+            }
           });
-          setThreads(results);
-          console.log('qwer', threads);
         } else {
           console.log('it is null');
         }
@@ -94,31 +101,26 @@ const Inbox = ({showValue}) => {
     return <ActivityIndicator size="large" color="#555" />;
   }
 
-  async function profileDataFN(userId) {
-    const data = await Promise.all(
-      fetch(global.address + 'GetUserProfile/' + userId, {
-        method: 'get',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          authToken: global.token,
-        },
+  async function GetOnlineStatus(userId) {
+    const data = await fetch(global.address + 'GetOnlineStatus/' + userId, {
+      method: 'get',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        authToken: global.token,
+      },
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log('gotcha', responseJson);
+        return {
+          responseJson,
+        };
       })
-        .then(response => response.json())
-        .then(responseJson => {
-          console.log('gotcha', responseJson.profile.name);
-          return {
-            user: {
-              name: responseJson.profile.name,
-              img: responseJson.profile.img_url,
-            },
-          };
-        })
-        .catch(error => {
-          console.error(error);
-        }),
-    );
-    console.log('diresu', userId);
+      .catch(error => {
+        console.error(error);
+      });
+
     return data;
   }
 

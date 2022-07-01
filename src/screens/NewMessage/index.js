@@ -67,8 +67,32 @@ export default function NewMessage({navigation}) {
     }
   };
 
-  function openChat(user) {
+  async function GetOnlineStatus(userId) {
+    const data = await fetch(global.address + 'GetOnlineStatus/' + userId, {
+      method: 'get',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        authToken: global.token,
+      },
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log('gotcha', responseJson);
+        return {
+          responseJson,
+        };
+      })
+      .catch(error => {
+        console.error(error);
+      });
+
+    return data;
+  }
+
+  async function openChat(user) {
     console.log('openChat', user);
+    const isOnline = await GetOnlineStatus(user.following_id);
     let users = [];
     users.push({userId: global.userData.user_id, name: global.userData.name});
     users.push({userId: user.following_id, name: user.name});
@@ -81,7 +105,7 @@ export default function NewMessage({navigation}) {
         conversationId: user.following_id,
         name: user.name,
         img: user.img,
-        online: user.onlineStatus,
+        online: isOnline.responseJson.onlineStatus,
       },
     });
 
