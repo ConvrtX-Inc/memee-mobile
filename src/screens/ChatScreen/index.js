@@ -69,7 +69,7 @@ const ChatScreen = ({route}) => {
     var docId = conversationId;
     console.log('docid', docId);
     const unsubscribeListener = firestore()
-      .collection('Mems_Conversation')
+      .collection('Conversation_Memee')
       .doc(`${docId}`)
       .collection('MESSAGES')
       .orderBy('createdAt', 'desc')
@@ -95,7 +95,7 @@ const ChatScreen = ({route}) => {
     var flag = false;
     console.log(primaryKey);
     firestore()
-      .collection('Mems_Conversation')
+      .collection('Conversation_Memee')
       .onSnapshot(querySnapshot => {
         if (querySnapshot != null) {
           const result = querySnapshot.docs.some(documentSnapshot => {
@@ -117,13 +117,13 @@ const ChatScreen = ({route}) => {
   const setFirebase = async primaryKey => {
     console.log('ehhosl', user.img);
     await firestore()
-      .collection('Mems_Conversation')
+      .collection('Conversation_Memee')
       .doc(`${primaryKey}`)
       .set({
         sender_id: global.userData.user_id,
         sender_name: global.userData.name,
         sender_img: global.userData.imgurl,
-        receiver_id: user.receiver_id,
+        receiver_id: user.selectedUserId,
         receiver_name: user.name,
         receiver_img: user.img,
         latestMessage: {
@@ -135,8 +135,16 @@ const ChatScreen = ({route}) => {
   const onSend = async messages => {
     const text = messages[0].text;
     console.log('erdaz', primaryKey);
+    console.log('erdaz', text);
+    console.log('erdaz', global.userData.user_id);
+    console.log('erdaz', global.userData.name);
+    console.log('erdaz', global.userData.imgurl);
+    console.log('erdaz', user.selectedUserId);
+    console.log('erdaz', user.name);
+    console.log('erdaz', text);
+
     firestore()
-      .collection('Mems_Conversation')
+      .collection('Conversation_Memee')
       .doc(`${primaryKey}`)
       .collection('MESSAGES')
       .add({
@@ -145,14 +153,14 @@ const ChatScreen = ({route}) => {
         user: currentChatUser,
       });
     await firestore()
-      .collection('Mems_Conversation')
+      .collection('Conversation_Memee')
       .doc(`${primaryKey}`)
       .set(
         {
           sender_id: global.userData.user_id,
           sender_name: global.userData.name,
           sender_img: global.userData.imgurl,
-          receiver_id: user.receiver_id,
+          receiver_id: user.selectedUserId,
           receiver_name: user.name,
           receiver_img: user.img,
           latestMessage: {
@@ -288,7 +296,7 @@ const ChatScreen = ({route}) => {
               //   user: currentChatUser,
               // });
               firestore()
-                .collection('Mems_Conversation')
+                .collection('Conversation_Memee')
                 .doc(`${primaryKey}`)
                 .collection('MESSAGES')
                 .add({
@@ -297,7 +305,7 @@ const ChatScreen = ({route}) => {
                   user: currentChatUser,
                 });
               await firestore()
-                .collection('Mems_Conversation')
+                .collection('Conversation_Memee')
                 .doc(`${primaryKey}`)
                 .set(
                   {

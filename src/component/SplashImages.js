@@ -8,7 +8,13 @@ const windowHeight = Dimensions.get('window').height;
 const SplashImages = () => {
   randomNum = Math.floor(Math.random() * 5 + 1);
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'black',
+      }}>
       <Image
         source={
           randomNum == 1

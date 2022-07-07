@@ -21,12 +21,10 @@ import moment from 'moment';
 import LinearGradient from 'react-native-linear-gradient';
 import {CONVERSATIONS} from '../../redux/constants';
 import {colors} from '../../Utility/colors';
-import {toggleOnlineStatus} from '../../redux/actions/Auth';
 
 const axios = require('axios');
 var windowWidth = Dimensions.get('window').width;
 var windowHeight = Dimensions.get('window').height;
-
 const Inbox = ({showValue}) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -35,15 +33,13 @@ const Inbox = ({showValue}) => {
   const [threads, setThreads] = useState([]);
   const [add, setAdd] = useState();
   useEffect(async () => {
-    toggleOnlineStatus('1');
-
     const unsubscribe = firestore()
-      .collection('Mems_Conversation')
+      .collection('Conversation_Memee')
       .orderBy('latestMessage.createdAt', 'desc')
-      .onSnapshot(querySnapshot => {
+      .onSnapshot(async querySnapshot => {
         if (querySnapshot != null) {
-          const threads = querySnapshot.docs.map(documentSnapshot => {
-            // console.log('documentSnapshot', documentSnapshot.data());
+          const thread = querySnapshot.docs.map(documentSnapshot => {
+            console.log('documentSnapshot', documentSnapshot.data());
             var add = documentSnapshot.data().receiver_id;
             var img = documentSnapshot.data().receiver_img;
             var name = documentSnapshot.data().receiver_name;
@@ -57,13 +53,15 @@ const Inbox = ({showValue}) => {
               documentSnapshot.data().sender_id == global.userData.user_id ||
               documentSnapshot.data().receiver_id == global.userData.user_id
             ) {
+              console.log('Stext', documentSnapshot.data().latestMessage.text);
               return {
                 _id: documentSnapshot.id,
                 asd: add,
                 names: name,
                 imgs: img,
-                online: '1',
                 lastSeen: '',
+                lastChat: '',
+                onlineStatus: 1,
                 latestMessage: {text: ''},
                 ...documentSnapshot.data(),
               };
@@ -71,17 +69,7 @@ const Inbox = ({showValue}) => {
               console.log('soes');
             }
           });
-          var res = [];
-          const results = threads.filter(async element => {
-            if (element !== undefined) {
-              const isOnline = await GetOnlineStatus(element.asd);
-              console.log('asds', isOnline.responseJson.onlineStatus);
-              element.online = isOnline.responseJson.onlineStatus;
-              element.lastSeen = isOnline.responseJson.lastSeen;
-              res.push(element);
-              setThreads(res);
-            }
-          });
+          const a = await setData(thread);
         } else {
           console.log('it is null');
         }
@@ -95,7 +83,7 @@ const Inbox = ({showValue}) => {
   // useEffect(async () => {
   //   console.log('waiting...');
   //   const data = await firestore()
-  //     .collection('Mems_Conversation')
+  //     .collection('Mem_Conversation')
   //     .doc('PXkMR5Z3AlfHme95Nzna')
   //     .get();
   //   console.log('adata', data);
@@ -103,7 +91,25 @@ const Inbox = ({showValue}) => {
   if (loading) {
     return <ActivityIndicator size="large" color="#555" />;
   }
+  async function setData(thread) {
+    const results = await thread.filter(async element => {
+      if (element !== undefined) {
+        return element;
+      }
+    });
+    for (var a = 0; a < results.length; a++) {
+      const isOnline = await GetOnlineStatus(results[a].asd);
+      results[a].onlineStatus = isOnline.responseJson.onlineStatus;
+      results[a].lastSeen = isOnline.responseJson.lastSeen;
+      results[a].lastChat = await getLastChatDate(
+        results[a].latestMessage.createdAt,
+      );
+    }
+    setThreads(results);
+    console.log('resultss', results);
 
+    return results;
+  }
   async function GetOnlineStatus(userId) {
     const data = await fetch(global.address + 'GetOnlineStatus/' + userId, {
       method: 'get',
@@ -127,6 +133,49 @@ const Inbox = ({showValue}) => {
     return data;
   }
 
+  async function profileDataFN(userId) {
+    const data = await Promise.all(
+      fetch(global.address + 'GetUserProfile/' + userId, {
+        method: 'get',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          authToken: global.token,
+        },
+      })
+        .then(response => response.json())
+        .then(responseJson => {
+          console.log('gotcha', responseJson.profile.name);
+          return {
+            user: {
+              name: responseJson.profile.name,
+              img: responseJson.profile.img_url,
+            },
+          };
+        })
+        .catch(error => {
+          console.error(error);
+        }),
+    );
+    console.log('diresu', userId);
+    return data;
+  }
+  async function getLastChatDate(createdAt) {
+    var date = new Date(createdAt);
+    var dateStr =
+      date.getFullYear() +
+      '-' +
+      ('00' + (date.getMonth() + 1)).slice(-2) +
+      '-' +
+      ('00' + date.getDate()).slice(-2) +
+      ' ' +
+      ('00' + date.getHours()).slice(-2) +
+      ':' +
+      ('00' + date.getMinutes()).slice(-2) +
+      ':' +
+      ('00' + date.getSeconds()).slice(-2);
+    return dateStr;
+  }
   // function setConversationsView(data) {
   //   let convs = [];
   //   data.forEach(element => {
@@ -218,7 +267,7 @@ const Inbox = ({showValue}) => {
                       conversationId: item.conversationId,
                       name: item.names,
                       img: item.imgs,
-                      onlineStatus: item.online,
+                      onlineStatus: item.onlineStatus,
                       lastSeen: item.lastSeen,
                     },
                   })
@@ -238,7 +287,7 @@ const Inbox = ({showValue}) => {
                         resizeMode="cover"
                       />
                     )}
-                    {item.online == '1' ? (
+                    {item.onlineStatus == '1' ? (
                       <View>
                         <Image
                           source={require('../../images/online.png')}
@@ -279,7 +328,7 @@ const Inbox = ({showValue}) => {
                     ]}>
                     {item.latestMessage.createdAt == 'New Connection'
                       ? 'New Connection'
-                      : formatDateTime('2022-06-11 12:12:12')}
+                      : formatDateTime(item.lastChat)}
                   </Text>
                   <Image
                     source={require('../../images/arrowR.png')}
