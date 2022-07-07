@@ -26,7 +26,8 @@ import {
 import {currentDateFN} from '../../Utility/Utils';
 import Toast from 'react-native-toast-message';
 import {toggleOnlineStatus} from '../../redux/actions/Auth';
-
+import {useDispatch} from 'react-redux';
+import {coinsRecordFN} from '../../redux/actions/Auth';
 import auth from '@react-native-firebase/auth';
 import SplashImages from '../../component/SplashImages';
 
@@ -49,6 +50,7 @@ const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 export default function Onboarding({navigation}) {
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
 
   // Login with fb
   async function onFacebookButtonPress() {
@@ -95,7 +97,7 @@ export default function Onboarding({navigation}) {
     )
       .then(response => response.json())
       .then(json => {
-        /* console.log('Logged in user data', json); */
+        console.log('Logged in user data', json);
         emailVar = json.email;
         nameVar = json.name;
         imageVar = json.picture.data.url;
@@ -185,6 +187,8 @@ export default function Onboarding({navigation}) {
     })
       .then(response => response.json())
       .then(async responseJson => {
+        console.log('asd', responseJson);
+
         if (responseJson.Status == 409) {
           if (loginTypeVar == 'Google') logoutFromGoogle();
 
@@ -203,8 +207,11 @@ export default function Onboarding({navigation}) {
             'https://memee-bucket.s3.amazonaws.com/posts%2F32886c6d-2c41-4a9b-bf5f-d47220140091.jpg',
           );
           await AsyncStorage.setItem('@userLoginType', loginTypeVar);
-
+          console.log('asd', responseJson.User[0].coins);
+          global.userData.coins = responseJson.User[0].coins;
           global.userData = responseJson.User[0];
+          dispatch(coinsRecordFN(responseJson.User[0].coins));
+
           global.token = responseJson.Token;
           navigation.replace('Dashboard');
 
