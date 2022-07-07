@@ -60,8 +60,7 @@ export default function AccountsScreen({navigation}) {
                 borderBottomColor: global.resultsBorderBottomColor,
                 borderBottomWidth: 1,
               }}>
-              <Avatar rounded size="medium" source={{uri: item.imgurl}} />
-
+              <Avatar rounded size="medium" source={{uri: null}} />
               <View style={{width: '65%', height: 60, marginLeft: 10}}>
                 <Text
                   style={{
