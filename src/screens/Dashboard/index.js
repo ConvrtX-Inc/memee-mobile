@@ -59,7 +59,6 @@ import {RNS3} from 'react-native-aws3';
 import {getBucketOptions, generateUID} from '../../Utility/Utils';
 import storage from '@react-native-firebase/storage';
 import moment from 'moment';
-import {toggleOnlineStatus} from '../../redux/actions/Auth';
 
 var offset = 0;
 global.navigateDashboard = 1;
@@ -71,16 +70,11 @@ var gloIndex = '';
 const {VideoEditorModule} = NativeModules;
 
 const openEditor = async () => {
-  console.log('niagi diri');
-  const res = await VideoEditorModule.openVideoEditor();
-  console.log('f res', res);
-  return res;
+  return await VideoEditorModule.openVideoEditor();
 };
 
 export const openVideoEditor = async () => {
-  console.log('hello');
   const response = await openEditor();
-  console.log('responsee------', response);
 
   if (!response) {
     return null;
@@ -109,13 +103,6 @@ export default function Dashboard(props) {
     mediaType: 'photo',
     maxWidth: 512,
     maxHeight: 512,
-    quality: 1,
-  };
-
-  let options2 = {
-    mediaType: 'video',
-    // maxWidth: 512,
-    // maxHeight: 512,
     quality: 1,
   };
 
@@ -163,7 +150,7 @@ export default function Dashboard(props) {
 
   const [pimgChange, setPimgChange] = useState(global.userData.imgurl);
   const [pProfileName, setPProfileName] = useState(
-    global.userData?.name?.split(' ')[0] || 'Memee',
+    global.userData.name.split(' ')[0],
   );
   const [refreshing, setRefreshing] = React.useState(false);
   const [loaderIndicator, setLoaderIndicator] = useState(true);
@@ -179,11 +166,9 @@ export default function Dashboard(props) {
   }, []);
 
   // fetching of Stories
-  useEffect(async () => {
-    await toggleOnlineStatus('1');
-
-    console.log('token', global.userData);
+  useEffect(() => {
     fetchStories();
+    console.log('token', global.userData.user_id);
   }, [updatedStories]);
 
   // upload image/video
@@ -630,6 +615,7 @@ export default function Dashboard(props) {
 
   function navigateToprofileFN() {
     global.profileID = global.userData.user_id;
+    console.log('asd', global.profileID);
     navigation.navigate('ProfileScreen');
   }
 
@@ -753,6 +739,7 @@ export default function Dashboard(props) {
   }
 
   function navigationToProfileFN(index) {
+    console.log('indexs', index);
     if (index > -1 && index != null) {
       var user =
         tabNumber == 1
@@ -831,10 +818,8 @@ export default function Dashboard(props) {
 
   function openGallery() {
     setIsOpenMedia(true);
-    console.log('this is true');
-    launchImageLibrary(options, (response) => {
-      console.log('Response = ', response);
-      console.log('Response = ');
+    launchImageLibrary(options, response => {
+      //console.log('Response = ', response);
 
       if (response.didCancel) {
         // alert('User cancelled camera picker');
@@ -855,43 +840,9 @@ export default function Dashboard(props) {
       }
 
       let source = response.assets[0];
-      console.log('source', source)
       openPhotoEditor(source.uri);
     });
   }
-
-  function openGalleryForIOS() {
-    setIsOpenMedia(true);
-    console.log('this is true');
-    launchImageLibrary(options2, (response) => {
-      console.log('Response = ', response);
-      console.log('Response = ');
-
-      if (response.didCancel) {
-        // alert('User cancelled camera picker');
-        setIsOpenMedia(false);
-        return;
-      } else if (response.errorCode == 'camera_unavailable') {
-        setIsOpenMedia(false);
-        // alert('Camera not available on device');
-        return;
-      } else if (response.errorCode == 'permission') {
-        setIsOpenMedia(false);
-        // alert('Permission not satisfied');
-        return;
-      } else if (response.errorCode == 'others') {
-        setIsOpenMedia(false);
-        // alert(response.errorMessage);
-        return;
-      }
-
-      let source = response;
-      console.log('source', source)
-      setIsOpenMedia(false);
-      // openPhotoEditor(source.uri);
-    });
-  }
-
   const getDescription = text => {
     try {
       return decodeURIComponent(
@@ -905,11 +856,9 @@ export default function Dashboard(props) {
     setIsOpenMedia(true);
     let isStoragePermitted = await requestExternalWritePermission();
     let isCameraPermitted = await requestCameraPermission();
-    console.log({isStoragePermitted, isCameraPermitted});
     if (isCameraPermitted && isStoragePermitted) {
       launchCamera(options, response => {
-        console.log('Response = ', response);
-        console.log('Response = ');
+        //console.log('Response = ', response);
 
         if (response.didCancel) {
           // alert('User cancelled camera picker');
@@ -936,7 +885,6 @@ export default function Dashboard(props) {
   };
 
   function openPhotoEditor(uri) {
-    console.log('tata uri', uri);
     setIsOpenMedia(true);
     PESDK.openEditor({uri: uri}).then(
       result => {
@@ -975,7 +923,7 @@ export default function Dashboard(props) {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
         renderItem={({item, index}) => {
-          /* console.log('skwa', item); */
+          console.log('skwa', item);
           var sd = '"' + item.description.replace(/\"/g, '\\"') + '"';
           sd.replace(/\n/g, ' ');
           return (
@@ -1435,7 +1383,7 @@ export default function Dashboard(props) {
                     marginTop: 8,
                     flexWrap: 'wrap',
 
-                    width: windowWidth * 0.35,
+                    width: windowWidth * 0.4,
                   }}>
                   Hi{' '}
                   <Text
@@ -1443,10 +1391,7 @@ export default function Dashboard(props) {
                       fontWeight: 'bold',
                       fontSize: 24,
                     }}>
-                    {windowWidth < 400
-                      ? pProfileName.substring(0, 2)
-                      : pProfileName}
-                    ,
+                    {pProfileName},
                   </Text>
                 </Text>
               </TouchableOpacity>
@@ -1735,7 +1680,7 @@ export default function Dashboard(props) {
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={{marginBottom: '6%'}}
-                      onPress={async () => {
+                      onPress={() => {
                         setIsOpenMedia(true);
                         if (Platform.OS === 'android') {
                           getAndroidExportResult()
@@ -1746,9 +1691,8 @@ export default function Dashboard(props) {
                               console.error('error', e);
                             });
                         } else {
-                          // const videoUri = await openVideoEditor();
-                          // console.log('videoUri',videoUri);
-                          openGalleryForIOS();
+                          const videoUri = openVideoEditor();
+                          //console.log(videoUri);
                         }
                         setIsOpenMedia(false);
                       }}>
@@ -2364,3 +2308,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+    

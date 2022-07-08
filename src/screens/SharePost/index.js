@@ -50,30 +50,23 @@ export default function SharePost() {
 
   function postUploadFN() {
     var desc = '';
-    var desc1 = '';
     if (post == '') {
-      desc1 = global.sharePost.description;
+      desc = global.sharePost.description;
     } else {
       desc = post;
     }
-    console.log('xxs', global.sharePost.description);
     setIndicatButton(true);
     var currentDate = currentDateFN();
     var unicodeString = '';
-    if (desc != '') {
-      for (var i = 0; i < desc.length; i++) {
-        var theUnicode = desc.charCodeAt(i).toString(16).toUpperCase();
-        while (theUnicode.length < 4) {
-          theUnicode = '0' + theUnicode;
-        }
-        theUnicode = '\\u' + theUnicode;
-        unicodeString += theUnicode;
+    console.log('desc', desc);
+    for (var i = 0; i < desc.length; i++) {
+      var theUnicode = desc.charCodeAt(i).toString(16).toUpperCase();
+      while (theUnicode.length < 4) {
+        theUnicode = '0' + theUnicode;
       }
-    } else {
-      unicodeString = desc1;
+      theUnicode = '\\u' + theUnicode;
+      unicodeString += theUnicode;
     }
-    console.log('desc', unicodeString);
-
     fetch(global.address + 'SharePost', {
       method: 'POST',
       headers: {

@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 import ButtonWithImage from '../../component/ButtonWithImage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { appleAuth } from '@invertase/react-native-apple-authentication'
 import {
   LoginManager,
   AccessToken,
@@ -27,8 +26,7 @@ import {
 import {currentDateFN} from '../../Utility/Utils';
 import Toast from 'react-native-toast-message';
 import {toggleOnlineStatus} from '../../redux/actions/Auth';
-import {useDispatch} from 'react-redux';
-import {coinsRecordFN} from '../../redux/actions/Auth';
+
 import auth from '@react-native-firebase/auth';
 import SplashImages from '../../component/SplashImages';
 
@@ -36,8 +34,8 @@ const {RNTwitterSignIn} = NativeModules;
 import {decode as atob, encode as btoa} from 'base-64';
 
 RNTwitterSignIn.init(
-  'Njir3nTj38mr0X9MO8kDd9jR9',
-  `hOBGHlFpII3HjPmvS4oYt2jbyQkMXuQgw8h6J7mrfceFhc5vKo`,
+  '7Yg35MGJX38own2WE9lxp3I05',
+  `27L8uE0Vyafin9kKceG0fWFbNiNVDggrKAFDxOFBhrUW7aQoM0`,
 ).then(() => console.log('Twitter SDK initialized'));
 
 Settings.initializeSDK();
@@ -51,7 +49,6 @@ const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 export default function Onboarding({navigation}) {
   const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useDispatch();
 
   // Login with fb
   async function onFacebookButtonPress() {
@@ -98,7 +95,7 @@ export default function Onboarding({navigation}) {
     )
       .then(response => response.json())
       .then(json => {
-        console.log('Logged in user data', json);
+        /* console.log('Logged in user data', json); */
         emailVar = json.email;
         nameVar = json.name;
         imageVar = json.picture.data.url;
@@ -188,13 +185,8 @@ export default function Onboarding({navigation}) {
     })
       .then(response => response.json())
       .then(async responseJson => {
-
-        
-
         if (responseJson.Status == 409) {
           if (loginTypeVar == 'Google') logoutFromGoogle();
-
- 
 
           console.log('Error', responseJson);
 
@@ -211,11 +203,8 @@ export default function Onboarding({navigation}) {
             'https://memee-bucket.s3.amazonaws.com/posts%2F32886c6d-2c41-4a9b-bf5f-d47220140091.jpg',
           );
           await AsyncStorage.setItem('@userLoginType', loginTypeVar);
-          console.log('asd', responseJson.User[0].coins);
-          global.userData.coins = responseJson.User[0].coins;
-          global.userData = responseJson.User[0];
-          dispatch(coinsRecordFN(responseJson.User[0].coins));
 
+          global.userData = responseJson.User[0];
           global.token = responseJson.Token;
           navigation.replace('Dashboard');
 
@@ -241,8 +230,6 @@ export default function Onboarding({navigation}) {
     } catch (e) {}
   }
 
-
-
   async function onTwitterButtonPress() {
     // Perform the login request
     try {
@@ -257,11 +244,10 @@ export default function Onboarding({navigation}) {
       await SignupFN();
     } catch (e) {
       console.log('error twitter', e);
-      // temporary hide the toast as it will show the error eventhough the user only cancel the login
-      // Toast.show({
-      //   type: 'error',
-      //   text2: 'Twitter Login Error',
-      // });
+      Toast.show({
+        type: 'error',
+        text2: 'Twitter Login Error',
+      });
     }
 
     setIsLoading(false);
@@ -285,76 +271,6 @@ export default function Onboarding({navigation}) {
       console.log(e);
     }
   };
-
-  const onAppleLoginTap = async() => {
-      try{
-
-      //apple login continuation
-      
-      const appleAuthResponse = await appleAuth.performRequest({
-        requestedOperation: appleAuth.Operation.LOGIN,
-        requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
-      });  
-      
-      const { identityToken, fullName, email } = appleAuthResponse
-
-      const loginDatas =  {
-        identityToken,
-        fullName,
-        email
-      }
-
-      try{
-        const loginData = await AsyncStorage.getItem('appleLogin')
-        const parsedLoginData = JSON.parse(loginData)
-
-          if (loginData == null){
-
-            // console.log(loginDatas)
-            AsyncStorage.setItem('appleLogin',JSON.stringify(loginDatas),(err)=> {
-              if (err){
-                console.log("an error")
-                throw err
-              } 
-
-              
-              emailVar = parsedLoginData?.email
-              nameVar = parsedLoginData?.fullName?.givenName +" "+ parsedLoginData?.fullName?.familyName;
-              imageVar = null;
-              loginTypeVar = 'apple';
-
-              SignupFN()
-
-
-
-            }).catch((err) => {
-              console.log("error is:" + err)
-            })
-
-          }else{
-
-              emailVar = parsedLoginData?.email
-              nameVar = parsedLoginData?.fullName?.givenName +" "+ parsedLoginData?.fullName?.familyName;
-              imageVar = null;
-              loginTypeVar = 'apple';
-
-              await SignupFN()
-          
-            
-          }
-        }catch(error){
-//error  
-          AsyncStorage.removeItem("appleLogin")
-       
-
-      }
-
-
-      }catch (error){
-        console.log('error apple'+error)
-      }
-  }
-  
 
   return (
     <View
@@ -423,10 +339,8 @@ export default function Onboarding({navigation}) {
             <Text
               style={{
                 textAlign: 'left',
-
                 fontFamily: 'OpenSans-SemiBold',
                 fontSize: 14,
-
                 color: '#fff',
               }}>
               Continue with Facebook
@@ -451,27 +365,6 @@ export default function Onboarding({navigation}) {
                 color: '#fff',
               }}>
               Continue with Twitter
-            </Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          activeOpacity={0.5}
-          onPress={() => onAppleLoginTap()}
-          style={styles.buttonStyle}>
-          <View style={styles.buttonContentContainer}>
-            <Image
-              style={styles.tinyLogoBtn}
-              source={require('../../images/applewhite.png')}
-            />
-            <Text
-              style={{
-                textAlign: 'center',
-                fontFamily: 'OpenSans-SemiBold',
-                fontSize: 16,
-                color: '#fff',
-              }}>
-              Continue with Apple
             </Text>
           </View>
         </TouchableOpacity>

@@ -125,10 +125,9 @@ export default function LoginScreen({navigation}) {
           });
           return;
         }
-        global.userData.coins = responseJson.coins;
         global.userData = responseJson;
         /* console.log('global.userData = responseJson;', responseJson); */
-        dispatch(coinsRecordFN(responseJson.coins));
+        dispatch(coinsRecordFN(global.userData.coins));
         toggleOnlineStatus('1');
         navigation.navigate('Dashboard');
       })

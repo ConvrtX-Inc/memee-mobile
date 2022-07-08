@@ -54,9 +54,7 @@ export default function IconsScreen() {
     )
       .then(response => response.json())
       .then(async responseJson => {
-        /* console.log('Icons get api...');
-        console.log(global.address);
-        console.log(global.token);
+        /* console.log('Icons get mohsin sb....');
         console.log(responseJson.StoreItems); */
 
         responseJson.StoreItems.forEach(function (element) {

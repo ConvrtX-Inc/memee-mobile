@@ -1,4 +1,4 @@
-package com.convrtx.memee2
+package com.convrtx.memee
 
 import android.view.View
 import com.facebook.react.ReactPackage

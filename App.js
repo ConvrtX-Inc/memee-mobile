@@ -80,22 +80,18 @@ global.address = `${urls.baseUrl}/`;
 Settings.initializeSDK();
 function App() {
   console.log('From App');
-  useEffect(async () => {
-    const subscription = AppState.addEventListener(
-      'change',
-      async nextAppState => {
-        if (global.userData) {
-          console.log('appstate', nextAppState);
-          if (nextAppState == 'active') {
-            /* console.log('Online'); */
-            await toggleOnlineStatus('1');
-          } else {
-            /* console.log('Offline'); */
-            await toggleOnlineStatus('0');
-          }
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      if (global.userData) {
+        if (nextAppState == 'active') {
+          /* console.log('Online'); */
+          toggleOnlineStatus('1');
+        } else {
+          /* console.log('Offline'); */
+          toggleOnlineStatus('0');
         }
-      },
-    );
+      }
+    });
 
     return () => {
       if (subscription) subscription.remove();

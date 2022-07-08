@@ -192,30 +192,8 @@ export default function ProfileScreen(props) {
       setTxtcolor2(global.tabNotSelectedTextColor);
     }
   }
-  async function GetOnlineStatus(userId) {
-    const data = await fetch(global.address + 'GetOnlineStatus/' + userId, {
-      method: 'get',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        authToken: global.token,
-      },
-    })
-      .then(response => response.json())
-      .then(responseJson => {
-        console.log('gotcha', responseJson);
-        return {
-          responseJson,
-        };
-      })
-      .catch(error => {
-        console.error(error);
-      });
 
-    return data;
-  }
-
-  async function openChat() {
+  function openChat() {
     if (profileData == null) return;
 
     setLoader(true);
@@ -229,20 +207,9 @@ export default function ProfileScreen(props) {
     /*console.log('GLOBAL Profile ID ', global.profileID);
     console.log('GLOBAL profileData name ', profileData.name);
     console.log('GLOBAL URL ', `${global.address}createConversation`);*/
-    setLoader(false);
-    const online = await GetOnlineStatus(profileData.user_id);
-    console.log('is online', online);
     navigation.navigate('ChatScreen', {
-      user: {
-        _id: profileData.user_id,
-        receiver_id: profileData.user_id,
-        selectedUserId: profileData.user_id,
-        conversationId: profileData.user_id,
-        name: profileData.name,
-        img: profileData.imgurl,
-        onlineStatus: online.responseJson.onlineStatus,
-        lastSeen: online.responseJson.lastSeen,
-      },
+      conversationId: 225,
+      user: profileData,
     });
     // axios({
     //   method: 'post',

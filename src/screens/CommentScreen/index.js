@@ -18,7 +18,6 @@ import {
 } from 'react-native';
 import {Avatar} from 'react-native-elements';
 import {testFN, currentDateFN, generateUID} from '../../Utility/Utils';
-import Icon from 'react-native-vector-icons/AntDesign';
 
 let parentID = 0;
 var windowWidth = Dimensions.get('window').width;
@@ -32,7 +31,7 @@ export default class CommentScreen extends React.Component {
       placeholderStat: 'Write a comment',
       modalVisible: false,
       message: '',
-      reload: '',
+      reload:''
     };
   }
 
@@ -73,7 +72,42 @@ export default class CommentScreen extends React.Component {
       .then(responseJson => {
         if (responseJson.length > 0) {
           var comments = testFN(responseJson);
+          // console.log("sco",comments.length)
+          
+          /* var comment = [];
+          var replies = [];
+          var commentList = [];
+          if (comments.length > 0) {
+            for (let i = comments.length - 1; i >= 0; i--) {
+              if (comments[i].parent_id == 0) {
+                comment.push(comments[i]);
+              } else {
+                replies.push(comments[i]);
+              }
+            }
+            commentList = Array.from(comment);
+            //console.log(commentList)
+            //console.log(replies)
+            if (replies.length > 0) {
+              for (let i = 0; i < comment.length; i++) {
+                for (let j = replies.length - 1; j >= 0; j--) {
+                  if (comment[i].comment_id == replies[j].parent_id) {
+                    console.log(
+                      '\nreplies[j]\n',
+                      replies[j].parent_id,
+                      comment[i].comment_id,
+                    );
+                    commentList.splice(i, 0, replies[j]);
+                  }
+                }
+              }
+            }
+          } */
+
+          /* var reversed = [].concat(commentList).reverse(); */
+
           var comment = [];
+          var replies = [];
           var commentList = [];
           if (comments.length > 0) {
             for (let i = comments.length - 1; i >= 0; i--) {
@@ -82,12 +116,34 @@ export default class CommentScreen extends React.Component {
                 for (let x = comments.length - 1; x >= 0; x--) {
                   if (comments[i].comment_id == comments[x].parent_id) {
                     comment.push(comments[x]);
+                    console.log("true")
+                  }else{
+                    console.log("false" + comments[i].comment_id + comments[x].parent_id)
                   }
                 }
-              }
+              } 
+              // else {
+              //   replies.push(comments[i]);
+              // }
             }
             commentList = Array.from(comment);
+            // console.log(commentList[0]);
+            // if (replies.length > 0) {
+            //   for (let i = 0; i < comment.length; i++) {
+            //     for (let j = replies.length - 1; j >= 0; j--) {
+            //       if (comment[i].comment_id == replies[j].parent_id) {
+            //         console.log(
+            //           '\nreplies[j]\n',
+            //           replies[j].parent_id,
+            //           comment[i].comment_id,
+            //         );
+            //         commentList.splice(i + 1, 0, replies[j]);
+            //       }
+            //     }
+            //   }
+            // }
           }
+          console.log("scos",commentList)
           this.setState({
             flatlist: commentList,
           });
@@ -99,6 +155,7 @@ export default class CommentScreen extends React.Component {
   }
 
   commentPlacedFN() {
+    console.log('cooms', this.state.comment);
     if (this.state.placeholderStat == 'Write a comment') {
       parentID = '0';
     }
@@ -108,6 +165,7 @@ export default class CommentScreen extends React.Component {
 
     global.refresh = true;
     if (this.state.comment == '') {
+      /* console.log('comment is empty..'); */
       this.setState({
         modalVisible: true,
         message: 'Please enter some text',
@@ -120,7 +178,7 @@ export default class CommentScreen extends React.Component {
       }, 1600);
     } else {
       var currentDate = currentDateFN();
-
+      
       fetch(global.address + 'PostComment', {
         method: 'POST',
         headers: {
@@ -180,9 +238,9 @@ export default class CommentScreen extends React.Component {
       this.setState({
         placeholderStat: 'Write a comment',
       });
-      this.getPostDataFN();
     }
     this.setState({
+      flatlist: tempCommentList,
       comment: '',
     });
 
@@ -225,15 +283,13 @@ export default class CommentScreen extends React.Component {
         var tempArr = this.state.flatlist;
         if (tempArr[index].IsLiked == '0') {
           tempArr[index].IsLiked = '1';
-          this.getPostDataFN();
         } else {
           tempArr[index].IsLiked = '0';
-          this.getPostDataFN();
         }
 
-        // this.setState({
-        //   flatlist: tempArr,
-        // });
+        this.setState({
+          flatlist: tempArr,
+        });
       })
       .catch(error => {
         console.error(error);
@@ -373,6 +429,16 @@ export default class CommentScreen extends React.Component {
                               }}>
                               Like
                             </Text>
+                            <Text
+                              style={[
+                                styles.txtReaction,
+                                {
+                                  color: global.colorTextPrimary,
+                                  fontFamily: global.fontSelect,
+                                },
+                              ]}>
+                              {item.like_count}
+                            </Text>
                           </TouchableOpacity>
                         ) : (
                           <TouchableOpacity
@@ -389,54 +455,26 @@ export default class CommentScreen extends React.Component {
                               }}>
                               Liked
                             </Text>
-                          </TouchableOpacity>
-                        )}
-                        <TouchableOpacity
-                          onPress={() => this.replyFN(index)}
-                          style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                          }}>
-                          <Text
-                            style={{
-                              color: global.colorTextPrimary,
-                              fontFamily: global.fontSelect,
-                              marginRight: 10,
-                            }}>
-                            Reply
-                          </Text>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              alignContent: 'space-between',
-                            }}>
                             <Text
                               style={[
                                 styles.txtReaction,
                                 {
                                   color: global.colorTextPrimary,
                                   fontFamily: global.fontSelect,
-                                  marginRight: 5,
                                 },
                               ]}>
-                              {item.like_count == 0 ? '' : item.like_count}
+                              {item.like_count}
                             </Text>
-                            {item.like_count == 0 ? (
-                              <></>
-                            ) : (
-                              <Icon
-                                name="like1"
-                                size={16}
-                                color={global.colorTextActive}
-                                style={{
-                                  padding: 1,
-                                  backgroundColor: 'white',
-                                  fontWeight: 'bold',
-                                  borderRadius: 100,
-                                }}
-                              />
-                            )}
-                          </View>
+                          </TouchableOpacity>
+                        )}
+                        <TouchableOpacity onPress={() => this.replyFN(index)}>
+                          <Text
+                            style={{
+                              color: global.colorTextPrimary,
+                              fontFamily: global.fontSelect,
+                            }}>
+                            Reply
+                          </Text>
                         </TouchableOpacity>
                       </View>
                     ) : null}
@@ -525,6 +563,16 @@ export default class CommentScreen extends React.Component {
                             }}>
                             Like
                           </Text>
+                          <Text
+                            style={[
+                              styles.txtReaction,
+                              {
+                                color: global.colorTextPrimary,
+                                fontFamily: global.fontSelect,
+                              },
+                            ]}>
+                            {item.like_count}
+                          </Text>
                         </TouchableOpacity>
                       ) : (
                         <TouchableOpacity
@@ -538,51 +586,26 @@ export default class CommentScreen extends React.Component {
                             }}>
                             Liked
                           </Text>
-                        </TouchableOpacity>
-                      )}
-                      <TouchableOpacity
-                        onPress={() => this.replyFN(index)}
-                        style={{flexDirection: 'row'}}>
-                        <Text
-                          style={{
-                            color: global.colorTextPrimary,
-                            fontFamily: global.fontSelect,
-                            marginRight: 10,
-                          }}>
-                          Reply
-                        </Text>
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            alignContent: 'space-between',
-                          }}>
                           <Text
                             style={[
                               styles.txtReaction,
                               {
                                 color: global.colorTextPrimary,
                                 fontFamily: global.fontSelect,
-                                marginRight: 5,
                               },
                             ]}>
-                            {item.like_count == 0 ? '' : item.like_count}
+                            {item.like_count}
                           </Text>
-                          {item.like_count == 0 ? (
-                            <></>
-                          ) : (
-                            <Icon
-                              name="like1"
-                              size={16}
-                              color={global.colorTextActive}
-                              style={{
-                                padding: 1,
-                                backgroundColor: 'white',
-                                fontWeight: 'bold',
-                                borderRadius: 100,
-                              }}
-                            />
-                          )}
-                        </View>
+                        </TouchableOpacity>
+                      )}
+                      <TouchableOpacity onPress={() => this.replyFN(index)}>
+                        <Text
+                          style={{
+                            color: global.colorTextPrimary,
+                            fontFamily: global.fontSelect,
+                          }}>
+                          Reply
+                        </Text>
                       </TouchableOpacity>
                     </View>
                   ) : null}
