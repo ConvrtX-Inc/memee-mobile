@@ -15,8 +15,7 @@ import OTPInputView from '@twotalltotems/react-native-otp-input';
 import {currentDateFN} from '../../Utility/Utils';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useDispatch} from 'react-redux';
-import {coinsRecordFN} from '../../redux/actions/Auth';
+
 function VerifyEmail({navigation, route}) {
   const [code, setcode] = useState('');
   const [loader, setLoader] = useState(false);
@@ -130,9 +129,6 @@ function VerifyEmail({navigation, route}) {
       .then(response => response.json())
       .then(responseJson => {
         global.userData = responseJson;
-        dispatch(coinsRecordFN(responseJson.coins));
-        global.userData.coins = responseJson.coins;
-
         /* console.log('Sign Up Data...');
         console.log(global.userData); */
         setLoader(false);
@@ -143,35 +139,7 @@ function VerifyEmail({navigation, route}) {
         setLoader(false);
       });
   }
-  const resentOPT = () => {
-    let body = JSON.stringify({
-      email: email.toLowerCase().trim(),
-      action: 'sign-up',
-    });
-    /* console.log(body); */
 
-    fetch(global.address + 'SendOTP', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: body,
-    })
-      .then(response => response.json())
-      .then(responseJson => {
-        setLoader(false);
-        /* console.log(responseJson); */
-      })
-      .catch(error => {
-        Toast.show({
-          type: 'error',
-          text2: 'Please check your internet connection.',
-        });
-        setLoader(false);
-        console.error(error);
-      });
-  };
   return (
     <View style={styles.container}>
       <ScrollView style={{padding: 10}}>
@@ -226,7 +194,7 @@ function VerifyEmail({navigation, route}) {
           ]}>
           Didn't receive code?
         </Text>
-        <TouchableOpacity style={styles.resendButton} onPres={resentOPT}>
+        <TouchableOpacity style={styles.resendButton}>
           <Text
             style={[
               styles.resendText,

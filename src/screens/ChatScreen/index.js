@@ -30,7 +30,6 @@ import {RNS3} from 'react-native-aws3';
 import {getLastSeenFormat} from '../../Utility/Utils';
 import {getBucketOptions} from '../../Utility/Utils';
 import storage from '@react-native-firebase/storage';
-import firestore from '@react-native-firebase/firestore';
 
 const ChatScreen = ({route}) => {
   const navigation = useNavigation();
@@ -40,137 +39,131 @@ const ChatScreen = ({route}) => {
   const [otherChatUser, setOtherChatUser] = useState();
   const [currentChatUser, setCurrentChatUser] = useState();
   const {conversationId, user} = route.params;
-  const [primaryKey, setPrimaryKey] = useState();
-  useEffect(async () => {
-    console.log('lastseens', user.lastSeen);
-    console.log('onleine', user.onlineStatus);
 
+  useEffect(() => {
+    if (messages.length == 0) getConversation(0);
     setOtherChatUser(user);
-    setCurrentChatUser({
-      _id: global.userData.user_id,
-      name: global.userData.name,
-      avatar: global.userData.imgurl,
-      userId: global.userData.user_id,
+  }, [1]);
+
+  function setMessagesView(data) {
+    let currentUserID = global.userData.user_id;
+    let _id = 2;
+    data.users.forEach(value => {
+      users.push({
+        _id: value.id == currentUserID ? 1 : _id++,
+        name: value.name,
+        avatar: value.avatar,
+        userId: value.id,
+      });
+
+      if (currentUserID != value.id) setOtherChatUser(value);
+      setOtherChatUser(user);
     });
 
-    var conversationId =
-      parseInt(global.userData.user_id) > parseInt(user.selectedUserId)
-        ? global.userData.user_id + ':' + user.selectedUserId
-        : user.selectedUserId + ':' + global.userData.user_id;
-    console.log('asdss', conversationId);
-    await isNewConversation(conversationId);
-    setPrimaryKey(conversationId);
-  }, [1]);
-  useEffect(async () => {
-    const conversationId =
-      parseInt(global.userData.user_id) > parseInt(user.selectedUserId)
-        ? global.userData.user_id + ':' + user.selectedUserId
-        : user.selectedUserId + ':' + global.userData.user_id;
-    var docId = conversationId;
-    console.log('docid', docId);
-    const unsubscribeListener = firestore()
-      .collection('Conversation_Memee')
-      .doc(`${docId}`)
-      .collection('MESSAGES')
-      .orderBy('createdAt', 'desc')
-      .onSnapshot(querySnapshot => {
-        const messages = querySnapshot.docs.map(doc => {
-          const firebaseData = doc.data();
-          const data = {
-            _id: doc.id,
-            text: '',
-            createdAt: 'New Connection',
-            ...firebaseData,
-          };
-          return data;
-        });
-        console.log('essameg', messages);
-        setMessages(messages);
+    let messages = [];
+    _id = 1;
+    data.messages.forEach(value => {
+      messages.push({
+        _id: _id++,
+        text: value.Type == 'text' ? value.Content : null,
+        location:
+          value.Type == 'location'
+            ? {
+                latitude: parseFloat(value.Content.split(',')[0]),
+                longitude: parseFloat(value.Content.split(',')[1]),
+              }
+            : '',
+        createdAt: value.DateCreated,
+        user: users.find(element => element.userId == value.SentBy),
+        image: value.Type == 'image' ? value.Content : null,
       });
+    });
 
-    return () => unsubscribeListener();
+    setCurrentChatUser(users.find(element => element.userId == currentUserID));
+    setMessages(messages);
+
+    console.log('messages', messages);
+    console.log('users', users);
+  }
+
+  function getConversation(offset) {
+    axios
+      .get(`${global.address}getConversation/${conversationId}/${offset}`)
+      .then(function (response) {
+        // handle success
+        /* console.log(response.data); */
+        setMessagesView(response.data);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+      .then(function () {
+        // always executed
+      });
+  }
+
+  function sendMessage(msg, type) {
+    var data = {
+      ConversationID: conversationId,
+      Type: type,
+      Content: type == 'image' ? msg[0].image : msg[0].text,
+      SentBy: global.userData.user_id,
+    };
+
+    console.log('data', data);
+
+    setMessages(previousMessages => GiftedChat.append(previousMessages, msg));
+
+    axios({
+      method: 'post',
+      url: `${global.address}sendMessage`,
+      data: data,
+      validateStatus: status => {
+        return true;
+      },
+    })
+      .catch(error => {
+        console.log(error);
+      })
+      .then(Response => {});
+
+    // axios
+    //   .post(`${global.address}sendMessage`, data)
+    //   .then(function (response) {})
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
+  }
+
+  useEffect(() => {
+    messaging().onMessage(async remoteMessage => {
+      /* console.log('msgggg', remoteMessage); */
+      var msg = {
+        _id: remoteMessage.messageId,
+        text:
+          remoteMessage.notification.body.trim() == 'Shared this image'
+            ? ''
+            : remoteMessage.notification.body,
+        createdAt: remoteMessage.sentTime,
+        user: users.find(
+          element => element.userId == remoteMessage.data.objectId,
+        ),
+        image:
+          remoteMessage.notification.body.trim() == 'Shared this image'
+            ? remoteMessage.data.image
+            : null,
+      };
+      if (msg.user.userId != global.userData.user_id)
+        setMessages(previousMessages =>
+          GiftedChat.append(previousMessages, msg),
+        );
+    });
   }, []);
 
-  const isNewConversation = async primaryKey => {
-    var flag = false;
-    console.log(primaryKey);
-    firestore()
-      .collection('Conversation_Memee')
-      .onSnapshot(querySnapshot => {
-        if (querySnapshot != null) {
-          const result = querySnapshot.docs.some(documentSnapshot => {
-            console.log('asdss', documentSnapshot.id);
-            if (documentSnapshot.id == primaryKey) {
-              return (flag = true);
-            }
-          });
-          console.log('asd', result);
-          if (!result) {
-            setFirebase(primaryKey);
-            console.log('sdfakse');
-          } else {
-            console.log('true');
-          }
-        }
-      });
-  };
-  const setFirebase = async primaryKey => {
-    console.log('ehhosl', user.img);
-    await firestore()
-      .collection('Conversation_Memee')
-      .doc(`${primaryKey}`)
-      .set({
-        sender_id: global.userData.user_id,
-        sender_name: global.userData.name,
-        sender_img: global.userData.imgurl,
-        receiver_id: user.selectedUserId,
-        receiver_name: user.name,
-        receiver_img: user.img,
-        latestMessage: {
-          text: `New Connection`,
-          createdAt: new Date().getTime(),
-        },
-      });
-  };
-  const onSend = async messages => {
-    const text = messages[0].text;
-    console.log('erdaz', primaryKey);
-    console.log('erdaz', text);
-    console.log('erdaz', global.userData.user_id);
-    console.log('erdaz', global.userData.name);
-    console.log('erdaz', global.userData.imgurl);
-    console.log('erdaz', user.selectedUserId);
-    console.log('erdaz', user.name);
-    console.log('erdaz', text);
-
-    firestore()
-      .collection('Conversation_Memee')
-      .doc(`${primaryKey}`)
-      .collection('MESSAGES')
-      .add({
-        text,
-        createdAt: new Date().getTime(),
-        user: currentChatUser,
-      });
-    await firestore()
-      .collection('Conversation_Memee')
-      .doc(`${primaryKey}`)
-      .set(
-        {
-          sender_id: global.userData.user_id,
-          sender_name: global.userData.name,
-          sender_img: global.userData.imgurl,
-          receiver_id: user.selectedUserId,
-          receiver_name: user.name,
-          receiver_img: user.img,
-          latestMessage: {
-            text,
-            createdAt: new Date().getTime(),
-          },
-        },
-        {merge: true},
-      );
-  };
+  const onSend = useCallback((messages = []) => {
+    sendMessage(messages, 'text');
+  }, []);
 
   function renderBubble(props) {
     return (
@@ -178,10 +171,9 @@ const ChatScreen = ({route}) => {
         {...props}
         wrapperStyle={{
           right: {
+            // Here is the color change
             backgroundColor: '#FFCD2F',
             marginBottom: 15,
-            borderTopRightRadius: 25,
-            borderBottomRightRadius: 0,
           },
           left: {
             backgroundColor: '#292929',
@@ -204,11 +196,10 @@ const ChatScreen = ({route}) => {
     return (
       <View
         style={{
-          marginTop: 90,
-          width: '100%',
+          marginTop: 40,
+          width: '90%',
           alignSelf: 'center',
-          position: 'absolute',
-          bottom: 10,
+          marginBottom: 20,
         }}>
         <InputToolbar
           {...props}
@@ -226,6 +217,38 @@ const ChatScreen = ({route}) => {
           }}
         />
       </View>
+    );
+  }
+
+  const renderTime = props => {
+    return (
+      <Time
+        {...props}
+        timeTextStyle={{
+          left: {
+            color: 'white',
+          },
+          right: {
+            color: 'black',
+          },
+        }}
+      />
+    );
+  };
+
+  function renderAvatar(props) {
+    return (
+      <Avatar
+        {...props}
+        imageStyle={{
+          left: {
+            marginBottom: 15,
+          },
+          right: {
+            marginBottom: 15,
+          },
+        }}
+      />
     );
   }
 
@@ -266,6 +289,7 @@ const ChatScreen = ({route}) => {
         console.log('User tapped custom button: ', response.customButton);
         alert(response.customButton);
       } else {
+        // setChatModal(true)
         const file = {
           uri: response.assets[0].uri,
           name: generateUID() + '.jpg',
@@ -276,12 +300,15 @@ const ChatScreen = ({route}) => {
         let task = reference.putFile(file.uri);
 
         task
-          .then(async response => {
+          .then(response => {
             console.log('Image uploaded to the bucket!');
-            reference.getDownloadURL().then(async response => {
+            reference.getDownloadURL().then(response => {
+              /* console.log('Image downloaded from the bucket!', response); */
+
               var valueToPush = {};
               valueToPush['_id'] = Math.floor(Math.random() * 100000);
               valueToPush['text'] = '';
+              valueToPush['createdAt'] = new Date();
               valueToPush['user'] = users.find(
                 element => element.userId == global.userData.user_id,
               );
@@ -289,73 +316,35 @@ const ChatScreen = ({route}) => {
 
               let msg = [];
               msg.push(valueToPush);
-              console.log('asd', msg);
-              // onSend({
-              //   _id: conversationId,
-              //   image: msg[0].image,
-              //   user: currentChatUser,
-              // });
-              firestore()
-                .collection('Conversation_Memee')
-                .doc(`${primaryKey}`)
-                .collection('MESSAGES')
-                .add({
-                  image: msg[0].image,
-                  createdAt: new Date().getTime(),
-                  user: currentChatUser,
-                });
-              await firestore()
-                .collection('Conversation_Memee')
-                .doc(`${primaryKey}`)
-                .set(
-                  {
-                    sender_id: global.userData.user_id,
-                    sender_name: global.userData.name,
-                    sender_img: global.userData.imgurl,
-                    receiver_id: user.receiver_id,
-                    receiver_name: user.name,
-                    receiver_img: user.img,
-                    latestMessage: {
-                      text: 'You sent a photo',
-                      createdAt: new Date().getTime(),
-                    },
-                  },
-                  {merge: true},
-                );
+              sendMessage(msg, 'image');
             });
           })
           .catch(e => {
             console.log('uploading image error => ', e);
           });
+
+        /* RNS3.put(file, getBucketOptions('chat')).then(response => {
+          if (response.status !== 201)
+            throw new Error('Failed to upload image to S3');
+          // setChatModal(false)
+
+          var valueToPush = {};
+          valueToPush['_id'] = Math.floor(Math.random() * 100000);
+          valueToPush['text'] = '';
+          valueToPush['createdAt'] = new Date();
+          valueToPush['user'] = users.find(
+            element => element.userId == global.userData.user_id,
+          );
+          valueToPush['image'] = response.body.postResponse.location;
+
+          let msg = [];
+          msg.push(valueToPush);
+          sendMessage(msg, 'image');
+        }); */
       }
     });
   };
 
-  // renderMessageImage(props) {
-  //   // console.log("imageprops",props)
-  //   return (
-  //     <View style={{padding: 0}}>
-  //       {/* second option use react native modal */}
-
-  //       <ImageModal
-  //         resizeMode="contain"
-  //         imageBackgroundColor="#000000"
-  //         style={{
-  //           width: 140,
-  //           height: 300,
-  //           borderRadius: 10,
-  //           overflow: 'hidden',
-  //         }}
-  //         modalImageStyle={{
-  //           borderRadius: 10,
-  //         }}
-  //         source={{
-  //           uri: props.currentMessage.image,
-  //         }}
-  //       />
-  //     </View>
-  //   );
-  // }
   return (
     <View
       style={{
@@ -372,31 +361,29 @@ const ChatScreen = ({route}) => {
           />
         </TouchableOpacity>
         <Image
-          source={{uri: user.img}}
+          source={{uri: user.imgurl}}
           style={[styles.addFriendImage, {}]}
           resizeMode="cover"
         />
-        {user.onlineStatus == '1' ? (
-          <View>
-            <Image
-              source={require('../../images/online.png')}
-              style={{
-                height: 18,
-                width: 18,
-                borderRadius: 10,
-                marginLeft: -15,
-                marginTop: 20,
-              }}
-              resizeMode="cover"
-            />
-          </View>
-        ) : null}
+        <View>
+          <Image
+            source={require('../../images/online.png')}
+            style={{
+              height: 18,
+              width: 18,
+              borderRadius: 10,
+              marginLeft: -15,
+              marginTop: 20,
+            }}
+            resizeMode="cover"
+          />
+        </View>
 
         <View style={{flexDirection: 'column'}}>
           <Text
             style={[
               styles.headerText,
-              {fontSize: user.name.length > 20 ? 14 : 20},
+              {fontSize: user.name.length > 20 ? 16 : 20},
             ]}>
             {user.name}
           </Text>
@@ -404,11 +391,7 @@ const ChatScreen = ({route}) => {
             <Text style={styles.simpleText}>
               {getLastSeenFormat(user.lastSeen)}
             </Text>
-          ) : (
-            <Text style={styles.simpleText}>
-              {/* {getLastSeenFormat(user.lastSeen)} */}
-            </Text>
-          )}
+          ) : null}
         </View>
       </View>
 
@@ -460,12 +443,14 @@ const ChatScreen = ({route}) => {
         ) : null} */}
         <GiftedChat
           alwaysShowSend
-          placeholder="Aa"
+          placeholder="Type a message"
           messages={messages}
           onSend={msg => onSend(msg)}
           user={currentChatUser}
+          renderAvatar={renderAvatar}
+          showUserAvatar={true}
           renderBubble={renderBubble}
-          renderTime={props => null}
+          renderTime={props => renderTime(props)}
           renderSend={props => (
             <Send {...props}>
               <Image
@@ -480,7 +465,6 @@ const ChatScreen = ({route}) => {
             </Send>
           )}
           renderInputToolbar={props => renderInputToolbar(props)}
-          // renderMessageImage={props => renderMessageImage(props)}
           renderActions={messages => galleryButton(messages)}
           textInputStyle={{
             backgroundColor: '#292929',
@@ -488,7 +472,6 @@ const ChatScreen = ({route}) => {
             paddingLeft: 20,
             paddingRight: 20,
             color: 'white',
-            marginTop: 100,
           }}
         />
       </View>
@@ -508,6 +491,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 80,
     alignItems: 'center',
+    // justifyContent: 'space-between'
   },
   headerText: {
     color: colors.textColor,

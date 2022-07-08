@@ -450,9 +450,8 @@ function SplashScreen({navigation}) {
     })
       .then(response => response.json())
       .then(responseJson => {
-        global.userData.coins = responseJson.coins;
         global.userData = responseJson;
-        dispatch(coinsRecordFN(responseJson.coins));
+        dispatch(coinsRecordFN(global.userData.coins));
         navigation.replace('Dashboard');
       })
       .catch(error => {

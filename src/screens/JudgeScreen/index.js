@@ -237,7 +237,7 @@ export default function JudgeScreen(props) {
                     fontFamily: global.fontSelect,
                     fontWeight: 'bold',
                   }}>
-                  Day
+                  Month
                 </Text>
               </LinearGradient>
             </View>

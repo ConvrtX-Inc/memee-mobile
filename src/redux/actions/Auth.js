@@ -111,34 +111,7 @@ export function toggleOnlineStatus(val) {
   )
     .then(response => response.json())
     .then(responseJson => {
-      console.log(
-        '\n Apstatus Api called toggleOnlineStatus.... \n',
-        responseJson,
-      );
-    })
-    .catch(error => {
-      console.error(error);
-    });
-}
-
-export async function GetOnlineStatus() {
-  /* console.info('val', val);
-  console.info('uth_token: global.token,', global.token); */
-  fetch(global.address + 'GetOnlineStatus/' + global.userData.user_id, {
-    method: 'get',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      authToken: global.token,
-    },
-  })
-    .then(response => response.json())
-    .then(responseJson => {
-      console.log(
-        '\n Apstatus Api called GetOnlineStatus .... \n',
-        responseJson,
-      );
-      return responseJson.onlineStatus;
+      /* console.log('\n Apstatus Api called.... \n', responseJson); */
     })
     .catch(error => {
       console.error(error);
