@@ -1,43 +1,42 @@
 {
   "project_info": {
-    "project_number": "422086856195",
-    "firebase_url": "https://memee-f9aca-default-rtdb.firebaseio.com",
-    "project_id": "memee-f9aca",
-    "storage_bucket": "memee-f9aca.appspot.com"
+    "project_number": "486832145551",
+    "firebase_url": "https://memee-dev2-default-rtdb.firebaseio.com",
+    "project_id": "memee-dev2",
+    "storage_bucket": "memee-dev2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:422086856195:android:4616fa19f57af561b58836",
+        "mobilesdk_app_id": "1:486832145551:android:b2c81b8c118e5f0f581cfa",
         "android_client_info": {
-          "package_name": "com.convrtx.memee"
+          "package_name": "com.convrtx.memee2"
         }
       },
       "oauth_client": [
         {
-          "client_id": "422086856195-o0d8s6i94tirkqc8cks1kqmovgiv28ad.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.convrtx.memee",
-            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
-          }
-        },
-        {
-          "client_id": "422086856195-74rah09f8pvu1vl14n4cd76h679obcrt.apps.googleusercontent.com",
+          "client_id": "486832145551-36l7l6s0hu6c7r8gusjfbbuabtbgk7f0.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB17JnQEbaD5eu62zcB4f-5KBlOb0VTh_Y"
+          "current_key": "AIzaSyCXJt1oP84EZQknjL9nNxcEIHEzgwgx0bQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "422086856195-74rah09f8pvu1vl14n4cd76h679obcrt.apps.googleusercontent.com",
+              "client_id": "486832145551-36l7l6s0hu6c7r8gusjfbbuabtbgk7f0.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "486832145551-3fpbilgrltngc40m6e89gnstr27set94.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.convrtx.memee2"
+              }
             }
           ]
         }
