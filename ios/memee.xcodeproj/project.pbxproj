@@ -110,6 +110,7 @@
 		148C1CEE285371D600FC2D96 /* TwitterKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TwitterKit.framework; sourceTree = "<group>"; };
 		148C1CEF285371D800FC2D96 /* TwitterKitResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TwitterKitResources.bundle; sourceTree = "<group>"; };
 		148C1CF0285371D800FC2D96 /* TwitterShareExtensionUIResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TwitterShareExtensionUIResources.bundle; sourceTree = "<group>"; };
+		14AFDB84285C80CC00960A58 /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		14F374AB283DCFFC00D20C83 /* OpenSans-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-SemiBold.ttf"; sourceTree = "<group>"; };
 		14F374AC283DCFFC00D20C83 /* OpenSans-SemiBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
 		14FFC45C2849BD54006B6785 /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
@@ -244,6 +245,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				14AFDB84285C80CC00960A58 /* main.jsbundle */,
 				148C1CED285371D500FC2D96 /* TwitterCore.framework */,
 				148C1CEE285371D600FC2D96 /* TwitterKit.framework */,
 				148C1CEF285371D800FC2D96 /* TwitterKitResources.bundle */,
@@ -435,12 +437,12 @@
 				8FAC0DE627D75EC900D6E882 /* GoogleService-Info.plist in Resources */,
 				6591DD8ACDDB423B96CF0E07 /* OpenSans-Bold.ttf in Resources */,
 				C69D0E50EA704C2AA930DDCD /* OpenSans-BoldItalic.ttf in Resources */,
-				14FFC45D2849BD54006B6785 /* main.jsbundle in Resources */,
 				80C12B8BD89B4302B50C66C5 /* OpenSans-ExtraBold.ttf in Resources */,
 				0A1DC67C49AB407E90E03093 /* OpenSans-ExtraBoldItalic.ttf in Resources */,
 				B5E047B955784754A8A22827 /* OpenSans-Italic.ttf in Resources */,
 				44E30DAF53594178A2EE2427 /* OpenSans-Light.ttf in Resources */,
 				BCCFC9D73F124E06849B869B /* OpenSans-LightItalic.ttf in Resources */,
+				14FFC45D2849BD54006B6785 /* main.jsbundle in Resources */,
 				E65534BE35E64DECA0471CB8 /* OpenSans-Medium.ttf in Resources */,
 				369A8EC47D0D43DC86E7018A /* OpenSans-MediumItalic.ttf in Resources */,
 				C16EEF266D7D4BA284D3E668 /* OpenSans-Regular.ttf in Resources */,
@@ -643,8 +645,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = memee/memee.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = LNKFW3HHLL;
+				DEVELOPMENT_TEAM = F9G3HM7HZJ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -660,8 +664,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.convrtx.memee;
 				PRODUCT_NAME = memee;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -675,8 +680,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = memee/memee.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = LNKFW3HHLL;
+				DEVELOPMENT_TEAM = F9G3HM7HZJ;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -691,8 +698,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.convrtx.memee;
 				PRODUCT_NAME = memee;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

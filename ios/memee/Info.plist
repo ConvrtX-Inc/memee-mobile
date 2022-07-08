@@ -52,23 +52,14 @@
 			</array>
 		</dict>
 	</array>
-  <!-- <key>CFBundleURLTypes</key>
-  <array>
-    <dict>
-    <key>CFBundleURLSchemes</key>
-    <array>
-      <string>fb4746972328745638</string>
-    </array>
-    </dict>
-  </array> -->
-  <key>FacebookAppID</key>
-  <string>4746972328745638</string>
-  <key>FacebookClientToken</key>
-  <string>b57663773dab6c896c37f27faedb2feb</string>
-  <key>FacebookDisplayName</key>
-  <string>Memee</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>FacebookAppID</key>
+	<string>4746972328745638</string>
+	<key>FacebookClientToken</key>
+	<string>b57663773dab6c896c37f27faedb2feb</string>
+	<key>FacebookDisplayName</key>
+	<string>Memee</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>

@@ -111,6 +111,13 @@ export default function Dashboard(props) {
     quality: 1,
   };
 
+  let options2 = {
+    mediaType: 'video',
+    // maxWidth: 512,
+    // maxHeight: 512,
+    quality: 1,
+  };
+
   const [dBottomFont, setdBottomFont] = useState(global.fontSelect);
   const dispatch = useDispatch();
   const [followingPost, setFollowingPost] = useState([]);
@@ -851,6 +858,39 @@ export default function Dashboard(props) {
       openPhotoEditor(source.uri);
     });
   }
+
+  function openGalleryForIOS() {
+    setIsOpenMedia(true);
+    console.log('this is true');
+    launchImageLibrary(options2, (response) => {
+      console.log('Response = ', response);
+      console.log('Response = ');
+
+      if (response.didCancel) {
+        // alert('User cancelled camera picker');
+        setIsOpenMedia(false);
+        return;
+      } else if (response.errorCode == 'camera_unavailable') {
+        setIsOpenMedia(false);
+        // alert('Camera not available on device');
+        return;
+      } else if (response.errorCode == 'permission') {
+        setIsOpenMedia(false);
+        // alert('Permission not satisfied');
+        return;
+      } else if (response.errorCode == 'others') {
+        setIsOpenMedia(false);
+        // alert(response.errorMessage);
+        return;
+      }
+
+      let source = response;
+      console.log('source', source)
+      setIsOpenMedia(false);
+      // openPhotoEditor(source.uri);
+    });
+  }
+
   const getDescription = text => {
     try {
       return decodeURIComponent(
@@ -1702,8 +1742,9 @@ export default function Dashboard(props) {
                               console.error('error', e);
                             });
                         } else {
-                          const videoUri = await openVideoEditor();
-                          console.log('videoUri',videoUri);
+                          // const videoUri = await openVideoEditor();
+                          // console.log('videoUri',videoUri);
+                          openGalleryForIOS();
                         }
                         setIsOpenMedia(false);
                       }}>

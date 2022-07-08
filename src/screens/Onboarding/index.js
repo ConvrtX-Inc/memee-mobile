@@ -385,17 +385,6 @@ export default function Onboarding({navigation}) {
           img={require('../../images/emailSignIn.png')}
         />
 
-        <ButtonWithImage
-          title="Continue with Apple"
-          onPress={onAppleLoginTap}
-          bgClrFirst={global.btnColor1}
-          bgClrSecond={global.btnColor2}
-          txtClr={global.btnTxt}
-          font={global.fontSelect}
-          img={require('../../images/emailSignIn.png')}
-          
-        />
-
         <TouchableOpacity
           activeOpacity={0.5}
           onPress={() => onLogin('google')}
@@ -408,7 +397,7 @@ export default function Onboarding({navigation}) {
             <Text
               style={{
                 textAlign: 'center',
-                fontFamily: 'OpenSansSemiBold',
+                fontFamily: 'OpenSans-SemiBold',
                 fontSize: 16,
                 color: '#fff',
               }}>
@@ -452,11 +441,32 @@ export default function Onboarding({navigation}) {
             <Text
               style={{
                 textAlign: 'left',
-                fontFamily: 'OpenSansSemiBold',
+                fontFamily: 'OpenSans-SemiBold',
                 fontSize: 16,
                 color: '#fff',
               }}>
               Continue with Twitter
+            </Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          activeOpacity={0.5}
+          onPress={() => onAppleLoginTap()}
+          style={styles.buttonStyle}>
+          <View style={styles.buttonContentContainer}>
+            <Image
+              style={styles.tinyLogoBtn}
+              source={require('../../images/applewhite.png')}
+            />
+            <Text
+              style={{
+                textAlign: 'center',
+                fontFamily: 'OpenSans-SemiBold',
+                fontSize: 16,
+                color: '#fff',
+              }}>
+              Continue with Apple
             </Text>
           </View>
         </TouchableOpacity>
