@@ -15,7 +15,8 @@ import OTPInputView from '@twotalltotems/react-native-otp-input';
 import {currentDateFN} from '../../Utility/Utils';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import {useDispatch} from 'react-redux';
+import {coinsRecordFN} from '../../redux/actions/Auth';
 function VerifyEmail({navigation, route}) {
   const [code, setcode] = useState('');
   const [loader, setLoader] = useState(false);
@@ -129,6 +130,9 @@ function VerifyEmail({navigation, route}) {
       .then(response => response.json())
       .then(responseJson => {
         global.userData = responseJson;
+        dispatch(coinsRecordFN(responseJson.coins));
+        global.userData.coins = responseJson.coins;
+
         /* console.log('Sign Up Data...');
         console.log(global.userData); */
         setLoader(false);

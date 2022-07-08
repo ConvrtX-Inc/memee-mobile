@@ -1,5 +1,5 @@
-package com.convrtx.memee.videoeditor.impl
-import com.convrtx.memee.R
+package com.convrtx.memee2.videoeditor.impl
+import com.convrtx.memee2.R
 import com.banuba.sdk.cameraui.data.CameraTimerStateProvider
 import com.banuba.sdk.cameraui.data.TimerEntry
 

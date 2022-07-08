@@ -1,4 +1,4 @@
-package com.convrtx.memee.videoeditor.impl
+package com.convrtx.memee2.videoeditor.impl
 
 import com.banuba.sdk.core.data.OrderProvider
 
