@@ -168,7 +168,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.convrtx.memee2"
+        applicationId "com.convrtx.memee"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 20220707

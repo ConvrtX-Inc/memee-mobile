@@ -146,7 +146,7 @@ export default function Onboarding({navigation}) {
         // some other error happened
         Toast.show({
           type: 'error',
-          text2: 'Please check your internet connection.',
+          text2: 'Theres something wrong please try again later.',
         });
         setIsLoading(false);
       }
@@ -320,7 +320,7 @@ export default function Onboarding({navigation}) {
           <View style={styles.buttonContentContainer}>
             <Image
               style={styles.tinyLogoBtn}
-              source={require('../../images/Gmail11.png')}
+              source={require('../../images/google.png')}
             />
             <Text
               style={{
@@ -341,7 +341,7 @@ export default function Onboarding({navigation}) {
           <View style={styles.buttonContentContainer}>
             <Image
               style={styles.tinyLogoBtn}
-              source={require('../../images/fb11.png')}
+              source={require('../../images/facebook.png')}
             />
             <Text
               style={{
@@ -362,7 +362,7 @@ export default function Onboarding({navigation}) {
           <View style={styles.buttonContentContainer}>
             <Image
               style={styles.tinyLogoBtn}
-              source={require('../../images/twiter11.png')}
+              source={require('../../images/twitter.png')}
             />
             <Text
               style={{
