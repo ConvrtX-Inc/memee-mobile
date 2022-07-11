@@ -170,7 +170,7 @@ export default function Dashboard(props) {
   useEffect(async () => {
     await toggleOnlineStatus('1');
 
-    console.log('token', global.userData);
+    // console.log('token', global.userData);
     fetchStories();
   }, [updatedStories]);
 
@@ -196,14 +196,14 @@ export default function Dashboard(props) {
 
     task
       .then(res => {
-        console.log('Image uploaded to the bucket!');
+        // console.log('Image uploaded to the bucket!');
         reference.getDownloadURL().then(response => {
           //console.log('Image downloaded from the bucket!', response);
           addStory(response);
         });
       })
       .catch(e => {
-        console.error('uploading image error => ', e);
+        // console.error('uploading image error => ', e);
         Toast.show({
           type: 'error',
           text2: 'Unable to add story. Please try again later!',

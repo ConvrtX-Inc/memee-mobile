@@ -140,14 +140,15 @@ export default class CommentScreen extends React.Component {
         .then(response => response.json())
         .then(responseJson => {
           if (responseJson.Status == '201') {
-            /* console.log(responseJson); */
-            var comments = this.state.flatlist;
-            comments.find(
-              c => c.commentUID == responseJson.commentUID,
-            ).comment_id = responseJson.commentID;
-            this.setState({
-              flatlist: comments,
-            });
+            // console.log(responseJson.commentID);
+            // var comments = this.state.flatlist;
+            // console.log(comments);
+
+            // comments.find(c => c.comment_id == responseJson.commentID);
+            // this.setState({
+            //   flatlist: comments,
+            // });
+            this.getPostDataFN();
           }
         })
         .catch(error => {
@@ -281,6 +282,7 @@ export default class CommentScreen extends React.Component {
           }}
           extraData={this.flatlist}
           data={this.state.flatlist}
+          keyExtractor={item => item.id}
           renderItem={({item, index}) => (
             <View style={{width: '100%', marginBottom: 15}}>
               {item.parent_id == 0 ? (

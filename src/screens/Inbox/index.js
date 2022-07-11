@@ -39,12 +39,12 @@ const Inbox = ({showValue}) => {
       .onSnapshot(async querySnapshot => {
         if (querySnapshot != null) {
           const thread = querySnapshot.docs.map(documentSnapshot => {
-            console.log('documentSnapshot', documentSnapshot.data());
+            // console.log('documentSnapshot', documentSnapshot.data());
             var add = documentSnapshot.data().receiver_id;
             var img = documentSnapshot.data().receiver_img;
             var name = documentSnapshot.data().receiver_name;
             if (documentSnapshot.data().sender_id != global.userData.user_id) {
-              console.log(documentSnapshot.data().sender_id);
+              // console.log(documentSnapshot.data().sender_id);
               add = documentSnapshot.data().sender_id;
               img = documentSnapshot.data().sender_img;
               name = documentSnapshot.data().sender_name;
@@ -66,12 +66,12 @@ const Inbox = ({showValue}) => {
                 ...documentSnapshot.data(),
               };
             } else {
-              console.log('soes');
+              // console.log('soes');
             }
           });
           const a = await setData(thread);
         } else {
-          console.log('it is null');
+          // console.log('it is null');
         }
         if (loading) {
           setLoading(false);
@@ -103,12 +103,12 @@ const Inbox = ({showValue}) => {
         results[a].lastChat = await getLastChatDate(
           results[a].latestMessage.createdAt,
         );
-        console.log('asl', results[a].lastChat);
+        // console.log('asl', results[a].lastChat);
       }
     }
 
     setThreads(results);
-    console.log('resultsss', results.length);
+    // console.log('resultsss', results.length);
 
     return results;
   }
@@ -123,7 +123,7 @@ const Inbox = ({showValue}) => {
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log('gotcha', responseJson);
+        // console.log('gotcha', responseJson);
         return {
           responseJson,
         };
@@ -147,7 +147,7 @@ const Inbox = ({showValue}) => {
       })
         .then(response => response.json())
         .then(responseJson => {
-          console.log('gotcha', responseJson.profile.name);
+          // console.log('gotcha', responseJson.profile.name);
           return {
             user: {
               name: responseJson.profile.name,
@@ -159,7 +159,7 @@ const Inbox = ({showValue}) => {
           console.error(error);
         }),
     );
-    console.log('diresu', userId);
+    // console.log('diresu', userId);
     return data;
   }
   async function getLastChatDate(createdAt) {
