@@ -39,7 +39,7 @@ yarn-error.log
 buck-out/
 \.buckd/
 *.keystore
-.lock
+*.lock
 !debug.keystore
 keysAndCert
 
