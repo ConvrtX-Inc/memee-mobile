@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "628249846461-260cm1u1qq7khhkfjudabc8qqlvrq8e3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.convrtx.memee",
+            "certificate_hash": "a8860f03408c61f83166b43765e722cad6c47264"
+          }
+        },
+        {
           "client_id": "628249846461-cr9ovfj0pnadq22g5nklgdfaduid74au.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
