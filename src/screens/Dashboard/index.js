@@ -71,16 +71,12 @@ var gloIndex = '';
 const {VideoEditorModule} = NativeModules;
 
 const openEditor = async () => {
-  console.log('niagi diri');
   const res = await VideoEditorModule.openVideoEditor();
-  console.log('f res', res);
   return res;
 };
 
 export const openVideoEditor = async () => {
-  console.log('hello');
   const response = await openEditor();
-  console.log('responsee------', response);
 
   if (!response) {
     return null;
@@ -888,6 +884,9 @@ export default function Dashboard(props) {
       let source = response;
       console.log('source', source)
       setIsOpenMedia(false);
+      if (source) {
+        setFile({type: 'video', uri: source.assets[0].uri});
+      }
       // openPhotoEditor(source.uri);
     });
   }
@@ -936,7 +935,6 @@ export default function Dashboard(props) {
   };
 
   function openPhotoEditor(uri) {
-    console.log('tata uri', uri);
     setIsOpenMedia(true);
     PESDK.openEditor({uri: uri}).then(
       result => {
