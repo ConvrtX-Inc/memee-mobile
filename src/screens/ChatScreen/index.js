@@ -312,7 +312,7 @@ const ChatScreen = ({route}) => {
                     sender_id: global.userData.user_id,
                     sender_name: global.userData.name,
                     sender_img: global.userData.imgurl,
-                    receiver_id: user.receiver_id,
+                    receiver_id: user.selectedUserId,
                     receiver_name: user.name,
                     receiver_img: user.img,
                     latestMessage: {
