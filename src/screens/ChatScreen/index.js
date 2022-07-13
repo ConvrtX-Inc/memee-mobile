@@ -178,13 +178,13 @@ const ChatScreen = ({route}) => {
         {...props}
         wrapperStyle={{
           right: {
-            backgroundColor: '#FFCD2F',
+            backgroundColor: global.btnColor1,
             marginBottom: 15,
             borderTopRightRadius: 25,
             borderBottomRightRadius: 0,
           },
           left: {
-            backgroundColor: '#292929',
+            backgroundColor: global.tabNotSelectedColor,
             marginBottom: 15,
           },
         }}
@@ -312,7 +312,7 @@ const ChatScreen = ({route}) => {
                     sender_id: global.userData.user_id,
                     sender_name: global.userData.name,
                     sender_img: global.userData.imgurl,
-                    receiver_id: user.receiver_id,
+                    receiver_id: user.selectedUserId,
                     receiver_name: user.name,
                     receiver_img: user.img,
                     latestMessage: {
@@ -501,7 +501,6 @@ export default ChatScreen;
 const styles = StyleSheet.create({
   containerStyle: {
     flex: 1,
-    backgroundColor: '#0D0219',
   },
   header: {
     marginHorizontal: '5%',

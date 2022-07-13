@@ -112,7 +112,14 @@ export default function ProfileScreen(props) {
       setFilteredPost([]);
     }
   }, [postToShow, selectedMonth]);
-
+  useEffect(() => {
+    console.log('profileScreens,');
+    const unsubscribe = navigation.addListener('focus', () => {
+      console.log('Refreshed!');
+      selectTab(1);
+    });
+    return unsubscribe;
+  }, [navigation]);
   useEffect(() => {
     selectTab(1);
     const backAction = () => {
@@ -1208,7 +1215,7 @@ export default function ProfileScreen(props) {
               <SelectDropdown
                 buttonStyle={{
                   height: 40,
-                  backgroundColor: global.gradientColors[1],
+                  backgroundColor: global.gradientColors[0],
                   padding: 0,
                 }}
                 buttonTextStyle={{
