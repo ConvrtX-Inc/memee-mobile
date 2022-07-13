@@ -1093,7 +1093,7 @@ export default function Dashboard(props) {
                         style={{
                           height: 22,
                           width: 22,
-                          marginLeft: 10,
+                          marginLeft: 20,
                           marginRight: 2,
                           tintColor: global.colorIcon,
                         }}

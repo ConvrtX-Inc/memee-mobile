@@ -144,6 +144,7 @@ function VerifyEmail({navigation, route}) {
       });
   }
   const resentOPT = () => {
+    console.log('sending otp again');
     let body = JSON.stringify({
       email: email.toLowerCase().trim(),
       action: 'sign-up',
@@ -226,7 +227,7 @@ function VerifyEmail({navigation, route}) {
           ]}>
           Didn't receive code?
         </Text>
-        <TouchableOpacity style={styles.resendButton} onPres={resentOPT}>
+        <TouchableOpacity style={styles.resendButton} onPress={resentOPT}>
           <Text
             style={[
               styles.resendText,
