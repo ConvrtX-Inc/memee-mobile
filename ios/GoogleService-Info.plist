@@ -6,6 +6,8 @@
 	<string>628249846461-chkgkacs8dald86mdt2psec819mbil91.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
 	<string>com.googleusercontent.apps.628249846461-chkgkacs8dald86mdt2psec819mbil91</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>628249846461-cr9ovfj0pnadq22g5nklgdfaduid74au.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBwUCAwgmfIwxjUrly9-b45_cBD6Do4PJA</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.convrtx.memee2</string>
+	<string>com.convrtx.memee</string>
 	<key>PROJECT_ID</key>
 	<string>memee-app-d35d3</string>
 	<key>STORAGE_BUCKET</key>
@@ -30,5 +32,7 @@
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
 	<string>1:628249846461:ios:bd93589c0d52b3a0698dd4</string>
+	<key>DATABASE_URL</key>
+	<string>https://memee-app-d35d3-default-rtdb.firebaseio.com</string>
 </dict>
 </plist>

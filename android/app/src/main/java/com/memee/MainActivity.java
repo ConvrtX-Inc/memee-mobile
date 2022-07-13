@@ -1,4 +1,4 @@
-package com.convrtx.memee2;
+package com.convrtx.memee;
 
 import com.facebook.react.ReactActivity;
 

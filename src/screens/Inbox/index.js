@@ -16,7 +16,7 @@ import firestore from '@react-native-firebase/firestore';
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import {useSelector, useDispatch} from 'react-redux';
 import Icon from 'react-native-vector-icons/AntDesign';
-import {formatDateTime} from '../../Utility/Utils';
+import {formatDateTime, getLastSeenFormat} from '../../Utility/Utils';
 import moment from 'moment';
 import LinearGradient from 'react-native-linear-gradient';
 import {CONVERSATIONS} from '../../redux/constants';
@@ -61,7 +61,7 @@ const Inbox = ({showValue}) => {
                 imgs: img,
                 lastSeen: '',
                 lastChat: '',
-                onlineStatus: 1,
+                onlineStatus: 0,
                 latestMessage: {text: ''},
                 ...documentSnapshot.data(),
               };
@@ -92,21 +92,23 @@ const Inbox = ({showValue}) => {
     return <ActivityIndicator size="large" color="#555" />;
   }
   async function setData(thread) {
-    const results = await thread.filter(async element => {
-      if (element !== undefined) {
-        return element;
-      }
+    const results = await thread.filter(element => {
+      return element !== undefined;
     });
-    for (var a = 0; a < results.length; a++) {
-      const isOnline = await GetOnlineStatus(results[a].asd);
-      results[a].onlineStatus = isOnline.responseJson.onlineStatus;
-      results[a].lastSeen = isOnline.responseJson.lastSeen;
-      results[a].lastChat = await getLastChatDate(
-        results[a].latestMessage.createdAt,
-      );
+    if (results.length !== 0) {
+      for (var a = 0; a < results.length; a++) {
+        const isOnline = await GetOnlineStatus(results[a].asd);
+        results[a].onlineStatus = isOnline.responseJson.onlineStatus;
+        results[a].lastSeen = isOnline.responseJson.lastSeen;
+        results[a].lastChat = await getLastChatDate(
+          results[a].latestMessage.createdAt,
+        );
+        console.log('asl', results[a].lastChat);
+      }
     }
+
     setThreads(results);
-    console.log('resultss', results);
+    console.log('resultsss', results.length);
 
     return results;
   }
@@ -169,7 +171,7 @@ const Inbox = ({showValue}) => {
       '-' +
       ('00' + date.getDate()).slice(-2) +
       ' ' +
-      ('00' + date.getHours()).slice(-2) +
+      ('00' + (('00' + date.getHours()).slice(-2) - 8)).slice(-2) +
       ':' +
       ('00' + date.getMinutes()).slice(-2) +
       ':' +

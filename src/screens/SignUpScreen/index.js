@@ -282,15 +282,19 @@ export default function SignUpScreen({navigation}) {
           )}
         </View>
 
-        <View
-          style={{flexDirection: 'row', alignSelf: 'center', marginTop: 20}}>
-          <Text style={styles.textTheme}>Already on memee?</Text>
-
+        <View style={{flexDirection: 'row', alignSelf: 'center'}}>
           <Text
-            style={[styles.txtdown2, {fontFamily: global.fontSelect}]}
-            onPress={() => navigation.navigate('LoginScreen')}>
-            Signin
+            style={[styles.txtdown, {fontWeight: 'bold', color: '#707070'}]}>
+            Already on memee?
           </Text>
+
+          <TouchableOpacity
+            onPress={() => navigation.navigate('LoginScreen')}
+            style={{marginTop: '4%'}}>
+            <Text style={[styles.txtdown2, {fontFamily: global.fontSelect}]}>
+              Sign in
+            </Text>
+          </TouchableOpacity>
         </View>
 
         <Text
