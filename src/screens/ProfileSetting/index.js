@@ -70,6 +70,7 @@ export default function ProfileSetting(props) {
         var ovverlayBackgrounVar = [];
         var iconsVar = [];
         var buttonsVar = [];
+        var buttonsVar2 = [];
         var fontVar = [];
 
         for (let i = 0; i < responseJson.PurchasedItems.length; i++) {
@@ -118,21 +119,6 @@ export default function ProfileSetting(props) {
             ovverlayBackgrounVar.push(valueToPush);
           }
 
-          if (responseJson.PurchasedItems[i].type == 'icon') {
-            var valueToPush = {};
-            valueToPush['item_code'] = responseJson.PurchasedItems[i].item_code;
-            valueToPush['datetime'] = responseJson.PurchasedItems[i].datetime;
-            valueToPush['item_id'] = responseJson.PurchasedItems[i].item_id;
-            valueToPush['purchase_id'] =
-              responseJson.PurchasedItems[i].purchase_id;
-            valueToPush['type'] = responseJson.PurchasedItems[i].type;
-            valueToPush['img'] = asignImageToProductsFN(
-              responseJson.PurchasedItems[i].item_code,
-              responseJson.PurchasedItems[i].type,
-            )[0].imag;
-            iconsVar.push(valueToPush);
-          }
-
           if (responseJson.PurchasedItems[i].type == 'button') {
             var valueToPush = {};
             valueToPush['item_code'] = responseJson.PurchasedItems[i].item_code;
@@ -146,6 +132,39 @@ export default function ProfileSetting(props) {
               responseJson.PurchasedItems[i].type,
             )[0].imag;
             buttonsVar.push(valueToPush);
+          }
+
+          if (responseJson.PurchasedItems[i].type == 'icon') {
+            var valueToPush = {};
+            valueToPush['item_code'] = responseJson.PurchasedItems[i].item_code;
+            valueToPush['datetime'] = responseJson.PurchasedItems[i].datetime;
+            valueToPush['item_id'] = responseJson.PurchasedItems[i].item_id;
+            valueToPush['purchase_id'] =
+              responseJson.PurchasedItems[i].purchase_id;
+            valueToPush['type'] = responseJson.PurchasedItems[i].type;
+            valueToPush['img'] = asignImageToProductsFN(
+              responseJson.PurchasedItems[i].item_code,
+              responseJson.PurchasedItems[i].type,
+            )[0].imag;
+            iconsVar.push(valueToPush);
+
+            var valueToPush2 = {};
+            valueToPush2['item_code'] = responseJson.PurchasedItems[
+              i
+            ].item_code.replace('icon', 'button');
+            valueToPush2['datetime'] = responseJson.PurchasedItems[i].datetime;
+            valueToPush2['item_id'] = responseJson.PurchasedItems[i].item_id;
+            valueToPush2['purchase_id'] =
+              responseJson.PurchasedItems[i].purchase_id;
+            valueToPush2['type'] = 'button';
+            valueToPush2['img'] = asignImageToProductsFN(
+              responseJson.PurchasedItems[i].item_code.replace(
+                'icon',
+                'button',
+              ),
+              'button',
+            )[0].imag;
+            buttonsVar2.push(valueToPush2);
           }
 
           if (responseJson.PurchasedItems[i].type == 'font') {
@@ -310,9 +329,30 @@ export default function ProfileSetting(props) {
         } */
 
         //console.log('buttonsVar var', buttonsVar);
+        var buttonFinal = buttonsVar;
+        buttonsVar.forEach(el => {
+          buttonsVar2.forEach(el2 => {
+            if (el.item_code != el2.item_code) {
+              // console.log('true', el.item_code, el2.item_code);
+              buttonFinal.push(el2);
+            }
+          });
+        });
+        const uniqueIds = [];
 
+        const unique = buttonFinal.filter(element => {
+          const isDuplicate = uniqueIds.includes(element.item_code);
+
+          if (!isDuplicate) {
+            uniqueIds.push(element.item_code);
+
+            return true;
+          }
+
+          return false;
+        });
         setFontPurchased(fontVar);
-        setButtonPurchased(buttonsVar);
+        setButtonPurchased(unique);
         setBottomTabicon(iconsVar);
         setProfileBackground(proBackgrounVar);
         setBackgroundOverLay(ovverlayBackgrounVar);
