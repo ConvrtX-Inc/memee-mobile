@@ -61,13 +61,27 @@ export default function SharePost() {
     var currentDate = currentDateFN();
     var unicodeString = '';
     if (desc != '') {
-      for (var i = 0; i < desc.length; i++) {
-        var theUnicode = desc.charCodeAt(i).toString(16).toUpperCase();
-        while (theUnicode.length < 4) {
-          theUnicode = '0' + theUnicode;
+      for (var i = 0; i < post.length; i++) {
+        console.log('asdw', post[i]);
+        let val = '1234567890';
+        let isnum = /^\d+$/.test(val);
+        if (
+          post[i].match(/[a-z]/i) ||
+          post[i].match(/[A-Z]/i) ||
+          isnum ||
+          post[i].match(/^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/i)
+        ) {
+          console.log('emoji detected');
+          unicodeString += post[i];
+        } else {
+          console.log('emoji not detected');
+          var theUnicode = post.charCodeAt(i).toString(16).toUpperCase();
+          while (theUnicode.length < 4) {
+            theUnicode = '0' + theUnicode;
+          }
+          theUnicode = '\\u' + theUnicode;
+          unicodeString += theUnicode;
         }
-        theUnicode = '\\u' + theUnicode;
-        unicodeString += theUnicode;
       }
     } else {
       unicodeString = desc1;
