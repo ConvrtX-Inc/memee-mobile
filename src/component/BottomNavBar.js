@@ -628,7 +628,7 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
     global.colorTextSecondary = '#FFFFFF';
     global.colorTextActive = '#FFFFFF';
     global.colorIcon = '#FFFFFF';
-    global.gradientColors = ['#F23F58', '#D4233B'];
+    global.gradientColors = ['#F23F58', '#F23F58'];
 
     // ! SET COLORS HERE FOR NEW THEMES ! //
 
@@ -1354,6 +1354,8 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   centerIcon: {
+    backgroundColor: '#00000000',
+    borderWidth: 0,
     width: windowWidth / 5,
     height: windowWidth / 5,
     marginBottom: 30,

@@ -70,6 +70,7 @@ export default function ProfileSetting(props) {
         var ovverlayBackgrounVar = [];
         var iconsVar = [];
         var buttonsVar = [];
+        var buttonsVar2 = [];
         var fontVar = [];
 
         for (let i = 0; i < responseJson.PurchasedItems.length; i++) {
@@ -118,21 +119,6 @@ export default function ProfileSetting(props) {
             ovverlayBackgrounVar.push(valueToPush);
           }
 
-          if (responseJson.PurchasedItems[i].type == 'icon') {
-            var valueToPush = {};
-            valueToPush['item_code'] = responseJson.PurchasedItems[i].item_code;
-            valueToPush['datetime'] = responseJson.PurchasedItems[i].datetime;
-            valueToPush['item_id'] = responseJson.PurchasedItems[i].item_id;
-            valueToPush['purchase_id'] =
-              responseJson.PurchasedItems[i].purchase_id;
-            valueToPush['type'] = responseJson.PurchasedItems[i].type;
-            valueToPush['img'] = asignImageToProductsFN(
-              responseJson.PurchasedItems[i].item_code,
-              responseJson.PurchasedItems[i].type,
-            )[0].imag;
-            iconsVar.push(valueToPush);
-          }
-
           if (responseJson.PurchasedItems[i].type == 'button') {
             var valueToPush = {};
             valueToPush['item_code'] = responseJson.PurchasedItems[i].item_code;
@@ -146,6 +132,39 @@ export default function ProfileSetting(props) {
               responseJson.PurchasedItems[i].type,
             )[0].imag;
             buttonsVar.push(valueToPush);
+          }
+
+          if (responseJson.PurchasedItems[i].type == 'icon') {
+            var valueToPush = {};
+            valueToPush['item_code'] = responseJson.PurchasedItems[i].item_code;
+            valueToPush['datetime'] = responseJson.PurchasedItems[i].datetime;
+            valueToPush['item_id'] = responseJson.PurchasedItems[i].item_id;
+            valueToPush['purchase_id'] =
+              responseJson.PurchasedItems[i].purchase_id;
+            valueToPush['type'] = responseJson.PurchasedItems[i].type;
+            valueToPush['img'] = asignImageToProductsFN(
+              responseJson.PurchasedItems[i].item_code,
+              responseJson.PurchasedItems[i].type,
+            )[0].imag;
+            iconsVar.push(valueToPush);
+
+            var valueToPush2 = {};
+            valueToPush2['item_code'] = responseJson.PurchasedItems[
+              i
+            ].item_code.replace('icon', 'button');
+            valueToPush2['datetime'] = responseJson.PurchasedItems[i].datetime;
+            valueToPush2['item_id'] = responseJson.PurchasedItems[i].item_id;
+            valueToPush2['purchase_id'] =
+              responseJson.PurchasedItems[i].purchase_id;
+            valueToPush2['type'] = 'button';
+            valueToPush2['img'] = asignImageToProductsFN(
+              responseJson.PurchasedItems[i].item_code.replace(
+                'icon',
+                'button',
+              ),
+              'button',
+            )[0].imag;
+            buttonsVar2.push(valueToPush2);
           }
 
           if (responseJson.PurchasedItems[i].type == 'font') {
@@ -310,9 +329,30 @@ export default function ProfileSetting(props) {
         } */
 
         //console.log('buttonsVar var', buttonsVar);
+        var buttonFinal = buttonsVar;
+        buttonsVar.forEach(el => {
+          buttonsVar2.forEach(el2 => {
+            if (el.item_code != el2.item_code) {
+              // console.log('true', el.item_code, el2.item_code);
+              buttonFinal.push(el2);
+            }
+          });
+        });
+        const uniqueIds = [];
 
+        const unique = buttonFinal.filter(element => {
+          const isDuplicate = uniqueIds.includes(element.item_code);
+
+          if (!isDuplicate) {
+            uniqueIds.push(element.item_code);
+
+            return true;
+          }
+
+          return false;
+        });
         setFontPurchased(fontVar);
-        setButtonPurchased(buttonsVar);
+        setButtonPurchased(unique);
         setBottomTabicon(iconsVar);
         setProfileBackground(proBackgrounVar);
         setBackgroundOverLay(ovverlayBackgrounVar);
@@ -529,11 +569,14 @@ export default function ProfileSetting(props) {
     for (let i = 0; i < BackgroundOverLay.length; i++) {
       if (index == i) {
         BackgroundOverLay[i].isSelected = true;
+        console.log('asdw', BackgroundOverLay[i].isSelected);
+        console.log('asdw', BackgroundOverLay[index].item_code);
       } else {
         BackgroundOverLay[i].isSelected = false;
       }
     }
     setBackgroundOverLay([...BackgroundOverLay]);
+    console.log('wasf', BackgroundOverLay[index].item_code);
 
     global.itemCodeOverLay = BackgroundOverLay[index].item_code;
     await AsyncStorage.setItem(
@@ -544,6 +587,7 @@ export default function ProfileSetting(props) {
       BackgroundOverLay[index].item_code ==
       'memee_theme_white_background_overlay'
     ) {
+      console.log('overlay chosen');
       await AsyncStorage.setItem('@overlay1', '#492C5B88');
       // await AsyncStorage.setItem('@overlay2', "#4A0D3F33");
       await AsyncStorage.setItem('@overlay3', '#B9A4C633');
@@ -632,18 +676,18 @@ export default function ProfileSetting(props) {
       global.WhichTab = '1';
     } else if (bottomTabicon[index].item_code == 'the_100_theme_icon') {
       dispatch(storeIconsBottomTabFN(3));
-      await AsyncStorage.setItem('@btnclr1', '#FFFFFF');
-      await AsyncStorage.setItem('@btnclr2', '#FFFFFF');
-      await AsyncStorage.setItem('@btntxtclr', '#000000');
-      await AsyncStorage.setItem('@btntxt', 'Buttons');
-      global.btnColor1 = '#FFFFFF';
-      global.btnColor2 = '#FFFFFF';
-      global.btnText = 'Buttons';
-      setBtncolor1('#FFFFFF');
-      setbtncolor2('#FFFFFF');
-      setbtnText('Buttons');
-      setbtnTextColor('#000000');
-      global.btnTxt = '#000000';
+      // await AsyncStorage.setItem('@btnclr1', '#FFFFFF');
+      // await AsyncStorage.setItem('@btnclr2', '#FFFFFF');
+      // await AsyncStorage.setItem('@btntxtclr', '#000000');
+      // await AsyncStorage.setItem('@btntxt', 'Buttons');
+      // global.btnColor1 = '#FFFFFF';
+      // global.btnColor2 = '#FFFFFF';
+      // global.btnText = 'Buttons';
+      // setBtncolor1('#FFFFFF');
+      // setbtncolor2('#FFFFFF');
+      // setbtnText('Buttons');
+      // setbtnTextColor('#000000');
+      // global.btnTxt = '#000000';
       global.WhichTab = '1';
     } else if (bottomTabicon[index].item_code == 'new_year_theme_icon') {
       dispatch(storeIconsBottomTabFN(4));
@@ -659,108 +703,108 @@ export default function ProfileSetting(props) {
       global.WhichTab = '0';
     } else if (bottomTabicon[index].item_code == 'memee_theme_generic_icon') {
       dispatch(storeIconsBottomTabFN(8));
-      await AsyncStorage.setItem('@btnclr1', '#FFD524');
-      await AsyncStorage.setItem('@btnclr2', '#ECB602');
-      await AsyncStorage.setItem('@btntxtclr', '#000000');
-      await AsyncStorage.setItem('@btntxt', 'Buttons');
-      global.btnColor1 = '#FFD524';
-      global.btnColor2 = '#ECB602';
-      global.btnText = 'Buttons';
-      setBtncolor1('#FFD524');
-      setbtncolor2('#ECB602');
-      setbtnText('Buttons');
-      setbtnTextColor('#000000');
-      global.btnTxt = '#000000';
+      // await AsyncStorage.setItem('@btnclr1', '#FFD524');
+      // await AsyncStorage.setItem('@btnclr2', '#ECB602');
+      // await AsyncStorage.setItem('@btntxtclr', '#000000');
+      // await AsyncStorage.setItem('@btntxt', 'Buttons');
+      // global.btnColor1 = '#FFD524';
+      // global.btnColor2 = '#ECB602';
+      // global.btnText = 'Buttons';
+      // setBtncolor1('#FFD524');
+      // setbtncolor2('#ECB602');
+      // setbtnText('Buttons');
+      // setbtnTextColor('#000000');
+      // global.btnTxt = '#000000';
       global.WhichTab = '0';
     } else if (bottomTabicon[index].item_code == 'free_icon_roygbiv_pink_1') {
       dispatch(storeIconsBottomTabFN(9));
-      await AsyncStorage.setItem('@btnclr1', '#EC6161');
-      await AsyncStorage.setItem('@btnclr2', '#EC6161');
-      await AsyncStorage.setItem('@btntxtclr', '#ffffff');
-      await AsyncStorage.setItem('@btntxt', 'Buttons');
-      global.btnColor1 = '#EC6161';
-      global.btnColor2 = '#EC6161';
-      global.btnText = 'Buttons';
-      setBtncolor1('#EC6161');
-      setbtncolor2('#EC6161');
-      setbtnText('Buttons');
-      setbtnTextColor('#ffffff');
-      global.btnTxt = '#ffffff';
+      // await AsyncStorage.setItem('@btnclr1', '#EC6161');
+      // await AsyncStorage.setItem('@btnclr2', '#EC6161');
+      // await AsyncStorage.setItem('@btntxtclr', '#ffffff');
+      // await AsyncStorage.setItem('@btntxt', 'Buttons');
+      // global.btnColor1 = '#EC6161';
+      // global.btnColor2 = '#EC6161';
+      // global.btnText = 'Buttons';
+      // setBtncolor1('#EC6161');
+      // setbtncolor2('#EC6161');
+      // setbtnText('Buttons');
+      // setbtnTextColor('#ffffff');
+      // global.btnTxt = '#ffffff';
       global.WhichTab = '1';
     } else if (bottomTabicon[index].item_code == 'free_icon_roygbiv_orange_1') {
       dispatch(storeIconsBottomTabFN(10));
-      await AsyncStorage.setItem('@btnclr1', '#FF8C00');
-      await AsyncStorage.setItem('@btnclr2', '#FF8C00');
-      await AsyncStorage.setItem('@btntxtclr', '#000000');
-      await AsyncStorage.setItem('@btntxt', 'Buttons');
-      global.btnColor1 = '#FF8C00';
-      global.btnColor2 = '#FF8C00';
-      global.btnText = 'Buttons';
-      setBtncolor1('#FF8C00');
-      setbtncolor2('#FF8C00');
-      setbtnText('Buttons');
-      setbtnTextColor('#000000');
-      global.btnTxt = '#000000';
+      // await AsyncStorage.setItem('@btnclr1', '#FF8C00');
+      // await AsyncStorage.setItem('@btnclr2', '#FF8C00');
+      // await AsyncStorage.setItem('@btntxtclr', '#000000');
+      // await AsyncStorage.setItem('@btntxt', 'Buttons');
+      // global.btnColor1 = '#FF8C00';
+      // global.btnColor2 = '#FF8C00';
+      // global.btnText = 'Buttons';
+      // setBtncolor1('#FF8C00');
+      // setbtncolor2('#FF8C00');
+      // setbtnText('Buttons');
+      // setbtnTextColor('#000000');
+      // global.btnTxt = '#000000';
       global.WhichTab = '1';
     } else if (bottomTabicon[index].item_code == 'free_icon_theme_2') {
       dispatch(storeIconsBottomTabFN(11));
-      await AsyncStorage.setItem('@btnclr1', '#1EDAAD');
-      await AsyncStorage.setItem('@btnclr2', '#00AF85');
-      await AsyncStorage.setItem('@btntxtclr', '#ffffff');
-      await AsyncStorage.setItem('@btntxt', 'Buttons');
-      global.btnColor1 = '#1EDAAD';
-      global.btnColor2 = '#00AF85';
-      global.btnText = 'Buttons';
-      setBtncolor1('#1EDAAD');
-      setbtncolor2('#00AF85');
-      setbtnText('Buttons');
-      setbtnTextColor('#ffffff');
-      global.btnTxt = '#ffffff';
+      // await AsyncStorage.setItem('@btnclr1', '#1EDAAD');
+      // await AsyncStorage.setItem('@btnclr2', '#00AF85');
+      // await AsyncStorage.setItem('@btntxtclr', '#ffffff');
+      // await AsyncStorage.setItem('@btntxt', 'Buttons');
+      // global.btnColor1 = '#1EDAAD';
+      // global.btnColor2 = '#00AF85';
+      // global.btnText = 'Buttons';
+      // setBtncolor1('#1EDAAD');
+      // setbtncolor2('#00AF85');
+      // setbtnText('Buttons');
+      // setbtnTextColor('#ffffff');
+      // global.btnTxt = '#ffffff';
       global.WhichTab = '1';
     } else if (bottomTabicon[index].item_code == 'free_icon_theme_3') {
       dispatch(storeIconsBottomTabFN(12));
-      await AsyncStorage.setItem('@btnclr1', '#F23F58');
-      await AsyncStorage.setItem('@btnclr2', '#D4233B');
-      await AsyncStorage.setItem('@btntxtclr', '#ffffff');
-      await AsyncStorage.setItem('@btntxt', 'Buttons');
-      global.btnColor1 = '#F23F58';
-      global.btnColor2 = '#D4233B';
-      global.btnText = 'Buttons';
-      setBtncolor1('#F23F58');
-      setbtncolor2('#D4233B');
-      setbtnText('Buttons');
-      setbtnTextColor('#ffffff');
-      global.btnTxt = '#ffffff';
+      // await AsyncStorage.setItem('@btnclr1', '#F23F58');
+      // await AsyncStorage.setItem('@btnclr2', '#D4233B');
+      // await AsyncStorage.setItem('@btntxtclr', '#ffffff');
+      // await AsyncStorage.setItem('@btntxt', 'Buttons');
+      // global.btnColor1 = '#F23F58';
+      // global.btnColor2 = '#D4233B';
+      // global.btnText = 'Buttons';
+      // setBtncolor1('#F23F58');
+      // setbtncolor2('#D4233B');
+      // setbtnText('Buttons');
+      // setbtnTextColor('#ffffff');
+      // global.btnTxt = '#ffffff';
       global.WhichTab = '1';
     } else if (bottomTabicon[index].item_code == 'free_icon_theme_4') {
       dispatch(storeIconsBottomTabFN(13));
-      await AsyncStorage.setItem('@btnclr1', '#FFF62A');
-      await AsyncStorage.setItem('@btnclr2', '#FFF62A');
-      await AsyncStorage.setItem('@btntxtclr', '#040216');
-      await AsyncStorage.setItem('@btntxt', 'Buttons');
-      global.btnColor1 = '#FFF62A';
-      global.btnColor2 = '#FFF62A';
-      global.btnText = 'Buttons';
-      setBtncolor1('#FFF62A');
-      setbtncolor2('#FFF62A');
-      setbtnText('Buttons');
-      setbtnTextColor('#040216');
-      global.btnTxt = '#040216';
+      // await AsyncStorage.setItem('@btnclr1', '#FFF62A');
+      // await AsyncStorage.setItem('@btnclr2', '#FFF62A');
+      // await AsyncStorage.setItem('@btntxtclr', '#040216');
+      // await AsyncStorage.setItem('@btntxt', 'Buttons');
+      // global.btnColor1 = '#FFF62A';
+      // global.btnColor2 = '#FFF62A';
+      // global.btnText = 'Buttons';
+      // setBtncolor1('#FFF62A');
+      // setbtncolor2('#FFF62A');
+      // setbtnText('Buttons');
+      // setbtnTextColor('#040216');
+      // global.btnTxt = '#040216';
       global.WhichTab = '1';
     } else if (bottomTabicon[index].item_code == 'free_icon_theme_1') {
       dispatch(storeIconsBottomTabFN(14));
-      await AsyncStorage.setItem('@btnclr1', '#BE31FF');
-      await AsyncStorage.setItem('@btnclr2', '#8900C9');
-      await AsyncStorage.setItem('@btntxtclr', '#FFFFFF');
-      await AsyncStorage.setItem('@btntxt', 'Buttons');
-      global.btnColor1 = '#BE31FF';
-      global.btnColor2 = '#8900C9';
-      global.btnText = 'Buttons';
-      setBtncolor1('#BE31FF');
-      setbtncolor2('#8900C9');
-      setbtnText('Buttons');
-      setbtnTextColor('#FFFFFF');
-      global.btnTxt = '#FFFFFF';
+      // await AsyncStorage.setItem('@btnclr1', '#BE31FF');
+      // await AsyncStorage.setItem('@btnclr2', '#8900C9');
+      // await AsyncStorage.setItem('@btntxtclr', '#FFFFFF');
+      // await AsyncStorage.setItem('@btntxt', 'Buttons');
+      // // global.btnColor1 = '#BE31FF';
+      // global.btnColor2 = '#8900C9';
+      // global.btnText = 'Buttons';
+      // setBtncolor1('#BE31FF');
+      // setbtncolor2('#8900C9');
+      // setbtnText('Buttons');
+      // setbtnTextColor('#FFFFFF');
+      // global.btnTxt = '#FFFFFF';
       global.WhichTab = '1';
     } else {
       console.log('wronge item code');

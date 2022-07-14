@@ -89,14 +89,13 @@ export default function ActivityNotification() {
       global.postId = data.object_id;
       console.log(global.postId);
       navigation.navigate('CommentScreen');
-    }else if (data.type == 'like') {
+    } else if (data.type == 'like') {
       console.log('like click');
       getPostData(data.receiver_id, data.object_id);
     } else if (data.type == 'share') {
       console.log('shared click');
       getPostData(data.sender_id, data.object_id);
-    } else if(data.type == 'follow_request_approved')
-    {
+    } else if (data.type == 'follow_request_approved') {
       global.profileID = data.sender_id;
       navigation.navigate('ProfileScreen');
     }
@@ -242,7 +241,7 @@ export default function ActivityNotification() {
               }}>
               <Avatar rounded size="medium" source={{uri: item.Image}} />
 
-              <View style={{width: '90%', height: 62, marginLeft: 10}}>
+              <View style={{width: '80%', height: 62, marginLeft: 10}}>
                 <Text
                   style={{
                     color: global.colorTextPrimary,
