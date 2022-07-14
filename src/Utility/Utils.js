@@ -260,10 +260,11 @@ export function asignImageToProductsFN(itemCode, type) {
       return iconArray;
     }
   } else if (type == 'font') {
+    console.log('tata itemCode', itemCode);
     if (itemCode == 'font1') {
       var fontArray = [
         {
-          font: 'Arial',
+          font: 'Arial-BoldMT',
           themeName: 'Memee Font 1',
         },
       ];
@@ -309,10 +310,10 @@ export function asignImageToProductsFN(itemCode, type) {
       ];
       return fontArray;
     } else {
-      console.log('wrong Font type');
+      console.log('wrong Font type', itemCode);
       var fontArray = [
         {
-          font: 'Arial',
+          font: 'Arial-BoldMT',
           themeName: itemCode,
         },
       ];

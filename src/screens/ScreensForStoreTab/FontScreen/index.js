@@ -41,7 +41,7 @@ export default function FontScreen() {
     {
       id: '1',
       name: 'Font Style 2',
-      font: 'Arial',
+      font: 'Arial-BoldMT',
       loadIndicat: 0,
     },
     {
@@ -57,7 +57,7 @@ export default function FontScreen() {
   }, []);
 
   useEffect(() => {
-    console.log(iconList);
+    console.log('iconlistfrom fontscreen',iconList);
   }, [iconList]);
 
   async function getprofileBgFN() {
@@ -165,60 +165,62 @@ export default function FontScreen() {
   return (
     <View style={{flex: 1, backgroundColor: global.colorPrimary}}>
       <ScrollView>
-        <FlatList
-          data={iconList}
-          renderItem={({item, index}) => (
-            <View
-              style={{
-                width: (windowWidth * 90) / 100,
-                height: (windowWidth * 43) / 100,
-                backgroundColor: '#201F38',
-                borderRadius: (windowWidth * 10) / 100,
-                alignSelf: 'center',
-                marginTop: 30,
-              }}>
+        {
+          iconList.length > 0 && (<FlatList
+            data={iconList}
+            renderItem={({item, index}) => (
               <View
-                style={{flexDirection: 'row', marginTop: 20, marginLeft: 18}}>
-                <Text style={{color: '#fff', opacity: 0.5}}>{item.name}</Text>
-
-                <View style={{marginLeft: 'auto', marginRight: 20}}>
-                  <ButtonCoinsShort
-                    title={item.coins}
-                    showAdd="2"
-                    font=""
-                    loading={item.loadIndicat}
-                    onPress={() => purchaseFontFN(index)}
-                  />
-                </View>
-              </View>
-
-              <TouchableOpacity style={{marginTop: 26}}>
+                style={{
+                  width: (windowWidth * 90) / 100,
+                  height: (windowWidth * 43) / 100,
+                  backgroundColor: '#201F38',
+                  borderRadius: (windowWidth * 10) / 100,
+                  alignSelf: 'center',
+                  marginTop: 30,
+                }}>
                 <View
-                  style={{
-                    borderColor: '#4A4A4A',
-                    borderWidth: 1,
-                    borderRadius: 40,
-                    width: '93%',
-                    height: 58,
-                    alignSelf: 'center',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <Text
-                    style={{
-                      color: '#fff',
-                      fontSize: 17,
-                      fontFamily: item.font,
-                    }}>
-                    I love memee app
-                  </Text>
+                  style={{flexDirection: 'row', marginTop: 20, marginLeft: 18}}>
+                  <Text style={{color: '#fff', opacity: 0.5}}>{item.name}</Text>
+  
+                  <View style={{marginLeft: 'auto', marginRight: 20}}>
+                    <ButtonCoinsShort
+                      title={item.coins}
+                      showAdd="2"
+                      font=""
+                      loading={item.loadIndicat}
+                      onPress={() => purchaseFontFN(index)}
+                    />
+                  </View>
                 </View>
-              </TouchableOpacity>
-            </View>
-          )}
-          keyExtractor={item => item.id}
-          // style={{ borderRadius: 100, marginTop: 3 }}
-        />
+  
+                <TouchableOpacity style={{marginTop: 26}}>
+                  <View
+                    style={{
+                      borderColor: '#4A4A4A',
+                      borderWidth: 1,
+                      borderRadius: 40,
+                      width: '93%',
+                      height: 58,
+                      alignSelf: 'center',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Text
+                      style={{
+                        color: '#fff',
+                        fontSize: 17,
+                        fontFamily: item.font,
+                      }}>
+                      I love memee app
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            )}
+            keyExtractor={item => item.id}
+            // style={{ borderRadius: 100, marginTop: 3 }}
+          />)
+        }
 
         {/* <Text style={{ marginBottom: 20 }}> Icons Screens</Text> */}
       </ScrollView>

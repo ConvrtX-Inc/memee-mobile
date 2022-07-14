@@ -795,9 +795,9 @@ export default function ProfileSetting(props) {
 
   async function selectFontFN(index) {
     if (fontPurchased[index].item_code == 'font1') {
-      await AsyncStorage.setItem('@whichFontFam', 'Arial');
-      global.fontSelect = 'Arial';
-      setSelectFonts('Arial');
+      await AsyncStorage.setItem('@whichFontFam', 'Arial-BoldMT');
+      global.fontSelect = 'Arial-BoldMT';
+      setSelectFonts('Arial-BoldMT');
     } else if (fontPurchased[index].item_code == 'font2') {
       await AsyncStorage.setItem('@whichFontFam', 'DancingScript-Bold');
       global.fontSelect = 'DancingScript-Bold';
