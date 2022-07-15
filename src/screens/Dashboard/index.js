@@ -1692,7 +1692,7 @@ export default function Dashboard(props) {
                         Choose photo from library...
                       </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                       style={{marginBottom: '6%'}}
                       onPress={async () => {
                         setIsOpenMedia(true);
@@ -1713,7 +1713,7 @@ export default function Dashboard(props) {
                       <Text style={{color: '#fff', opacity: 0.5, fontSize: 16}}>
                         Select Video
                       </Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     <TouchableOpacity
                       disabled={isOpenMedia}
                       style={[{marginTop: '20%'}]}

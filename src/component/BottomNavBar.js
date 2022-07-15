@@ -1239,7 +1239,7 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={{marginBottom: '6%'}}
               onPress={() => {
                 setShowImagePickerDialog(false);
@@ -1265,7 +1265,7 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
               <Text style={{color: '#fff', opacity: 0.5, fontSize: 16}}>
                 Select Video
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <TouchableOpacity
               style={[styles.button, styles.buttonOpen, {marginTop: '20%'}]}
