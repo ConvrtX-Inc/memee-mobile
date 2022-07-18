@@ -42,6 +42,9 @@ const ChatScreen = ({route}) => {
   const {conversationId, user} = route.params;
   const [primaryKey, setPrimaryKey] = useState();
   useEffect(async () => {
+    console.log('lastseens', user.lastSeen);
+    console.log('onleine', user.onlineStatus);
+
     setOtherChatUser(user);
     setCurrentChatUser({
       _id: global.userData.user_id,
@@ -66,7 +69,7 @@ const ChatScreen = ({route}) => {
     var docId = conversationId;
     console.log('docid', docId);
     const unsubscribeListener = firestore()
-      .collection('Memes_Conversation')
+      .collection('Conversation_Memee')
       .doc(`${docId}`)
       .collection('MESSAGES')
       .orderBy('createdAt', 'desc')
@@ -92,7 +95,7 @@ const ChatScreen = ({route}) => {
     var flag = false;
     console.log(primaryKey);
     firestore()
-      .collection('Memes_Conversation')
+      .collection('Conversation_Memee')
       .onSnapshot(querySnapshot => {
         if (querySnapshot != null) {
           const result = querySnapshot.docs.some(documentSnapshot => {
@@ -114,13 +117,13 @@ const ChatScreen = ({route}) => {
   const setFirebase = async primaryKey => {
     console.log('ehhosl', user.img);
     await firestore()
-      .collection('Memes_Conversation')
+      .collection('Conversation_Memee')
       .doc(`${primaryKey}`)
       .set({
         sender_id: global.userData.user_id,
         sender_name: global.userData.name,
         sender_img: global.userData.imgurl,
-        receiver_id: user.receiver_id,
+        receiver_id: user.selectedUserId,
         receiver_name: user.name,
         receiver_img: user.img,
         latestMessage: {
@@ -132,8 +135,16 @@ const ChatScreen = ({route}) => {
   const onSend = async messages => {
     const text = messages[0].text;
     console.log('erdaz', primaryKey);
+    console.log('erdaz', text);
+    console.log('erdaz', global.userData.user_id);
+    console.log('erdaz', global.userData.name);
+    console.log('erdaz', global.userData.imgurl);
+    console.log('erdaz', user.selectedUserId);
+    console.log('erdaz', user.name);
+    console.log('erdaz', text);
+
     firestore()
-      .collection('Memes_Conversation')
+      .collection('Conversation_Memee')
       .doc(`${primaryKey}`)
       .collection('MESSAGES')
       .add({
@@ -142,14 +153,14 @@ const ChatScreen = ({route}) => {
         user: currentChatUser,
       });
     await firestore()
-      .collection('Memes_Conversation')
+      .collection('Conversation_Memee')
       .doc(`${primaryKey}`)
       .set(
         {
           sender_id: global.userData.user_id,
           sender_name: global.userData.name,
           sender_img: global.userData.imgurl,
-          receiver_id: user.receiver_id,
+          receiver_id: user.selectedUserId,
           receiver_name: user.name,
           receiver_img: user.img,
           latestMessage: {
@@ -167,13 +178,13 @@ const ChatScreen = ({route}) => {
         {...props}
         wrapperStyle={{
           right: {
-            backgroundColor: '#FFCD2F',
+            backgroundColor: global.btnColor1,
             marginBottom: 15,
             borderTopRightRadius: 25,
             borderBottomRightRadius: 0,
           },
           left: {
-            backgroundColor: '#292929',
+            backgroundColor: global.tabNotSelectedColor,
             marginBottom: 15,
           },
         }}
@@ -285,7 +296,7 @@ const ChatScreen = ({route}) => {
               //   user: currentChatUser,
               // });
               firestore()
-                .collection('Memes_Conversation')
+                .collection('Conversation_Memee')
                 .doc(`${primaryKey}`)
                 .collection('MESSAGES')
                 .add({
@@ -294,14 +305,14 @@ const ChatScreen = ({route}) => {
                   user: currentChatUser,
                 });
               await firestore()
-                .collection('Memes_Conversation')
+                .collection('Conversation_Memee')
                 .doc(`${primaryKey}`)
                 .set(
                   {
                     sender_id: global.userData.user_id,
                     sender_name: global.userData.name,
                     sender_img: global.userData.imgurl,
-                    receiver_id: user.receiver_id,
+                    receiver_id: user.selectedUserId,
                     receiver_name: user.name,
                     receiver_img: user.img,
                     latestMessage: {
@@ -365,19 +376,21 @@ const ChatScreen = ({route}) => {
           style={[styles.addFriendImage, {}]}
           resizeMode="cover"
         />
-        <View>
-          <Image
-            source={require('../../images/online.png')}
-            style={{
-              height: 18,
-              width: 18,
-              borderRadius: 10,
-              marginLeft: -15,
-              marginTop: 20,
-            }}
-            resizeMode="cover"
-          />
-        </View>
+        {user.onlineStatus == '1' ? (
+          <View>
+            <Image
+              source={require('../../images/online.png')}
+              style={{
+                height: 18,
+                width: 18,
+                borderRadius: 10,
+                marginLeft: -15,
+                marginTop: 20,
+              }}
+              resizeMode="cover"
+            />
+          </View>
+        ) : null}
 
         <View style={{flexDirection: 'column'}}>
           <Text
@@ -391,7 +404,11 @@ const ChatScreen = ({route}) => {
             <Text style={styles.simpleText}>
               {getLastSeenFormat(user.lastSeen)}
             </Text>
-          ) : null}
+          ) : (
+            <Text style={styles.simpleText}>
+              {/* {getLastSeenFormat(user.lastSeen)} */}
+            </Text>
+          )}
         </View>
       </View>
 
@@ -484,7 +501,6 @@ export default ChatScreen;
 const styles = StyleSheet.create({
   containerStyle: {
     flex: 1,
-    backgroundColor: '#0D0219',
   },
   header: {
     marginHorizontal: '5%',

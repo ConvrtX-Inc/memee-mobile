@@ -15,7 +15,8 @@ import OTPInputView from '@twotalltotems/react-native-otp-input';
 import {currentDateFN} from '../../Utility/Utils';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import {useDispatch} from 'react-redux';
+import {coinsRecordFN} from '../../redux/actions/Auth';
 function VerifyEmail({navigation, route}) {
   const [code, setcode] = useState('');
   const [loader, setLoader] = useState(false);
@@ -129,6 +130,9 @@ function VerifyEmail({navigation, route}) {
       .then(response => response.json())
       .then(responseJson => {
         global.userData = responseJson;
+        dispatch(coinsRecordFN(responseJson.coins));
+        global.userData.coins = responseJson.coins;
+
         /* console.log('Sign Up Data...');
         console.log(global.userData); */
         setLoader(false);
@@ -140,6 +144,7 @@ function VerifyEmail({navigation, route}) {
       });
   }
   const resentOPT = () => {
+    console.log('sending otp again');
     let body = JSON.stringify({
       email: email.toLowerCase().trim(),
       action: 'sign-up',
@@ -222,7 +227,7 @@ function VerifyEmail({navigation, route}) {
           ]}>
           Didn't receive code?
         </Text>
-        <TouchableOpacity style={styles.resendButton} onPres={resentOPT}>
+        <TouchableOpacity style={styles.resendButton} onPress={resentOPT}>
           <Text
             style={[
               styles.resendText,

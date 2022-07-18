@@ -73,42 +73,7 @@ export default class CommentScreen extends React.Component {
       .then(responseJson => {
         if (responseJson.length > 0) {
           var comments = testFN(responseJson);
-          // console.log("sco",comments.length)
-
-          /* var comment = [];
-          var replies = [];
-          var commentList = [];
-          if (comments.length > 0) {
-            for (let i = comments.length - 1; i >= 0; i--) {
-              if (comments[i].parent_id == 0) {
-                comment.push(comments[i]);
-              } else {
-                replies.push(comments[i]);
-              }
-            }
-            commentList = Array.from(comment);
-            //console.log(commentList)
-            //console.log(replies)
-            if (replies.length > 0) {
-              for (let i = 0; i < comment.length; i++) {
-                for (let j = replies.length - 1; j >= 0; j--) {
-                  if (comment[i].comment_id == replies[j].parent_id) {
-                    console.log(
-                      '\nreplies[j]\n',
-                      replies[j].parent_id,
-                      comment[i].comment_id,
-                    );
-                    commentList.splice(i, 0, replies[j]);
-                  }
-                }
-              }
-            }
-          } */
-
-          /* var reversed = [].concat(commentList).reverse(); */
-
           var comment = [];
-          var replies = [];
           var commentList = [];
           if (comments.length > 0) {
             for (let i = comments.length - 1; i >= 0; i--) {
@@ -117,36 +82,12 @@ export default class CommentScreen extends React.Component {
                 for (let x = comments.length - 1; x >= 0; x--) {
                   if (comments[i].comment_id == comments[x].parent_id) {
                     comment.push(comments[x]);
-                    console.log('true');
-                  } else {
-                    console.log(
-                      'false' + comments[i].comment_id + comments[x].parent_id,
-                    );
                   }
                 }
               }
-              // else {
-              //   replies.push(comments[i]);
-              // }
             }
             commentList = Array.from(comment);
-            // console.log(commentList[0]);
-            // if (replies.length > 0) {
-            //   for (let i = 0; i < comment.length; i++) {
-            //     for (let j = replies.length - 1; j >= 0; j--) {
-            //       if (comment[i].comment_id == replies[j].parent_id) {
-            //         console.log(
-            //           '\nreplies[j]\n',
-            //           replies[j].parent_id,
-            //           comment[i].comment_id,
-            //         );
-            //         commentList.splice(i + 1, 0, replies[j]);
-            //       }
-            //     }
-            //   }
-            // }
           }
-          console.log('scos', commentList);
           this.setState({
             flatlist: commentList,
           });
@@ -158,7 +99,6 @@ export default class CommentScreen extends React.Component {
   }
 
   commentPlacedFN() {
-    console.log('cooms', this.state.comment);
     if (this.state.placeholderStat == 'Write a comment') {
       parentID = '0';
     }
@@ -168,7 +108,6 @@ export default class CommentScreen extends React.Component {
 
     global.refresh = true;
     if (this.state.comment == '') {
-      /* console.log('comment is empty..'); */
       this.setState({
         modalVisible: true,
         message: 'Please enter some text',
@@ -201,14 +140,15 @@ export default class CommentScreen extends React.Component {
         .then(response => response.json())
         .then(responseJson => {
           if (responseJson.Status == '201') {
-            /* console.log(responseJson); */
-            var comments = this.state.flatlist;
-            comments.find(
-              c => c.commentUID == responseJson.commentUID,
-            ).comment_id = responseJson.commentID;
-            this.setState({
-              flatlist: comments,
-            });
+            // console.log(responseJson.commentID);
+            // var comments = this.state.flatlist;
+            // console.log(comments);
+
+            // comments.find(c => c.comment_id == responseJson.commentID);
+            // this.setState({
+            //   flatlist: comments,
+            // });
+            this.getPostDataFN();
           }
         })
         .catch(error => {
@@ -241,9 +181,9 @@ export default class CommentScreen extends React.Component {
       this.setState({
         placeholderStat: 'Write a comment',
       });
+      this.getPostDataFN();
     }
     this.setState({
-      flatlist: tempCommentList,
       comment: '',
     });
 
@@ -283,7 +223,6 @@ export default class CommentScreen extends React.Component {
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log('obob', responseJson);
         var tempArr = this.state.flatlist;
         if (tempArr[index].IsLiked == '0') {
           tempArr[index].IsLiked = '1';
@@ -343,6 +282,7 @@ export default class CommentScreen extends React.Component {
           }}
           extraData={this.flatlist}
           data={this.state.flatlist}
+          keyExtractor={item => item.id}
           renderItem={({item, index}) => (
             <View style={{width: '100%', marginBottom: 15}}>
               {item.parent_id == 0 ? (

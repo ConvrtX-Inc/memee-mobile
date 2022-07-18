@@ -71,7 +71,6 @@ export default function CoinsConfirmation({navigation, route}) {
           }}>
           You have successfully purchased {coinsPurchased} Coins.
         </Text>
-        n
       </View>
     </View>
   );
