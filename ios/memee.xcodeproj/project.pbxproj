@@ -42,7 +42,7 @@
 		1448E3CE287F04EA00580858 /* ProductSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1448E3CA287F04EA00580858 /* ProductSans-Bold.ttf */; };
 		1448E3CF287F04EA00580858 /* ProductSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1448E3CB287F04EA00580858 /* ProductSans-Regular.ttf */; };
 		14FFC45D2849BD54006B6785 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 14FFC45C2849BD54006B6785 /* main.jsbundle */; };
-		651ABAA6AF7EEC93B41E8CF5 /* libPods-memee.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0836154A844022073F28432E /* libPods-memee.a */; };
+		428C033432DEF3D4C1567FA0 /* libPods-memee.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ED2CE5340E8038B03C55062E /* libPods-memee.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8FAC0DE627D75EC900D6E882 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8FAC0DE527D75EC900D6E882 /* GoogleService-Info.plist */; };
 		A29A2B03DDA541138AE61ABC /* Arial-BoldMT.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 72CF8FABB4ED4DF2A019E114 /* Arial-BoldMT.ttf */; };
@@ -64,7 +64,6 @@
 		00E356F21AD99517003FC87E /* memeeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = memeeTests.m; sourceTree = "<group>"; };
 		04F9E9EBE9EC4C4992F8EE21 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		05664CAFD49F40B9B064D231 /* OpenSans-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-ExtraBoldItalic.ttf"; path = "../assets/fonts/OpenSans-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
-		0836154A844022073F28432E /* libPods-memee.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-memee.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CF88B4D9DC34661AC76CDB6 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* memee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = memee.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = memee/AppDelegate.h; sourceTree = "<group>"; };
@@ -183,6 +182,7 @@
 		14F374AC283DCFFC00D20C83 /* OpenSans-SemiBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
 		14FFC45C2849BD54006B6785 /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		1B341BDC23FE4DFEAE5F1ACD /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
+		1BC4BC12D475F7465F81DD4C /* Pods-memee.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-memee.debug.xcconfig"; path = "Target Support Files/Pods-memee/Pods-memee.debug.xcconfig"; sourceTree = "<group>"; };
 		1C8B340EE1E743BAAC35A4A7 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		1F82212C52E94D06A29A7A99 /* OpenSans-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-ExtraBold.ttf"; path = "../assets/fonts/OpenSans-ExtraBold.ttf"; sourceTree = "<group>"; };
 		202379220179466298EBE453 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
@@ -194,6 +194,7 @@
 		4C23BD5828314CBA8BBC9493 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		4C8B1D55648E42CA930C60B3 /* OpenSans-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-MediumItalic.ttf"; path = "../assets/fonts/OpenSans-MediumItalic.ttf"; sourceTree = "<group>"; };
 		5B984AED077B4A2E94467327 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
+		620FDA2E65C308ABF4D391FF /* Pods-memee.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-memee.release.xcconfig"; path = "Target Support Files/Pods-memee/Pods-memee.release.xcconfig"; sourceTree = "<group>"; };
 		72CF8FABB4ED4DF2A019E114 /* Arial-BoldMT.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Arial-BoldMT.ttf"; path = "../assets/fonts/Arial-BoldMT.ttf"; sourceTree = "<group>"; };
 		757250F1BE9149808A2BCF6A /* OpenSans-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-SemiBoldItalic.ttf"; path = "../assets/fonts/OpenSans-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = memee/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -208,9 +209,8 @@
 		B00FAA349F074B37B8AB6F54 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
 		B7EE28EA07C94965828848B0 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		D60706C631854D8AA3C8076F /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
-		E2BD54BD818D4A70E82B3136 /* Pods-memee.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-memee.debug.xcconfig"; path = "Target Support Files/Pods-memee/Pods-memee.debug.xcconfig"; sourceTree = "<group>"; };
-		EC0EB7DBD6386D4E8DF030F7 /* Pods-memee.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-memee.release.xcconfig"; path = "Target Support Files/Pods-memee/Pods-memee.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		ED2CE5340E8038B03C55062E /* libPods-memee.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-memee.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -225,7 +225,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				651ABAA6AF7EEC93B41E8CF5 /* libPods-memee.a in Frameworks */,
+				428C033432DEF3D4C1567FA0 /* libPods-memee.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,8 +268,8 @@
 		19AC309919D4BAD6808AA4D7 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				E2BD54BD818D4A70E82B3136 /* Pods-memee.debug.xcconfig */,
-				EC0EB7DBD6386D4E8DF030F7 /* Pods-memee.release.xcconfig */,
+				1BC4BC12D475F7465F81DD4C /* Pods-memee.debug.xcconfig */,
+				620FDA2E65C308ABF4D391FF /* Pods-memee.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -296,7 +296,7 @@
 				14030AC22849B3AC0063BBA6 /* VEPlaybackSDK.xcframework */,
 				14030AC32849B3AC0063BBA6 /* VideoEditor.xcframework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				0836154A844022073F28432E /* libPods-memee.a */,
+				ED2CE5340E8038B03C55062E /* libPods-memee.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -482,15 +482,15 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "memee" */;
 			buildPhases = (
-				D18A26AD776521640335414A /* [CP] Check Pods Manifest.lock */,
+				5D8FA3B7CB9287558A4DC589 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				7A93EC1C9A00805AB0DD1054 /* [CP] Embed Pods Frameworks */,
-				661247BD56D0B31DF7287B6A /* [CP] Copy Pods Resources */,
-				DD6442122EEEA9E039A303DC /* [CP-User] [RNFB] Core Configuration */,
+				5E71E1ACB9D606DB342F4211 /* [CP] Embed Pods Frameworks */,
+				1A899BE68419DD04AB0B56F7 /* [CP] Copy Pods Resources */,
+				E507EDE6BFC551604BC109E8 /* [CP-User] [RNFB] Core Configuration */,
 			);
 			buildRules = (
 			);
@@ -604,7 +604,7 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nexport NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
-		661247BD56D0B31DF7287B6A /* [CP] Copy Pods Resources */ = {
+		1A899BE68419DD04AB0B56F7 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -621,24 +621,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-memee/Pods-memee-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		7A93EC1C9A00805AB0DD1054 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-memee/Pods-memee-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-memee/Pods-memee-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-memee/Pods-memee-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		D18A26AD776521640335414A /* [CP] Check Pods Manifest.lock */ = {
+		5D8FA3B7CB9287558A4DC589 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -660,7 +643,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		DD6442122EEEA9E039A303DC /* [CP-User] [RNFB] Core Configuration */ = {
+		5E71E1ACB9D606DB342F4211 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-memee/Pods-memee-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-memee/Pods-memee-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-memee/Pods-memee-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E507EDE6BFC551604BC109E8 /* [CP-User] [RNFB] Core Configuration */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -776,14 +776,14 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E2BD54BD818D4A70E82B3136 /* Pods-memee.debug.xcconfig */;
+			baseConfigurationReference = 1BC4BC12D475F7465F81DD4C /* Pods-memee.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = memee/memee.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = F9G3HM7HZJ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -791,11 +791,12 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = memee/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.4;
+				MARKETING_VERSION = 1.0.6;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -812,25 +813,26 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EC0EB7DBD6386D4E8DF030F7 /* Pods-memee.release.xcconfig */;
+			baseConfigurationReference = 620FDA2E65C308ABF4D391FF /* Pods-memee.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = memee/memeeRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = F9G3HM7HZJ;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = memee/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.4;
+				MARKETING_VERSION = 1.0.6;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

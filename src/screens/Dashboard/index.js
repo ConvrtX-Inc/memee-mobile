@@ -1167,7 +1167,7 @@ export default function Dashboard(props) {
                 {getDescription(item.description)}
               </TwitterTextView>
 
-              {item.img_url.includes('mp4') ? (
+              {/* {item.img_url.includes('mp4') ? (
                 <View key={item.img_url}>
                   <VideoPlayer
                     key={item.post_id}
@@ -1209,7 +1209,22 @@ export default function Dashboard(props) {
                     style={{height: '100%', width: '100%'}}
                   />
                 </ImageBackground>
-              )}
+              )} */}
+
+              {
+                !item.img_url.includes('mp4') && (<ImageBackground
+                  source={{uri: item.img_url}}
+                  resizeMode="contain"
+                  style={{
+                    height: item.calHeight ? item.calHeight : windowWidth,
+                    width: '100%',
+                  }}>
+                  <LinearGradient
+                    colors={[global.overlay1, global.overlay3]}
+                    style={{height: '100%', width: '100%'}}
+                  />
+                </ImageBackground>)
+              }
 
               <View
                 style={{width: '100%', backgroundColor: global.colorPrimary}}>
@@ -1731,7 +1746,7 @@ export default function Dashboard(props) {
                         Choose photo from library...
                       </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                       style={{marginBottom: '6%'}}
                       onPress={async () => {
                         setIsOpenMedia(true);
@@ -1753,7 +1768,7 @@ export default function Dashboard(props) {
                       <Text style={{color: '#fff', opacity: 0.5, fontSize: 16}}>
                         Select Video
                       </Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     <TouchableOpacity
                       disabled={isOpenMedia}
                       style={[{marginTop: '20%'}]}

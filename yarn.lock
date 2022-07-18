@@ -2506,15 +2506,10 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/eslint-plugin/-/eslint-plugin-1.2.0.tgz#7d6d789ae8edf73dc9bed1246cd48277edea8066"
   integrity sha512-o6aam+0Ug1xGK3ABYmBm0B1YuEKfM/5kaoZO0eHbZwSpw9UzDX4G5y4Nx/K20FHqUmJHkZmLvOUFYwN4N+HqKA==
 
-"@react-native-community/masked-view@^0.1.8", "@react-native-community/masked-view@>= 0.1.0":
-  "integrity" "sha512-rk4sWFsmtOw8oyx8SD3KSvawwaK7gRBSEIy2TAwURyGt+3TizssXP1r8nx3zY+R7v2vYYHXZ+k2/GULAT/bcaQ=="
-  "resolved" "https://registry.npmjs.org/@react-native-community/masked-view/-/masked-view-0.1.10.tgz"
-  "version" "0.1.10"
-
-"@react-native-firebase/app@^14.11.1", "@react-native-firebase/app@14.11.1":
-  "integrity" "sha512-fkvOK8c7e8MxIbfb2076kO3GtGUc3ZXNEkPyfamRKBnPgANpmnjQaTVIraXpeuIIOfjj5uDK4uw32znWiDusGA=="
-  "resolved" "https://registry.npmjs.org/@react-native-firebase/app/-/app-14.11.1.tgz"
-  "version" "14.11.1"
+"@react-native-firebase/app@^14.11.1":
+  version "14.11.1"
+  resolved "https://registry.npmjs.org/@react-native-firebase/app/-/app-14.11.1.tgz"
+  integrity sha512-fkvOK8c7e8MxIbfb2076kO3GtGUc3ZXNEkPyfamRKBnPgANpmnjQaTVIraXpeuIIOfjj5uDK4uw32znWiDusGA==
   dependencies:
     "@expo/config-plugins" "^4.1.5"
     opencollective-postinstall "^2.0.1"
@@ -2526,9 +2521,9 @@
   integrity sha512-IzgFakon2jkuC4FEP8q9wruz8Yu0yem/Yk0v8IwndV2h/5lYmmij/f5Pyk74U3tadGOr9UrBsGkrWZMceiAjHQ==
 
 "@react-native-firebase/firestore@^14.11.1":
-  "integrity" "sha512-1/Ap0EDlAueUDHrH7WxU5ZfEF+qcT1NfUJU4qkFBvcg9pdnMS7cch4nzifRHr6jqyfUYiHgFrRe2wYfqQ0gK+w=="
-  "resolved" "https://registry.npmjs.org/@react-native-firebase/firestore/-/firestore-14.11.1.tgz"
-  "version" "14.11.1"
+  version "14.11.1"
+  resolved "https://registry.npmjs.org/@react-native-firebase/firestore/-/firestore-14.11.1.tgz"
+  integrity sha512-1/Ap0EDlAueUDHrH7WxU5ZfEF+qcT1NfUJU4qkFBvcg9pdnMS7cch4nzifRHr6jqyfUYiHgFrRe2wYfqQ0gK+w==
 
 "@react-native-firebase/messaging@^14.11.1":
   version "14.11.1"
@@ -9078,7 +9073,15 @@ plist@2.0.1:
     xmlbuilder "8.2.2"
     xmldom "0.1.x"
 
-plist@^3.0.0, plist@^3.0.1, plist@^3.0.5:
+plist@^3.0.0:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/plist/-/plist-3.0.6.tgz#7cfb68a856a7834bca6dbfe3218eb9c7740145d3"
+  integrity sha512-WiIVYyrp8TD4w8yCvyeIr+lkmrGRd5u0VbRnU+tP/aRLxP/YadJUYOMZJ/6hIa3oUyVCsycXvtNRgd5XBJIbiA==
+  dependencies:
+    base64-js "^1.5.1"
+    xmlbuilder "^15.1.1"
+
+plist@^3.0.1, plist@^3.0.5:
   version "3.0.5"
   resolved "https://registry.yarnpkg.com/plist/-/plist-3.0.5.tgz#2cbeb52d10e3cdccccf0c11a63a85d830970a987"
   integrity sha512-83vX4eYdQp3vP9SxuYgEM/G/pJQqLUz/V/xzPrzruLs7fz7jxGQ1msZ/mg1nwZxUSuOp4sb+/bEIbRrbzZRxDA==
@@ -11760,6 +11763,11 @@ xmlbuilder@^14.0.0:
   version "14.0.0"
   resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-14.0.0.tgz#876b5aec4f05ffd5feb97b0a871c855d16fbeb8c"
   integrity sha512-ts+B2rSe4fIckR6iquDjsKbQFK2NlUk6iG5nf14mDEyldgoc2nEKZ3jZWMPTxGQwVgToSjt6VGIho1H8/fNFTg==
+
+xmlbuilder@^15.1.1:
+  version "15.1.1"
+  resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-15.1.1.tgz#9dcdce49eea66d8d10b42cae94a79c3c8d0c2ec5"
+  integrity sha512-yMqGBqtXyeN1e3TGYvgNgDVZ3j84W4cwkOXQswghol6APgZWaff9lnbvN7MHYJOiXsvGPXtjTYJEiC9J2wv9Eg==
 
 xmlbuilder@^9.0.7:
   version "9.0.7"

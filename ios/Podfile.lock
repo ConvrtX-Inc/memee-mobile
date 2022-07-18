@@ -1018,7 +1018,7 @@ PODS:
     - React-Core
   - react-native-twitter-signin (1.1.1):
     - React
-    - TwitterKit (~> 3.3)
+    - TwitterKit5
   - react-native-video (5.2.0):
     - React-Core
     - react-native-video/Video (= 5.2.0)
@@ -1171,8 +1171,8 @@ PODS:
   - RNVectorIcons (8.1.0):
     - React-Core
   - TwitterCore (3.2.0)
-  - TwitterKit (3.4.2):
-    - TwitterCore (>= 3.2.0)
+  - TwitterKit5 (5.2.0):
+    - TwitterCore (>= 3.1.0)
   - VEEffectsSDK (1.23.0)
   - VEExportSDK (1.23.0)
   - VEPlaybackSDK (1.23.0)
@@ -1308,7 +1308,7 @@ SPEC REPOS:
     - PhotoEditorSDK
     - PromisesObjC
     - TwitterCore
-    - TwitterKit
+    - TwitterKit5
 
 EXTERNAL SOURCES:
   BVLinearGradient:
@@ -1489,7 +1489,7 @@ SPEC CHECKSUMS:
   react-native-image-picker: cffb727cf2f59bd5c0408e30b3dbe0b935f88835
   react-native-restart: 733a51ad137f15b0f8dc34c4082e55af7da00979
   react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
-  react-native-twitter-signin: 5b737eab225a0059e6f8fe93c893c864d020b8b9
+  react-native-twitter-signin: 23e7c2a71777f2f124674cb7c372f5360a5aefb9
   react-native-video: a4c2635d0802f983594b7057e1bce8f442f0ad28
   React-perflogger: 9c547d8f06b9bf00cb447f2b75e8d7f19b7e02af
   React-RCTActionSheet: 3080b6e12e0e1a5b313c8c0050699b5c794a1b11
@@ -1526,13 +1526,13 @@ SPEC CHECKSUMS:
   RNTextGradientView: 3eb4744303f801546fad35ac47a53cc82257cb25
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
   TwitterCore: 8cbc9ad34d91c63a0035ea05bfbfc0d7ca72a28c
-  TwitterKit: 5e4f41d70b9abdb41df5467f52d7aa2c0fd26ebb
+  TwitterKit5: 64095dfefcf39be2355711ef27112d55e340d90e
   VEEffectsSDK: 31f600a7f0b46d6780e54a6651ed2896bbc1c3ff
   VEExportSDK: cbcfaf9af5e3a0539c32b3f2462edc3671a647dc
   VEPlaybackSDK: 7aba27222a11b8155c4e77c68de7f4db13755c82
   VideoEditor: d61253a121cdb8780f8dcfd525c9a07faae019ec
   Yoga: 8c8436d4171c87504c648ae23b1d81242bdf3bbf
 
-PODFILE CHECKSUM: 024f4a1141f7e671dd4bc85e58d41b43bd5fb558
+PODFILE CHECKSUM: 3583f7c0c40f96f8a652766c7f153465a6f0b6f1
 
 COCOAPODS: 1.11.3
