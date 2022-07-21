@@ -166,20 +166,28 @@ export default function Tournament(props) {
           <Text
             numberOfLines={1}
             style={{
-              width: '30%',
               fontSize: 20,
               fontWeight: '800',
               color: global.colorTextPrimary,
               marginLeft: 7,
               marginTop: 6,
-              marginRight: 10,
+              marginRight: 6,
               fontFamily: global.fontSelect,
             }}>
             Tournament
           </Text>
+          <TouchableOpacity
+            onPress={() => setModalVisible(!modalVisible)}
+            style={{marginTop: 8}}>
+            <Image
+              style={{height: 25, width: 25, tintColor: global.colorIcon}}
+              resizeMode="stretch"
+              source={require('../../images/InfoCircle.png')}
+            />
+          </TouchableOpacity>
           <View
             style={{width: '70%', flexDirection: 'row', marginLeft: 'auto'}}>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => setModalVisible(!modalVisible)}
               style={{marginTop: 12, marginLeft: 'auto'}}>
               <Image
@@ -187,7 +195,7 @@ export default function Tournament(props) {
                 resizeMode="stretch"
                 source={require('../../images/InfoCircle.png')}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity
               onPress={() => navigation.navigate('NotificationScreen')}
               style={{marginLeft: 'auto'}}>
