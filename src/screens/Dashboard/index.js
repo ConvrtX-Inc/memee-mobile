@@ -170,7 +170,7 @@ export default function Dashboard(props) {
   useEffect(async () => {
     await toggleOnlineStatus('1');
 
-    // console.log('token', global.userData);
+    console.log('token', global.token);
     fetchStories();
   }, [updatedStories]);
 

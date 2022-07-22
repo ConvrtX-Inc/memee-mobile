@@ -172,7 +172,13 @@ export default function ExploreScreen(props) {
           }}>
           <TouchableOpacity>
             <Image
-              style={{height: 25, width: 25, marginTop: 15, marginLeft: 15, color: 'black'}}
+              style={{
+                height: 25,
+                width: 25,
+                marginTop: 15,
+                marginLeft: 15,
+                color: 'black',
+              }}
               resizeMode="stretch"
               source={require('../../images/search.png')}
             />

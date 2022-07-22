@@ -18,6 +18,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch} from 'react-redux';
 import {coinsRecordFN} from '../../redux/actions/Auth';
 function VerifyEmail({navigation, route}) {
+  const dispatch = useDispatch();
   const [code, setcode] = useState('');
   const [loader, setLoader] = useState(false);
   const {action, email} = route.params;
@@ -64,7 +65,7 @@ function VerifyEmail({navigation, route}) {
       email: global.OtpData[0].email,
       userPassword: global.OtpData[0].password,
       userImage:
-        'https://www.cognite.com/hubfs/raw_assets/public/tc_custom/images/unknown_user.jpg',
+        'https://firebasestorage.googleapis.com/v0/b/memee-app-d35d3.appspot.com/o/febfa2aa-4162-4190-bf80-960c43a50444.jpg?alt=media&token=5532a09a-fe95-433c-bbc6-aa14856be405',
       loginType: 'Email',
     });
 
