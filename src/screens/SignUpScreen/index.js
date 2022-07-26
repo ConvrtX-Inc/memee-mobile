@@ -13,6 +13,9 @@ import PickerComponent from '../../component/Picker';
 import ButtonLargeIndicator from '../../component/ButtonLargeIndicator';
 import Toast from 'react-native-toast-message';
 import {isStrongPassword} from '../../Utility/Utils';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 var emailLowerCase = '';
 
@@ -119,7 +122,7 @@ export default function SignUpScreen({navigation}) {
         paddingTop: '5%',
         backgroundColor: '#0B0213',
       }}>
-      <ScrollView style={{padding: 10}}>
+      <ScrollView style={{padding: 10, marginTop: hasNotch ? 25 : 0}}>
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image

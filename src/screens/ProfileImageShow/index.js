@@ -17,6 +17,9 @@ import {currentDateFN} from '../../Utility/Utils';
 import Video from 'react-native-video';
 import VideoPlayer from 'react-native-video-controls';
 import Toast from 'react-native-toast-message';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 var windowWidth = Dimensions.get('window').width;
 
@@ -152,7 +155,7 @@ const index = ({navigation}) => {
         backgroundColor: global.colorPrimary,
         marginBottom: -30,
       }}>
-      <ScrollView style={{marginBottom: 40}}>
+      <ScrollView style={{marginBottom: 40, marginTop: hasNotch ? 25 : 0}}>
         {selectedPostState.img_url.includes('mp4') ? (
           <View key={selectedPostState.img_url}>
             <VideoPlayer

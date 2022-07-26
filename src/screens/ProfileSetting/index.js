@@ -19,6 +19,9 @@ import {currentDateFN, asignImageToProductsFN} from '../../Utility/Utils';
 import {useDispatch, useSelector} from 'react-redux';
 import {storeIconsBottomTabFN} from '../../redux/actions/Auth';
 import ThemeButton from '../../component/ThemeButton';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 var windowWidth = Dimensions.get('window').width;
 export default function ProfileSetting(props) {
@@ -874,7 +877,7 @@ export default function ProfileSetting(props) {
         paddingTop: '5%',
         backgroundColor: global.colorPrimary,
       }}>
-      <ScrollView>
+      <ScrollView style={{marginTop: hasNotch ? 25 : 0}}>
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
             onPress={() => navigation.navigate('ProfileScreen')}>

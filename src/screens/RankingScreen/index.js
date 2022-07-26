@@ -9,6 +9,9 @@ import {
   Image,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 export default function RankingScreen(props) {
   const navigation = useNavigation();
@@ -54,7 +57,7 @@ export default function RankingScreen(props) {
         paddingTop: '5%',
         backgroundColor: global.colorPrimary,
       }}>
-      <ScrollView>
+      <ScrollView style={{marginTop: hasNotch ? 25 : 0}}>
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image

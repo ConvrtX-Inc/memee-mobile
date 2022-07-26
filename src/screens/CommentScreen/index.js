@@ -19,6 +19,9 @@ import {
 import {Avatar} from 'react-native-elements';
 import {testFN, currentDateFN, generateUID} from '../../Utility/Utils';
 import Icon from 'react-native-vector-icons/AntDesign';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 let parentID = 0;
 var windowWidth = Dimensions.get('window').width;
@@ -258,7 +261,7 @@ export default class CommentScreen extends React.Component {
         }}>
         {/* <ScrollView> */}
 
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row', marginTop: hasNotch ? 25 : 0}}>
           <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
             <Image
               style={[styles.tinyLogo, {tintColor: global.colorIcon}]}

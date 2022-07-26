@@ -16,6 +16,9 @@ import {coinsRecordFN} from '../../redux/actions/Auth';
 import Toast from 'react-native-toast-message';
 import {Settings} from 'react-native-fbsdk-next';
 import {toggleOnlineStatus} from '../../redux/actions/Auth';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 Settings.initializeSDK();
 global.userData = [];
@@ -130,7 +133,7 @@ export default function LoginScreen({navigation}) {
         /* console.log('global.userData = responseJson;', responseJson); */
         dispatch(coinsRecordFN(responseJson.coins));
         toggleOnlineStatus('1');
-        navigation.navigate('Dashboard');
+        navigation.replace('Dashboard');
       })
       .catch(error => {
         console.error(error);
@@ -145,7 +148,7 @@ export default function LoginScreen({navigation}) {
         paddingTop: '5%',
         backgroundColor: '#0B0213',
       }}>
-      <ScrollView>
+      <ScrollView style={{marginTop: hasNotch ? 25 : 0}}>
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image

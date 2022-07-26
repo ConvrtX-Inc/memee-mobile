@@ -25,6 +25,9 @@ import SearchScreen from '../SearchScreen';
 import {useSelector} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import BottomNavBar from '../../component/BottomNavBar';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 var showScreen = false;
 global.searchText = '';
@@ -119,7 +122,7 @@ export default function ExploreScreen(props) {
     <View
       style={{flex: 1, backgroundColor: global.colorPrimary, marginBottom: 0}}>
       <ScrollView style={{marginBottom: 0}}>
-        <View style={styles.topView}>
+        <View style={[styles.topView, { marginTop: hasNotch ? 25 : 0 }]}>
           <TouchableOpacity>
             <View style={{width: 145, height: 38}}>
               <Text

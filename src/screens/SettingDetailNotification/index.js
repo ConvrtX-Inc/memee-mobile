@@ -13,6 +13,9 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 export default function SettingDetailNotification(props) {
   const navigation = useNavigation();
@@ -105,7 +108,7 @@ export default function SettingDetailNotification(props) {
         paddingTop: '5%',
         backgroundColor: global.colorPrimary,
       }}>
-      <ScrollView>
+      <ScrollView style={{marginTop: hasNotch ? 25 : 0}}>
         {/* {console.log(
           '\n\n global.userData.appNotifications',
           global.userData.appNotifications,

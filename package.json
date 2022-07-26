@@ -40,6 +40,7 @@
     "react-native-button-toggle-group": "^1.1.1",
     "react-native-carousel-control": "^2.0.1",
     "react-native-country-picker-modal": "^2.0.0",
+    "react-native-device-info": "^10.0.2",
     "react-native-elements": "^3.3.2",
     "react-native-fbsdk-next": "^4.3.0",
     "react-native-fs": "^2.18.0",

@@ -26,6 +26,9 @@ import {RNS3} from 'react-native-aws3';
 import ButtonLargeIndicator from '../../component/ButtonLargeIndicator';
 import {navigateToHome} from '../../Utility/Utils';
 import Toast from 'react-native-toast-message';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 export default function SharePost() {
   const navigation = useNavigation();
@@ -135,7 +138,7 @@ export default function SharePost() {
         backgroundColor: global.colorPrimary,
         marginBottom: -30,
       }}>
-      <ScrollView style={{padding: 10}}>
+      <ScrollView style={{padding: 10, marginTop: hasNotch ? 25 : 0}}>
         <View style={{flexDirection: 'row', marginTop: 10}}>
           <TouchableOpacity onPress={() => navigatFN()}>
             <Image

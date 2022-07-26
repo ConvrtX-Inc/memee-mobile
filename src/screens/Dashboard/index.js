@@ -60,6 +60,9 @@ import {getBucketOptions, generateUID} from '../../Utility/Utils';
 import storage from '@react-native-firebase/storage';
 import moment from 'moment';
 import {toggleOnlineStatus} from '../../redux/actions/Auth';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 var offset = 0;
 global.navigateDashboard = 1;
@@ -1431,7 +1434,7 @@ export default function Dashboard(props) {
         )}
         ListHeaderComponent={() => (
           <View>
-            <View style={styles.topView}>
+            <View style={[styles.topView, {marginTop: hasNotch ? 25 : 0}]}>
               <TouchableOpacity
                 onPress={() => navigateToprofileFN()}
                 style={{

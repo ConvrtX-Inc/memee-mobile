@@ -14,6 +14,9 @@ import {
 import ActivityNotification from '../ActivityNotification';
 import LinearGradient from 'react-native-linear-gradient';
 import Inbox from '../Inbox';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 global.navigateNotification = -1;
 var checkNavi = 0;
@@ -93,7 +96,7 @@ export default function NotificationScreen({navigation}) {
         backgroundColor: global.colorPrimary,
       }}>
       {/* <ScrollView> */}
-      <View style={{flexDirection: 'row'}}>
+      <View style={{flexDirection: 'row', marginTop: hasNotch ? 25 : 0}}>
         <TouchableOpacity onPress={() => navigation.navigate('Dashboard')}>
           <Image
             style={[styles.tinyLogo, {tintColor: global.colorIcon}]}

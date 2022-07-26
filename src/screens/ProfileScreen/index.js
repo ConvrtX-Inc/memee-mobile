@@ -34,6 +34,9 @@ import {getBucketOptions} from '../../Utility/Utils';
 import storage from '@react-native-firebase/storage';
 import SelectDropdown from 'react-native-select-dropdown';
 import Toast from 'react-native-toast-message';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 const axios = require('axios');
 
@@ -690,7 +693,7 @@ export default function ProfileScreen(props) {
           resizeMode="cover"
           imageStyle={{borderBottomRightRadius: 30, borderBottomLeftRadius: 30}}
           style={styles.image}>
-          <View style={styles.topView}>
+          <View style={[styles.topView, { marginTop: hasNotch ? 15 : 0 }]}>
             {global.userData.user_id == global.profileID ? (
               <View style={{flexDirection: 'row'}}>
                 <TouchableOpacity
