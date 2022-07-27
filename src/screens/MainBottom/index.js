@@ -28,7 +28,8 @@ export default function MainBottom() {
         indicatorStyle: {
           opacity: 0,
         },
-      }}>
+      }}
+      initialRouteName="HomeTab">
       <Tab.Screen name="HomeTab" component={Dashboard} />
       <Tab.Screen name="ExploreTab" component={ExploreScreen} />
       <Tab.Screen name="TournamentTab" component={Tournament} />
