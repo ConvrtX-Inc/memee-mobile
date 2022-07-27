@@ -618,7 +618,7 @@ export default function Dashboard(props) {
 
   function navigateToprofileFN() {
     global.profileID = global.userData.user_id;
-    navigation.navigate('ProfileScreen');
+    navigation.navigate('ProfileTab');
   }
 
   function likeOrUnlikeFN(index) {
@@ -753,7 +753,7 @@ export default function Dashboard(props) {
       // var id = user.user_id;
       //console.log('user', user, id);
       global.profileID = index;
-      navigation.navigate('ProfileScreen');
+      navigation.navigate('ProfileTab');
     }
   }
 
@@ -793,12 +793,12 @@ export default function Dashboard(props) {
       toTop();
       onRefresh();
     } else if (counter == 2) {
-      navigation.navigate('ExploreScreen');
+      navigation.navigate('ExploreTab');
     } else if (counter == 3) {
-      navigation.navigate('Tournament');
+      navigation.navigate('TournamentTab');
     } else if (counter == 4) {
       global.profileID = global.userData.user_id;
-      navigation.navigate('ProfileScreen');
+      navigation.navigate('ProfileTab');
     }
   }
 
@@ -1312,6 +1312,7 @@ export default function Dashboard(props) {
                     top: 30,
                     right: 22,
                     backgroundColor: '#fff',
+                    marginRight: 5,
                   }}>
                   {global.userData.user_id == item.user_id ? (
                     <View>

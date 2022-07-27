@@ -372,6 +372,7 @@ function SplashScreen({navigation}) {
   }, []);
 
   async function SignupSocialFN() {
+    console.log('fetching signup');
     await fetch(global.address + 'RegisterUser', {
       method: 'POST',
       headers: {
@@ -393,7 +394,8 @@ function SplashScreen({navigation}) {
         } else {
           global.userData = responseJson.User[0];
           global.token = responseJson.Token;
-          navigation.replace('Dashboard');
+          console.log('going up');
+          navigation.replace('MainBottom');
         }
       })
       .catch(error => {
@@ -407,6 +409,7 @@ function SplashScreen({navigation}) {
   }
 
   function generalLogin() {
+    console.log('fetching login');
     fetch(global.address + 'login', {
       method: 'POST',
       headers: {
@@ -436,6 +439,7 @@ function SplashScreen({navigation}) {
   }
 
   function loginData() {
+    console.log('fetching method');
     fetch(global.address + 'getLoggedInUser', {
       method: 'POST',
       headers: {
@@ -453,7 +457,8 @@ function SplashScreen({navigation}) {
         global.userData.coins = responseJson.coins;
         global.userData = responseJson;
         dispatch(coinsRecordFN(responseJson.coins));
-        navigation.replace('Dashboard');
+        console.log('going up');
+        navigation.replace('MainBottom');
       })
       .catch(error => {
         console.error('loginData', error);

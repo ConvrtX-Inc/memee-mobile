@@ -137,7 +137,8 @@ function VerifyEmail({navigation, route}) {
         /* console.log('Sign Up Data...');
         console.log(global.userData); */
         setLoader(false);
-        navigation.replace('Dashboard');
+        console.log('going up');
+        navigation.replace('MainBottom');
       })
       .catch(error => {
         console.error(error);

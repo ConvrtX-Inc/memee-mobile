@@ -65,7 +65,7 @@ import Toast from 'react-native-toast-message';
 import {toggleOnlineStatus} from './src/redux/actions/Auth';
 import {urls} from './src/api/urls';
 import TournamentImageShow from './src/screens/TournamentImageShow';
-
+import MainBottom from './src/screens/MainBottom';
 const {store, persistor} = configureStore();
 
 const Stack = createStackNavigator();
@@ -121,6 +121,7 @@ function App() {
             <Stack.Screen name="SplashScreen" component={SplashScreen} />
             <Stack.Screen name="LoginScreen" component={LoginScreen} />
             <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
+            <Stack.Screen name="MainBottom" component={MainBottom} />
             <Stack.Screen name="Dashboard" component={Dashboard} />
             <Stack.Screen name="CommentScreen" component={CommentScreen} />
             <Stack.Screen name="NewPost" component={NewPost} />

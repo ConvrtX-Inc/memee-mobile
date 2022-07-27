@@ -242,7 +242,7 @@ export default function EditProfileScreen(props) {
       .then(response => response.json())
       .then(responseJson => {
         global.refresh = true;
-        navigation.navigate('Dashboard');
+        navigation.navigate('HomeTab');
         setIndicatButton(false);
         if (responseJson.Status == '201') {
           global.token = responseJson.Token;

@@ -130,7 +130,8 @@ export default function LoginScreen({navigation}) {
         /* console.log('global.userData = responseJson;', responseJson); */
         dispatch(coinsRecordFN(responseJson.coins));
         toggleOnlineStatus('1');
-        navigation.navigate('Dashboard');
+        console.log('going up');
+        navigation.replace('MainBottom');
       })
       .catch(error => {
         console.error(error);

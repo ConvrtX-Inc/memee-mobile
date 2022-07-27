@@ -147,14 +147,14 @@ export default function Tournament(props) {
   function activeTab(counter) {
     global.TabButton = counter;
     if (counter == 1) {
-      navigation.navigate('Dashboard');
+      navigation.navigate('HomeTab');
     } else if (counter == 2) {
-      navigation.navigate('ExploreScreen');
+      navigation.navigate('ExploreTab');
     } else if (counter == 3) {
-      navigation.navigate('Tournament');
+      navigation.navigate('TournamentTab');
     } else if (counter == 4) {
       global.profileID = global.userData.user_id;
-      navigation.navigate('ProfileScreen');
+      navigation.navigate('ProfileTab');
     }
   }
 

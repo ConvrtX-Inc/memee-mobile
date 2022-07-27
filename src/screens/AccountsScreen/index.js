@@ -32,7 +32,7 @@ export default function AccountsScreen({navigation}) {
     /* console.log(searchData[index].user_id) */
 
     global.profileID = searchData[index].user_id;
-    navigation.navigate('ProfileScreen');
+    navigation.navigate('ProfileTab');
 
     global.searchText = '';
     searchTxtchk = '';

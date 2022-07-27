@@ -104,8 +104,7 @@ const TournamentImageShow = ({navigation, route}) => {
       <ScrollView style={{marginBottom: 40}}>
         <View
           style={{flexDirection: 'row', paddingLeft: '5%', paddingTop: '5%'}}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('ProfileScreen')}>
+          <TouchableOpacity onPress={() => navigation.navigate('ProfileTab')}>
             <Image
               style={[styles.tinyLogo, {tintColor: global.colorIcon}]}
               source={require('../../images/back1.png')}

@@ -168,7 +168,7 @@ export default function Onboarding({navigation}) {
   async function SignupFN() {
     var currentDate = currentDateFN();
     setIsLoading(true);
-
+    console.log('onboarding registrer user');
     await fetch(global.address + 'RegisterUser', {
       method: 'POST',
       headers: {
@@ -213,7 +213,8 @@ export default function Onboarding({navigation}) {
           dispatch(coinsRecordFN(responseJson.User[0].coins));
 
           global.token = responseJson.Token;
-          navigation.replace('Dashboard');
+          console.log('going Up');
+          navigation.replace('MainBottom');
 
           toggleOnlineStatus('1');
         }
