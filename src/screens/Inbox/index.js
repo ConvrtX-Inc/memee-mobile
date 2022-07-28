@@ -242,7 +242,9 @@ const Inbox = ({showValue}) => {
 
   return (
     <View style={styles.containerStyle}>
-      <ScrollView nestedScrollEnabled={true}>
+      <ScrollView
+        nestedScrollEnabled={true}
+        style={{backgroundColor: global.colorPrimary}}>
         {/* <View style={styles.searchView}>
                     <TextInput style={styles.searchInput}
                         placeholder="Search"
@@ -254,7 +256,7 @@ const Inbox = ({showValue}) => {
                         <Icon name="search1" size={20} color={colors.textColor} />
                     </View>
                 </View> */}
-        <View>
+        <View style={{backgroundColor: global.colorPrimary}}>
           <FlatList
             data={threads}
             // data={mock}
@@ -383,7 +385,7 @@ const styles = StyleSheet.create({
     height: (windowHeight * 80.5) / 100,
     width: (windowWidth * 90) / 100,
     /* width: '100%', */
-    backgroundColor: global.messageBG,
+    backgroundColor: global.colorPrimary,
   },
   header: {
     marginHorizontal: '5%',

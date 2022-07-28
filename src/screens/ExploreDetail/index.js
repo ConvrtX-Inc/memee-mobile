@@ -131,7 +131,7 @@ export default class ExploreDetail extends React.Component {
 
   navigateToProfile(navigation, user) {
     global.profileID = user.UserId;
-    navigation.navigate('ProfileScreen');
+    navigation.navigate('ProfileTab');
   }
 
   sharePostFN() {
@@ -265,7 +265,11 @@ export default class ExploreDetail extends React.Component {
                   </View>
                 </TouchableOpacity>
               )}
-              <Text style={{fontFamily: global.fontSelect, color: global.postInteractionsTextColor}}>
+              <Text
+                style={{
+                  fontFamily: global.fontSelect,
+                  color: global.postInteractionsTextColor,
+                }}>
                 {this.state.selectedPostState.PostLikeCount}
               </Text>
             </View>
@@ -284,13 +288,17 @@ export default class ExploreDetail extends React.Component {
                     width: 28,
                     marginLeft: 10,
                     marginRight: 2,
-                    tintColor: global.postInteractionsTextColor
+                    tintColor: global.postInteractionsTextColor,
                   }}
                   resizeMode="stretch"
                   source={require('../../images/sms.png')}
                 />
               </TouchableOpacity>
-              <Text style={{fontFamily: global.fontSelect, color: global.postInteractionsTextColor}}>
+              <Text
+                style={{
+                  fontFamily: global.fontSelect,
+                  color: global.postInteractionsTextColor,
+                }}>
                 {this.state.selectedPostState.PostCommentCount}
               </Text>
             </View>
@@ -309,13 +317,17 @@ export default class ExploreDetail extends React.Component {
                     width: 28,
                     marginLeft: 10,
                     marginRight: 2,
-                    tintColor: global.postInteractionsTextColor
+                    tintColor: global.postInteractionsTextColor,
                   }}
                   resizeMode="stretch"
                   source={require('../../images/share.png')}
                 />
               </TouchableOpacity>
-              <Text style={{fontFamily: global.fontSelect, color: global.postInteractionsTextColor}}>
+              <Text
+                style={{
+                  fontFamily: global.fontSelect,
+                  color: global.postInteractionsTextColor,
+                }}>
                 {this.state.selectedPostState.PostShareCount}
               </Text>
             </View>

@@ -16,6 +16,8 @@ import {
   ImageBackground,
   ViewBase,
 } from 'react-native';
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
+
 import ButtonCoins from '../../component/ButtonCoins';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
@@ -150,19 +152,33 @@ export default function Tournament(props) {
   function activeTab(counter) {
     global.TabButton = counter;
     if (counter == 1) {
-      navigation.navigate('Dashboard');
+      navigation.navigate('HomeTab');
     } else if (counter == 2) {
-      navigation.navigate('ExploreScreen');
+      navigation.navigate('ExploreTab');
     } else if (counter == 3) {
-      navigation.navigate('Tournament');
+      navigation.navigate('TournamentTab');
     } else if (counter == 4) {
       global.profileID = global.userData.user_id;
-      navigation.navigate('ProfileScreen');
+      navigation.navigate('ProfileTab');
     }
   }
-
+  const config = {
+    velocityThreshold: 0.3,
+    directionalOffsetThreshold: 80,
+  };
   return (
-    <View
+    <GestureRecognizer
+      onSwipe={(direction, state) => console.log('Direction', direction)}
+      onSwipeUp={state => console.log('onSwipeUp', state)}
+      onSwipeDown={state => console.log('onSwipeDown', state)}
+      onSwipeLeft={state => {
+        global.profileID = global.userData.user_id;
+        navigation.navigate('ProfileTab', {screen: 'ProfileScreen'});
+      }}
+      onSwipeRight={state =>
+        navigation.navigate('ExploreTab', {screen: 'ExploreScreen'})
+      }
+      config={config}
       style={{flex: 1, backgroundColor: global.colorPrimary, marginBottom: 0}}>
       <ScrollView style={{marginBottom: -25}}>
         <View style={[styles.topView, { marginTop: hasNotch ? 25 : 0 }]}>
@@ -377,13 +393,13 @@ export default function Tournament(props) {
         </View>
       </Modal>
 
-      <BottomNavBar
+      {/* <BottomNavBar
         onPress={index => activeTab(index)}
         themeIndex={ImageBottoms}
         navigation={navigation}
         navIndex={2}
-      />
-    </View>
+      /> */}
+    </GestureRecognizer>
   );
 }
 

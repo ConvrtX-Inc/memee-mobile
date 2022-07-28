@@ -879,8 +879,7 @@ export default function ProfileSetting(props) {
       }}>
       <ScrollView style={{marginTop: hasNotch ? 25 : 0}}>
         <View style={{flexDirection: 'row'}}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('ProfileScreen')}>
+          <TouchableOpacity onPress={() => navigation.navigate('ProfileTab')}>
             <Image
               style={[styles.tinyLogo, {tintColor: global.colorIcon}]}
               source={require('../../images/back1.png')}

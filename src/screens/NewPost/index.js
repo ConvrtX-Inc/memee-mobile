@@ -173,7 +173,7 @@ export default function NewPost(routes) {
         if (responseJson.Status == '201') {
           setPost('');
           global.refresh = true;
-          navigation.navigate('Dashboard');
+          navigation.navigate('HomeTab');
         }
         setIndicatButton(false);
       })
@@ -189,7 +189,7 @@ export default function NewPost(routes) {
 
   function navigatFN() {
     global.homeScreenShow = '5';
-    navigation.navigate('Dashboard');
+    navigation.navigate('HomeTab');
   }
 
   return (

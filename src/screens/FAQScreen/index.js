@@ -9,6 +9,7 @@ import {
   Modal,
   Image,
   ImageBackground,
+  Linking,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {
@@ -249,7 +250,7 @@ export default function FAQScreen(props) {
           <CollapseHeader>
             <View style={{flexDirection: 'row', width: '98%'}}>
               <Text style={{color: '#fff', fontSize: 15, width: '87%'}}>
-                How do I place a cancellation request?
+                How do I cancel payment?
               </Text>
 
               {cancelRequestToggle == true ? (
@@ -281,14 +282,32 @@ export default function FAQScreen(props) {
           </CollapseHeader>
           <CollapseBody style={{marginTop: 10}}>
             <Text style={{color: '#D6D6D6', opacity: 0.4}}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-              sunt in culpa qui officia deserunt mollit anim id est laborum.
+              To cancel payment or request refund, For “ Apple Pay “ here is the
+              link below and follow the instructions;
+              {'\n'}
             </Text>
+            <TouchableOpacity
+              onPress={() =>
+                Linking.openURL(
+                  'https://support.apple.com/en-us/HT207875#:~:text=Open%20the%20Messages%20app%2C%20then%20open%20the%20conversation%20and%20tap,Tap%20Cancel%20Payment.',
+                )
+              }>
+              <Text style={{color: '#87CEEB'}}>https://support.apple.com</Text>
+            </TouchableOpacity>
+            <Text style={{color: '#D6D6D6', opacity: 0.4}}>
+              {'\n'}
+              For “ Google Pay” here is the link below and follow the
+              instructions;
+              {'\n'}
+            </Text>
+            <TouchableOpacity
+              onPress={() =>
+                Linking.openURL(
+                  'https://support.google.com/googleplay/workflow/9813244?hl=en',
+                )
+              }>
+              <Text style={{color: '#87CEEB'}}>https://support.google.com</Text>
+            </TouchableOpacity>
           </CollapseBody>
         </Collapse>
 
@@ -338,13 +357,8 @@ export default function FAQScreen(props) {
           </CollapseHeader>
           <CollapseBody style={{marginTop: 10}}>
             <Text style={{color: '#D6D6D6', opacity: 0.4}}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-              sunt in culpa qui officia deserunt mollit anim id est laborum.
+              To edit or remove your post in the timeline, click the 3 dots on
+              the top right corner of your post.
             </Text>
           </CollapseBody>
         </Collapse>

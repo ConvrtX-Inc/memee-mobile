@@ -97,7 +97,7 @@ export default function ActivityNotification() {
       getPostData(data.sender_id, data.object_id);
     } else if (data.type == 'follow_request_approved') {
       global.profileID = data.sender_id;
-      navigation.navigate('ProfileScreen');
+      navigation.navigate('ProfileTab');
     }
   }
 

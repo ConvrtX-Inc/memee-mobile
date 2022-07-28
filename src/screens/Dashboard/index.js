@@ -21,6 +21,7 @@ import {
   NativeModules,
   Platform
 } from 'react-native';
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Modal2 from 'react-native-modalbox';
 import ButtonCoins from '../../component/ButtonCoins';
@@ -630,7 +631,7 @@ export default function Dashboard(props) {
 
   function navigateToprofileFN() {
     global.profileID = global.userData.user_id;
-    navigation.navigate('ProfileScreen');
+    navigation.navigate('ProfileTab');
   }
 
   function likeOrUnlikeFN(index) {
@@ -765,7 +766,7 @@ export default function Dashboard(props) {
       // var id = user.user_id;
       //console.log('user', user, id);
       global.profileID = index;
-      navigation.navigate('ProfileScreen');
+      navigation.navigate('ProfileTab');
     }
   }
 
@@ -805,12 +806,12 @@ export default function Dashboard(props) {
       toTop();
       onRefresh();
     } else if (counter == 2) {
-      navigation.navigate('ExploreScreen');
+      navigation.navigate('ExploreTab');
     } else if (counter == 3) {
-      navigation.navigate('Tournament');
+      navigation.navigate('TournamentTab');
     } else if (counter == 4) {
       global.profileID = global.userData.user_id;
-      navigation.navigate('ProfileScreen');
+      navigation.navigate('ProfileTab');
     }
   }
 
@@ -958,8 +959,21 @@ export default function Dashboard(props) {
 
   // console.log('FILE', file);
   /* console.log('textMaximumWidth', textMaximumWidth); */
+  const config = {
+    velocityThreshold: 0.3,
+    directionalOffsetThreshold: 80,
+  };
   return (
-    <View style={{flex: 1, backgroundColor: global.colorPrimary}}>
+    <GestureRecognizer
+      onSwipe={(direction, state) => console.log('Direction', direction)}
+      onSwipeUp={state => console.log('onSwipeUp', state)}
+      onSwipeDown={state => console.log('onSwipeDown', state)}
+      onSwipeLeft={state =>
+        navigation.navigate('ExploreTab', {screen: 'ExploreScreen'})
+      }
+      onSwipeRight={state => console.log('onSwipeRight', state)}
+      config={config}
+      style={{flex: 1, backgroundColor: global.colorPrimary}}>
       <FlatList
         ref={flatlistRef}
         data={
@@ -1375,11 +1389,12 @@ export default function Dashboard(props) {
                 <View
                   style={{
                     padding: 10,
-                    borderRadius: 20,
+                    borderRadius: 10,
                     position: 'absolute',
-                    top: 30,
+                    top: 45,
                     right: 22,
                     backgroundColor: '#fff',
+                    marginRight: 5,
                   }}>
                   {global.userData.user_id == item.user_id ? (
                     <View>
@@ -1404,6 +1419,35 @@ export default function Dashboard(props) {
                           </Text>
                         </View>
                       </TouchableOpacity>
+                      <View
+                        style={{
+                          height: 0.5,
+                          width: '100%',
+                          backgroundColor: 'black',
+                        }}
+                      />
+                      <TouchableOpacity
+                        onPress={() => navigation.navigate('FAQScreen')}>
+                        <View style={{flexDirection: 'row', marginVertical: 5}}>
+                          <Image
+                            style={{
+                              height: 22,
+                              width: 22,
+                              marginLeft: 0,
+                              marginRight: 10,
+                            }}
+                            resizeMode="stretch"
+                            source={require('../../images/faq.png')}
+                          />
+                          <Text
+                            style={{
+                              fontFamily: global.fontSelect,
+                              marginRight: 5,
+                            }}>
+                            FAQs
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
                     </View>
                   ) : null}
                 </View>
@@ -1413,7 +1457,7 @@ export default function Dashboard(props) {
         }}
         keyExtractor={item => item.post_id}
         ListFooterComponent={() => (
-          <View>
+          <View style={{height: 90}}>
             {loaderIndicator == true ? (
               <ActivityIndicator
                 size="large"
@@ -2080,13 +2124,13 @@ export default function Dashboard(props) {
         </View>
       </Modal>
 
-      <BottomNavBar
+      {/* <BottomNavBar
         onPress={index => activeTab(index)}
         themeIndex={ImageBottoms}
         navigation={navigation}
         navIndex={0}
-      />
-    </View>
+      /> */}
+    </GestureRecognizer>
   );
 }
 

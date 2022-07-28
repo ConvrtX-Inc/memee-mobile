@@ -54,7 +54,7 @@ import Inbox from './src/screens/Inbox';
 import NewMessage from './src/screens/NewMessage';
 import CongratsScreen from './src/screens/CongratsScreen';
 import TournamentEntry from './src/screens/TournamentEntry';
-
+import ModalPost from './src/screens/ModalPost';
 import {Settings} from 'react-native-fbsdk-next';
 import {Provider} from 'react-redux';
 import configureStore from './src/redux/store/index';
@@ -65,7 +65,7 @@ import Toast from 'react-native-toast-message';
 import {toggleOnlineStatus} from './src/redux/actions/Auth';
 import {urls} from './src/api/urls';
 import TournamentImageShow from './src/screens/TournamentImageShow';
-
+import MainBottom from './src/screens/MainBottom';
 const {store, persistor} = configureStore();
 
 const Stack = createStackNavigator();
@@ -105,7 +105,7 @@ function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <NavigationContainer>
+        <NavigationContainer style={{backgroundColor: 'transparent'}}>
           <StatusBar
             animated={true}
             backgroundColor="#0D0219"
@@ -119,14 +119,21 @@ function App() {
               headerShown: false,
             }}>
             <Stack.Screen name="SplashScreen" component={SplashScreen} />
-            <Stack.Screen name="LoginScreen" component={LoginScreen}  options={{gestureEnabled: false}} />
+            <Stack.Screen
+              name="LoginScreen"
+              component={LoginScreen}
+              options={{gestureEnabled: false}}
+            />
             <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
-            <Stack.Screen name="Dashboard" component={Dashboard} options={{gestureEnabled: false}} />
+            <Stack.Screen name="MainBottom" component={MainBottom} />
+            <Stack.Screen name="Dashboard" component={Dashboard} />
             <Stack.Screen name="CommentScreen" component={CommentScreen} />
             <Stack.Screen name="NewPost" component={NewPost} />
             <Stack.Screen name="TournamentEntry" component={TournamentEntry} />
             <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
             <Stack.Screen name="ProfileSetting" component={ProfileSetting} />
+            <Stack.Screen name="ModalPost" component={ModalPost} />
+
             <Stack.Screen
               name="TournamentImageShow"
               component={TournamentImageShow}

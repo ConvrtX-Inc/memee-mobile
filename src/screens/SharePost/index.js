@@ -113,7 +113,7 @@ export default function SharePost() {
           setPost('');
           setIndicatButton(false);
           global.refresh = true;
-          navigation.navigate('Dashboard');
+          navigation.navigate('HomeTab');
         }
       })
       .catch(error => {
@@ -128,7 +128,7 @@ export default function SharePost() {
 
   function navigatFN() {
     global.homeScreenShow = '5';
-    navigation.navigate('Dashboard');
+    navigation.navigate('HomeTab');
   }
 
   return (

@@ -246,7 +246,7 @@ export default class CommentScreen extends React.Component {
 
   navigateToProfile(navigation, user) {
     global.profileID = user.user_id;
-    navigation.navigate('ProfileScreen');
+    navigation.navigate('ProfileTab');
   }
 
   render() {

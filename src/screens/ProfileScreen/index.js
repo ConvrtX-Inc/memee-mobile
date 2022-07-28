@@ -15,6 +15,8 @@ import {
   ImageBackground,
   ViewBase,
 } from 'react-native';
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
+
 import {Avatar} from 'react-native-elements';
 import ButtonCoins from '../../component/ButtonCoins';
 import {useNavigation} from '@react-navigation/native';
@@ -96,6 +98,7 @@ export default function ProfileScreen(props) {
   const [btncolor2_1, setBtncolor2_1] = useState('#201E23');
   const [btncolor2_2, setBtncolor2_2] = useState('#201E23');
   const [txtcolor2, setTxtcolor2] = useState('#ABABAD');
+  const [focus, setFocus] = useState('false');
 
   const dispatch = useDispatch();
   const {coinsStored, scrollDown, selectedBadges, ImageBottoms} = useSelector(
@@ -124,6 +127,9 @@ export default function ProfileScreen(props) {
     return unsubscribe;
   }, [navigation]);
   useEffect(() => {
+    setFocus(!focus);
+    console.log('focus', focus);
+
     selectTab(1);
     const backAction = () => {
       navigation.goBack();
@@ -670,28 +676,43 @@ export default function ProfileScreen(props) {
   function activeTab(counter) {
     global.TabButton = counter;
     if (counter == 1) {
-      navigation.navigate('Dashboard');
+      navigation.navigate('HomeTab');
     } else if (counter == 2) {
-      navigation.navigate('ExploreScreen');
+      navigation.navigate('ExploreTab');
     } else if (counter == 3) {
-      navigation.navigate('Tournament');
+      navigation.navigate('TournamentTab');
     } else if (counter == 4) {
+      console.log('profilescreen');
       global.profileID = global.userData.user_id;
-      navigation.navigate('ProfileScreen');
+      navigation.navigate('ProfileTab', {screen: 'ProfileScreen'});
     } else if (counter == 5) {
       // chooseFile(counter);
       setModalVisibleBottomImgPicker(true);
     }
   }
-
+  const config = {
+    velocityThreshold: 0.3,
+    directionalOffsetThreshold: 80,
+  };
   return (
-    <View
+    <GestureRecognizer
+      onSwipe={(direction, state) => console.log('Direction', direction)}
+      onSwipeUp={state => console.log('onSwipeUp', state)}
+      onSwipeDown={state => console.log('onSwipeDown', state)}
+      onSwipeLeft={state => null}
+      onSwipeRight={state =>
+        navigation.navigate('TournamentTab', {screen: 'Tournament'})
+      }
+      config={config}
       style={{flex: 1, marginBottom: 0, backgroundColor: global.colorPrimary}}>
       <ScrollView>
         <ImageBackground
           source={profileBGPick}
           resizeMode="cover"
-          imageStyle={{borderBottomRightRadius: 30, borderBottomLeftRadius: 30}}
+          imageStyle={{
+            borderBottomRightRadius: 30,
+            borderBottomLeftRadius: 30,
+          }}
           style={styles.image}>
           <View style={[styles.topView, { marginTop: hasNotch ? 15 : 0 }]}>
             {global.userData.user_id == global.profileID ? (
@@ -1461,15 +1482,15 @@ export default function ProfileScreen(props) {
         </View>
       </Modal>
 
-      <BottomNavBar
+      {/* <BottomNavBar
         onPress={index => activeTab(index)}
         themeIndex={ImageBottoms}
         navigation={navigation}
         navIndex={3}
-      />
+      /> */}
 
       {/* Image picker Bottom Modal start */}
-    </View>
+    </GestureRecognizer>
   );
 }
 

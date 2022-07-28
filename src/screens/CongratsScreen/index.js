@@ -13,7 +13,7 @@ var windowHeight = Dimensions.get('window').height;
 const CongratsScreen = ({navigation}) => {
   // joining a tournament
   return (
-    <TouchableOpacity onPress={() => navigation.navigate('Tournament')}>
+    <TouchableOpacity onPress={() => navigation.navigate('TournamentTab')}>
       <Image
         source={require('../../images/Congrats.png')}
         style={{

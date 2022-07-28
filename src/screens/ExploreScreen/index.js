@@ -25,9 +25,7 @@ import SearchScreen from '../SearchScreen';
 import {useSelector} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import BottomNavBar from '../../component/BottomNavBar';
-import DeviceInfo from 'react-native-device-info';
-
-const hasNotch = DeviceInfo.hasNotch();
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 
 var showScreen = false;
 global.searchText = '';
@@ -107,22 +105,35 @@ export default function ExploreScreen(props) {
   function activeTab(counter) {
     global.TabButton = counter;
     if (counter == 1) {
-      navigation.navigate('Dashboard');
+      navigation.navigate('HomeTab');
     } else if (counter == 2) {
-      navigation.navigate('ExploreScreen');
+      navigation.navigate('ExploreTab');
     } else if (counter == 3) {
-      navigation.navigate('Tournament');
+      navigation.navigate('TournamentTab');
     } else if (counter == 4) {
       global.profileID = global.userData.user_id;
-      navigation.navigate('ProfileScreen');
+      navigation.navigate('ProfileTab');
     }
   }
-
+  const config = {
+    velocityThreshold: 0.3,
+    directionalOffsetThreshold: 80,
+  };
   return (
-    <View
+    <GestureRecognizer
+      onSwipe={(direction, state) => console.log('Direction', direction)}
+      onSwipeUp={state => console.log('onSwipeUp', state)}
+      onSwipeDown={state => console.log('onSwipeDown', state)}
+      onSwipeLeft={state =>
+        navigation.navigate('TournamentTab', {screen: 'Tournament'})
+      }
+      onSwipeRight={state =>
+        navigation.navigate('HomeTab', {screen: 'Dashboard'})
+      }
+      config={config}
       style={{flex: 1, backgroundColor: global.colorPrimary, marginBottom: 0}}>
       <ScrollView style={{marginBottom: 0}}>
-        <View style={[styles.topView, { marginTop: hasNotch ? 25 : 0 }]}>
+        <View style={[styles.topView, {marginTop: hasNotch ? 25 : 0}]}>
           <TouchableOpacity>
             <View style={{width: 145, height: 38}}>
               <Text
@@ -208,13 +219,13 @@ export default function ExploreScreen(props) {
         )}
       </ScrollView>
 
-      <BottomNavBar
+      {/* <BottomNavBar
         onPress={index => activeTab(index)}
         themeIndex={ImageBottoms}
         navigation={navigation}
         navIndex={1}
-      />
-    </View>
+      /> */}
+    </GestureRecognizer>
   );
 }
 
