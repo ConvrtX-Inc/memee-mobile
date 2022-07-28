@@ -19,6 +19,7 @@ import {
   ImageBackground,
   ViewBase,
   NativeModules,
+  Platform
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Modal2 from 'react-native-modalbox';
@@ -1632,7 +1633,8 @@ export default function Dashboard(props) {
                               bottom: -2,
                               backgroundColor: 'white',
                               fontWeight: 'bold',
-                              borderRadius: 100,
+                              borderRadius: Platform.OS === 'ios' ? 10.5 : 100,
+                              overflow: Platform.OS === 'ios' ? 'hidden' : ''
                             }}
                           />
                         </TouchableOpacity>
@@ -1703,7 +1705,7 @@ export default function Dashboard(props) {
                 width: '100%',
               }}>
               <View style={{flexDirection: 'row-reverse'}}>
-                <View>
+                <View style={{marginTop: hasNotch ? 25 : 0}}>
                   <TouchableOpacity onPress={() => cancelStoryModal()}>
                     {loadingAddStory ? (
                       <ActivityIndicator
@@ -1825,7 +1827,7 @@ export default function Dashboard(props) {
                 width: '100%',
               }}>
               <View style={{flexDirection: 'row-reverse'}}>
-                <View>
+                <View style={{marginTop: hasNotch ? 25 : 0}}>
                   <TouchableOpacity onPress={() => cancelStoryModal()}>
                     {loadingAddStory ? (
                       <ActivityIndicator
