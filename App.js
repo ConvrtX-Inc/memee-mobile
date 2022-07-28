@@ -119,9 +119,9 @@ function App() {
               headerShown: false,
             }}>
             <Stack.Screen name="SplashScreen" component={SplashScreen} />
-            <Stack.Screen name="LoginScreen" component={LoginScreen} />
+            <Stack.Screen name="LoginScreen" component={LoginScreen}  options={{gestureEnabled: false}} />
             <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
-            <Stack.Screen name="Dashboard" component={Dashboard} />
+            <Stack.Screen name="Dashboard" component={Dashboard} options={{gestureEnabled: false}} />
             <Stack.Screen name="CommentScreen" component={CommentScreen} />
             <Stack.Screen name="NewPost" component={NewPost} />
             <Stack.Screen name="TournamentEntry" component={TournamentEntry} />

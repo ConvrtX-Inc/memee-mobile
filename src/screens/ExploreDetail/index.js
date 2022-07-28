@@ -19,6 +19,9 @@ import {useNavigation} from '@react-navigation/native';
 import TwitterTextView from 'react-native-twitter-textview';
 import LinearGradient from 'react-native-linear-gradient';
 import {currentDateFN} from '../../Utility/Utils';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 var windowWidth = Dimensions.get('window').width;
 var windowHeight = Dimensions.get('window').height;
@@ -142,7 +145,7 @@ export default class ExploreDetail extends React.Component {
 
     return (
       <View style={{flex: 1, backgroundColor: global.colorPrimary}}>
-        <ScrollView>
+        <ScrollView style={{marginTop: hasNotch ? 25 : 0}}>
           <ImageBackground
             style={{
               width: windowWidth,

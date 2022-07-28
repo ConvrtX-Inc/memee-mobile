@@ -4,6 +4,9 @@ import { useNavigation } from '@react-navigation/native';
 import InputWithoutBorder from '../../component/InputFieldWithoutBorder';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Moment from 'moment';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 export default function BillingDetail(props) {
 
@@ -32,7 +35,7 @@ export default function BillingDetail(props) {
 
     return (
         <View style={{ flex: 1, paddingLeft: "5%", paddingTop: "5%", backgroundColor: '#0B0213' }}>
-            <ScrollView>
+            <ScrollView style={{marginTop: hasNotch ? 25 : 0}}>
 
                 <View style={{ flexDirection: 'row', }}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>

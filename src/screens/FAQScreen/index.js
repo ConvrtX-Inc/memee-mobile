@@ -18,6 +18,9 @@ import {
   AccordionList,
 } from 'accordion-collapse-react-native';
 import {colors} from '../../Utility/colors';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 export default function FAQScreen(props) {
   const navigation = useNavigation();
@@ -95,7 +98,7 @@ export default function FAQScreen(props) {
         backgroundColor: global.colorPrimary,
         /* backgroundColor: colors.backgroundColor, */
       }}>
-      <ScrollView>
+      <ScrollView style={{marginTop: hasNotch ? 25 : 0}}>
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image

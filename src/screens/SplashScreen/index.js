@@ -59,7 +59,7 @@ function SplashScreen({navigation}) {
         global.fontSelect == null ||
         global.fontSelect == undefined
       ) {
-        global.fontSelect = 'Arial';
+        global.fontSelect = 'Arial-BoldMT';
       }
 
       var whichThemee = await AsyncStorage.getItem('@whichTheme');

@@ -19,6 +19,9 @@ import {currentDateFN, asignImageToProductsFN} from '../../Utility/Utils';
 import {useDispatch, useSelector} from 'react-redux';
 import {storeIconsBottomTabFN} from '../../redux/actions/Auth';
 import ThemeButton from '../../component/ThemeButton';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 var windowWidth = Dimensions.get('window').width;
 export default function ProfileSetting(props) {
@@ -839,9 +842,9 @@ export default function ProfileSetting(props) {
 
   async function selectFontFN(index) {
     if (fontPurchased[index].item_code == 'font1') {
-      await AsyncStorage.setItem('@whichFontFam', 'Arial');
-      global.fontSelect = 'Arial';
-      setSelectFonts('Arial');
+      await AsyncStorage.setItem('@whichFontFam', 'Arial-BoldMT');
+      global.fontSelect = 'Arial-BoldMT';
+      setSelectFonts('Arial-BoldMT');
     } else if (fontPurchased[index].item_code == 'font2') {
       await AsyncStorage.setItem('@whichFontFam', 'DancingScript-Bold');
       global.fontSelect = 'DancingScript-Bold';
@@ -874,7 +877,7 @@ export default function ProfileSetting(props) {
         paddingTop: '5%',
         backgroundColor: global.colorPrimary,
       }}>
-      <ScrollView>
+      <ScrollView style={{marginTop: hasNotch ? 25 : 0}}>
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
             onPress={() => navigation.navigate('ProfileScreen')}>

@@ -24,6 +24,9 @@ import TounamentScreen from '../TournamentScreen';
 import Store from '../Store';
 import LinearGradient from 'react-native-linear-gradient';
 import JudgeScreen from '../JudgeScreen';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 global.navigateTournament = -1;
 var checkNavi = 0;
@@ -162,7 +165,7 @@ export default function Tournament(props) {
     <View
       style={{flex: 1, backgroundColor: global.colorPrimary, marginBottom: 0}}>
       <ScrollView style={{marginBottom: -25}}>
-        <View style={styles.topView}>
+        <View style={[styles.topView, { marginTop: hasNotch ? 25 : 0 }]}>
           <Text
             numberOfLines={1}
             style={{

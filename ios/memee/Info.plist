@@ -17,11 +17,49 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.628249846461-chkgkacs8dald86mdt2psec819mbil91</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb4746972328745638</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>twitterkit-Njir3nTj38mr0X9MO8kDd9jR9</string>
+			</array>
+			<key>LSApplicationQueriesSchemes</key>
+			<array>
+				<string>twitter</string>
+				<string>twitterauth</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>FacebookAppID</key>
+	<string>4746972328745638</string>
+	<key>FacebookClientToken</key>
+	<string>b57663773dab6c896c37f27faedb2feb</string>
+	<key>FacebookDisplayName</key>
+	<string>Memee</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -35,8 +73,55 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>App does not request this permission or utilize this functionality but it is included in our info.plist since our app utilizes the react-native-permissions library, which references this permission in its code.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>App requires access to your camera to allow you to take a photo or video</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>App require access to your location to allow you to know your location</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>App requires access to your microphone to allow you to record an audio or voice memo</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>App require access to your photo library to allow you to upload or pick an image or video</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>App require access to your photo library to allow you to use the usage description of the library</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>OpenSans-Bold.ttf</string>
+		<string>OpenSans-BoldItalic.ttf</string>
+		<string>OpenSans-ExtraBold.ttf</string>
+		<string>OpenSans-ExtraBoldItalic.ttf</string>
+		<string>OpenSans-Italic.ttf</string>
+		<string>OpenSans-Light.ttf</string>
+		<string>OpenSans-LightItalic.ttf</string>
+		<string>OpenSans-Medium.ttf</string>
+		<string>OpenSans-MediumItalic.ttf</string>
+		<string>OpenSans-Regular.ttf</string>
+		<string>OpenSans-SemiBold.ttf</string>
+		<string>OpenSans-SemiBoldItalic.ttf</string>
+		<string>AntDesign.ttf</string>
+		<string>Entypo.ttf</string>
+		<string>EvilIcons.ttf</string>
+		<string>Feather.ttf</string>
+		<string>FontAwesome.ttf</string>
+		<string>FontAwesome5_Brands.ttf</string>
+		<string>FontAwesome5_Regular.ttf</string>
+		<string>FontAwesome5_Solid.ttf</string>
+		<string>Fontisto.ttf</string>
+		<string>Foundation.ttf</string>
+		<string>Ionicons.ttf</string>
+		<string>MaterialCommunityIcons.ttf</string>
+		<string>MaterialIcons.ttf</string>
+		<string>Octicons.ttf</string>
+		<string>SimpleLineIcons.ttf</string>
+		<string>Zocial.ttf</string>
+		<string>DancingScript-Bold.ttf</string>
+		<string>ProductSans-Bold.ttf</string>
+		<string>PTSans-Bold.ttf</string>
+		<string>Unkempt-Bold.ttf</string>
+		<string>Unna-Bold.ttf</string>
+		<string>Arial-BoldMT.ttf</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>

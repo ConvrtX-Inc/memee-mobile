@@ -28,6 +28,9 @@ import {coinsRecordFN} from '../../redux/actions/Auth';
 import Toast from 'react-native-toast-message';
 import {getBucketOptions} from '../../Utility/Utils';
 import storage from '@react-native-firebase/storage';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 // mock data for ui changes
 // Temporary import of colors
@@ -279,7 +282,7 @@ export default function EditProfileScreen(props) {
         backgroundColor: global.colorPrimary,
         /* backgroundColor: colors.backgroundColor, */
       }}>
-      <ScrollView>
+      <ScrollView style={{ marginTop: hasNotch ? 25 : 0}}>
         <View style={{flexDirection: 'row', paddingLeft: '5%'}}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image

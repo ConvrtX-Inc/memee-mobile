@@ -58,6 +58,13 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
     quality: 1,
   };
 
+  let options2 = {
+    mediaType: 'video',
+    // maxWidth: 512,
+    // maxHeight: 512,
+    quality: 1,
+  };
+
   let gradientColors = [];
   let icons = [];
   let iconsSelected = [];
@@ -1103,6 +1110,43 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
     );
   }
 
+  function openGalleryForIOS() {
+    setShowImagePickerDialog(true);
+    launchImageLibrary(options2, (response) => {
+      console.log('Response = ', response);
+      console.log('Response = ');
+
+      if (response.didCancel) {
+        // alert('User cancelled camera picker');
+        setShowImagePickerDialog(false);
+        return;
+      } else if (response.errorCode == 'camera_unavailable') {
+        setShowImagePickerDialog(false);
+        // alert('Camera not available on device');
+        return;
+      } else if (response.errorCode == 'permission') {
+        setShowImagePickerDialog(false);
+        // alert('Permission not satisfied');
+        return;
+      } else if (response.errorCode == 'others') {
+        setShowImagePickerDialog(false);
+        // alert(response.errorMessage);
+        return;
+      }
+
+      let source = response;
+      console.log('source', source)
+      setShowImagePickerDialog(false);
+      if (source) {
+        navigation.navigate('NewPost', {
+          uri: `file://${source.assets[0].uri}`,
+          type: 'video',
+        });
+      }
+      // openPhotoEditor(source.uri);
+    });
+  }
+
   return (
     // <View style={[styles.barStyle,{justifyContent: 'center'}]}>
     //<View style={[{justifyContent: 'center'}]}>
@@ -1239,7 +1283,7 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={{marginBottom: '6%'}}
               onPress={() => {
                 setShowImagePickerDialog(false);
@@ -1258,14 +1302,15 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
                       console.log(e);
                     });
                 } else {
-                  const videoUri = openVideoEditor();
-                  console.log(videoUri);
+                  // const videoUri = openVideoEditor();
+                  // console.log(videoUri);
+                  openGalleryForIOS();
                 }
               }}>
               <Text style={{color: '#fff', opacity: 0.5, fontSize: 16}}>
                 Select Video
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <TouchableOpacity
               style={[styles.button, styles.buttonOpen, {marginTop: '20%'}]}

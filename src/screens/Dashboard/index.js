@@ -19,6 +19,7 @@ import {
   ImageBackground,
   ViewBase,
   NativeModules,
+  Platform
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Modal2 from 'react-native-modalbox';
@@ -60,6 +61,9 @@ import {getBucketOptions, generateUID} from '../../Utility/Utils';
 import storage from '@react-native-firebase/storage';
 import moment from 'moment';
 import {toggleOnlineStatus} from '../../redux/actions/Auth';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 var offset = 0;
 global.navigateDashboard = 1;
@@ -71,7 +75,8 @@ var gloIndex = '';
 const {VideoEditorModule} = NativeModules;
 
 const openEditor = async () => {
-  return await VideoEditorModule.openVideoEditor();
+  const res = await VideoEditorModule.openVideoEditor();
+  return res;
 };
 
 export const openVideoEditor = async () => {
@@ -104,6 +109,13 @@ export default function Dashboard(props) {
     mediaType: 'photo',
     maxWidth: 512,
     maxHeight: 512,
+    quality: 1,
+  };
+
+  let options2 = {
+    mediaType: 'video',
+    // maxWidth: 512,
+    // maxHeight: 512,
     quality: 1,
   };
 
@@ -819,8 +831,10 @@ export default function Dashboard(props) {
 
   function openGallery() {
     setIsOpenMedia(true);
-    launchImageLibrary(options, response => {
-      //console.log('Response = ', response);
+    console.log('this is true');
+    launchImageLibrary(options, (response) => {
+      console.log('Response = ', response);
+      console.log('Response = ');
 
       if (response.didCancel) {
         // alert('User cancelled camera picker');
@@ -841,9 +855,46 @@ export default function Dashboard(props) {
       }
 
       let source = response.assets[0];
+      console.log('source', source)
       openPhotoEditor(source.uri);
     });
   }
+
+  function openGalleryForIOS() {
+    setIsOpenMedia(true);
+    console.log('this is true');
+    launchImageLibrary(options2, (response) => {
+      console.log('Response = ', response);
+      console.log('Response = ');
+
+      if (response.didCancel) {
+        // alert('User cancelled camera picker');
+        setIsOpenMedia(false);
+        return;
+      } else if (response.errorCode == 'camera_unavailable') {
+        setIsOpenMedia(false);
+        // alert('Camera not available on device');
+        return;
+      } else if (response.errorCode == 'permission') {
+        setIsOpenMedia(false);
+        // alert('Permission not satisfied');
+        return;
+      } else if (response.errorCode == 'others') {
+        setIsOpenMedia(false);
+        // alert(response.errorMessage);
+        return;
+      }
+
+      let source = response;
+      console.log('source', source)
+      setIsOpenMedia(false);
+      if (source) {
+        setFile({type: 'video', uri: source.assets[0].uri});
+      }
+      // openPhotoEditor(source.uri);
+    });
+  }
+
   const getDescription = text => {
     try {
       return decodeURIComponent(
@@ -857,9 +908,11 @@ export default function Dashboard(props) {
     setIsOpenMedia(true);
     let isStoragePermitted = await requestExternalWritePermission();
     let isCameraPermitted = await requestCameraPermission();
+    console.log({isStoragePermitted, isCameraPermitted});
     if (isCameraPermitted && isStoragePermitted) {
       launchCamera(options, response => {
-        //console.log('Response = ', response);
+        console.log('Response = ', response);
+        console.log('Response = ');
 
         if (response.didCancel) {
           // alert('User cancelled camera picker');
@@ -1118,7 +1171,7 @@ export default function Dashboard(props) {
                 {getDescription(item.description)}
               </TwitterTextView>
 
-              {item.img_url.includes('mp4') ? (
+              {/* {item.img_url.includes('mp4') ? (
                 <View key={item.img_url}>
                   <VideoPlayer
                     key={item.post_id}
@@ -1160,7 +1213,22 @@ export default function Dashboard(props) {
                     style={{height: '100%', width: '100%'}}
                   />
                 </ImageBackground>
-              )}
+              )} */}
+
+              {
+                !item.img_url.includes('mp4') && (<ImageBackground
+                  source={{uri: item.img_url}}
+                  resizeMode="contain"
+                  style={{
+                    height: item.calHeight ? item.calHeight : windowWidth,
+                    width: '100%',
+                  }}>
+                  <LinearGradient
+                    colors={[global.overlay1, global.overlay3]}
+                    style={{height: '100%', width: '100%'}}
+                  />
+                </ImageBackground>)
+              }
 
               <View
                 style={{width: '100%', backgroundColor: global.colorPrimary}}>
@@ -1367,7 +1435,7 @@ export default function Dashboard(props) {
         )}
         ListHeaderComponent={() => (
           <View>
-            <View style={styles.topView}>
+            <View style={[styles.topView, {marginTop: hasNotch ? 25 : 0}]}>
               <TouchableOpacity
                 onPress={() => navigateToprofileFN()}
                 style={{
@@ -1565,7 +1633,8 @@ export default function Dashboard(props) {
                               bottom: -2,
                               backgroundColor: 'white',
                               fontWeight: 'bold',
-                              borderRadius: 100,
+                              borderRadius: Platform.OS === 'ios' ? 10.5 : 100,
+                              overflow: Platform.OS === 'ios' ? 'hidden' : ''
                             }}
                           />
                         </TouchableOpacity>
@@ -1636,7 +1705,7 @@ export default function Dashboard(props) {
                 width: '100%',
               }}>
               <View style={{flexDirection: 'row-reverse'}}>
-                <View>
+                <View style={{marginTop: hasNotch ? 25 : 0}}>
                   <TouchableOpacity onPress={() => cancelStoryModal()}>
                     {loadingAddStory ? (
                       <ActivityIndicator
@@ -1682,9 +1751,9 @@ export default function Dashboard(props) {
                         Choose photo from library...
                       </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                       style={{marginBottom: '6%'}}
-                      onPress={() => {
+                      onPress={async () => {
                         setIsOpenMedia(true);
                         if (Platform.OS === 'android') {
                           getAndroidExportResult()
@@ -1695,15 +1764,16 @@ export default function Dashboard(props) {
                               console.error('error', e);
                             });
                         } else {
-                          const videoUri = openVideoEditor();
-                          //console.log(videoUri);
+                          // const videoUri = await openVideoEditor();
+                          // console.log('videoUri',videoUri);
+                          openGalleryForIOS();
                         }
                         setIsOpenMedia(false);
                       }}>
                       <Text style={{color: '#fff', opacity: 0.5, fontSize: 16}}>
                         Select Video
                       </Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     <TouchableOpacity
                       disabled={isOpenMedia}
                       style={[{marginTop: '20%'}]}
@@ -1757,7 +1827,7 @@ export default function Dashboard(props) {
                 width: '100%',
               }}>
               <View style={{flexDirection: 'row-reverse'}}>
-                <View>
+                <View style={{marginTop: hasNotch ? 25 : 0}}>
                   <TouchableOpacity onPress={() => cancelStoryModal()}>
                     {loadingAddStory ? (
                       <ActivityIndicator

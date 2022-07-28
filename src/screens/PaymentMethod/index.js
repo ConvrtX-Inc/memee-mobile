@@ -6,6 +6,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNRestart from 'react-native-restart';
 import messaging from '@react-native-firebase/messaging';
 import ButtonLarge from '../../component/ButtonLarge';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 
 export default function PaymentMethod(props) {
@@ -24,7 +27,7 @@ export default function PaymentMethod(props) {
 
     return (
         <View style={{ flex: 1, paddingTop: "5%", backgroundColor: '#0B0213' }}>
-            <ScrollView>
+            <ScrollView style={{marginTop: hasNotch ? 25 : 0}}>
 
                 <View style={{ flexDirection: 'row', marginLeft: "5%" }}>
                     <TouchableOpacity onPress={() => navigation.navigate("ProfileScreen")}>

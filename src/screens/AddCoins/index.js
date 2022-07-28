@@ -23,6 +23,10 @@ import Carousel from 'react-native-snap-carousel';
 import LinearGradient from 'react-native-linear-gradient';
 import {LinearTextGradient} from 'react-native-text-gradient';
 import ButtonCoins from '../../component/ButtonCoins';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
+
 // import * as RNIap from 'react-native-iap';
 import RNIap, {
   purchaseErrorListener,
@@ -246,7 +250,7 @@ export default function AddCoins(props) {
     <View
       style={{flex: 1, paddingTop: '5%', backgroundColor: global.colorPrimary}}>
       <ScrollView>
-        <View style={{flexDirection: 'row', marginLeft: '4%', marginTop: 10}}>
+        <View style={{flexDirection: 'row', marginLeft: '4%', marginTop: hasNotch ? 25 : 10}}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image
               style={[styles.tinyLogo, {tintColor: global.colorIcon}]}

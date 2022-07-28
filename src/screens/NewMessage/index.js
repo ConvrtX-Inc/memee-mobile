@@ -11,6 +11,9 @@ import SimpleInput from '../../component/SimpleTextInput';
 import {useFocusEffect} from '@react-navigation/native';
 const axios = require('axios');
 import Toast from 'react-native-toast-message';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 export default function NewMessage({navigation}) {
   const [isLoading, setIsLoading] = useState(true);
@@ -144,7 +147,7 @@ export default function NewMessage({navigation}) {
         backgroundColor: global.colorPrimary,
       }}>
       {/* <ScrollView> */}
-      <View style={{flexDirection: 'row'}}>
+      <View style={{flexDirection: 'row', marginTop: hasNotch ? 25 : 0}}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
             style={[styles.tinyLogo, {tintColor: global.colorIcon}]}

@@ -17,6 +17,9 @@ import {useNavigation} from '@react-navigation/native';
 import {ProgressBar, Colors} from 'react-native-paper';
 import LinearGradient from 'react-native-linear-gradient';
 import {useDispatch, useSelector} from 'react-redux';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 var windowWidth = Dimensions.get('window').width;
 var windowHeight = Dimensions.get('window').height;
@@ -249,7 +252,7 @@ export default function OrganizeBadges(props) {
         paddingTop: '5%',
         backgroundColor: global.colorPrimary,
       }}>
-      <ScrollView>
+      <ScrollView style={{marginTop: hasNotch ? 25 : 0}}>
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image

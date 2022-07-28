@@ -31,6 +31,9 @@ import storage from '@react-native-firebase/storage';
 
 import Video from 'react-native-video';
 import VideoPlayer from 'react-native-video-controls';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 export default function NewPost(routes) {
   const navigation = useNavigation();
@@ -196,7 +199,7 @@ export default function NewPost(routes) {
         backgroundColor: global.colorPrimary,
         marginBottom: -30,
       }}>
-      <ScrollView style={{padding: 10}}>
+      <ScrollView style={{padding: 10, marginTop: hasNotch ? 25 : 0}}>
         <View style={{flexDirection: 'row', marginTop: 10}}>
           <TouchableOpacity onPress={() => navigatFN()}>
             <Image

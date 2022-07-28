@@ -13,6 +13,9 @@ import ButtonLarge from '../../component/ButtonLarge';
 import ButtonLargeIndicator from '../../component/ButtonLargeIndicator';
 import Toast from 'react-native-toast-message';
 import Input from '../../component/InputField';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 function ForgetPassword({navigation}) {
   const [loading, setLoading] = useState(false);
@@ -81,7 +84,7 @@ function ForgetPassword({navigation}) {
 
   return (
     <View style={styles.container}>
-      <ScrollView style={{padding: 10}}>
+      <ScrollView style={{padding: 10, marginTop: hasNotch ? 25 : 0}}>
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image

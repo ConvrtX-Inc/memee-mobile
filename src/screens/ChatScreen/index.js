@@ -31,6 +31,9 @@ import {getLastSeenFormat} from '../../Utility/Utils';
 import {getBucketOptions} from '../../Utility/Utils';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 const ChatScreen = ({route}) => {
   const navigation = useNavigation();
@@ -364,7 +367,7 @@ const ChatScreen = ({route}) => {
         paddingTop: '5%',
         backgroundColor: global.colorPrimary,
       }}>
-      <View style={{flexDirection: 'row'}}>
+      <View style={{flexDirection: 'row', marginTop: hasNotch ? 25 : 0}}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
             style={[styles.tinyLogo, {tintColor: global.colorIcon}]}

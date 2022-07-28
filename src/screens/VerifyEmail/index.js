@@ -17,6 +17,9 @@ import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch} from 'react-redux';
 import {coinsRecordFN} from '../../redux/actions/Auth';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 function VerifyEmail({navigation, route}) {
   const dispatch = useDispatch();
   const [code, setcode] = useState('');
@@ -176,7 +179,7 @@ function VerifyEmail({navigation, route}) {
   };
   return (
     <View style={styles.container}>
-      <ScrollView style={{padding: 10}}>
+      <ScrollView style={{padding: 10, marginTop: hasNotch ? 25 : 0}}>
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image
