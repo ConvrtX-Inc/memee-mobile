@@ -78,6 +78,7 @@ import ExploreScreen from '../ExploreScreen';
 import Tournament from '../Taurnament';
 import ProfileScreen from '../ProfileScreen';
 import {useDispatch, useSelector} from 'react-redux';
+import ModalPost from '../ModalPost';
 var windowWidth = Dimensions.get('window').width;
 const Tab = createBottomTabNavigator();
 const MainBottom = props => {
@@ -1139,6 +1140,7 @@ const MainBottom = props => {
 
   return (
     <Tab.Navigator
+      style={{backgroundColor: 'red'}}
       screenOptions={{
         scrollEnabled: true,
         headerShown: false,
@@ -1152,8 +1154,8 @@ const MainBottom = props => {
           borderTopStartRadius: 30,
           borderTopEndRadius: 30,
           paddingBottom: 10,
-          position: 'absolute',
           borderTopWidth: 0,
+          position: 'absolute',
         },
         tabBarBackground: () => (
           <LinearGradient
@@ -1198,13 +1200,15 @@ const MainBottom = props => {
       />
       <Tab.Screen
         name="Memee"
-        component={() => null}
+        component={ModalPost}
         options={{
-          // unmountOnBlur: true,
+          unmountOnBlur: true,
           showLabel: false,
           tabBarLabel: () => {
             return null;
           },
+          tabBarStyle: {display: 'none'},
+
           tabBarIcon: ({color}) => (
             <View style={styles.icon}>
               <View style={styles.touchstyle}>
@@ -1219,17 +1223,17 @@ const MainBottom = props => {
             </View>
           ),
         }}
-        listeners={({navigation, route}) => ({
-          // unmountOnBlur: true,
-          tabPress: e => {
-            global.imagePicker = false;
-            console.log('memee', global.addPost);
-            e.preventDefault();
+        // listeners={({navigation, route}) => ({
+        //   // unmountOnBlur: true,
+        //   tabPress: e => {
+        //     global.imagePicker = false;
+        //     console.log('memee', global.addPost);
+        //     e.preventDefault();
 
-            // global.profileID = currentUser.user_id;
-            // navigation.navigate('Profile', {screen: 'ProfileScreen'});
-          },
-        })}
+        //     // global.profileID = currentUser.user_id;
+        //     // navigation.navigate('Profile', {screen: 'ProfileScreen'});
+        //   },
+        // })}
       />
       <Tab.Screen
         name="TournamentTab"

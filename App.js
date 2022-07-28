@@ -54,7 +54,7 @@ import Inbox from './src/screens/Inbox';
 import NewMessage from './src/screens/NewMessage';
 import CongratsScreen from './src/screens/CongratsScreen';
 import TournamentEntry from './src/screens/TournamentEntry';
-
+import ModalPost from './src/screens/ModalPost';
 import {Settings} from 'react-native-fbsdk-next';
 import {Provider} from 'react-redux';
 import configureStore from './src/redux/store/index';
@@ -105,7 +105,7 @@ function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <NavigationContainer>
+        <NavigationContainer style={{backgroundColor: 'transparent'}}>
           <StatusBar
             animated={true}
             backgroundColor="#0D0219"
@@ -128,6 +128,8 @@ function App() {
             <Stack.Screen name="TournamentEntry" component={TournamentEntry} />
             <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
             <Stack.Screen name="ProfileSetting" component={ProfileSetting} />
+            <Stack.Screen name="ModalPost" component={ModalPost} />
+
             <Stack.Screen
               name="TournamentImageShow"
               component={TournamentImageShow}

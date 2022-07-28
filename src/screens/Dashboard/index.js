@@ -1389,7 +1389,7 @@ export default function Dashboard(props) {
         }}
         keyExtractor={item => item.post_id}
         ListFooterComponent={() => (
-          <View>
+          <View style={{height: 90}}>
             {loaderIndicator == true ? (
               <ActivityIndicator
                 size="large"
