@@ -242,6 +242,7 @@ const ChatScreen = ({route}) => {
               height: 25,
               width: 25,
               resizeMode: 'contain',
+              tintColor: global.sendColor,
             }}
           />
         </TouchableOpacity>
@@ -475,6 +476,7 @@ const ChatScreen = ({route}) => {
                   width: 22,
                   marginBottom: 15,
                   marginLeft: 10,
+                  tintColor: global.sendColor,
                 }}
               />
             </Send>

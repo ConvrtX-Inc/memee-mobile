@@ -118,7 +118,7 @@ const MainBottom = props => {
 
     iconsSelected = icons;
     centerIcon = require('../../images/postBlue.png');
-
+    global.sendColor = '#BB77F0';
     selectedColor = '#BB77F0';
     unselectedColor = '#654E77';
 
@@ -133,7 +133,7 @@ const MainBottom = props => {
 
     iconsSelected = icons;
     centerIcon = require('../../images/uniconMain.png');
-
+    global.sendColor = '#FFC7DA';
     selectedColor = '#FFC7DA';
     unselectedColor = '#EE6293';
   } else if (global.themeIndex == 3) {
@@ -151,7 +151,7 @@ const MainBottom = props => {
     iconsSelected.push(require('../../images/person100.png'));
 
     centerIcon = require('../../images/M100.png');
-
+    global.sendColor = '#000000';
     selectedColor = '#000000';
     unselectedColor = '#FFFFFF';
 
@@ -256,7 +256,7 @@ const MainBottom = props => {
 
     iconsSelected = icons;
     centerIcon = require('../../images/newYearMain.png');
-
+    global.sendColor = '#FFFFFF';
     selectedColor = '#FFFFFF';
     unselectedColor = '#B1CCAA';
   } else if (global.themeIndex == 5) {
@@ -270,7 +270,7 @@ const MainBottom = props => {
 
     iconsSelected = icons;
     centerIcon = require('../../images/saveEarthMain.png');
-
+    global.sendColor = '#FFFFFF';
     selectedColor = '#FFFFFF';
     unselectedColor = '#B1CCAA';
   } else if (global.themeIndex == 6) {
@@ -284,7 +284,7 @@ const MainBottom = props => {
 
     iconsSelected = icons;
     centerIcon = require('../../images/whiteMainM.png');
-
+    global.sendColor = '#FFD03B';
     selectedColor = '#FFD03B';
     unselectedColor = '#000000';
   } else if (global.themeIndex == 9) {
@@ -304,7 +304,7 @@ const MainBottom = props => {
     iconsSelected.push(require('../../images/personMainFilled.png'));
 
     centerIcon = require('../../images/mainM.png');
-
+    global.sendColor = '#FFCD2F';
     selectedColor = '#FFCD2F';
     unselectedColor = '#FFFFFF';
 
@@ -416,7 +416,7 @@ const MainBottom = props => {
     iconsSelected.push(require('../../images/personMainFilled.png'));
 
     centerIcon = require('../../images/mainM.png');
-
+    global.sendColor = '#FFCD2F';
     selectedColor = '#FFCD2F';
     unselectedColor = '#FFFFFF';
 
@@ -531,7 +531,7 @@ const MainBottom = props => {
     iconsSelected.push(require('../../images/theme2Profile.png'));
 
     centerIcon = require('../../images/whiteMainM.png');
-
+    global.sendColor = '#FFCD2F';
     selectedColor = '#FFCD2F';
     unselectedColor = '#FFFFFF';
 
@@ -643,7 +643,7 @@ const MainBottom = props => {
     iconsSelected.push(require('../../images/theme3Profile.png'));
 
     centerIcon = require('../../images/theme3MainM.png');
-
+    global.sendColor = '#FFCD2F';
     selectedColor = '#FFCD2F';
     unselectedColor = '#FFFFFF';
 
@@ -755,7 +755,7 @@ const MainBottom = props => {
     iconsSelected.push(require('../../images/personMainFilled.png'));
 
     centerIcon = require('../../images/theme4MainM.png');
-
+    global.sendColor = '#FFFFFF';
     selectedColor = '#FFCD2F';
     unselectedColor = '#FFFFFF';
 
@@ -867,7 +867,7 @@ const MainBottom = props => {
     iconsSelected.push(require('../../images/theme1Profile.png'));
 
     centerIcon = require('../../images/whiteMainM.png');
-
+    global.sendColor = '#FFFFFF';
     selectedColor = '#FFCD2F';
     unselectedColor = '#FFFFFF';
 
@@ -977,7 +977,7 @@ const MainBottom = props => {
     iconsSelected.push(require('../../images/personMainFilled.png'));
 
     centerIcon = require('../../images/mainM.png');
-
+    global.sendColor = '#9B9B9B';
     selectedColor = '#FFCD2F';
     unselectedColor = '#9B9B9B';
 
@@ -1184,7 +1184,7 @@ const MainBottom = props => {
         name="ExploreTab"
         component={ExploreScreen}
         options={({route}) => ({
-          unmountOnBlur: true,
+          // unmountOnBlur: true,
           tabBarIcon: ({color}) => (
             <View style={[styles.icon, styles.touchstyle]}>
               <Image
@@ -1200,7 +1200,7 @@ const MainBottom = props => {
         name="Memee"
         component={() => null}
         options={{
-          unmountOnBlur: true,
+          // unmountOnBlur: true,
           showLabel: false,
           tabBarLabel: () => {
             return null;
@@ -1220,9 +1220,9 @@ const MainBottom = props => {
           ),
         }}
         listeners={({navigation, route}) => ({
-          unmountOnBlur: true,
+          // unmountOnBlur: true,
           tabPress: e => {
-            global.addPost = true;
+            global.imagePicker = false;
             console.log('memee', global.addPost);
             e.preventDefault();
 
@@ -1236,7 +1236,7 @@ const MainBottom = props => {
         message-processing-outline
         component={Tournament}
         options={({route}) => ({
-          unmountOnBlur: true,
+          // unmountOnBlur: true,
           tabBarIcon: ({color}) => (
             <View style={[styles.icon, styles.touchstyle]}>
               <Image

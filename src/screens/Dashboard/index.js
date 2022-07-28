@@ -1321,9 +1321,9 @@ export default function Dashboard(props) {
                 <View
                   style={{
                     padding: 10,
-                    borderRadius: 20,
+                    borderRadius: 10,
                     position: 'absolute',
-                    top: 30,
+                    top: 45,
                     right: 22,
                     backgroundColor: '#fff',
                     marginRight: 5,
@@ -1348,6 +1348,35 @@ export default function Dashboard(props) {
                               marginRight: 5,
                             }}>
                             Delete
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                      <View
+                        style={{
+                          height: 0.5,
+                          width: '100%',
+                          backgroundColor: 'black',
+                        }}
+                      />
+                      <TouchableOpacity
+                        onPress={() => navigation.navigate('FAQScreen')}>
+                        <View style={{flexDirection: 'row', marginVertical: 5}}>
+                          <Image
+                            style={{
+                              height: 22,
+                              width: 22,
+                              marginLeft: 0,
+                              marginRight: 10,
+                            }}
+                            resizeMode="stretch"
+                            source={require('../../images/faq.png')}
+                          />
+                          <Text
+                            style={{
+                              fontFamily: global.fontSelect,
+                              marginRight: 5,
+                            }}>
+                            FAQs
                           </Text>
                         </View>
                       </TouchableOpacity>
