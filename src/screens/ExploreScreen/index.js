@@ -25,6 +25,7 @@ import SearchScreen from '../SearchScreen';
 import {useSelector} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import BottomNavBar from '../../component/BottomNavBar';
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 
 var showScreen = false;
 global.searchText = '';
@@ -114,9 +115,22 @@ export default function ExploreScreen(props) {
       navigation.navigate('ProfileTab');
     }
   }
-
+  const config = {
+    velocityThreshold: 0.3,
+    directionalOffsetThreshold: 80,
+  };
   return (
-    <View
+    <GestureRecognizer
+      onSwipe={(direction, state) => console.log('Direction', direction)}
+      onSwipeUp={state => console.log('onSwipeUp', state)}
+      onSwipeDown={state => console.log('onSwipeDown', state)}
+      onSwipeLeft={state =>
+        navigation.navigate('TournamentTab', {screen: 'Tournament'})
+      }
+      onSwipeRight={state =>
+        navigation.navigate('HomeTab', {screen: 'Dashboard'})
+      }
+      config={config}
       style={{flex: 1, backgroundColor: global.colorPrimary, marginBottom: 0}}>
       <ScrollView style={{marginBottom: 0}}>
         <View style={styles.topView}>
@@ -205,13 +219,13 @@ export default function ExploreScreen(props) {
         )}
       </ScrollView>
 
-      <BottomNavBar
+      {/* <BottomNavBar
         onPress={index => activeTab(index)}
         themeIndex={ImageBottoms}
         navigation={navigation}
         navIndex={1}
-      />
-    </View>
+      /> */}
+    </GestureRecognizer>
   );
 }
 

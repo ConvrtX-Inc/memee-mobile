@@ -20,6 +20,7 @@ import {
   ViewBase,
   NativeModules,
 } from 'react-native';
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Modal2 from 'react-native-modalbox';
 import ButtonCoins from '../../component/ButtonCoins';
@@ -905,8 +906,21 @@ export default function Dashboard(props) {
 
   // console.log('FILE', file);
   /* console.log('textMaximumWidth', textMaximumWidth); */
+  const config = {
+    velocityThreshold: 0.3,
+    directionalOffsetThreshold: 80,
+  };
   return (
-    <View style={{flex: 1, backgroundColor: global.colorPrimary}}>
+    <GestureRecognizer
+      onSwipe={(direction, state) => console.log('Direction', direction)}
+      onSwipeUp={state => console.log('onSwipeUp', state)}
+      onSwipeDown={state => console.log('onSwipeDown', state)}
+      onSwipeLeft={state =>
+        navigation.navigate('ExploreTab', {screen: 'ExploreScreen'})
+      }
+      onSwipeRight={state => console.log('onSwipeRight', state)}
+      config={config}
+      style={{flex: 1, backgroundColor: global.colorPrimary}}>
       <FlatList
         ref={flatlistRef}
         data={
@@ -2011,13 +2025,13 @@ export default function Dashboard(props) {
         </View>
       </Modal>
 
-      <BottomNavBar
+      {/* <BottomNavBar
         onPress={index => activeTab(index)}
         themeIndex={ImageBottoms}
         navigation={navigation}
         navIndex={0}
-      />
-    </View>
+      /> */}
+    </GestureRecognizer>
   );
 }
 
