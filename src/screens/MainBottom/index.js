@@ -1225,11 +1225,12 @@ const MainBottom = props => {
         }}
         // listeners={({navigation, route}) => ({
         //   // unmountOnBlur: true,
-        //   tabPress: e => {
-        //     global.imagePicker = false;
-        //     console.log('memee', global.addPost);
-        //     e.preventDefault();
-
+        //   blur: () => null,
+        //   tabPress: (scene, jumpToIndex) => {
+        //     global.isModalOpen = true;
+        //     console.log('eemem', scene, jumpToIndex);
+        //     jumpToIndex(scene.target);
+        //     // e.preventDefault();
         //     // global.profileID = currentUser.user_id;
         //     // navigation.navigate('Profile', {screen: 'ProfileScreen'});
         //   },

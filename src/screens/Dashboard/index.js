@@ -63,6 +63,7 @@ import storage from '@react-native-firebase/storage';
 import moment from 'moment';
 import {toggleOnlineStatus} from '../../redux/actions/Auth';
 import DeviceInfo from 'react-native-device-info';
+import {useIsFocused} from '@react-navigation/native';
 
 const hasNotch = DeviceInfo.hasNotch();
 
@@ -105,7 +106,9 @@ export default function Dashboard(props) {
     tournamentRanking,
     followRequests,
   } = useSelector(({authRed}) => authRed);
-
+  const [isModalOpen, setIsModalOpen] = useState(
+    global.isModalOpen !== undefined ? global.isModalOpen : false,
+  );
   let options = {
     mediaType: 'photo',
     maxWidth: 512,
@@ -183,10 +186,15 @@ export default function Dashboard(props) {
   useEffect(async () => {
     await toggleOnlineStatus('1');
 
-    console.log('token', global.token);
+    // console.log('token', global.token);
     fetchStories();
   }, [updatedStories]);
-
+  // fetching of Stories
+  const isFocused = useIsFocused();
+  useEffect(async () => {
+    console.log('ipdating modal');
+    setIsModalOpen(global.isModalOpen);
+  }, [global.isModalOpen, isFocused]);
   // upload image/video
   function uploadImageToS3() {
     setLoadingAddStory(true);
@@ -898,6 +906,7 @@ export default function Dashboard(props) {
 
   const getDescription = text => {
     try {
+      // console.log('eset', text);
       return decodeURIComponent(
         JSON.parse('"' + text.replace(/\"/g, '\\"') + '"'),
       );
@@ -1416,35 +1425,6 @@ export default function Dashboard(props) {
                               marginRight: 5,
                             }}>
                             Delete
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-                      <View
-                        style={{
-                          height: 0.5,
-                          width: '100%',
-                          backgroundColor: 'black',
-                        }}
-                      />
-                      <TouchableOpacity
-                        onPress={() => navigation.navigate('FAQScreen')}>
-                        <View style={{flexDirection: 'row', marginVertical: 5}}>
-                          <Image
-                            style={{
-                              height: 22,
-                              width: 22,
-                              marginLeft: 0,
-                              marginRight: 10,
-                            }}
-                            resizeMode="stretch"
-                            source={require('../../images/faq.png')}
-                          />
-                          <Text
-                            style={{
-                              fontFamily: global.fontSelect,
-                              marginRight: 5,
-                            }}>
-                            FAQs
                           </Text>
                         </View>
                       </TouchableOpacity>
@@ -2130,6 +2110,7 @@ export default function Dashboard(props) {
         themeIndex={ImageBottoms}
         navigation={navigation}
         navIndex={0}
+        isModalOpen={isModalOpen}
       /> */}
     </GestureRecognizer>
   );

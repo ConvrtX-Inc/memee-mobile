@@ -224,6 +224,13 @@ export default function EditProfileScreen(props) {
     if (error.phone.error) {
       return;
     }
+    if (name.length > 25) {
+      Toast.show({
+        type: 'error',
+        text2: 'Name should have only a maximum of 25 characters',
+      });
+      return;
+    }
     setIndicatButton(true);
 
     global.userData.imgurl = imgUrl;
@@ -282,7 +289,7 @@ export default function EditProfileScreen(props) {
         backgroundColor: global.colorPrimary,
         /* backgroundColor: colors.backgroundColor, */
       }}>
-      <ScrollView style={{ marginTop: hasNotch ? 25 : 0}}>
+      <ScrollView style={{marginTop: hasNotch ? 25 : 0}}>
         <View style={{flexDirection: 'row', paddingLeft: '5%'}}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image

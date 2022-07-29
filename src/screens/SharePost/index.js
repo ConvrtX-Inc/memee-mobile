@@ -69,10 +69,9 @@ export default function SharePost() {
         let val = '1234567890';
         let isnum = /^\d+$/.test(val);
         if (
-          post[i].match(/[a-z]/i) ||
-          post[i].match(/[A-Z]/i) ||
-          isnum ||
-          post[i].match(/^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/i)
+          /[a-z]/i.test(post[i]) ||
+          /[A-Z]/i.test(post[i]) ||
+          /^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/i.test(post[i])
         ) {
           console.log('emoji detected');
           unicodeString += post[i];

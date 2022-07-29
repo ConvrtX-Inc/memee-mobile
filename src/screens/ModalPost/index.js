@@ -23,6 +23,7 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
+import SplashImages from '../../component/SplashImages';
 import {
   PESDK,
   PhotoEditorModal,
@@ -35,8 +36,10 @@ import {
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 global.navigateDashboard = 1;
 var windowWidth = Dimensions.get('window').width;
-
+import {Host, Portal} from 'react-native-portalize';
+import {Modalize} from 'react-native-modalize';
 //Banuba Video Editor
+
 const {VideoEditorModule} = NativeModules;
 
 const openEditor = async () => {
@@ -65,12 +68,21 @@ const ModalPost = () => {
     quality: 1,
   };
   const navigation = useNavigation();
-
+  const modalizeRef = useRef(Modalize);
   const [addStoryModalVisible, setAddStoryModalVisible] = useState(false);
   const [file, setFile] = useState(null);
   const [isOpenMedia, setIsOpenMedia] = useState(false);
   const [loadingAddStory, setLoadingAddStory] = useState(false);
   const [updatedStories, setUpdatedStories] = useState(0);
+
+  const handleClose = dest => {
+    if (modalizeRef.current) {
+      modalizeRef.current.close(dest);
+      setTimeout(() => {
+        navigation.goBack();
+      }, 1000);
+    }
+  };
 
   // upload image/video
   function uploadImageToS3() {
@@ -188,28 +200,23 @@ const ModalPost = () => {
     });
   }
   const openCamera = async () => {
-    setIsOpenMedia(true);
     let isStoragePermitted = await requestExternalWritePermission();
     let isCameraPermitted = await requestCameraPermission();
     if (isCameraPermitted && isStoragePermitted) {
       launchCamera(options, response => {
-        //console.log('Response = ', response);
+        /* console.log('Response = ', response); */
 
         if (response.didCancel) {
           // alert('User cancelled camera picker');
-          setIsOpenMedia(false);
           return;
         } else if (response.errorCode == 'camera_unavailable') {
           // alert('Camera not available on device');
-          setIsOpenMedia(false);
           return;
         } else if (response.errorCode == 'permission') {
           // alert('Permission not satisfied');
-          setIsOpenMedia(false);
           return;
         } else if (response.errorCode == 'others') {
           // alert(response.errorMessage);
-          setIsOpenMedia(false);
           return;
         }
 
@@ -220,10 +227,8 @@ const ModalPost = () => {
   };
 
   function openPhotoEditor(uri) {
-    setIsOpenMedia(true);
     PESDK.openEditor({uri: uri}).then(
       result => {
-        setIsOpenMedia(false);
         navigation.navigate('NewPost', {uri: result.image, type: 'photo'});
       },
       error => {
@@ -231,74 +236,88 @@ const ModalPost = () => {
       },
     );
   }
+  const image = {uri: 'https://reactjs.org/logo-og.png'};
   return (
-    <View
-      style={{
-        flex: 1,
-        height: Dimensions.get('window').height,
-        width: Dimensions.get('window').width,
-      }}>
-      {/* <Modal
-        // animationType='slide'
-        // transparent={true}
-        // visible={addStoryModalVisible}
-        
-        isOpen={true}
-        onClosed={() => setAddStoryModalVisible(false)}
-        position="center"
-        coverScreen={true}
-        transparent={true}> */}
-      <View
-        style={{
-          backgroundColor: '#201E23',
-          flex: 1,
-        }}>
+    <Host>
+      {/* <SplashImages /> */}
+      <View style={{flex: 1, backgroundColor: global.colorPrimary}}>
+        <Image
+          style={{
+            width: (windowWidth * 64) / 100,
+            height: (windowWidth * 17) / 100,
+            marginTop: (windowWidth * 10) / 100,
+            marginBottom: (windowWidth * 10) / 100,
+            tintColor: global.sendColor,
+          }}
+          resizeMode="stretch"
+          source={require('../../images/onboardIcon.png')}
+        />
+      </View>
+      <Modalize
+        ref={modalizeRef}
+        alwaysOpen={500}
+        snapPoint={200}
+        modalTopOffset={200}
+        dragToss={false}
+        handlePosition={null}
+        panGestureEnabled={false}
+        modalHeight={500}>
         <View
           style={{
             flex: 1,
-            height: '100%',
-            width: '100%',
+            height: 500,
+            width: Dimensions.get('window').width,
           }}>
-          <View style={{flexDirection: 'row-reverse'}}>
-            <View>
-              <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Text
-                  style={{
-                    paddingRight: 15,
-                    paddingTop: 15,
-                    color: 'white',
-                    fontSize: 16,
-                  }}>
-                  Cancel
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+          <View
+            style={{
+              backgroundColor: '#201E23',
+              flex: 1,
+            }}>
+            <View
+              style={{
+                flex: 1,
+                width: '100%',
+              }}>
+              <View style={{flexDirection: 'row-reverse'}}>
+                <View>
+                  <TouchableOpacity onPress={() => handleClose()}>
+                    <Text
+                      style={{
+                        paddingRight: 15,
+                        paddingTop: 15,
+                        color: 'white',
+                        fontSize: 16,
+                      }}>
+                      Cancel
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
 
-          <View style={styles.centeredView}>
-            <View>
-              <TouchableOpacity
-                disabled={isOpenMedia}
-                style={{marginBottom: '8%'}}
-                onPress={() => openCamera()}>
-                <Text
-                  style={{
-                    color: '#fff',
-                    opacity: 0.5,
-                    fontSize: 16,
-                  }}>
-                  Take photo...
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                disabled={isOpenMedia}
-                style={{marginBottom: '6%'}}
-                onPress={() => openGallery()}>
-                <Text style={{color: '#fff', opacity: 0.5, fontSize: 16}}>
-                  Choose photo from library...
-                </Text>
-              </TouchableOpacity>
-              {/* <TouchableOpacity
+              <View style={styles.centeredView}>
+                <View>
+                  <TouchableOpacity
+                    disabled={isOpenMedia}
+                    style={{marginBottom: '8%'}}
+                    onPress={() => openCamera()}>
+                    <Text
+                      style={{
+                        color: '#fff',
+                        opacity: 0.5,
+                        fontSize: 16,
+                      }}>
+                      Take photo...
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    disabled={isOpenMedia}
+                    style={{marginBottom: '6%'}}
+                    onPress={() => openGallery()}>
+                    <Text style={{color: '#fff', opacity: 0.5, fontSize: 16}}>
+                      Choose photo from library...
+                    </Text>
+                  </TouchableOpacity>
+                  {/* <TouchableOpacity
                 style={{marginBottom: '6%'}}
                 onPress={() => {
                   setIsOpenMedia(true);
@@ -324,28 +343,30 @@ const ModalPost = () => {
                   Select Video
                 </Text>
               </TouchableOpacity> */}
+                </View>
+              </View>
             </View>
-          </View>
-        </View>
 
-        {file && file.type === 'photo' && (
-          <ImageBackground
-            source={{uri: file && file.uri}}
-            resizeMode="contain"
-            imageStyle={{
-              flex: 1,
-              height: '100%',
-              width: '100%',
-            }}
-            style={{
-              flex: 1,
-              height: '100%',
-              width: '100%',
-            }}></ImageBackground>
-        )}
-      </View>
-      {/* </Modal> */}
-    </View>
+            {file && file.type === 'photo' && (
+              <ImageBackground
+                source={{uri: file && file.uri}}
+                resizeMode="contain"
+                imageStyle={{
+                  flex: 1,
+                  height: '100%',
+                  width: '100%',
+                }}
+                style={{
+                  flex: 1,
+                  height: '100%',
+                  width: '100%',
+                }}></ImageBackground>
+            )}
+          </View>
+          {/* </Modal> */}
+        </View>
+      </Modalize>
+    </Host>
   );
 };
 const styles = StyleSheet.create({
@@ -398,7 +419,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: '36%',
   },
   modalView: {
     margin: 20,

@@ -66,6 +66,7 @@ import {toggleOnlineStatus} from './src/redux/actions/Auth';
 import {urls} from './src/api/urls';
 import TournamentImageShow from './src/screens/TournamentImageShow';
 import MainBottom from './src/screens/MainBottom';
+import {Host} from 'react-native-portalize';
 const {store, persistor} = configureStore();
 
 const Stack = createStackNavigator();
@@ -106,115 +107,123 @@ function App() {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <NavigationContainer style={{backgroundColor: 'transparent'}}>
-          <StatusBar
-            animated={true}
-            backgroundColor="#0D0219"
-            // barStyle={statusBarStyle}
-            // showHideTransition={statusBarTransition}
-            // hidden={hidden}
-          />
-          <Stack.Navigator
-            initialRouteName="SplashScreen"
-            screenOptions={{
-              headerShown: false,
-            }}>
-            <Stack.Screen name="SplashScreen" component={SplashScreen} />
-            <Stack.Screen
-              name="LoginScreen"
-              component={LoginScreen}
-              options={{gestureEnabled: false}}
+          <Host>
+            <StatusBar
+              animated={true}
+              backgroundColor="#0D0219"
+              // barStyle={statusBarStyle}
+              // showHideTransition={statusBarTransition}
+              // hidden={hidden}
             />
-            <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
-            <Stack.Screen name="MainBottom" component={MainBottom} />
-            <Stack.Screen name="Dashboard" component={Dashboard} />
-            <Stack.Screen name="CommentScreen" component={CommentScreen} />
-            <Stack.Screen name="NewPost" component={NewPost} />
-            <Stack.Screen name="TournamentEntry" component={TournamentEntry} />
-            <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
-            <Stack.Screen name="ProfileSetting" component={ProfileSetting} />
-            <Stack.Screen name="ModalPost" component={ModalPost} />
-
-            <Stack.Screen
-              name="TournamentImageShow"
-              component={TournamentImageShow}
-            />
-            <Stack.Screen
-              name="CongratsScreen"
-              component={CongratsScreen}
+            <Stack.Navigator
+              initialRouteName="SplashScreen"
               screenOptions={{
                 headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name="NotificationScreen"
-              component={NotificationScreen}
-            />
-            <Stack.Screen
-              name="ActivityNotification"
-              component={ActivityNotification}
-            />
-            <Stack.Screen name="FollowRequest" component={FollowRequest} />
-            <Stack.Screen name="NavigateScreen" component={NavigateScreen} />
-            <Stack.Screen name="SettingScreen" component={SettingScreen} />
-            <Stack.Screen name="ExploreScreen" component={ExploreScreen} />
-            <Stack.Screen name="ExploreDetail" component={ExploreDetail} />
-            <Stack.Screen
-              name="TrendingPostExplore"
-              component={TrendingPostExplore}
-            />
-            <Stack.Screen name="SearchScreen" component={SearchScreen} />
-            <Stack.Screen
-              name="ProfileImageShow"
-              component={ProfileImageShow}
-            />
-            <Stack.Screen
-              name="SettingDetailNotification"
-              component={SettingDetailNotification}
-            />
-            <Stack.Screen name="Tournament" component={Tournament} />
-            <Stack.Screen name="TounamentScreen" component={TounamentScreen} />
-            <Stack.Screen name="RankingScreen" component={RankingScreen} />
-            <Stack.Screen name="Store" component={Store} />
-            <Stack.Screen name="JudgeScreen" component={JudgeScreen} />
-            <Stack.Screen name="JudgeMeme" component={JudgeMeme} />
-            <Stack.Screen name="AddCoins" component={AddCoins} />
-            <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
-            <Stack.Screen name="VerifyEmail" component={VerifyEmail} />
-            <Stack.Screen name="PaymentMethod" component={PaymentMethod} />
-            <Stack.Screen name="NewPassword" component={NewPassword} />
-            <Stack.Screen name="StoreTab" component={StoreTab} />
-            <Stack.Screen name="IconsScreen" component={IconsScreen} />
-            <Stack.Screen name="ButtonsScreen" component={ButtonsScreen} />
-            <Stack.Screen name="FontScreen" component={FontScreen} />
-            <Stack.Screen
-              name="ProfileBackgroundScreen"
-              component={ProfileBackgroundScreen}
-            />
-            <Stack.Screen
-              name="ProfileOverlayScreen"
-              component={ProfileOverlayScreen}
-            />
-            <Stack.Screen
-              name="CoinsConfirmation"
-              component={CoinsConfirmation}
-            />
-            <Stack.Screen name="OrganizeBadges" component={OrganizeBadges} />
-            <Stack.Screen
-              name="EditProfileScreen"
-              component={EditProfileScreen}
-            />
-            <Stack.Screen name="BillingDetail" component={BillingDetail} />
-            <Stack.Screen name="FAQScreen" component={FAQScreen} />
-            <Stack.Screen name="ChangeCountry" component={ChangeCountry} />
-            <Stack.Screen name="Congradulation" component={Congradulation} />
-            <Stack.Screen name="SharePost" component={SharePost} />
-            <Stack.Screen name="Onboarding" component={Onboarding} />
-            <Stack.Screen name="ChatScreen" component={ChatScreen} />
-            <Stack.Screen name="Inbox" component={Inbox} />
-            <Stack.Screen name="NewMessage" component={NewMessage} />
+              }}>
+              <Stack.Screen name="SplashScreen" component={SplashScreen} />
+              <Stack.Screen
+                name="LoginScreen"
+                component={LoginScreen}
+                options={{gestureEnabled: false}}
+              />
+              <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
+              <Stack.Screen name="MainBottom" component={MainBottom} />
+              <Stack.Screen name="Dashboard" component={Dashboard} />
+              <Stack.Screen name="CommentScreen" component={CommentScreen} />
+              <Stack.Screen name="NewPost" component={NewPost} />
+              <Stack.Screen
+                name="TournamentEntry"
+                component={TournamentEntry}
+              />
+              <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+              <Stack.Screen name="ProfileSetting" component={ProfileSetting} />
+              <Stack.Screen name="ModalPost" component={ModalPost} />
 
-            {/* <Stack.Screen name="PhotoEditingTry" component={PhotoEditingTry} /> */}
-          </Stack.Navigator>
+              <Stack.Screen
+                name="TournamentImageShow"
+                component={TournamentImageShow}
+              />
+              <Stack.Screen
+                name="CongratsScreen"
+                component={CongratsScreen}
+                screenOptions={{
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen
+                name="NotificationScreen"
+                component={NotificationScreen}
+              />
+              <Stack.Screen
+                name="ActivityNotification"
+                component={ActivityNotification}
+              />
+              <Stack.Screen name="FollowRequest" component={FollowRequest} />
+              <Stack.Screen name="NavigateScreen" component={NavigateScreen} />
+              <Stack.Screen name="SettingScreen" component={SettingScreen} />
+              <Stack.Screen name="ExploreScreen" component={ExploreScreen} />
+              <Stack.Screen name="ExploreDetail" component={ExploreDetail} />
+              <Stack.Screen
+                name="TrendingPostExplore"
+                component={TrendingPostExplore}
+              />
+              <Stack.Screen name="SearchScreen" component={SearchScreen} />
+              <Stack.Screen
+                name="ProfileImageShow"
+                component={ProfileImageShow}
+              />
+              <Stack.Screen
+                name="SettingDetailNotification"
+                component={SettingDetailNotification}
+              />
+              <Stack.Screen name="Tournament" component={Tournament} />
+              <Stack.Screen
+                name="TounamentScreen"
+                component={TounamentScreen}
+              />
+              <Stack.Screen name="RankingScreen" component={RankingScreen} />
+              <Stack.Screen name="Store" component={Store} />
+              <Stack.Screen name="JudgeScreen" component={JudgeScreen} />
+              <Stack.Screen name="JudgeMeme" component={JudgeMeme} />
+              <Stack.Screen name="AddCoins" component={AddCoins} />
+              <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
+              <Stack.Screen name="VerifyEmail" component={VerifyEmail} />
+              <Stack.Screen name="PaymentMethod" component={PaymentMethod} />
+              <Stack.Screen name="NewPassword" component={NewPassword} />
+              <Stack.Screen name="StoreTab" component={StoreTab} />
+              <Stack.Screen name="IconsScreen" component={IconsScreen} />
+              <Stack.Screen name="ButtonsScreen" component={ButtonsScreen} />
+              <Stack.Screen name="FontScreen" component={FontScreen} />
+              <Stack.Screen
+                name="ProfileBackgroundScreen"
+                component={ProfileBackgroundScreen}
+              />
+              <Stack.Screen
+                name="ProfileOverlayScreen"
+                component={ProfileOverlayScreen}
+              />
+              <Stack.Screen
+                name="CoinsConfirmation"
+                component={CoinsConfirmation}
+              />
+              <Stack.Screen name="OrganizeBadges" component={OrganizeBadges} />
+              <Stack.Screen
+                name="EditProfileScreen"
+                component={EditProfileScreen}
+              />
+              <Stack.Screen name="BillingDetail" component={BillingDetail} />
+              <Stack.Screen name="FAQScreen" component={FAQScreen} />
+              <Stack.Screen name="ChangeCountry" component={ChangeCountry} />
+              <Stack.Screen name="Congradulation" component={Congradulation} />
+              <Stack.Screen name="SharePost" component={SharePost} />
+              <Stack.Screen name="Onboarding" component={Onboarding} />
+              <Stack.Screen name="ChatScreen" component={ChatScreen} />
+              <Stack.Screen name="Inbox" component={Inbox} />
+              <Stack.Screen name="NewMessage" component={NewMessage} />
+
+              {/* <Stack.Screen name="PhotoEditingTry" component={PhotoEditingTry} /> */}
+            </Stack.Navigator>
+          </Host>
         </NavigationContainer>
       </PersistGate>
       <Toast position="bottom" ref={ref => Toast.setRef(ref)} />

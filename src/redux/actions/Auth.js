@@ -94,14 +94,14 @@ export function readNotifications() {
 export async function toggleOnlineStatus(val) {
   /* console.info('val', val);
   console.info('uth_token: global.token,', global.token); */
-  console.log(
-    'URL USE:',
-    global.address +
-      'toggleOnlineStatus/' +
-      global.userData.user_id +
-      '/' +
-      val,
-  );
+  // console.log(
+  //   'URL USE:',
+  //   global.address +
+  //     'toggleOnlineStatus/' +
+  //     global.userData.user_id +
+  //     '/' +
+  //     val,
+  // );
   if (global.userData.user_id !== undefined) {
     fetch(
       global.address +

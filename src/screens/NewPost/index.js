@@ -130,30 +130,30 @@ export default function NewPost(routes) {
     var currentDate = currentDateFN();
     var unicodeString = '';
     var hashtag = '';
-    console.log('postas', post);
+    console.log('postas', post[0]);
     for (var i = 0; i < post.length; i++) {
-      console.log('asdw', post[i]);
       let val = '1234567890';
       let isnum = /^\d+$/.test(val);
+      console.log('asdw', post[i], /[a-z]/i.test(post[i]));
       if (
-        post[i].match(/[a-z]/i) ||
-        post[i].match(/[A-Z]/i) ||
-        isnum ||
-        post[i].match(/^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/i)
+        /[a-z]/i.test(post[i]) ||
+        /[A-Z]/i.test(post[i]) ||
+        /^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/i.test(post[i])
       ) {
-        console.log('emoji detected');
+        console.log('emoji not detected');
         unicodeString += post[i];
       } else {
-        console.log('emoji not detected');
+        console.log('emoji  detected');
         var theUnicode = post.charCodeAt(i).toString(16).toUpperCase();
         while (theUnicode.length < 4) {
           theUnicode = '0' + theUnicode;
         }
+        console.log('emoji  detected');
         theUnicode = '\\u' + theUnicode;
         unicodeString += theUnicode;
       }
     }
-
+    console.log('unicodeString', unicodeString);
     fetch(global.address + 'AddPost', {
       method: 'POST',
       headers: {
