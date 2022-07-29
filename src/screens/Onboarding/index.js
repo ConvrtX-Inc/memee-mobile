@@ -441,28 +441,28 @@ export default function Onboarding({navigation}) {
             </Text>
           </View>
         </TouchableOpacity>
-
-        <TouchableOpacity
-          activeOpacity={0.5}
-          onPress={() => onAppleLoginTap()}
-          style={styles.buttonStyle}>
-          <View style={styles.buttonContentContainer}>
-            <Image
-              style={styles.tinyLogoBtn}
-              source={require('../../images/applewhite.png')}
-            />
-            <Text
-              style={{
-                textAlign: 'center',
-                fontFamily: 'OpenSans-SemiBold',
-                fontSize: 16,
-                color: '#fff',
-              }}>
-              Continue with Apple
-            </Text>
-          </View>
-        </TouchableOpacity>
-
+        {Platform.OS !== 'android' ? (
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => onAppleLoginTap()}
+            style={styles.buttonStyle}>
+            <View style={styles.buttonContentContainer}>
+              <Image
+                style={styles.tinyLogoBtn}
+                source={require('../../images/applewhite.png')}
+              />
+              <Text
+                style={{
+                  textAlign: 'center',
+                  fontFamily: 'OpenSans-SemiBold',
+                  fontSize: 16,
+                  color: '#fff',
+                }}>
+                Continue with Apple
+              </Text>
+            </View>
+          </TouchableOpacity>
+        ) : null}
         <View style={{flexDirection: 'row', alignSelf: 'center'}}>
           <Text
             style={[styles.txtdown, {fontWeight: 'bold', color: '#707070'}]}>
