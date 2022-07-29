@@ -298,7 +298,7 @@ const ModalPost = () => {
                   Choose photo from library...
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={{marginBottom: '6%'}}
                 onPress={() => {
                   setIsOpenMedia(true);
@@ -323,7 +323,7 @@ const ModalPost = () => {
                 <Text style={{color: '#fff', opacity: 0.5, fontSize: 16}}>
                   Select Video
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </View>
         </View>

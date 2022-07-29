@@ -26,9 +26,11 @@ import {useSelector} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import BottomNavBar from '../../component/BottomNavBar';
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
+import DeviceInfo from 'react-native-device-info';
 
 var showScreen = false;
 global.searchText = '';
+const hasNotch = DeviceInfo.hasNotch();
 export default function ExploreScreen(props) {
   const navigation = useNavigation();
   const {coinsStored, ImageBottoms, notifications} = useSelector(

@@ -19,7 +19,7 @@ import {
   ImageBackground,
   ViewBase,
   NativeModules,
-  Platform
+  Platform,
 } from 'react-native';
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -833,7 +833,7 @@ export default function Dashboard(props) {
   function openGallery() {
     setIsOpenMedia(true);
     console.log('this is true');
-    launchImageLibrary(options, (response) => {
+    launchImageLibrary(options, response => {
       console.log('Response = ', response);
       console.log('Response = ');
 
@@ -856,7 +856,7 @@ export default function Dashboard(props) {
       }
 
       let source = response.assets[0];
-      console.log('source', source)
+      console.log('source', source);
       openPhotoEditor(source.uri);
     });
   }
@@ -864,7 +864,7 @@ export default function Dashboard(props) {
   function openGalleryForIOS() {
     setIsOpenMedia(true);
     console.log('this is true');
-    launchImageLibrary(options2, (response) => {
+    launchImageLibrary(options2, response => {
       console.log('Response = ', response);
       console.log('Response = ');
 
@@ -887,7 +887,7 @@ export default function Dashboard(props) {
       }
 
       let source = response;
-      console.log('source', source)
+      console.log('source', source);
       setIsOpenMedia(false);
       if (source) {
         setFile({type: 'video', uri: source.assets[0].uri});
@@ -1229,8 +1229,8 @@ export default function Dashboard(props) {
                 </ImageBackground>
               )} */}
 
-              {
-                !item.img_url.includes('mp4') && (<ImageBackground
+              {!item.img_url.includes('mp4') && (
+                <ImageBackground
                   source={{uri: item.img_url}}
                   resizeMode="contain"
                   style={{
@@ -1241,8 +1241,8 @@ export default function Dashboard(props) {
                     colors={[global.overlay1, global.overlay3]}
                     style={{height: '100%', width: '100%'}}
                   />
-                </ImageBackground>)
-              }
+                </ImageBackground>
+              )}
 
               <View
                 style={{width: '100%', backgroundColor: global.colorPrimary}}>
@@ -1678,7 +1678,8 @@ export default function Dashboard(props) {
                               backgroundColor: 'white',
                               fontWeight: 'bold',
                               borderRadius: Platform.OS === 'ios' ? 10.5 : 100,
-                              overflow: Platform.OS === 'ios' ? 'hidden' : ''
+                              overflow:
+                                Platform.OS === 'ios' ? 'hidden' : 'hidden',
                             }}
                           />
                         </TouchableOpacity>

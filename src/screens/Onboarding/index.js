@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import ButtonWithImage from '../../component/ButtonWithImage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { appleAuth } from '@invertase/react-native-apple-authentication'
+// import { appleAuth } from '@invertase/react-native-apple-authentication'
 import {
   LoginManager,
   AccessToken,
@@ -188,13 +188,8 @@ export default function Onboarding({navigation}) {
     })
       .then(response => response.json())
       .then(async responseJson => {
-
-        
-
         if (responseJson.Status == 409) {
           if (loginTypeVar == 'Google') logoutFromGoogle();
-
- 
 
           console.log('Error', responseJson);
 
@@ -242,8 +237,6 @@ export default function Onboarding({navigation}) {
     } catch (e) {}
   }
 
-
-
   async function onTwitterButtonPress() {
     // Perform the login request
     try {
@@ -287,75 +280,68 @@ export default function Onboarding({navigation}) {
     }
   };
 
-  const onAppleLoginTap = async() => {
-      try{
+  //   const onAppleLoginTap = async() => {
+  //       try{
 
-      //apple login continuation
-      
-      const appleAuthResponse = await appleAuth.performRequest({
-        requestedOperation: appleAuth.Operation.LOGIN,
-        requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
-      });  
-      
-      const { identityToken, fullName, email } = appleAuthResponse
+  //       //apple login continuation
 
-      const loginDatas =  {
-        identityToken,
-        fullName,
-        email
-      }
+  //       const appleAuthResponse = await appleAuth.performRequest({
+  //         requestedOperation: appleAuth.Operation.LOGIN,
+  //         requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+  //       });
 
-      try{
-        const loginData = await AsyncStorage.getItem('appleLogin')
-        const parsedLoginData = JSON.parse(loginData)
+  //       const { identityToken, fullName, email } = appleAuthResponse
 
-          if (loginData == null){
+  //       const loginDatas =  {
+  //         identityToken,
+  //         fullName,
+  //         email
+  //       }
 
-            // console.log(loginDatas)
-            AsyncStorage.setItem('appleLogin',JSON.stringify(loginDatas),(err)=> {
-              if (err){
-                console.log("an error")
-                throw err
-              } 
+  //       try{
+  //         const loginData = await AsyncStorage.getItem('appleLogin')
+  //         const parsedLoginData = JSON.parse(loginData)
 
-              
-              emailVar = parsedLoginData?.email
-              nameVar = parsedLoginData?.fullName?.givenName +" "+ parsedLoginData?.fullName?.familyName;
-              imageVar = null;
-              loginTypeVar = 'apple';
+  //           if (loginData == null){
 
-              SignupFN()
+  //             // console.log(loginDatas)
+  //             AsyncStorage.setItem('appleLogin',JSON.stringify(loginDatas),(err)=> {
+  //               if (err){
+  //                 console.log("an error")
+  //                 throw err
+  //               }
 
+  //               emailVar = parsedLoginData?.email
+  //               nameVar = parsedLoginData?.fullName?.givenName +" "+ parsedLoginData?.fullName?.familyName;
+  //               imageVar = null;
+  //               loginTypeVar = 'apple';
 
+  //               SignupFN()
 
-            }).catch((err) => {
-              console.log("error is:" + err)
-            })
+  //             }).catch((err) => {
+  //               console.log("error is:" + err)
+  //             })
 
-          }else{
+  //           }else{
 
-              emailVar = parsedLoginData?.email
-              nameVar = parsedLoginData?.fullName?.givenName +" "+ parsedLoginData?.fullName?.familyName;
-              imageVar = null;
-              loginTypeVar = 'apple';
+  //               emailVar = parsedLoginData?.email
+  //               nameVar = parsedLoginData?.fullName?.givenName +" "+ parsedLoginData?.fullName?.familyName;
+  //               imageVar = null;
+  //               loginTypeVar = 'apple';
 
-              await SignupFN()
-          
-            
-          }
-        }catch(error){
-//error  
-          AsyncStorage.removeItem("appleLogin")
-       
+  //               await SignupFN()
 
-      }
+  //           }
+  //         }catch(error){
+  // //error
+  //           AsyncStorage.removeItem("appleLogin")
 
+  //       }
 
-      }catch (error){
-        console.log('error apple'+error)
-      }
-  }
-  
+  //       }catch (error){
+  //         console.log('error apple'+error)
+  //       }
+  //   }
 
   return (
     <View
