@@ -325,7 +325,7 @@ export default function FAQScreen(props) {
           <CollapseHeader>
             <View style={{flexDirection: 'row', width: '98%'}}>
               <Text style={{color: '#fff', fontSize: 15, width: '87%'}}>
-                How do I edit or remove a method?
+                How do I edit or remove a post?
               </Text>
 
               {RemoveToggle == true ? (
