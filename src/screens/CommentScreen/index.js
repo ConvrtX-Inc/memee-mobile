@@ -390,7 +390,8 @@ export default class CommentScreen extends React.Component {
                               style={{
                                 color: global.colorTextActive,
                                 fontFamily: global.fontSelect,
-                                marginRight: 5,
+                                marginRight: 10,
+                                marginLeft:10
                               }}>
                               Liked
                             </Text>
@@ -539,7 +540,8 @@ export default class CommentScreen extends React.Component {
                             style={{
                               color: global.colorTextActive,
                               fontFamily: global.fontSelect,
-                              marginRight: 5,
+                              marginRight: 10,
+                              marginLeft:10,
                             }}>
                             Liked
                           </Text>
