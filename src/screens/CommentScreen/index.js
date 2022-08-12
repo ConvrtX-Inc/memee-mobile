@@ -436,7 +436,6 @@ export default class CommentScreen extends React.Component {
                                 color={global.colorTextActive}
                                 style={{
                                   padding: 1,
-                                  backgroundColor: 'white',
                                   fontWeight: 'bold',
                                   borderRadius: 100,
                                 }}
@@ -583,7 +582,6 @@ export default class CommentScreen extends React.Component {
                               color={global.colorTextActive}
                               style={{
                                 padding: 1,
-                                backgroundColor: 'white',
                                 fontWeight: 'bold',
                                 borderRadius: 100,
                               }}
