@@ -48,8 +48,15 @@ async function getAndroidExportResult() {
 }
 //End Video Editor
 
-const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
-  const [showImagePickerDialog, setShowImagePickerDialog] = useState(false);
+const BottomNavBar = ({
+  themeIndex,
+  navIndex,
+  onPress,
+  navigation,
+  isModalOpen,
+}) => {
+  const [showImagePickerDialog, setShowImagePickerDialog] =
+    useState(isModalOpen);
 
   let options = {
     mediaType: 'photo',
@@ -628,7 +635,7 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
     global.colorTextSecondary = '#FFFFFF';
     global.colorTextActive = '#FFFFFF';
     global.colorIcon = '#FFFFFF';
-    global.gradientColors = ['#F23F58', '#D4233B'];
+    global.gradientColors = ['#F23F58', '#F23F58'];
 
     // ! SET COLORS HERE FOR NEW THEMES ! //
 
@@ -1072,7 +1079,6 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
   }
 
   const openCamera = async () => {
-    setShowImagePickerDialog(false);
     let isStoragePermitted = await requestExternalWritePermission();
     let isCameraPermitted = await requestCameraPermission();
     if (isCameraPermitted && isStoragePermitted) {
@@ -1112,7 +1118,7 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
 
   function openGalleryForIOS() {
     setShowImagePickerDialog(true);
-    launchImageLibrary(options2, (response) => {
+    launchImageLibrary(options2, response => {
       console.log('Response = ', response);
       console.log('Response = ');
 
@@ -1135,7 +1141,7 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
       }
 
       let source = response;
-      console.log('source', source)
+      console.log('source', source);
       setShowImagePickerDialog(false);
       if (source) {
         navigation.navigate('NewPost', {
@@ -1283,7 +1289,7 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={{marginBottom: '6%'}}
               onPress={() => {
                 setShowImagePickerDialog(false);
@@ -1310,7 +1316,7 @@ const BottomNavBar = ({themeIndex, navIndex, onPress, navigation}) => {
               <Text style={{color: '#fff', opacity: 0.5, fontSize: 16}}>
                 Select Video
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <TouchableOpacity
               style={[styles.button, styles.buttonOpen, {marginTop: '20%'}]}
@@ -1354,6 +1360,8 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   centerIcon: {
+    backgroundColor: '#00000000',
+    borderWidth: 0,
     width: windowWidth / 5,
     height: windowWidth / 5,
     marginBottom: 30,

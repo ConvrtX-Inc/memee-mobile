@@ -26,6 +26,9 @@ import {RNS3} from 'react-native-aws3';
 import ButtonLargeIndicator from '../../component/ButtonLargeIndicator';
 import {navigateToHome} from '../../Utility/Utils';
 import Toast from 'react-native-toast-message';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 export default function SharePost() {
   const navigation = useNavigation();
@@ -61,13 +64,26 @@ export default function SharePost() {
     var currentDate = currentDateFN();
     var unicodeString = '';
     if (desc != '') {
-      for (var i = 0; i < desc.length; i++) {
-        var theUnicode = desc.charCodeAt(i).toString(16).toUpperCase();
-        while (theUnicode.length < 4) {
-          theUnicode = '0' + theUnicode;
+      for (var i = 0; i < post.length; i++) {
+        console.log('asdw', post[i]);
+        let val = '1234567890';
+        let isnum = /^\d+$/.test(val);
+        if (
+          /[a-z]/i.test(post[i]) ||
+          /[A-Z]/i.test(post[i]) ||
+          /^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/i.test(post[i])
+        ) {
+          console.log('emoji detected');
+          unicodeString += post[i];
+        } else {
+          console.log('emoji not detected');
+          var theUnicode = post.charCodeAt(i).toString(16).toUpperCase();
+          while (theUnicode.length < 4) {
+            theUnicode = '0' + theUnicode;
+          }
+          theUnicode = '\\u' + theUnicode;
+          unicodeString += theUnicode;
         }
-        theUnicode = '\\u' + theUnicode;
-        unicodeString += theUnicode;
       }
     } else {
       unicodeString = desc1;
@@ -96,7 +112,7 @@ export default function SharePost() {
           setPost('');
           setIndicatButton(false);
           global.refresh = true;
-          navigation.navigate('Dashboard');
+          navigation.navigate('HomeTab');
         }
       })
       .catch(error => {
@@ -111,7 +127,7 @@ export default function SharePost() {
 
   function navigatFN() {
     global.homeScreenShow = '5';
-    navigation.navigate('Dashboard');
+    navigation.navigate('HomeTab');
   }
 
   return (
@@ -121,7 +137,7 @@ export default function SharePost() {
         backgroundColor: global.colorPrimary,
         marginBottom: -30,
       }}>
-      <ScrollView style={{padding: 10}}>
+      <ScrollView style={{padding: 10, marginTop: hasNotch ? 25 : 0}}>
         <View style={{flexDirection: 'row', marginTop: 10}}>
           <TouchableOpacity onPress={() => navigatFN()}>
             <Image

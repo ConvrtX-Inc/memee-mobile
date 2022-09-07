@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import ButtonWithImage from '../../component/ButtonWithImage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { appleAuth } from '@invertase/react-native-apple-authentication'
+// import { appleAuth } from '@invertase/react-native-apple-authentication'
 import {
   LoginManager,
   AccessToken,
@@ -169,7 +169,7 @@ export default function Onboarding({navigation}) {
   async function SignupFN() {
     var currentDate = currentDateFN();
     setIsLoading(true);
-
+    console.log('onboarding registrer user');
     await fetch(global.address + 'RegisterUser', {
       method: 'POST',
       headers: {
@@ -188,13 +188,8 @@ export default function Onboarding({navigation}) {
     })
       .then(response => response.json())
       .then(async responseJson => {
-
-        
-
         if (responseJson.Status == 409) {
           if (loginTypeVar == 'Google') logoutFromGoogle();
-
- 
 
           console.log('Error', responseJson);
 
@@ -217,7 +212,8 @@ export default function Onboarding({navigation}) {
           dispatch(coinsRecordFN(responseJson.User[0].coins));
 
           global.token = responseJson.Token;
-          navigation.replace('Dashboard');
+          console.log('going Up');
+          navigation.replace('MainBottom');
 
           toggleOnlineStatus('1');
         }
@@ -240,8 +236,6 @@ export default function Onboarding({navigation}) {
       await GoogleSignin.signOut();
     } catch (e) {}
   }
-
-
 
   async function onTwitterButtonPress() {
     // Perform the login request
@@ -286,75 +280,68 @@ export default function Onboarding({navigation}) {
     }
   };
 
-  const onAppleLoginTap = async() => {
-      try{
+  //   const onAppleLoginTap = async() => {
+  //       try{
 
-      //apple login continuation
-      
-      const appleAuthResponse = await appleAuth.performRequest({
-        requestedOperation: appleAuth.Operation.LOGIN,
-        requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
-      });  
-      
-      const { identityToken, fullName, email } = appleAuthResponse
+  //       //apple login continuation
 
-      const loginDatas =  {
-        identityToken,
-        fullName,
-        email
-      }
+  //       const appleAuthResponse = await appleAuth.performRequest({
+  //         requestedOperation: appleAuth.Operation.LOGIN,
+  //         requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+  //       });
 
-      try{
-        const loginData = await AsyncStorage.getItem('appleLogin')
-        const parsedLoginData = JSON.parse(loginData)
+  //       const { identityToken, fullName, email } = appleAuthResponse
 
-          if (loginData == null){
+  //       const loginDatas =  {
+  //         identityToken,
+  //         fullName,
+  //         email
+  //       }
 
-            // console.log(loginDatas)
-            AsyncStorage.setItem('appleLogin',JSON.stringify(loginDatas),(err)=> {
-              if (err){
-                console.log("an error")
-                throw err
-              } 
+  //       try{
+  //         const loginData = await AsyncStorage.getItem('appleLogin')
+  //         const parsedLoginData = JSON.parse(loginData)
 
-              
-              emailVar = parsedLoginData?.email
-              nameVar = parsedLoginData?.fullName?.givenName +" "+ parsedLoginData?.fullName?.familyName;
-              imageVar = null;
-              loginTypeVar = 'apple';
+  //           if (loginData == null){
 
-              SignupFN()
+  //             // console.log(loginDatas)
+  //             AsyncStorage.setItem('appleLogin',JSON.stringify(loginDatas),(err)=> {
+  //               if (err){
+  //                 console.log("an error")
+  //                 throw err
+  //               }
 
+  //               emailVar = parsedLoginData?.email
+  //               nameVar = parsedLoginData?.fullName?.givenName +" "+ parsedLoginData?.fullName?.familyName;
+  //               imageVar = null;
+  //               loginTypeVar = 'apple';
 
+  //               SignupFN()
 
-            }).catch((err) => {
-              console.log("error is:" + err)
-            })
+  //             }).catch((err) => {
+  //               console.log("error is:" + err)
+  //             })
 
-          }else{
+  //           }else{
 
-              emailVar = parsedLoginData?.email
-              nameVar = parsedLoginData?.fullName?.givenName +" "+ parsedLoginData?.fullName?.familyName;
-              imageVar = null;
-              loginTypeVar = 'apple';
+  //               emailVar = parsedLoginData?.email
+  //               nameVar = parsedLoginData?.fullName?.givenName +" "+ parsedLoginData?.fullName?.familyName;
+  //               imageVar = null;
+  //               loginTypeVar = 'apple';
 
-              await SignupFN()
-          
-            
-          }
-        }catch(error){
-//error  
-          AsyncStorage.removeItem("appleLogin")
-       
+  //               await SignupFN()
 
-      }
+  //           }
+  //         }catch(error){
+  // //error
+  //           AsyncStorage.removeItem("appleLogin")
 
+  //       }
 
-      }catch (error){
-        console.log('error apple'+error)
-      }
-  }
-  
+  //       }catch (error){
+  //         console.log('error apple'+error)
+  //       }
+  //   }
 
   return (
     <View
@@ -454,28 +441,28 @@ export default function Onboarding({navigation}) {
             </Text>
           </View>
         </TouchableOpacity>
-
-        <TouchableOpacity
-          activeOpacity={0.5}
-          onPress={() => onAppleLoginTap()}
-          style={styles.buttonStyle}>
-          <View style={styles.buttonContentContainer}>
-            <Image
-              style={styles.tinyLogoBtn}
-              source={require('../../images/applewhite.png')}
-            />
-            <Text
-              style={{
-                textAlign: 'center',
-                fontFamily: 'OpenSans-SemiBold',
-                fontSize: 16,
-                color: '#fff',
-              }}>
-              Continue with Apple
-            </Text>
-          </View>
-        </TouchableOpacity>
-
+        {Platform.OS !== 'android' ? (
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => onAppleLoginTap()}
+            style={styles.buttonStyle}>
+            <View style={styles.buttonContentContainer}>
+              <Image
+                style={styles.tinyLogoBtn}
+                source={require('../../images/applewhite.png')}
+              />
+              <Text
+                style={{
+                  textAlign: 'center',
+                  fontFamily: 'OpenSans-SemiBold',
+                  fontSize: 16,
+                  color: '#fff',
+                }}>
+                Continue with Apple
+              </Text>
+            </View>
+          </TouchableOpacity>
+        ) : null}
         <View style={{flexDirection: 'row', alignSelf: 'center'}}>
           <Text
             style={[styles.txtdown, {fontWeight: 'bold', color: '#707070'}]}>

@@ -16,6 +16,8 @@ import {
   ImageBackground,
   ViewBase,
 } from 'react-native';
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
+
 import ButtonCoins from '../../component/ButtonCoins';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
@@ -24,6 +26,9 @@ import TounamentScreen from '../TournamentScreen';
 import Store from '../Store';
 import LinearGradient from 'react-native-linear-gradient';
 import JudgeScreen from '../JudgeScreen';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 global.navigateTournament = -1;
 var checkNavi = 0;
@@ -147,39 +152,61 @@ export default function Tournament(props) {
   function activeTab(counter) {
     global.TabButton = counter;
     if (counter == 1) {
-      navigation.navigate('Dashboard');
+      navigation.navigate('HomeTab');
     } else if (counter == 2) {
-      navigation.navigate('ExploreScreen');
+      navigation.navigate('ExploreTab');
     } else if (counter == 3) {
-      navigation.navigate('Tournament');
+      navigation.navigate('TournamentTab');
     } else if (counter == 4) {
       global.profileID = global.userData.user_id;
-      navigation.navigate('ProfileScreen');
+      navigation.navigate('ProfileTab');
     }
   }
-
+  const config = {
+    velocityThreshold: 0.3,
+    directionalOffsetThreshold: 80,
+  };
   return (
-    <View
+    <GestureRecognizer
+      onSwipe={(direction, state) => console.log('Direction', direction)}
+      onSwipeUp={state => console.log('onSwipeUp', state)}
+      onSwipeDown={state => console.log('onSwipeDown', state)}
+      onSwipeLeft={state => {
+        global.profileID = global.userData.user_id;
+        navigation.navigate('ProfileTab', {screen: 'ProfileScreen'});
+      }}
+      onSwipeRight={state =>
+        navigation.navigate('ExploreTab', {screen: 'ExploreScreen'})
+      }
+      config={config}
       style={{flex: 1, backgroundColor: global.colorPrimary, marginBottom: 0}}>
       <ScrollView style={{marginBottom: -25}}>
-        <View style={styles.topView}>
+        <View style={[styles.topView, { marginTop: hasNotch ? 25 : 0 }]}>
           <Text
             numberOfLines={1}
             style={{
-              width: '30%',
               fontSize: 20,
               fontWeight: '800',
               color: global.colorTextPrimary,
               marginLeft: 7,
               marginTop: 6,
-              marginRight: 10,
+              marginRight: 6,
               fontFamily: global.fontSelect,
             }}>
             Tournament
           </Text>
+          <TouchableOpacity
+            onPress={() => setModalVisible(!modalVisible)}
+            style={{marginTop: 8}}>
+            <Image
+              style={{height: 25, width: 25, tintColor: global.colorIcon}}
+              resizeMode="stretch"
+              source={require('../../images/InfoCircle.png')}
+            />
+          </TouchableOpacity>
           <View
             style={{width: '70%', flexDirection: 'row', marginLeft: 'auto'}}>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => setModalVisible(!modalVisible)}
               style={{marginTop: 12, marginLeft: 'auto'}}>
               <Image
@@ -187,7 +214,7 @@ export default function Tournament(props) {
                 resizeMode="stretch"
                 source={require('../../images/InfoCircle.png')}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity
               onPress={() => navigation.navigate('NotificationScreen')}
               style={{marginLeft: 'auto'}}>
@@ -366,13 +393,13 @@ export default function Tournament(props) {
         </View>
       </Modal>
 
-      <BottomNavBar
+      {/* <BottomNavBar
         onPress={index => activeTab(index)}
         themeIndex={ImageBottoms}
         navigation={navigation}
         navIndex={2}
-      />
-    </View>
+      /> */}
+    </GestureRecognizer>
   );
 }
 

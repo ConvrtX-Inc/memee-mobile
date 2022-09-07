@@ -19,6 +19,9 @@ import {
 import {Avatar} from 'react-native-elements';
 import {testFN, currentDateFN, generateUID} from '../../Utility/Utils';
 import Icon from 'react-native-vector-icons/AntDesign';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 let parentID = 0;
 var windowWidth = Dimensions.get('window').width;
@@ -140,14 +143,15 @@ export default class CommentScreen extends React.Component {
         .then(response => response.json())
         .then(responseJson => {
           if (responseJson.Status == '201') {
-            /* console.log(responseJson); */
-            var comments = this.state.flatlist;
-            comments.find(
-              c => c.commentUID == responseJson.commentUID,
-            ).comment_id = responseJson.commentID;
-            this.setState({
-              flatlist: comments,
-            });
+            // console.log(responseJson.commentID);
+            // var comments = this.state.flatlist;
+            // console.log(comments);
+
+            // comments.find(c => c.comment_id == responseJson.commentID);
+            // this.setState({
+            //   flatlist: comments,
+            // });
+            this.getPostDataFN();
           }
         })
         .catch(error => {
@@ -242,7 +246,7 @@ export default class CommentScreen extends React.Component {
 
   navigateToProfile(navigation, user) {
     global.profileID = user.user_id;
-    navigation.navigate('ProfileScreen');
+    navigation.navigate('ProfileTab');
   }
 
   render() {
@@ -257,7 +261,7 @@ export default class CommentScreen extends React.Component {
         }}>
         {/* <ScrollView> */}
 
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row', marginTop: hasNotch ? 25 : 0}}>
           <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
             <Image
               style={[styles.tinyLogo, {tintColor: global.colorIcon}]}
@@ -281,6 +285,7 @@ export default class CommentScreen extends React.Component {
           }}
           extraData={this.flatlist}
           data={this.state.flatlist}
+          keyExtractor={item => item.id}
           renderItem={({item, index}) => (
             <View style={{width: '100%', marginBottom: 15}}>
               {item.parent_id == 0 ? (
@@ -385,7 +390,8 @@ export default class CommentScreen extends React.Component {
                               style={{
                                 color: global.colorTextActive,
                                 fontFamily: global.fontSelect,
-                                marginRight: 5,
+                                marginRight: 10,
+                                marginLeft:10
                               }}>
                               Liked
                             </Text>
@@ -430,7 +436,6 @@ export default class CommentScreen extends React.Component {
                                 color={global.colorTextActive}
                                 style={{
                                   padding: 1,
-                                  backgroundColor: 'white',
                                   fontWeight: 'bold',
                                   borderRadius: 100,
                                 }}
@@ -534,7 +539,8 @@ export default class CommentScreen extends React.Component {
                             style={{
                               color: global.colorTextActive,
                               fontFamily: global.fontSelect,
-                              marginRight: 5,
+                              marginRight: 10,
+                              marginLeft:10,
                             }}>
                             Liked
                           </Text>
@@ -576,7 +582,6 @@ export default class CommentScreen extends React.Component {
                               color={global.colorTextActive}
                               style={{
                                 padding: 1,
-                                backgroundColor: 'white',
                                 fontWeight: 'bold',
                                 borderRadius: 100,
                               }}

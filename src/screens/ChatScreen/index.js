@@ -31,6 +31,9 @@ import {getLastSeenFormat} from '../../Utility/Utils';
 import {getBucketOptions} from '../../Utility/Utils';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 const ChatScreen = ({route}) => {
   const navigation = useNavigation();
@@ -178,13 +181,13 @@ const ChatScreen = ({route}) => {
         {...props}
         wrapperStyle={{
           right: {
-            backgroundColor: '#FFCD2F',
+            backgroundColor: global.btnColor1,
             marginBottom: 15,
             borderTopRightRadius: 25,
             borderBottomRightRadius: 0,
           },
           left: {
-            backgroundColor: '#292929',
+            backgroundColor: global.tabNotSelectedColor,
             marginBottom: 15,
           },
         }}
@@ -242,6 +245,7 @@ const ChatScreen = ({route}) => {
               height: 25,
               width: 25,
               resizeMode: 'contain',
+              tintColor: global.sendColor,
             }}
           />
         </TouchableOpacity>
@@ -312,7 +316,7 @@ const ChatScreen = ({route}) => {
                     sender_id: global.userData.user_id,
                     sender_name: global.userData.name,
                     sender_img: global.userData.imgurl,
-                    receiver_id: user.receiver_id,
+                    receiver_id: user.selectedUserId,
                     receiver_name: user.name,
                     receiver_img: user.img,
                     latestMessage: {
@@ -364,7 +368,7 @@ const ChatScreen = ({route}) => {
         paddingTop: '5%',
         backgroundColor: global.colorPrimary,
       }}>
-      <View style={{flexDirection: 'row'}}>
+      <View style={{flexDirection: 'row', marginTop: hasNotch ? 25 : 0}}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
             style={[styles.tinyLogo, {tintColor: global.colorIcon}]}
@@ -475,6 +479,7 @@ const ChatScreen = ({route}) => {
                   width: 22,
                   marginBottom: 15,
                   marginLeft: 10,
+                  tintColor: global.sendColor,
                 }}
               />
             </Send>
@@ -501,7 +506,6 @@ export default ChatScreen;
 const styles = StyleSheet.create({
   containerStyle: {
     flex: 1,
-    backgroundColor: '#0D0219',
   },
   header: {
     marginHorizontal: '5%',

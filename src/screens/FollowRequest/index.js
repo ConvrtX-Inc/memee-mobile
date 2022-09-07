@@ -18,6 +18,9 @@ import ButtonExtraSmall from '../../component/ButtonExtraSmall';
 import {useNavigation} from '@react-navigation/native';
 import {testFN} from '../../Utility/Utils';
 import {currentDateFN} from '../../Utility/Utils';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 export default class FollowRequest extends React.Component {
   constructor(props) {
@@ -162,7 +165,7 @@ export default class FollowRequest extends React.Component {
 
   navigateToProfile(navigation, user) {
     global.profileID = user.user_id;
-    navigation.navigate('ProfileScreen');
+    navigation.navigate('ProfileTab');
   }
 
   render() {
@@ -175,7 +178,7 @@ export default class FollowRequest extends React.Component {
           paddingTop: '5%',
           backgroundColor: global.colorPrimary,
         }}>
-        <ScrollView>
+        <ScrollView style={{marginTop: hasNotch ? 25 : 0}}>
           <View style={{flexDirection: 'row'}}>
             <TouchableOpacity
               onPress={() => navigation.navigate('NotificationScreen')}>

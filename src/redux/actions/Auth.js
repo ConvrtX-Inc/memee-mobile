@@ -91,34 +91,44 @@ export function readNotifications() {
   }
 }
 
-export function toggleOnlineStatus(val) {
+export async function toggleOnlineStatus(val) {
   /* console.info('val', val);
   console.info('uth_token: global.token,', global.token); */
-  fetch(
-    global.address +
-      'toggleOnlineStatus/' +
-      global.userData.user_id +
-      '/' +
-      val,
-    {
-      method: 'get',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        authToken: global.token,
+  // console.log(
+  //   'URL USE:',
+  //   global.address +
+  //     'toggleOnlineStatus/' +
+  //     global.userData.user_id +
+  //     '/' +
+  //     val,
+  // );
+  if (global.userData.user_id !== undefined) {
+    fetch(
+      global.address +
+        'toggleOnlineStatus/' +
+        global.userData.user_id +
+        '/' +
+        val,
+      {
+        method: 'get',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          authToken: global.token,
+        },
       },
-    },
-  )
-    .then(response => response.json())
-    .then(responseJson => {
-      console.log(
-        '\n Apstatus Api called toggleOnlineStatus.... \n',
-        responseJson,
-      );
-    })
-    .catch(error => {
-      console.error(error);
-    });
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log(
+          '\n Apstatus Api called toggleOnlineStatus.... \n',
+          responseJson,
+        );
+      })
+      .catch(error => {
+        console.error('errpr', error);
+      });
+  }
 }
 
 export async function GetOnlineStatus() {

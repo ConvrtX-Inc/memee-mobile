@@ -20,6 +20,9 @@ import {CheckBox} from 'react-native-elements';
 import {useNavigation} from '@react-navigation/native';
 import {MonthsArray} from '../../Utility/Utils';
 // import PhotoEditor from 'react-native-photo-editor'
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 var windowWidth = Dimensions.get('window').width;
 windowWidth = (windowWidth * 85) / 100;
@@ -183,7 +186,7 @@ export default function JudgeMeme(props) {
   return (
     <View
       style={{flex: 1, paddingTop: '3%', backgroundColor: global.colorPrimary}}>
-      <ScrollView>
+      <ScrollView style={{marginTop: hasNotch ? 25 : 0}}>
         <View style={{flexDirection: 'row', marginHorizontal: '4%'}}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image

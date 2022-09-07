@@ -7,6 +7,9 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 var windowWidth = Dimensions.get('window').width;
 export default function Congradulation({navigation, route}) {
   const [likesHave, setLikesHave] = useState(0);
@@ -22,7 +25,7 @@ export default function Congradulation({navigation, route}) {
 
   return (
     <View style={{flex: 1, backgroundColor: global.colorPrimary}}>
-      <View style={{flexDirection: 'row', marginLeft: '4%', marginTop: 10}}>
+      <View style={{flexDirection: 'row', marginLeft: '4%', marginTop: hasNotch ? 25 : 10}}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
             style={styles.tinyLogo}

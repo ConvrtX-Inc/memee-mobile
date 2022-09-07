@@ -28,6 +28,9 @@ import {coinsRecordFN} from '../../redux/actions/Auth';
 import Toast from 'react-native-toast-message';
 import {getBucketOptions} from '../../Utility/Utils';
 import storage from '@react-native-firebase/storage';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 // mock data for ui changes
 // Temporary import of colors
@@ -221,6 +224,13 @@ export default function EditProfileScreen(props) {
     if (error.phone.error) {
       return;
     }
+    if (name.length > 25) {
+      Toast.show({
+        type: 'error',
+        text2: 'Name should have only a maximum of 25 characters',
+      });
+      return;
+    }
     setIndicatButton(true);
 
     global.userData.imgurl = imgUrl;
@@ -242,7 +252,7 @@ export default function EditProfileScreen(props) {
       .then(response => response.json())
       .then(responseJson => {
         global.refresh = true;
-        navigation.navigate('Dashboard');
+        navigation.navigate('HomeTab');
         setIndicatButton(false);
         if (responseJson.Status == '201') {
           global.token = responseJson.Token;
@@ -279,7 +289,7 @@ export default function EditProfileScreen(props) {
         backgroundColor: global.colorPrimary,
         /* backgroundColor: colors.backgroundColor, */
       }}>
-      <ScrollView>
+      <ScrollView style={{marginTop: hasNotch ? 25 : 0}}>
         <View style={{flexDirection: 'row', paddingLeft: '5%'}}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image

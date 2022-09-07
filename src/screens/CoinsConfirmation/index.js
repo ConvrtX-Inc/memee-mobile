@@ -12,6 +12,9 @@ import {
   Dimensions,
   Pressable,
 } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 var coins = '';
 var windowWidth = Dimensions.get('window').width;
@@ -26,7 +29,7 @@ export default function CoinsConfirmation({navigation, route}) {
 
   return (
     <View style={{flex: 1, backgroundColor: global.colorPrimary}}>
-      <View style={{flexDirection: 'row', marginLeft: '4%', marginTop: 10}}>
+      <View style={{flexDirection: 'row', marginLeft: '4%', marginTop: hasNotch ? 25 : 10}}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
             style={[styles.tinyLogo, {tintColor: global.colorIcon}]}

@@ -15,6 +15,9 @@ import Input from '../../component/InputField';
 import ButtonLarge from '../../component/ButtonLarge';
 import ButtonLargeIndicator from '../../component/ButtonLargeIndicator';
 import Toast from 'react-native-toast-message';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 export default function NewPassword({navigation, route}) {
   const [password, setPassword] = useState('');
@@ -85,7 +88,7 @@ export default function NewPassword({navigation, route}) {
         paddingTop: '5%',
         backgroundColor: '#0B0213',
       }}>
-      <ScrollView>
+      <ScrollView style={{marginTop: hasNotch ? 25 : 0}}>
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image

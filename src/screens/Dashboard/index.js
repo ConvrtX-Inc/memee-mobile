@@ -19,7 +19,9 @@ import {
   ImageBackground,
   ViewBase,
   NativeModules,
+  Platform,
 } from 'react-native';
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Modal2 from 'react-native-modalbox';
 import ButtonCoins from '../../component/ButtonCoins';
@@ -60,6 +62,10 @@ import {getBucketOptions, generateUID} from '../../Utility/Utils';
 import storage from '@react-native-firebase/storage';
 import moment from 'moment';
 import {toggleOnlineStatus} from '../../redux/actions/Auth';
+import DeviceInfo from 'react-native-device-info';
+import {useIsFocused} from '@react-navigation/native';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 var offset = 0;
 global.navigateDashboard = 1;
@@ -100,7 +106,9 @@ export default function Dashboard(props) {
     tournamentRanking,
     followRequests,
   } = useSelector(({authRed}) => authRed);
-
+  const [isModalOpen, setIsModalOpen] = useState(
+    global.isModalOpen !== undefined ? global.isModalOpen : false,
+  );
   let options = {
     mediaType: 'photo',
     maxWidth: 512,
@@ -178,10 +186,15 @@ export default function Dashboard(props) {
   useEffect(async () => {
     await toggleOnlineStatus('1');
 
-    console.log('token', global.userData);
+    // console.log('token', global.token);
     fetchStories();
   }, [updatedStories]);
-
+  // fetching of Stories
+  const isFocused = useIsFocused();
+  useEffect(async () => {
+    console.log('ipdating modal');
+    setIsModalOpen(global.isModalOpen);
+  }, [global.isModalOpen, isFocused]);
   // upload image/video
   function uploadImageToS3() {
     setLoadingAddStory(true);
@@ -204,14 +217,14 @@ export default function Dashboard(props) {
 
     task
       .then(res => {
-        console.log('Image uploaded to the bucket!');
+        // console.log('Image uploaded to the bucket!');
         reference.getDownloadURL().then(response => {
           //console.log('Image downloaded from the bucket!', response);
           addStory(response);
         });
       })
       .catch(e => {
-        console.error('uploading image error => ', e);
+        // console.error('uploading image error => ', e);
         Toast.show({
           type: 'error',
           text2: 'Unable to add story. Please try again later!',
@@ -626,7 +639,7 @@ export default function Dashboard(props) {
 
   function navigateToprofileFN() {
     global.profileID = global.userData.user_id;
-    navigation.navigate('ProfileScreen');
+    navigation.navigate('ProfileTab');
   }
 
   function likeOrUnlikeFN(index) {
@@ -761,7 +774,7 @@ export default function Dashboard(props) {
       // var id = user.user_id;
       //console.log('user', user, id);
       global.profileID = index;
-      navigation.navigate('ProfileScreen');
+      navigation.navigate('ProfileTab');
     }
   }
 
@@ -801,12 +814,12 @@ export default function Dashboard(props) {
       toTop();
       onRefresh();
     } else if (counter == 2) {
-      navigation.navigate('ExploreScreen');
+      navigation.navigate('ExploreTab');
     } else if (counter == 3) {
-      navigation.navigate('Tournament');
+      navigation.navigate('TournamentTab');
     } else if (counter == 4) {
       global.profileID = global.userData.user_id;
-      navigation.navigate('ProfileScreen');
+      navigation.navigate('ProfileTab');
     }
   }
 
@@ -828,7 +841,7 @@ export default function Dashboard(props) {
   function openGallery() {
     setIsOpenMedia(true);
     console.log('this is true');
-    launchImageLibrary(options, (response) => {
+    launchImageLibrary(options, response => {
       console.log('Response = ', response);
       console.log('Response = ');
 
@@ -851,7 +864,7 @@ export default function Dashboard(props) {
       }
 
       let source = response.assets[0];
-      console.log('source', source)
+      console.log('source', source);
       openPhotoEditor(source.uri);
     });
   }
@@ -859,7 +872,7 @@ export default function Dashboard(props) {
   function openGalleryForIOS() {
     setIsOpenMedia(true);
     console.log('this is true');
-    launchImageLibrary(options2, (response) => {
+    launchImageLibrary(options2, response => {
       console.log('Response = ', response);
       console.log('Response = ');
 
@@ -882,7 +895,7 @@ export default function Dashboard(props) {
       }
 
       let source = response;
-      console.log('source', source)
+      console.log('source', source);
       setIsOpenMedia(false);
       if (source) {
         setFile({type: 'video', uri: source.assets[0].uri});
@@ -893,6 +906,7 @@ export default function Dashboard(props) {
 
   const getDescription = text => {
     try {
+      // console.log('eset', text);
       return decodeURIComponent(
         JSON.parse('"' + text.replace(/\"/g, '\\"') + '"'),
       );
@@ -954,8 +968,21 @@ export default function Dashboard(props) {
 
   // console.log('FILE', file);
   /* console.log('textMaximumWidth', textMaximumWidth); */
+  const config = {
+    velocityThreshold: 0.3,
+    directionalOffsetThreshold: 80,
+  };
   return (
-    <View style={{flex: 1, backgroundColor: global.colorPrimary}}>
+    <GestureRecognizer
+      onSwipe={(direction, state) => console.log('Direction', direction)}
+      onSwipeUp={state => console.log('onSwipeUp', state)}
+      onSwipeDown={state => console.log('onSwipeDown', state)}
+      onSwipeLeft={state =>
+        navigation.navigate('ExploreTab', {screen: 'ExploreScreen'})
+      }
+      onSwipeRight={state => console.log('onSwipeRight', state)}
+      config={config}
+      style={{flex: 1, backgroundColor: global.colorPrimary}}>
       <FlatList
         ref={flatlistRef}
         data={
@@ -1142,7 +1169,7 @@ export default function Dashboard(props) {
                         style={{
                           height: 22,
                           width: 22,
-                          marginLeft: 10,
+                          marginLeft: 20,
                           marginRight: 2,
                           tintColor: global.colorIcon,
                         }}
@@ -1167,7 +1194,7 @@ export default function Dashboard(props) {
                 {getDescription(item.description)}
               </TwitterTextView>
 
-              {item.img_url.includes('mp4') ? (
+              {/* {item.img_url.includes('mp4') ? (
                 <View key={item.img_url}>
                   <VideoPlayer
                     key={item.post_id}
@@ -1197,6 +1224,21 @@ export default function Dashboard(props) {
                   />
                 </View>
               ) : (
+                <ImageBackground
+                  source={{uri: item.img_url}}
+                  resizeMode="contain"
+                  style={{
+                    height: item.calHeight ? item.calHeight : windowWidth,
+                    width: '100%',
+                  }}>
+                  <LinearGradient
+                    colors={[global.overlay1, global.overlay3]}
+                    style={{height: '100%', width: '100%'}}
+                  />
+                </ImageBackground>
+              )} */}
+
+              {!item.img_url.includes('mp4') && (
                 <ImageBackground
                   source={{uri: item.img_url}}
                   resizeMode="contain"
@@ -1356,11 +1398,12 @@ export default function Dashboard(props) {
                 <View
                   style={{
                     padding: 10,
-                    borderRadius: 20,
+                    borderRadius: 10,
                     position: 'absolute',
-                    top: 30,
+                    top: 45,
                     right: 22,
                     backgroundColor: '#fff',
+                    marginRight: 5,
                   }}>
                   {global.userData.user_id == item.user_id ? (
                     <View>
@@ -1394,7 +1437,7 @@ export default function Dashboard(props) {
         }}
         keyExtractor={item => item.post_id}
         ListFooterComponent={() => (
-          <View>
+          <View style={{height: 90}}>
             {loaderIndicator == true ? (
               <ActivityIndicator
                 size="large"
@@ -1416,7 +1459,7 @@ export default function Dashboard(props) {
         )}
         ListHeaderComponent={() => (
           <View>
-            <View style={styles.topView}>
+            <View style={[styles.topView, {marginTop: hasNotch ? 25 : 0}]}>
               <TouchableOpacity
                 onPress={() => navigateToprofileFN()}
                 style={{
@@ -1614,7 +1657,9 @@ export default function Dashboard(props) {
                               bottom: -2,
                               backgroundColor: 'white',
                               fontWeight: 'bold',
-                              borderRadius: 100,
+                              borderRadius: Platform.OS === 'ios' ? 10.5 : 100,
+                              overflow:
+                                Platform.OS === 'ios' ? 'hidden' : 'hidden',
                             }}
                           />
                         </TouchableOpacity>
@@ -1685,7 +1730,7 @@ export default function Dashboard(props) {
                 width: '100%',
               }}>
               <View style={{flexDirection: 'row-reverse'}}>
-                <View>
+                <View style={{marginTop: hasNotch ? 25 : 0}}>
                   <TouchableOpacity onPress={() => cancelStoryModal()}>
                     {loadingAddStory ? (
                       <ActivityIndicator
@@ -1731,7 +1776,7 @@ export default function Dashboard(props) {
                         Choose photo from library...
                       </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                       style={{marginBottom: '6%'}}
                       onPress={async () => {
                         setIsOpenMedia(true);
@@ -1753,7 +1798,7 @@ export default function Dashboard(props) {
                       <Text style={{color: '#fff', opacity: 0.5, fontSize: 16}}>
                         Select Video
                       </Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     <TouchableOpacity
                       disabled={isOpenMedia}
                       style={[{marginTop: '20%'}]}
@@ -1807,7 +1852,7 @@ export default function Dashboard(props) {
                 width: '100%',
               }}>
               <View style={{flexDirection: 'row-reverse'}}>
-                <View>
+                <View style={{marginTop: hasNotch ? 25 : 0}}>
                   <TouchableOpacity onPress={() => cancelStoryModal()}>
                     {loadingAddStory ? (
                       <ActivityIndicator
@@ -2060,13 +2105,14 @@ export default function Dashboard(props) {
         </View>
       </Modal>
 
-      <BottomNavBar
+      {/* <BottomNavBar
         onPress={index => activeTab(index)}
         themeIndex={ImageBottoms}
         navigation={navigation}
         navIndex={0}
-      />
-    </View>
+        isModalOpen={isModalOpen}
+      /> */}
+    </GestureRecognizer>
   );
 }
 

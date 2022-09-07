@@ -6,6 +6,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNRestart from 'react-native-restart';
 import messaging from '@react-native-firebase/messaging';
 import { Collapse, CollapseHeader, CollapseBody, AccordionList } from 'accordion-collapse-react-native';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 export default function ChangeCountry(props) {
 
@@ -14,7 +17,7 @@ export default function ChangeCountry(props) {
 
     return (
         <View style={{ flex: 1, paddingLeft: "5%", paddingTop: "5%", backgroundColor: '#0B0213', }}>
-            <ScrollView>
+            <ScrollView style={{marginTop: hasNotch ? 25 : 0}}>
 
                 <View style={{ flexDirection: 'row', }}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>

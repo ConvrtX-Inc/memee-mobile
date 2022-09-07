@@ -13,6 +13,9 @@ import {Avatar} from 'react-native-elements';
 import TwitterTextView from 'react-native-twitter-textview';
 import LinearGradient from 'react-native-linear-gradient';
 import {currentDateFN} from '../../Utility/Utils';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 var windowWidth = Dimensions.get('window').width;
 
@@ -101,11 +104,10 @@ const TournamentImageShow = ({navigation, route}) => {
         backgroundColor: global.colorPrimary,
         marginBottom: -30,
       }}>
-      <ScrollView style={{marginBottom: 40}}>
+      <ScrollView style={{marginBottom: 40, marginTop: hasNotch ? 25 : 0}}>
         <View
           style={{flexDirection: 'row', paddingLeft: '5%', paddingTop: '5%'}}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('ProfileScreen')}>
+          <TouchableOpacity onPress={() => navigation.navigate('ProfileTab')}>
             <Image
               style={[styles.tinyLogo, {tintColor: global.colorIcon}]}
               source={require('../../images/back1.png')}

@@ -16,7 +16,8 @@ target 'memee' do
     :hermes_enabled => false
   )
   
-  pod 'TwitterKit', '~> 3.3.0'
+  # pod 'TwitterKit', '~> 3.3.0'
+  # pod 'TwitterKit5'
   pod 'BanubaARCloudSDK', '1.23.0' #optional
   pod 'BanubaVideoEditorSDK', '1.23.0'
   pod 'BanubaAudioBrowserSDK', '1.23.0' #optional

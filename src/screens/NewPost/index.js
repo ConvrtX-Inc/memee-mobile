@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 // import { useState } from 'react';
 import {
   View,
@@ -15,24 +15,25 @@ import {
   ViewBase,
   Dimensions,
 } from 'react-native';
-import { Avatar } from 'react-native-elements';
-import { useNavigation } from '@react-navigation/native';
+import {Avatar} from 'react-native-elements';
+import {useNavigation} from '@react-navigation/native';
 import ButtonLarge from '../../component/ButtonLarge';
-import { generateUID, currentDateFN } from '../../Utility/Utils';
+import {generateUID, currentDateFN} from '../../Utility/Utils';
 import ImagePicker from 'react-native-image-picker';
 import InputMultilineBig from '../../component/InputMultiLineBig';
 import RNFetchBlob from 'rn-fetch-blob';
-import { RNS3 } from 'react-native-aws3';
+import {RNS3} from 'react-native-aws3';
 import ButtonLargeIndicator from '../../component/ButtonLargeIndicator';
-import { navigateToHome } from '../../Utility/Utils';
+import {navigateToHome} from '../../Utility/Utils';
 import Toast from 'react-native-toast-message';
-import { getBucketOptions } from '../../Utility/Utils';
+import {getBucketOptions} from '../../Utility/Utils';
 import storage from '@react-native-firebase/storage';
 
 import Video from 'react-native-video';
 import VideoPlayer from 'react-native-video-controls';
+import DeviceInfo from 'react-native-device-info';
 
-
+const hasNotch = DeviceInfo.hasNotch();
 
 export default function NewPost(routes) {
   const navigation = useNavigation();
@@ -41,7 +42,7 @@ export default function NewPost(routes) {
   const [indicatButton, setIndicatButton] = useState(false);
   const [filePath, setFilePath] = useState('');
   const [fileType, setFileType] = useState('');
-  const [videoHeight,setVideoHeight] = useState(300);
+  const [videoHeight, setVideoHeight] = useState(300);
 
   var player = useRef();
 
@@ -60,24 +61,32 @@ export default function NewPost(routes) {
   }, []);
 
   useEffect(() => {
-    console.log("File URI", routes.route.params.uri, "File TYPE", routes.route.params.type)
+    console.log(
+      'File URI',
+      routes.route.params.uri,
+      'File TYPE',
+      routes.route.params.type,
+    );
     if (routes && routes.route && routes.route.params)
       setFilePath(routes.route.params.uri);
-    setFileType(routes.route.params.type)
+    setFileType(routes.route.params.type);
   }, []);
 
   function uploadImageToS3() {
     setIndicatButton(true);
 
-    const file = fileType == 'photo' ? {
-      uri: filePath,
-      name: generateUID() + '.jpg',
-      type: 'image/jpeg',
-    } : {
-      uri: filePath,
-      name: generateUID() + '.mp4',
-      type: 'video/mp4',
-    };
+    const file =
+      fileType == 'photo'
+        ? {
+            uri: filePath,
+            name: generateUID() + '.jpg',
+            type: 'image/jpeg',
+          }
+        : {
+            uri: filePath,
+            name: generateUID() + '.mp4',
+            type: 'video/mp4',
+          };
 
     let reference = storage().ref(file.name);
     let task = reference.putFile(file.uri);
@@ -117,18 +126,34 @@ export default function NewPost(routes) {
   }
 
   function postUploadFN(location) {
-    console.log("LOCATION: ", location);
+    console.log('LOCATION: ', location);
     var currentDate = currentDateFN();
     var unicodeString = '';
-    console.log('post', post);
+    var hashtag = '';
+    console.log('postas', post[0]);
     for (var i = 0; i < post.length; i++) {
-      var theUnicode = post.charCodeAt(i).toString(16).toUpperCase();
-      while (theUnicode.length < 4) {
-        theUnicode = '0' + theUnicode;
+      let val = '1234567890';
+      let isnum = /^\d+$/.test(val);
+      console.log('asdw', post[i], /[a-z]/i.test(post[i]));
+      if (
+        /[a-z]/i.test(post[i]) ||
+        /[A-Z]/i.test(post[i]) ||
+        /^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/i.test(post[i])
+      ) {
+        console.log('emoji not detected');
+        unicodeString += post[i];
+      } else {
+        console.log('emoji  detected');
+        var theUnicode = post.charCodeAt(i).toString(16).toUpperCase();
+        while (theUnicode.length < 4) {
+          theUnicode = '0' + theUnicode;
+        }
+        console.log('emoji  detected');
+        theUnicode = '\\u' + theUnicode;
+        unicodeString += theUnicode;
       }
-      theUnicode = '\\u' + theUnicode;
-      unicodeString += theUnicode;
     }
+    console.log('unicodeString', unicodeString);
     fetch(global.address + 'AddPost', {
       method: 'POST',
       headers: {
@@ -148,7 +173,7 @@ export default function NewPost(routes) {
         if (responseJson.Status == '201') {
           setPost('');
           global.refresh = true;
-          navigation.navigate('Dashboard');
+          navigation.navigate('HomeTab');
         }
         setIndicatButton(false);
       })
@@ -164,7 +189,7 @@ export default function NewPost(routes) {
 
   function navigatFN() {
     global.homeScreenShow = '5';
-    navigation.navigate('Dashboard');
+    navigation.navigate('HomeTab');
   }
 
   return (
@@ -174,30 +199,30 @@ export default function NewPost(routes) {
         backgroundColor: global.colorPrimary,
         marginBottom: -30,
       }}>
-      <ScrollView style={{ padding: 10 }}>
-        <View style={{ flexDirection: 'row', marginTop: 10 }}>
+      <ScrollView style={{padding: 10, marginTop: hasNotch ? 25 : 0}}>
+        <View style={{flexDirection: 'row', marginTop: 10}}>
           <TouchableOpacity onPress={() => navigatFN()}>
             <Image
-              style={[styles.tinyLogo, { tintColor: global.colorIcon }]}
+              style={[styles.tinyLogo, {tintColor: global.colorIcon}]}
               source={require('../../images/back1.png')}
             />
           </TouchableOpacity>
           <Text
             style={[
               styles.title,
-              { fontFamily: global.fontSelect, color: global.colorIcon },
+              {fontFamily: global.fontSelect, color: global.colorIcon},
             ]}>
             {' '}
             New post
           </Text>
         </View>
 
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{flexDirection: 'row'}}>
           <View>
             <Avatar
               rounded
               size="medium"
-              source={{ uri: global.userData.imgurl }}
+              source={{uri: global.userData.imgurl}}
             />
           </View>
 
@@ -224,7 +249,7 @@ export default function NewPost(routes) {
           </View>
         </View>
 
-        <View style={{ marginLeft: -10, marginBottom: 10 }}>
+        <View style={{marginLeft: -10, marginBottom: 10}}>
           <InputMultilineBig
             placeholder="Type text here...."
             onChangeText={text => setPost(text)}
@@ -233,39 +258,38 @@ export default function NewPost(routes) {
             color={global.colorTextPrimary}
           />
         </View>
-        {
-          fileType == 'photo' ? <Image source={{ uri: filePath }} style={styles.imageStyle} /> :
-            // <Video
-            //   source={{ uri: filePath }}
-            //   ref={player}
-            //   resizeMode='contain'
-            //   style={{ height: 300, margin: 5 }}
-            // />
-            <VideoPlayer
-             
-              source={{ uri: filePath }}
-              disableFullscreen
-              disableBack
-              controlTimeout={2500}
-              tapAnywhereToPause={true}
-              showOnStart={true}
-
-              style={{
-                width: '100%',
-                height: videoHeight
-              }}
-              resizeMode='contain'
-              paused={false}
-              onLoad={response => {
-                const { width, height } = response.naturalSize;
-                const heightScaled = height * (Dimensions.get("screen").width / width);
-                if (heightScaled < 300) {
-                  setVideoHeight(heightScaled)
-                } 
-              }}
-
-            />
-        }
+        {fileType == 'photo' ? (
+          <Image source={{uri: filePath}} style={styles.imageStyle} />
+        ) : (
+          // <Video
+          //   source={{ uri: filePath }}
+          //   ref={player}
+          //   resizeMode='contain'
+          //   style={{ height: 300, margin: 5 }}
+          // />
+          <VideoPlayer
+            source={{uri: filePath}}
+            disableFullscreen
+            disableBack
+            controlTimeout={2500}
+            tapAnywhereToPause={true}
+            showOnStart={true}
+            style={{
+              width: '100%',
+              height: videoHeight,
+            }}
+            resizeMode="contain"
+            paused={false}
+            onLoad={response => {
+              const {width, height} = response.naturalSize;
+              const heightScaled =
+                height * (Dimensions.get('screen').width / width);
+              if (heightScaled < 300) {
+                setVideoHeight(heightScaled);
+              }
+            }}
+          />
+        )}
 
         {indicatButton == false ? (
           <ButtonLarge
@@ -286,7 +310,7 @@ export default function NewPost(routes) {
           />
         )}
 
-        <View style={{ marginBottom: 70 }}></View>
+        <View style={{marginBottom: 70}}></View>
       </ScrollView>
     </View>
   );

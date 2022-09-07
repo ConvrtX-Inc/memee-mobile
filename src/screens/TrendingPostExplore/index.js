@@ -357,4 +357,3 @@ export default class TrendingPostExplore extends React.Component {
     );
   }
 }
-  

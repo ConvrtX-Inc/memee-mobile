@@ -17,7 +17,11 @@ import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch} from 'react-redux';
 import {coinsRecordFN} from '../../redux/actions/Auth';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 function VerifyEmail({navigation, route}) {
+  const dispatch = useDispatch();
   const [code, setcode] = useState('');
   const [loader, setLoader] = useState(false);
   const {action, email} = route.params;
@@ -64,7 +68,7 @@ function VerifyEmail({navigation, route}) {
       email: global.OtpData[0].email,
       userPassword: global.OtpData[0].password,
       userImage:
-        'https://www.cognite.com/hubfs/raw_assets/public/tc_custom/images/unknown_user.jpg',
+        'https://firebasestorage.googleapis.com/v0/b/memee-app-d35d3.appspot.com/o/febfa2aa-4162-4190-bf80-960c43a50444.jpg?alt=media&token=5532a09a-fe95-433c-bbc6-aa14856be405',
       loginType: 'Email',
     });
 
@@ -136,7 +140,8 @@ function VerifyEmail({navigation, route}) {
         /* console.log('Sign Up Data...');
         console.log(global.userData); */
         setLoader(false);
-        navigation.replace('Dashboard');
+        console.log('going up');
+        navigation.replace('MainBottom');
       })
       .catch(error => {
         console.error(error);
@@ -144,6 +149,7 @@ function VerifyEmail({navigation, route}) {
       });
   }
   const resentOPT = () => {
+    console.log('sending otp again');
     let body = JSON.stringify({
       email: email.toLowerCase().trim(),
       action: 'sign-up',
@@ -174,7 +180,7 @@ function VerifyEmail({navigation, route}) {
   };
   return (
     <View style={styles.container}>
-      <ScrollView style={{padding: 10}}>
+      <ScrollView style={{padding: 10, marginTop: hasNotch ? 25 : 0}}>
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image
@@ -226,7 +232,7 @@ function VerifyEmail({navigation, route}) {
           ]}>
           Didn't receive code?
         </Text>
-        <TouchableOpacity style={styles.resendButton} onPres={resentOPT}>
+        <TouchableOpacity style={styles.resendButton} onPress={resentOPT}>
           <Text
             style={[
               styles.resendText,

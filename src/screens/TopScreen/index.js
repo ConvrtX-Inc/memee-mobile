@@ -57,7 +57,7 @@ export default function TopScreen({navigation}) {
     } catch (err) {}
 
     global.profileID = user.user_id;
-    navigation.navigate('ProfileScreen');
+    navigation.navigate('ProfileTab');
 
     global.searchText = '';
     searchTxtchk = '';

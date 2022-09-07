@@ -171,8 +171,8 @@ android {
         applicationId "com.convrtx.memee"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1"
+        versionCode 5
+        versionName "1.4.0"
         missingDimensionStrategy 'store', 'play'
     }
     splits {
@@ -289,7 +289,9 @@ dependencies {
     implementation "com.banuba.sdk:banuba-token-storage-sdk:${banubaSdkVersion}"
     implementation "com.banuba.sdk:ve-export-sdk:${banubaSdkVersion}"
     implementation "com.banuba.sdk:ve-playback-sdk:${banubaSdkVersion}"
-
+api(platform("com.squareup.okhttp3:okhttp-bom:4.7.2"))
+api("com.squareup.okhttp3:okhttp")
+api("com.squareup.okhttp3:logging-interceptor")
     // twitter
     compile project(':react-native-twitter-signin')
 

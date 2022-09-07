@@ -14,11 +14,14 @@ import {
 import ActivityNotification from '../ActivityNotification';
 import LinearGradient from 'react-native-linear-gradient';
 import Inbox from '../Inbox';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 global.navigateNotification = -1;
 var checkNavi = 0;
 
-export default function NotificationScreen({navigation}) {
+export default function NotificationScreen({navigation, route}) {
   const [btncolor1_1, setBtncolor1_1] = useState(global.btnColor1);
   const [btncolor1_2, setBtncolor1_2] = useState(global.btnColor2);
   const [txtcolor1, setTxtcolor1] = useState('#000000');
@@ -94,7 +97,7 @@ export default function NotificationScreen({navigation}) {
       }}>
       {/* <ScrollView> */}
       <View style={{flexDirection: 'row'}}>
-        <TouchableOpacity onPress={() => navigation.navigate('Dashboard')}>
+        <TouchableOpacity onPress={() => navigation.navigate('HomeTab')}>
           <Image
             style={[styles.tinyLogo, {tintColor: global.colorIcon}]}
             source={require('../../images/back1.png')}

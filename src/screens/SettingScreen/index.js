@@ -26,6 +26,9 @@ import {
 } from '../../redux/constants';
 import {ActivityIndicator} from 'react-native-paper';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import DeviceInfo from 'react-native-device-info';
+
+const hasNotch = DeviceInfo.hasNotch();
 
 export default function SettingScreen(props) {
   const navigation = useNavigation();
@@ -89,10 +92,9 @@ export default function SettingScreen(props) {
         paddingTop: '5%',
         backgroundColor: global.colorPrimary,
       }}>
-      <ScrollView>
+      <ScrollView style={{marginTop: hasNotch ? 25 : 0}}>
         <View style={{flexDirection: 'row'}}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('ProfileScreen')}>
+          <TouchableOpacity onPress={() => navigation.navigate('ProfileTab')}>
             <Image
               style={[styles.tinyLogo, {tintColor: global.colorIcon}]}
               source={require('../../images/back1.png')}
