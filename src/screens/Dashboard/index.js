@@ -8,13 +8,13 @@ import {
   FlatList,
   Image,
   ImageBackground,
+  Modal,
   NativeModules,
   RefreshControl,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  Modal,
 } from 'react-native';
 import Modal2 from 'react-native-modalbox';
 import VideoPlayer from 'react-native-video';
@@ -37,12 +37,12 @@ import {PESDK} from 'react-native-photoeditorsdk';
 import API from '../../api/StoryApi';
 import storage from '@react-native-firebase/storage';
 import moment from 'moment';
-import ButtonCoins from '../../component/ButtonCoins';
 import {Avatar} from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
 import StorySkeleton from '../../component/Story/StorySkeleton';
 import Story from '../../component/Story/Story';
 import BottomNavBar from '../../component/BottomNavBar';
+import ButtonCoins from '../../component/ButtonCoins';
 
 var offset = 0;
 global.navigateDashboard = 1;
@@ -52,6 +52,8 @@ var gloIndex = '';
 
 //Banuba Video Editor
 const {VideoEditorModule} = NativeModules;
+
+const imgUrl = 'https://ca.slack-edge.com/TTCP01MH6-U03L57C48K1-06be914489f8-512';
 
 const openEditor = async () => {
   console.log('Should open Editor');
@@ -173,15 +175,15 @@ export default function Dashboard(props) {
     const data =
       file.type == 'photo'
         ? {
-            uri: file.uri,
-            name: generateUID() + '.jpg',
-            type: 'image/jpeg',
-          }
+          uri: file.uri,
+          name: generateUID() + '.jpg',
+          type: 'image/jpeg',
+        }
         : {
-            uri: file.uri,
-            name: generateUID() + '.mp4',
-            type: 'video/mp4',
-          };
+          uri: file.uri,
+          name: generateUID() + '.mp4',
+          type: 'video/mp4',
+        };
 
     let reference = storage().ref(data.name);
     let task = reference.putFile(data.uri);
@@ -324,22 +326,22 @@ export default function Dashboard(props) {
   function cancelStoryModal() {
     file
       ? Alert.alert('Discard story', 'Are you sure you want to exit?', [
-          {
-            text: 'Cancel',
-            onPress: () => {
-              setAddStoryModalVisible(false);
-              setIsOpenMedia(false);
-            },
-            style: 'cancel',
+        {
+          text: 'Cancel',
+          onPress: () => {
+            setAddStoryModalVisible(false);
+            setIsOpenMedia(false);
           },
-          {
-            text: 'OK',
-            onPress: () => {
-              setFile(null);
-              setIsOpenMedia(false);
-            },
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: () => {
+            setFile(null);
+            setIsOpenMedia(false);
           },
-        ])
+        },
+      ])
       : setAddStoryModalVisible(false);
   }
 
@@ -393,10 +395,10 @@ export default function Dashboard(props) {
   function saveTokenToDatabase(deviceToken) {
     fetch(
       global.address +
-        'updateDeviceToken/' +
-        global.userData.user_id +
-        '/' +
-        deviceToken,
+      'updateDeviceToken/' +
+      global.userData.user_id +
+      '/' +
+      deviceToken,
       {
         method: 'get',
         headers: {
@@ -508,13 +510,13 @@ export default function Dashboard(props) {
     try {
       const res = await fetch(
         global.address +
-          postApiName +
-          '/' +
-          global.userData.user_id +
-          '/' +
-          offset +
-          '/' +
-          limit,
+        postApiName +
+        '/' +
+        global.userData.user_id +
+        '/' +
+        offset +
+        '/' +
+        limit,
         {
           method: 'get',
           headers: {
@@ -631,8 +633,8 @@ export default function Dashboard(props) {
       tabNumber == 1
         ? followingPost
         : tabNumber == 2
-        ? newMemePost
-        : trendingPost;
+          ? newMemePost
+          : trendingPost;
     var postID = postList[index].post_id;
     var arrayTemp = '';
 
@@ -674,14 +676,14 @@ export default function Dashboard(props) {
       tabNumber == 1
         ? followingPost
         : tabNumber == 2
-        ? newMemePost
-        : trendingPost;
+          ? newMemePost
+          : trendingPost;
     (postList[index].showMenu = !postList[index].showMenu),
       tabNumber == 1
         ? setFollowingPost([...postList])
         : tabNumber == 2
-        ? setNewMemePost([...postList])
-        : setTrendingPost([...postList]);
+          ? setNewMemePost([...postList])
+          : setTrendingPost([...postList]);
   }
 
   function showMenueModalFN(index) {
@@ -690,14 +692,14 @@ export default function Dashboard(props) {
       tabNumber == 1
         ? followingPost
         : tabNumber == 2
-        ? newMemePost
-        : trendingPost;
+          ? newMemePost
+          : trendingPost;
     (postList[index].showMenu = !postList[index].showMenu),
       tabNumber == 1
         ? setFollowingPost([...postList])
         : tabNumber == 2
-        ? setNewMemePost([...postList])
-        : setTrendingPost([...postList]);
+          ? setNewMemePost([...postList])
+          : setTrendingPost([...postList]);
     setModalVisible(true);
     setPostIdToDelete(postList[index].post_id);
   }
@@ -719,15 +721,15 @@ export default function Dashboard(props) {
           tabNumber == 1
             ? followingPost
             : tabNumber == 2
-            ? newMemePost
-            : trendingPost;
+              ? newMemePost
+              : trendingPost;
         postList.splice(gloIndex, 1);
 
         tabNumber == 1
           ? setFollowingPost([...postList])
           : tabNumber == 2
-          ? setNewMemePost([...postList])
-          : setTrendingPost([...postList]);
+            ? setNewMemePost([...postList])
+            : setTrendingPost([...postList]);
       })
       .catch(error => {
         Toast.show({
@@ -743,8 +745,8 @@ export default function Dashboard(props) {
       tabNumber == 1
         ? followingPost
         : tabNumber == 2
-        ? newMemePost
-        : trendingPost;
+          ? newMemePost
+          : trendingPost;
     global.postId = postList[index].post_id;
     navigation.navigate('CommentScreen');
   }
@@ -756,10 +758,10 @@ export default function Dashboard(props) {
         tabNumber == 1
           ? followingPost[index]
           : tabNumber == 2
-          ? newMemePost[index]
-          : tabNumber == 3
-          ? trendingPost[index]
-          : 0;
+            ? newMemePost[index]
+            : tabNumber == 3
+              ? trendingPost[index]
+              : 0;
       // var id = user.user_id;
       //console.log('user', user, id);
       global.profileID = index;
@@ -779,8 +781,8 @@ export default function Dashboard(props) {
       tabNumber == 1
         ? followingPost
         : tabNumber == 2
-        ? newMemePost
-        : trendingPost;
+          ? newMemePost
+          : trendingPost;
 
     global.sharePost = postList[index];
 
@@ -935,10 +937,10 @@ export default function Dashboard(props) {
           tabNumber === 1
             ? followingPost
             : tabNumber === 2
-            ? newMemePost
-            : tabNumber === 3
-            ? trendingPost
-            : []
+              ? newMemePost
+              : tabNumber === 3
+                ? trendingPost
+                : []
         }
         /* data={mock} */
         onEndReached={() => getPosts(global.navigateDashboard, true)}
@@ -976,7 +978,7 @@ export default function Dashboard(props) {
                             }}>
                             <Avatar
                               rounded
-                              size="medium"
+                              size='medium'
                               source={{uri: item.UserImage}}
                             />
                           </View>
@@ -1027,7 +1029,7 @@ export default function Dashboard(props) {
                             }}>
                             <Avatar
                               rounded
-                              size="small"
+                              size='small'
                               source={{uri: item.ParentUserImage}}
                             />
                           </View>
@@ -1036,7 +1038,7 @@ export default function Dashboard(props) {
                         <View style={{marginLeft: 10}}>
                           <Text
                             numberOfLines={3}
-                            ellipsizeMode="tail"
+                            ellipsizeMode='tail'
                             style={{
                               fontSize: 15,
                               color: global.colorTextPrimary,
@@ -1070,7 +1072,7 @@ export default function Dashboard(props) {
                             }}>
                             <Avatar
                               rounded
-                              size="medium"
+                              size='medium'
                               source={{uri: item.UserImage}}
                             />
                           </View>
@@ -1079,7 +1081,7 @@ export default function Dashboard(props) {
                         <View style={{marginLeft: 10}}>
                           <Text
                             numberOfLines={3}
-                            ellipsizeMode="tail"
+                            ellipsizeMode='tail'
                             style={{
                               fontSize: 18,
                               color: global.colorTextPrimary,
@@ -1119,7 +1121,7 @@ export default function Dashboard(props) {
                           marginRight: 2,
                           tintColor: global.colorIcon,
                         }}
-                        resizeMode="stretch"
+                        resizeMode='stretch'
                         source={require('../../images/more.png')}
                       />
                     </View>
@@ -1155,7 +1157,7 @@ export default function Dashboard(props) {
                       width: '100%',
                       height: videoHeight,
                     }}
-                    resizeMode="cover"
+                    resizeMode='cover'
                     onLoad={response => {
                       const {width, height} = response.naturalSize;
                       const heightScaled =
@@ -1172,7 +1174,7 @@ export default function Dashboard(props) {
               ) : (
                 <ImageBackground
                   source={{uri: item.img_url}}
-                  resizeMode="contain"
+                  resizeMode='contain'
                   style={{
                     height: item.calHeight ? item.calHeight : windowWidth,
                     width: '100%',
@@ -1188,7 +1190,7 @@ export default function Dashboard(props) {
                 style={{width: '100%', backgroundColor: global.colorPrimary}}>
                 <ImageBackground
                   source={global.postInteractionsBG}
-                  resizeMode="stretch"
+                  resizeMode='stretch'
                   style={{
                     flexDirection: 'row',
                     width: windowWidth - (windowWidth * 25) / 100,
@@ -1216,7 +1218,7 @@ export default function Dashboard(props) {
                               marginRight: 2,
                               tintColor: global.postInteractionsTextColor,
                             }}
-                            resizeMode="stretch"
+                            resizeMode='stretch'
                             source={require('../../images/Vector.png')}
                           />
                         </View>
@@ -1232,7 +1234,7 @@ export default function Dashboard(props) {
                               marginRight: 2,
                               tintColor: heartColor,
                             }}
-                            resizeMode="stretch"
+                            resizeMode='stretch'
                             source={require('../../images/Vector.png')}
                           />
                         </View>
@@ -1267,7 +1269,7 @@ export default function Dashboard(props) {
                           marginRight: 2,
                           tintColor: global.postInteractionsTextColor,
                         }}
-                        resizeMode="stretch"
+                        resizeMode='stretch'
                         source={require('../../images/sms.png')}
                       />
                     </TouchableOpacity>
@@ -1299,7 +1301,7 @@ export default function Dashboard(props) {
                           marginRight: 2,
                           tintColor: global.postInteractionsTextColor,
                         }}
-                        resizeMode="stretch"
+                        resizeMode='stretch'
                         source={require('../../images/share.png')}
                       />
                     </TouchableOpacity>
@@ -1323,7 +1325,8 @@ export default function Dashboard(props) {
                   height: 3,
                   backgroundColor: global.colorSecondary,
                   marginTop: 20,
-                }}></View>
+                }}
+              />
 
               {item.showMenu == true ? (
                 <View
@@ -1346,7 +1349,7 @@ export default function Dashboard(props) {
                               marginLeft: 0,
                               marginRight: 10,
                             }}
-                            resizeMode="stretch"
+                            resizeMode='stretch'
                             source={require('../../images/delete.png')}
                           />
                           <Text
@@ -1370,7 +1373,7 @@ export default function Dashboard(props) {
           <View>
             {loaderIndicator == true ? (
               <ActivityIndicator
-                size="large"
+                size='large'
                 color={global.colorTextActive}
                 style={{alignSelf: 'center', marginTop: '10%'}}
               />
@@ -1395,10 +1398,10 @@ export default function Dashboard(props) {
                 style={{
                   flexDirection: 'row',
                 }}>
-                <Avatar rounded size="medium" source={{uri: pimgChange}} />
+                <Avatar rounded size='medium' source={{uri: imgUrl}} />
                 <Text
                   numberOfLines={1}
-                  ellipsizeMode="tail"
+                  ellipsizeMode='tail'
                   style={{
                     color: 'white',
                     marginLeft: 10,
@@ -1432,7 +1435,7 @@ export default function Dashboard(props) {
                     tintColor: global.colorIcon,
                     marginRight: 10,
                   }}
-                  resizeMode="contain"
+                  resizeMode='contain'
                   source={
                     notifications.some(n => n.status == 0) ||
                     followRequests?.length > 0
@@ -1574,23 +1577,24 @@ export default function Dashboard(props) {
                         }}>
                         <TouchableOpacity
                           onPress={() => setAddStoryModalVisible(true)}>
-                          <Image
-                            style={{width: 35, height: 35, borderRadius: 50}}
-                            source={{uri: global.userData.imgurl}}
-                          />
-                          <Icon
-                            name="pluscircle"
-                            size={20}
-                            color="#4267B2"
-                            style={{
-                              position: 'absolute',
-                              right: -2,
-                              bottom: -2,
-                              backgroundColor: 'white',
-                              fontWeight: 'bold',
-                              borderRadius: 100,
-                            }}
-                          />
+                          {/*TODO fix this image*/}
+                          <View>
+                            <Image onError={(error) => console.log('error', error)}
+                                   source={{uri: imgUrl}} />
+                            <Icon
+                              name='pluscircle'
+                              size={20}
+                              color='#4267B2'
+                              style={{
+                                position: 'absolute',
+                                right: 0,
+                                bottom: 0,
+                                backgroundColor: 'white',
+                                fontWeight: 'bold',
+                                borderRadius: 100,
+                              }}
+                            />
+                          </View>
                         </TouchableOpacity>
                       </View>
                       <View style={{marginBottom: 5, marginTop: 10}}>
@@ -1616,7 +1620,7 @@ export default function Dashboard(props) {
 
       {loadingNewStory && (
         <ActivityIndicator
-          size="large"
+          size='large'
           color={global.colorTextActive}
           style={{
             position: 'absolute',
@@ -1643,7 +1647,7 @@ export default function Dashboard(props) {
         }}
         isOpen={addStoryModalVisible}
         onClosed={() => setAddStoryModalVisible(false)}
-        position="center"
+        position='center'
         coverScreen={true}
         transparent={true}>
         <View
@@ -1663,8 +1667,8 @@ export default function Dashboard(props) {
                   <TouchableOpacity onPress={() => cancelStoryModal()}>
                     {loadingAddStory ? (
                       <ActivityIndicator
-                        size="small"
-                        color="white"
+                        size='small'
+                        color='white'
                         style={{paddingRight: 15, paddingTop: 15}}
                       />
                     ) : (
@@ -1750,7 +1754,7 @@ export default function Dashboard(props) {
                 </View>
               ) : (
                 <ActivityIndicator
-                  size="small"
+                  size='small'
                   color={global.colorTextActive}
                   style={{
                     position: 'absolute',
@@ -1768,7 +1772,7 @@ export default function Dashboard(props) {
           {file && file.type === 'photo' && (
             <ImageBackground
               source={{uri: file && file.uri}}
-              resizeMode="contain"
+              resizeMode='contain'
               imageStyle={{
                 flex: 1,
                 height: '100%',
@@ -1784,8 +1788,8 @@ export default function Dashboard(props) {
                   <TouchableOpacity onPress={() => cancelStoryModal()}>
                     {loadingAddStory ? (
                       <ActivityIndicator
-                        size="small"
-                        color="white"
+                        size='small'
+                        color='white'
                         style={{paddingRight: 15, paddingTop: 15}}
                       />
                     ) : (
@@ -1881,7 +1885,7 @@ export default function Dashboard(props) {
                                 styles.modalText,
                                 {color: global.btnTxt},
                               ]}>
-                              <Icon name="plus" color="black" /> Add story
+                              <Icon name='plus' color='black' /> Add story
                             </Text>
                           </LinearGradient>
                         </TouchableOpacity>
@@ -1898,7 +1902,7 @@ export default function Dashboard(props) {
                 <VideoPlayer
                   repeat
                   source={{uri: file.uri}}
-                  resizeMode="contain"
+                  resizeMode='contain'
                   style={{
                     height: windowHeight,
                     position: 'absolute',
@@ -1913,8 +1917,8 @@ export default function Dashboard(props) {
                 <TouchableOpacity onPress={() => cancelStoryModal()}>
                   {loadingAddStory ? (
                     <ActivityIndicator
-                      size="small"
-                      color="white"
+                      size='small'
+                      color='white'
                       style={{paddingRight: 15, paddingTop: 15}}
                     />
                   ) : (
@@ -1959,7 +1963,7 @@ export default function Dashboard(props) {
                           }}>
                           <Text
                             style={[styles.modalText, {color: global.btnTxt}]}>
-                            <Icon name="plus" color="black" /> Add story
+                            <Icon name='plus' color='black' /> Add story
                           </Text>
                         </LinearGradient>
                       </TouchableOpacity>
@@ -1975,7 +1979,7 @@ export default function Dashboard(props) {
       {/* End of Modal add story */}
 
       <Modal
-        animationType="slide"
+        animationType='slide'
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {

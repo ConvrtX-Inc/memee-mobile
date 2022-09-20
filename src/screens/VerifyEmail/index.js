@@ -63,7 +63,7 @@ function VerifyEmail({navigation, route}) {
       email: global.OtpData[0].email,
       userPassword: global.OtpData[0].password,
       userImage:
-        'https://www.cognite.com/hubfs/raw_assets/public/tc_custom/images/unknown_user.jpg',
+        'https://upload.wikimedia.org/wikipedia/en/9/96/Pink_Panther.png',
       loginType: 'Email',
     });
 
