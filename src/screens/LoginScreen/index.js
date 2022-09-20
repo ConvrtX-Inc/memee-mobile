@@ -60,9 +60,10 @@ export default function LoginScreen({navigation}) {
         }),
       })
         .then(response => response.json())
-        .then(async responseJson => {
+        .then(async (responseJson) => {
           setIndicatButton(false);
           if (responseJson.Status == 400) {
+            console.log({emailLowerCase, password, responseJson});
             Toast.show({
               type: 'error',
               text2: 'Invalid credentials.',

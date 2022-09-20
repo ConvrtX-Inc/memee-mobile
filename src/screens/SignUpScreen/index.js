@@ -1,15 +1,7 @@
-import React, {useState, useRef} from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  Image,
-} from 'react-native';
+import React, {useState} from 'react';
+import {Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Input from '../../component/InputField';
 import ButtonLarge from '../../component/ButtonLarge';
-import PickerComponent from '../../component/Picker';
 import ButtonLargeIndicator from '../../component/ButtonLargeIndicator';
 import Toast from 'react-native-toast-message';
 import {isStrongPassword} from '../../Utility/Utils';
@@ -78,7 +70,7 @@ export default function SignUpScreen({navigation}) {
         email: email.toLowerCase().trim(),
         action: 'sign-up',
       });
-      /* console.log(body); */
+      console.log(body);
 
       fetch(global.address + 'SendOTP', {
         method: 'POST',
@@ -135,7 +127,7 @@ export default function SignUpScreen({navigation}) {
 
         <Text style={styles.textTheme}>YOUR FULL NAME</Text>
         <Input
-          placeholder="Full Name"
+          placeholder='Full Name'
           onChangeText={text => setName(text)}
           value={name}
           secureTextEntry={false}
@@ -143,7 +135,7 @@ export default function SignUpScreen({navigation}) {
 
         <Text style={styles.textTheme}>YOUR EMAIL</Text>
         <Input
-          placeholder="iammemee@memee.com"
+          placeholder='iammemee@memee.com'
           onChangeText={text => setEmail(text)}
           value={email}
           secureTextEntry={false}
@@ -153,7 +145,7 @@ export default function SignUpScreen({navigation}) {
         <View style={{flexDirection: 'row', marginLeft: '2%'}}>
           <View style={{width: '75%'}}>
             <Input
-              placeholder="Password"
+              placeholder='Password'
               onChangeText={text => setPassword(text)}
               value={password}
               secureTextEntry={passwordShowHide}
@@ -180,7 +172,7 @@ export default function SignUpScreen({navigation}) {
                     marginTop: 15,
                     tintColor: '#BABABA',
                   }}
-                  resizeMode="stretch"
+                  resizeMode='stretch'
                   source={require('../../images/invisible.png')}
                 />
               </TouchableOpacity>
@@ -195,7 +187,7 @@ export default function SignUpScreen({navigation}) {
                     marginTop: 15,
                     tintColor: '#BABABA',
                   }}
-                  resizeMode="stretch"
+                  resizeMode='stretch'
                   source={require('../../images/visible.png')}
                 />
               </TouchableOpacity>
@@ -207,7 +199,7 @@ export default function SignUpScreen({navigation}) {
         <View style={{flexDirection: 'row', marginLeft: '2%'}}>
           <View style={{width: '75%'}}>
             <Input
-              placeholder="Password"
+              placeholder='Password'
               onChangeText={text => setPasswordconfirm(text)}
               value={passwordconfirm}
               secureTextEntry={confirmPasswordShowHide}
@@ -236,7 +228,7 @@ export default function SignUpScreen({navigation}) {
                     marginTop: 15,
                     tintColor: '#BABABA',
                   }}
-                  resizeMode="stretch"
+                  resizeMode='stretch'
                   source={require('../../images/invisible.png')}
                 />
               </TouchableOpacity>
@@ -253,7 +245,7 @@ export default function SignUpScreen({navigation}) {
                     marginTop: 15,
                     tintColor: '#BABABA',
                   }}
-                  resizeMode="stretch"
+                  resizeMode='stretch'
                   source={require('../../images/visible.png')}
                 />
               </TouchableOpacity>
@@ -264,7 +256,7 @@ export default function SignUpScreen({navigation}) {
         <View style={{marginTop: '10%'}}>
           {loader == false ? (
             <ButtonLarge
-              title="Sign Up"
+              title='Sign Up'
               onPress={() => validation()}
               bgClrFirst={global.btnColor1}
               bgClrSecond={global.btnColor2}
@@ -273,7 +265,7 @@ export default function SignUpScreen({navigation}) {
             />
           ) : (
             <ButtonLargeIndicator
-              title=""
+              title=''
               onPress={() => navigation.navigate('')}
               bgClrFirst={global.btnColor1}
               bgClrSecond={global.btnColor2}

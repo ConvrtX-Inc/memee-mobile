@@ -46,6 +46,8 @@ if (!firebase.apps.length) {
 
 export {firebase, messaging};
 
+ErrorUtils.setGlobalHandler(console.error);
+
 const Setup = () => {
   const [loading, setLoading] = useState(true);
 

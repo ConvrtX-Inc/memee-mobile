@@ -1,64 +1,48 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import Icon from 'react-native-vector-icons/AntDesign';
 import {
-  View,
-  Text,
-  RefreshControl,
-  TouchableOpacity,
-  BackHandler,
-  Alert,
   ActivityIndicator,
-  PermissionsAndroid,
-  Animated,
-  Modal,
+  Alert,
+  BackHandler,
   Dimensions,
-  MaskedViewIOS,
-  StyleSheet,
-  ScrollView,
-  Image,
   FlatList,
+  Image,
   ImageBackground,
-  ViewBase,
   NativeModules,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Modal,
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Modal2 from 'react-native-modalbox';
-import ButtonCoins from '../../component/ButtonCoins';
-import {Avatar} from 'react-native-elements';
+import VideoPlayer from 'react-native-video';
+import TwitterTextView from 'react-native-twitter-textview';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
-import LinearGradient from 'react-native-linear-gradient';
-import TwitterTextView from 'react-native-twitter-textview';
 import {
   currentDateFN,
+  generateUID,
   moveItemArray,
-  removeItemOnce,
-} from '../../Utility/Utils';
-import messaging from '@react-native-firebase/messaging';
-import {firebaseConfig} from '../../redux/constants';
-import BottomNavBar from '../../component/BottomNavBar';
-import {getNotifications} from '../../redux/actions/Auth';
-
-import Toast from 'react-native-toast-message';
-import Video from 'react-native-video';
-import VideoPlayer from 'react-native-video-controls';
-import Icon from 'react-native-vector-icons/AntDesign';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {
-  PESDK,
-  PhotoEditorModal,
-  Configuration,
-} from 'react-native-photoeditorsdk';
-import {
   requestCameraPermission,
   requestExternalWritePermission,
 } from '../../Utility/Utils';
-import Story from '../../component/Story/Story';
-import StorySkeleton from '../../component/Story/StorySkeleton';
+import messaging from '@react-native-firebase/messaging';
+import {getNotifications} from '../../redux/actions/Auth';
+
+import Toast from 'react-native-toast-message';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {PESDK} from 'react-native-photoeditorsdk';
 import API from '../../api/StoryApi';
-import {RNS3} from 'react-native-aws3';
-import {getBucketOptions, generateUID} from '../../Utility/Utils';
 import storage from '@react-native-firebase/storage';
 import moment from 'moment';
+import ButtonCoins from '../../component/ButtonCoins';
+import {Avatar} from 'react-native-elements';
+import LinearGradient from 'react-native-linear-gradient';
+import StorySkeleton from '../../component/Story/StorySkeleton';
+import Story from '../../component/Story/Story';
+import BottomNavBar from '../../component/BottomNavBar';
 
 var offset = 0;
 global.navigateDashboard = 1;
@@ -70,9 +54,9 @@ var gloIndex = '';
 const {VideoEditorModule} = NativeModules;
 
 const openEditor = async () => {
-  console.log('niagi diri');
+  console.log('Should open Editor');
   const res = await VideoEditorModule.openVideoEditor();
-  console.log('f res', res);
+  console.log('Opened editor', res);
   return res;
 };
 
@@ -91,6 +75,7 @@ export const openVideoEditor = async () => {
 async function getAndroidExportResult() {
   return await VideoEditorModule.openVideoEditor();
 }
+
 //End Video Editor
 
 export default function Dashboard(props) {
@@ -168,13 +153,18 @@ export default function Dashboard(props) {
     setRefreshing(true);
     fetchStories();
     selectTab(global.navigateDashboard);
-  }, []);
+  }, [fetchStories, selectTab]);
 
   // fetching of Stories
   useEffect(() => {
     fetchStories();
-    console.log('token', global.userData.user_id);
-  }, [updatedStories]);
+    console.log(
+      'token >>',
+      global.userData,
+      'user_id',
+      global.userData.user_id,
+    );
+  }, [fetchStories, updatedStories]);
 
   // upload image/video
   function uploadImageToS3() {
@@ -215,7 +205,7 @@ export default function Dashboard(props) {
   }
 
   // fetch stories = query /user_id=xxxx&limit=xx
-  const fetchStories = async () => {
+  const fetchStories = useCallback(async () => {
     setLoadingStoriesItems(true);
     // console.log('sds', global.userData.user_id);
     setStoryOffset(0);
@@ -260,7 +250,7 @@ export default function Dashboard(props) {
     setStories([]);
     setLoadingStoriesItems(false);
     setRefreshing(false);
-  };
+  }, [storyLimit, storyOffset]);
 
   // Add story body: {userId: XXXX, ImgUrl: XXXX, VideoUrl: XXXX, dateTime: YYYY-MM-DD HH:mm:ss}
   async function addStory(location) {
@@ -384,7 +374,7 @@ export default function Dashboard(props) {
     });
 
     return unsubscribe;
-  }, [navigation]);
+  }, [SelectedBtnFN, dispatch, getPosts, navigation, selectTab]);
 
   useEffect(() => {
     const backAction = () => {
@@ -425,13 +415,16 @@ export default function Dashboard(props) {
       });
   }
 
-  function selectTab(index) {
-    setTabNumber(index);
-    SelectedBtnFN(index);
-    getPosts(index);
-  }
+  const selectTab = useCallback(
+    index => {
+      setTabNumber(index);
+      SelectedBtnFN(index);
+      getPosts(index);
+    },
+    [SelectedBtnFN, getPosts],
+  );
 
-  function SelectedBtnFN(btnNo) {
+  const SelectedBtnFN = useCallback(btnNo => {
     /* console.log('Selected tab : ', btnNo); */
 
     global.navigateDashboard = btnNo;
@@ -489,7 +482,7 @@ export default function Dashboard(props) {
       setTxtcolor2(global.tabNotSelectedTextColor);
       setTxtcolor3(global.tabNotSelectedTextColor);
     }
-  }
+  }, []);
 
   const getImageSize = async uri =>
     new Promise(resolve => {
@@ -544,79 +537,88 @@ export default function Dashboard(props) {
     }
   };
 
-  const getPosts = async (tabNo, scroll = false) => {
-    if (
-      scroll &&
-      (followingPost.length < 50 ||
-        newMemePost.length < 50 ||
-        trendingPost.length < 50)
-    )
-      return;
-
-    setLoaderIndicator(true);
-
-    const res = await getDashboardPosts(tabNo, scroll);
-
-    let data = [];
-    let treatedData = [];
-    let filteredData = [];
-
-    if (tabNo == 1) data = res.FollowerPosts;
-    else if (tabNo == 2) data = res.NewPosts;
-    else if (tabNo == 3) data = res.TrendingPosts;
-
-    //console.log(typeof data);
-    //console.log(typeof filteredData);
-
-    if (data[0]?.tournament) {
-      filteredData = data.filter(item => item.tournament.length < 1);
-    } else {
-      filteredData = data;
-    }
-    //treatedData = filteredData;
-
-    const treatTheData = async data => {
-      try {
-        var resData = data;
-        for (let i = 0; i < data.length; i++) {
-          if (!data[i].img_url.includes('mp4')) {
-            resData[i].showMenu = false;
-            const [width, height] = await getImageSize(data[i].img_url);
-            const ratio = windowWidth / width;
-            resData[i].calHeight = height * ratio;
-            resData[i].calWidth = windowWidth;
-          } else {
-            resData[i].paused = true;
-          }
-        }
-
-        return resData;
-      } catch (error) {
-        console.error(error);
-        return data;
+  const getPosts = useCallback(
+    async (tabNo, scroll = false) => {
+      if (
+        scroll &&
+        (followingPost.length < 50 ||
+          newMemePost.length < 50 ||
+          trendingPost.length < 50)
+      ) {
+        return;
       }
-    };
 
-    treatedData = await treatTheData(filteredData);
+      setLoaderIndicator(true);
 
-    //console.error('filteredData', filteredData);
-    //console.error('treatedData', treatedData);
+      const res = await getDashboardPosts(tabNo, scroll);
 
-    if (tabNo == 1)
-      scroll
-        ? setFollowingPost(followingPost => [...followingPost, treatedData])
-        : setFollowingPost(treatedData);
-    else if (tabNo == 2)
-      scroll
-        ? setNewMemePost(newMemePost => [...newMemePost, treatedData])
-        : setNewMemePost(treatedData);
-    else if (tabNo == 3)
-      scroll
-        ? setTrendingPost(trendingPost => [...trendingPost, treatedData])
-        : setTrendingPost(treatedData);
+      let data = [];
+      let treatedData = [];
+      let filteredData = [];
 
-    setLoaderIndicator(false);
-  };
+      if (tabNo == 1) {
+        data = res.FollowerPosts;
+      } else if (tabNo == 2) {
+        data = res.NewPosts;
+      } else if (tabNo == 3) {
+        data = res.TrendingPosts;
+      }
+
+      //console.log(typeof data);
+      //console.log(typeof filteredData);
+
+      if (data[0]?.tournament) {
+        filteredData = data.filter(item => item.tournament.length < 1);
+      } else {
+        filteredData = data;
+      }
+      //treatedData = filteredData;
+
+      const treatTheData = async data => {
+        try {
+          var resData = data;
+          for (let i = 0; i < data.length; i++) {
+            if (!data[i].img_url.includes('mp4')) {
+              resData[i].showMenu = false;
+              const [width, height] = await getImageSize(data[i].img_url);
+              const ratio = windowWidth / width;
+              resData[i].calHeight = height * ratio;
+              resData[i].calWidth = windowWidth;
+            } else {
+              resData[i].paused = true;
+            }
+          }
+
+          return resData;
+        } catch (error) {
+          console.error(error);
+          return data;
+        }
+      };
+
+      treatedData = await treatTheData(filteredData);
+
+      //console.error('filteredData', filteredData);
+      //console.error('treatedData', treatedData);
+
+      if (tabNo == 1) {
+        scroll
+          ? setFollowingPost(followingPost => [...followingPost, treatedData])
+          : setFollowingPost(treatedData);
+      } else if (tabNo == 2) {
+        scroll
+          ? setNewMemePost(newMemePost => [...newMemePost, treatedData])
+          : setNewMemePost(treatedData);
+      } else if (tabNo == 3) {
+        scroll
+          ? setTrendingPost(trendingPost => [...trendingPost, treatedData])
+          : setTrendingPost(treatedData);
+      }
+
+      setLoaderIndicator(false);
+    },
+    [followingPost.length, newMemePost.length, trendingPost.length],
+  );
 
   function navigateToprofileFN() {
     global.profileID = global.userData.user_id;
@@ -644,9 +646,13 @@ export default function Dashboard(props) {
       arrayTemp[index].like_count = parseInt(arrayTemp[index].like_count) - 1;
     }
 
-    if (tabNumber == 1) setFollowingPost([...arrayTemp]);
-    else if (tabNumber == 2) setNewMemePost([...arrayTemp]);
-    else setTrendingPost([...arrayTemp]);
+    if (tabNumber == 1) {
+      setFollowingPost([...arrayTemp]);
+    } else if (tabNumber == 2) {
+      setNewMemePost([...arrayTemp]);
+    } else {
+      setTrendingPost([...arrayTemp]);
+    }
 
     fetch(global.address + 'reactToPost', {
       method: 'POST',
@@ -784,7 +790,11 @@ export default function Dashboard(props) {
 
   const toTop = () => {
     // use current
-    flatlistRef.current.scrollToOffset({animated: true, offset: 0});
+    const current = flatlistRef.current;
+    if (!current) {
+      return;
+    }
+    current.scrollToOffset({animated: true, offset: 0});
   };
 
   // for bottom tab
@@ -819,12 +829,13 @@ export default function Dashboard(props) {
         'Leo duis ut diam quam nulla. Vitae proin sagittis nisl rhoncus mattis rhoncus urna neque viverra. ',
     },
   ]; */
+
   /* global.colorPrimary */
 
   function openGallery() {
     setIsOpenMedia(true);
     console.log('this is true');
-    launchImageLibrary(options, (response) => {
+    launchImageLibrary(options, response => {
       console.log('Response = ', response);
       console.log('Response = ');
 
@@ -847,10 +858,11 @@ export default function Dashboard(props) {
       }
 
       let source = response.assets[0];
-      console.log('source', source)
+      console.log('source', source);
       openPhotoEditor(source.uri);
     });
   }
+
   const getDescription = text => {
     try {
       return decodeURIComponent(
@@ -920,11 +932,11 @@ export default function Dashboard(props) {
       <FlatList
         ref={flatlistRef}
         data={
-          tabNumber == 1
+          tabNumber === 1
             ? followingPost
-            : tabNumber == 2
+            : tabNumber === 2
             ? newMemePost
-            : tabNumber == 3
+            : tabNumber === 3
             ? trendingPost
             : []
         }
@@ -1364,7 +1376,7 @@ export default function Dashboard(props) {
               />
             ) : (
               <View>
-                {followingPost.length < 1 && (
+                {followingPost?.length < 1 && (
                   <View style={{flex: 1, width: '100%', alignItems: 'center'}}>
                     <Text style={{color: global.colorTextPrimary}}>
                       No available posts.
@@ -1513,6 +1525,7 @@ export default function Dashboard(props) {
                 {/* </View> */}
               </TouchableOpacity>
             </View>
+
             <View style={{flexDirection: 'row', marginBottom: 25}}>
               {!loadingStoriesItems ? (
                 stories.length > 0 ? (
@@ -1882,7 +1895,7 @@ export default function Dashboard(props) {
           {file && file.type === 'video' && (
             <View style={{flex: 1}}>
               <View>
-                <Video
+                <VideoPlayer
                   repeat
                   source={{uri: file.uri}}
                   resizeMode="contain"
@@ -2036,16 +2049,6 @@ const styles = StyleSheet.create({
     color: '#E6E6E6',
     marginBottom: 15,
   },
-
-  tinyLogo: {
-    width: 30,
-    height: 30,
-    marginTop: 10,
-    marginRight: 10,
-    tintColor: '#222222',
-    alignSelf: 'flex-end',
-  },
-
   Logo: {
     width: 350,
     height: 350,
@@ -2129,14 +2132,6 @@ const styles = StyleSheet.create({
     marginLeft: 3,
   },
 
-  // bottom tab design
-  bottom: {
-    backgroundColor: '#272727',
-    flexDirection: 'row',
-    height: 80,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-  },
   first: {
     // backgroundColor: '#ffffff',
     width: '17.5%',
@@ -2159,6 +2154,10 @@ const styles = StyleSheet.create({
   tinyLogo: {
     width: 30,
     height: 30,
+    marginTop: 10,
+    marginRight: 10,
+    tintColor: '#222222',
+    alignSelf: 'flex-end',
   },
   tinyLogoOB: {
     width: 80,
@@ -2171,11 +2170,6 @@ const styles = StyleSheet.create({
     height: 60,
     tintColor: '#FBC848',
     marginTop: -27,
-  },
-  touchstyle: {
-    alignSelf: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   txticon: {
     color: '#FBC848',
@@ -2296,6 +2290,7 @@ const styles = StyleSheet.create({
     height: 500,
   },
   bottom: {
+    backgroundColor: '#272727',
     flexDirection: 'row',
     height: 80,
     borderTopLeftRadius: 30,
@@ -2322,4 +2317,3 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-    
