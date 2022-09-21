@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import ButtonWithImage from '../../component/ButtonWithImage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { appleAuth } from '@invertase/react-native-apple-authentication'
+import {appleAuth} from '@invertase/react-native-apple-authentication';
 import {
   LoginManager,
   AccessToken,
@@ -28,15 +28,13 @@ import {currentDateFN} from '../../Utility/Utils';
 import Toast from 'react-native-toast-message';
 import {toggleOnlineStatus} from '../../redux/actions/Auth';
 
-import auth from '@react-native-firebase/auth';
 import SplashImages from '../../component/SplashImages';
 
 const {RNTwitterSignIn} = NativeModules;
-import {decode as atob, encode as btoa} from 'base-64';
 
 RNTwitterSignIn.init(
   '7Yg35MGJX38own2WE9lxp3I05',
-  `27L8uE0Vyafin9kKceG0fWFbNiNVDggrKAFDxOFBhrUW7aQoM0`,
+  '27L8uE0Vyafin9kKceG0fWFbNiNVDggrKAFDxOFBhrUW7aQoM0',
 ).then(() => console.log('Twitter SDK initialized'));
 
 Settings.initializeSDK();
@@ -101,7 +99,7 @@ export default function Onboarding({navigation}) {
         nameVar = json.name;
         imageVar = json.picture.data.url;
         loginTypeVar = 'Facebook';
-        SignupFN();
+        signUp();
       })
       .catch(err => {
         console.log('ERROR GETTING DATA FROM FACEBOOK', err);
@@ -125,7 +123,7 @@ export default function Onboarding({navigation}) {
       nameVar = userInfo.user.name;
       imageVar = userInfo.user.photo.replace('s96-c', 's384-c', true);
       loginTypeVar = 'Google';
-      SignupFN();
+      signUp();
     } catch (error) {
       // Toast.show({
       //   type: 'error',
@@ -164,7 +162,7 @@ export default function Onboarding({navigation}) {
       await auth().signInWithCredential(credential);
     } catch (error) { console.log('error google Login', error) } */
 
-  async function SignupFN() {
+  async function signUp() {
     var currentDate = currentDateFN();
     setIsLoading(true);
 
@@ -186,13 +184,10 @@ export default function Onboarding({navigation}) {
     })
       .then(response => response.json())
       .then(async responseJson => {
-
-        
-
         if (responseJson.Status == 409) {
-          if (loginTypeVar == 'Google') logoutFromGoogle();
-
- 
+          if (loginTypeVar == 'Google') {
+            logoutFromGoogle();
+          }
 
           console.log('Error', responseJson);
 
@@ -218,7 +213,9 @@ export default function Onboarding({navigation}) {
         }
       })
       .catch(error => {
-        if (loginTypeVar == 'Google') logoutFromGoogle();
+        if (loginTypeVar == 'Google') {
+          logoutFromGoogle();
+        }
 
         Toast.show({
           type: 'error',
@@ -236,8 +233,6 @@ export default function Onboarding({navigation}) {
     } catch (e) {}
   }
 
-
-
   async function onTwitterButtonPress() {
     // Perform the login request
     try {
@@ -249,7 +244,7 @@ export default function Onboarding({navigation}) {
       imageVar = null;
       loginTypeVar = 'Twitter';
 
-      await SignupFN();
+      await signUp();
     } catch (e) {
       console.log('error twitter', e);
       Toast.show({
@@ -280,75 +275,70 @@ export default function Onboarding({navigation}) {
     }
   };
 
-  const onAppleLoginTap = async() => {
-      try{
-
+  const onAppleLoginTap = async () => {
+    try {
       //apple login continuation
-      
+
       const appleAuthResponse = await appleAuth.performRequest({
         requestedOperation: appleAuth.Operation.LOGIN,
         requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
-      });  
-      
-      const { identityToken, fullName, email } = appleAuthResponse
+      });
 
-      const loginDatas =  {
+      const {identityToken, fullName, email} = appleAuthResponse;
+
+      const loginDatas = {
         identityToken,
         fullName,
-        email
-      }
+        email,
+      };
 
-      try{
-        const loginData = await AsyncStorage.getItem('appleLogin')
-        const parsedLoginData = JSON.parse(loginData)
+      try {
+        const loginData = await AsyncStorage.getItem('appleLogin');
+        const parsedLoginData = JSON.parse(loginData);
 
-          if (loginData == null){
+        if (loginData == null) {
+          // console.log(loginDatas)
+          AsyncStorage.setItem(
+            'appleLogin',
+            JSON.stringify(loginDatas),
+            err => {
+              if (err) {
+                console.log('an error');
+                throw err;
+              }
 
-            // console.log(loginDatas)
-            AsyncStorage.setItem('appleLogin',JSON.stringify(loginDatas),(err)=> {
-              if (err){
-                console.log("an error")
-                throw err
-              } 
-
-              
-              emailVar = parsedLoginData?.email
-              nameVar = parsedLoginData?.fullName?.givenName +" "+ parsedLoginData?.fullName?.familyName;
+              emailVar = parsedLoginData?.email;
+              nameVar =
+                parsedLoginData?.fullName?.givenName +
+                ' ' +
+                parsedLoginData?.fullName?.familyName;
               imageVar = null;
               loginTypeVar = 'apple';
 
-              SignupFN()
+              signUp();
+            },
+          ).catch(err => {
+            console.log('error is:' + err);
+          });
+        } else {
+          emailVar = parsedLoginData?.email;
+          nameVar =
+            parsedLoginData?.fullName?.givenName +
+            ' ' +
+            parsedLoginData?.fullName?.familyName;
+          imageVar = null;
+          loginTypeVar = 'apple';
 
-
-
-            }).catch((err) => {
-              console.log("error is:" + err)
-            })
-
-          }else{
-
-              emailVar = parsedLoginData?.email
-              nameVar = parsedLoginData?.fullName?.givenName +" "+ parsedLoginData?.fullName?.familyName;
-              imageVar = null;
-              loginTypeVar = 'apple';
-
-              await SignupFN()
-          
-            
-          }
-        }catch(error){
-//error  
-          AsyncStorage.removeItem("appleLogin")
-       
-
+          await signUp();
+        }
+      } catch (error) {
+        //error
+        AsyncStorage.removeItem('appleLogin');
       }
-
-
-      }catch (error){
-        console.log('error apple'+error)
-      }
-  }
-  
+    } catch (error) {
+      console.log('error apple' + error);
+    }
+  };
 
   return (
     <View
@@ -392,7 +382,6 @@ export default function Onboarding({navigation}) {
           txtClr={global.btnTxt}
           font={global.fontSelect}
           img={require('../../images/emailSignIn.png')}
-          
         />
 
         <TouchableOpacity
@@ -428,10 +417,8 @@ export default function Onboarding({navigation}) {
             <Text
               style={{
                 textAlign: 'left',
-
                 fontFamily: 'OpenSans-SemiBold',
                 fontSize: 14,
-
                 color: '#fff',
               }}>
               Continue with Facebook
